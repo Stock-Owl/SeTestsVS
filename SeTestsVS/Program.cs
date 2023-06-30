@@ -1,6 +1,7 @@
 ﻿using System;
+using static FirefoxCore;
 
-namespace SeTestVSCore
+namespace SeTestCore
 {
     class Core
     {
