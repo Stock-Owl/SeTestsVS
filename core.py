@@ -31,11 +31,46 @@ class Core:
                 service = ChromeService(service_args = service_args, log_path = log_path)
 
                 opts = webdriver.ChromeOptions()
-                opts.page_load_strategy = options_["page_load_strategy"]        # should be a string
-                opts.accept_insecure_certs = options_["accept_insecure_certs"]  # should be a bool
-                opts.timeouts = options_["timeouts"] # should be a timeout of some sort
-                opts.unhandled_prompt_behavior = options_["unhandled_promt_behavior"] # should be on of the following:
-                # dismiss, accept, dismiss and notify, accept and notify, ignore
+
+                """
+                3 types of page load startegies are available:
+                * normal
+                * eager
+                * none
+
+                Throws a ValueError if an unsupported page load startegy type is given.
+                """
+                opts.page_load_strategy(options_["page_load_strategy"])
+
+                """
+                Accept insecure cert(ification)s is either true or false. Not case sensitive
+                """
+                opts.accept_insecure_certs(bool(options_["accept_insecure_certs"]))  # should be a bool
+
+                """
+                3 types of timeouts are available:
+                * impilicit
+                * pageLoad
+                * script
+
+                Throws a ValueError if an unsupported timeout type is given.
+
+                The value of the timeout is the timespan [of the timteout] in MILLISECONDS (ms)
+                """
+                opts.timeouts({options_["timeout"]["type"]: int(options_["timeout"]["value"])})
+
+                """
+                5 types of behaviors are available:
+                * dismiss
+                * accept
+                * dismiss and notify
+                * accept and notify
+                * ignore
+
+                Throws a ValueError if an unsupported behavior type is given.
+                """
+                opts.unhandled_prompt_behavior(options_["unhandled_promt_behavior"])
+
                 for each in options_:
                     opts.add_argument(each)
                 driver = webdriver.Chrome(options = opts, service = service)

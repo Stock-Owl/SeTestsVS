@@ -3,7 +3,7 @@
     {
         "page_load_startegy": "normal",
         "accept_insecure_certs": "false",
-        "timeouts": "",
+        "timeout": {"type": "pageLoad", "value": "300000"},
         "unhandled_prompt_behavior": "dismiss and notify",
         "args": [],
 
