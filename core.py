@@ -71,13 +71,19 @@ class Core:
                 """
                 opts.unhandled_prompt_behavior(options_["unhandled_promt_behavior"])
 
+                if options_["keep_browser_open"] != "":
+                    opts.add_experimental_option("detach", bool(options_["keep_browser_open"]))
+
                 for each in options_:
                     opts.add_argument(each)
                 driver = webdriver.Chrome(options = opts, service = service)
             else:
                 driver = webdriver.WebDriver()
             #
-            driver.Quit()
+            if bool(options_["keep_browser_open"]):
+                pass
+            else:
+                driver.Quit()
         
         def goto(driver: object, url: str):
             Core.Chrome.checkDriverExists(driver)
@@ -104,5 +110,4 @@ class Core:
             return None
             
 
-driver = 1
 Core.Chrome.goto(driver, 'https://google.com')

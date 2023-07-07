@@ -5,6 +5,7 @@
         "accept_insecure_certs": "false",
         "timeout": {"type": "pageLoad", "value": "300000"},
         "unhandled_prompt_behavior": "dismiss and notify",
+        "keep_browser_open": "true",
         "args": [],
 
         "service_log_path": ".",
