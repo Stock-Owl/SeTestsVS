@@ -1,12 +1,17 @@
 from selenium import webdriver
+from selenium.webdriver.chrome.webdriver import WebDriver as ChromeDriver
 from selenium.webdriver.chrome.service import Service as ChromeService
+from selenium.webdriver.firefox.webdriver import WebDriver as FirefoxDriver
 from selenium.webdriver.firefox.service import Service as FirefoxService
+from selenium.webdriver.remote.webelement import WebElement
 # from selenium.webdriver.chrome.options import Options
 from json import loads
 import selenium
+from selenium.webdriver.common.by import By
 # from selenium.webdriver.chrome.webdriver import WebDriver as chromedriver
 
 # chrome webdriver type: selenium.webdriver.chrome.webdriver.WebDriver
+# webdriver HTML element type: selenium.webdriver.remote.webelement.WebElement
 
 class Core:
     class Chrome:
@@ -22,8 +27,9 @@ class Core:
                        loaded_dict = loads(f.read())
                 except FileNotFoundError:
                     raise Exception("Invalid path, file not found")
-
+            driver: ChromeDriver
             options_ = loaded_dict["options"]
+            # create the chrome driver with arguments
             if options_ != []:
                 # TODO: args need to be joined via " ".join(iterable) bc lists are for pussies
                 log_path = options_["service_log_path"]
@@ -77,6 +83,7 @@ class Core:
                 for each in options_:
                     opts.add_argument(each)
                 driver = webdriver.Chrome(options = opts, service = service)
+            # create the chrome driver (as bare bones as it gets)
             else:
                 driver = webdriver.WebDriver()
             #
@@ -85,21 +92,17 @@ class Core:
             else:
                 driver.Quit()
         
-        def goto(driver: object, url: str):
-            Core.Chrome.checkDriverExists(driver)
-            driver.get(url)
-
         def checkDriverExists(driver: object, omit_exceptions: bool = True) -> None | bool | Exception:
             try:
                 assert driver
             except AssertionError:
                 if omit_exceptions:
-                    print("Shit doesn't exist type mate")
+                    print("Shit doesn't exist mate")
                     return False
-                raise AssertionError("Shit doesn't exist type mate")
+                raise AssertionError("Shit doesn't exist mate")
             
             try:
-                assert isinstance(driver, selenium.webdriver.chrome.webdriver.WebDriver)
+                assert isinstance(driver, ChromeDriver)
             except AssertionError:
                 if omit_exceptions:
                     print("Invalid fuckin' type mate")
@@ -108,6 +111,10 @@ class Core:
             if omit_exceptions:            
                 return True
             return None
-            
 
-Core.Chrome.goto(driver, 'https://google.com')
+        def goto(driver: ChromeDriver, url: str):
+            Core.Chrome.checkDriverExists(driver)
+            driver.get(url)
+
+        def getElement(driver: ChromeDriver | WebElement, _by: By | str):
+            pass
