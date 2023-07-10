@@ -15,6 +15,7 @@
     "actions":
     {
         "goto": {"url": "https://google.com"},
+        "click": {},
         "find_element": {"locator": "name", "value": "myname"}
     }
 }

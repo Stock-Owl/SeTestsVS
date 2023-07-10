@@ -41,6 +41,8 @@ Alapérték: dismiss and notify
 Logikai érték  (igaz/hamis)
 Alapérték: igaz
 
+A tesztek futása után nyitva tartja a böngészőt, ameddig a driver nem kap `driver.Quit` parancsot
+
 ### Actions
 
 ---

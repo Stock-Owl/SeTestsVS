@@ -116,5 +116,32 @@ class Core:
             Core.Chrome.checkDriverExists(driver)
             driver.get(url)
 
-        def getElement(driver: ChromeDriver | WebElement, _by: By | str):
-            pass
+# TODO: Relative locators 
+# TODO: JSON so get elements get passed
+# TODO: JS.Log setup
+# TODO: Check the JS.log file if it's empty, only write if and only if empty
+
+        def getElement(_obj: ChromeDriver | WebElement, _by: By | str, value: str):
+            if isinstance(_by, By):
+                _obj.find_element(_by, value)
+            elif isinstance(_by, str):
+                match _by.lower():
+                    case "id":
+                        _obj.find_element(By.ID, value)
+                    case "name":
+                        _obj.find_element(By.NAME, value)
+                    case "css_selector":
+                        _obj.find_element(By.CSS_SELECTOR, value)
+                    case "class", "class_name":
+                        _obj.find_element(By.CLASS_NAME, value)
+                    case "tag", "tag_name":
+                        _obj.find_element(By.TAG_NAME, value)
+                    case "link", "link_text":
+                        _obj.find_element(By.LINK_TEXT, value)
+                    case "partial_link", "partial_link_text":
+                        _obj.find_element(By.PARTIAL_LINK_TEXT, value)
+                    case "xpath":
+                        _obj.find_element(By.XPATH, value)
+                    case _:
+                        raise ValueError("This doesn't exist mate")
+            
