@@ -53,7 +53,7 @@
             panel1 = new Panel();
             optionInfo = new PictureBox();
             button1 = new Button();
-            optionsPanel = new Panel();
+            flowLayoutPanel1 = new FlowLayoutPanel();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             actionHeaderPanel.SuspendLayout();
@@ -88,7 +88,7 @@
             urlTextField.ForeColor = Color.DarkGray;
             urlTextField.Location = new Point(368, 9);
             urlTextField.Name = "urlTextField";
-            urlTextField.PlaceholderText = "Weboldal URL tesztelésre... *";
+            urlTextField.PlaceholderText = "Weboldal URL tesztelésre...";
             urlTextField.Size = new Size(604, 27);
             urlTextField.TabIndex = 1;
             // 
@@ -193,9 +193,9 @@
             actionText.ForeColor = Color.White;
             actionText.Location = new Point(3, 2);
             actionText.Name = "actionText";
-            actionText.Size = new Size(88, 25);
+            actionText.Size = new Size(75, 25);
             actionText.TabIndex = 9;
-            actionText.Text = "Akciók: *";
+            actionText.Text = "Akciók:";
             // 
             // addButton
             // 
@@ -227,7 +227,7 @@
             // actionsPanelInfo
             // 
             actionsPanelInfo.Image = (Image)resources.GetObject("actionsPanelInfo.Image");
-            actionsPanelInfo.Location = new Point(98, 8);
+            actionsPanelInfo.Location = new Point(84, 10);
             actionsPanelInfo.Name = "actionsPanelInfo";
             actionsPanelInfo.Size = new Size(15, 15);
             actionsPanelInfo.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -317,9 +317,9 @@
             optionText.ForeColor = Color.White;
             optionText.Location = new Point(3, 2);
             optionText.Name = "optionText";
-            optionText.Size = new Size(90, 25);
+            optionText.Size = new Size(77, 25);
             optionText.TabIndex = 9;
-            optionText.Text = "Opciók: *";
+            optionText.Text = "Opciók:";
             // 
             // optionHeaderPanel
             // 
@@ -348,7 +348,7 @@
             // optionInfo
             // 
             optionInfo.Image = (Image)resources.GetObject("optionInfo.Image");
-            optionInfo.Location = new Point(99, 8);
+            optionInfo.Location = new Point(86, 8);
             optionInfo.Name = "optionInfo";
             optionInfo.Size = new Size(15, 15);
             optionInfo.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -369,22 +369,22 @@
             button1.Text = "Hozzáadás...";
             button1.UseVisualStyleBackColor = false;
             // 
-            // optionsPanel
+            // flowLayoutPanel1
             // 
-            optionsPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            optionsPanel.AutoScroll = true;
-            optionsPanel.BackColor = Color.FromArgb(45, 45, 50);
-            optionsPanel.Location = new Point(645, 137);
-            optionsPanel.Name = "optionsPanel";
-            optionsPanel.Size = new Size(327, 316);
-            optionsPanel.TabIndex = 38;
+            flowLayoutPanel1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
+            flowLayoutPanel1.AutoScroll = true;
+            flowLayoutPanel1.BackColor = Color.FromArgb(45, 45, 50);
+            flowLayoutPanel1.Location = new Point(645, 137);
+            flowLayoutPanel1.Name = "flowLayoutPanel1";
+            flowLayoutPanel1.Size = new Size(327, 316);
+            flowLayoutPanel1.TabIndex = 38;
             // 
             // MainForm
             // 
             AutoScaleMode = AutoScaleMode.None;
             BackColor = Color.FromArgb(50, 50, 53);
             ClientSize = new Size(984, 511);
-            Controls.Add(optionsPanel);
+            Controls.Add(flowLayoutPanel1);
             Controls.Add(urlTextFieldInfo);
             Controls.Add(pictureBox4);
             Controls.Add(pictureBox3);
@@ -449,6 +449,6 @@
         private Button button1;
         private PictureBox optionInfo;
         private Panel panel1;
-        private Panel optionsPanel;
+        private FlowLayoutPanel flowLayoutPanel1;
     }
 }

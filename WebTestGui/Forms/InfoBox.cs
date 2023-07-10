@@ -32,6 +32,17 @@ namespace WebTestGui.Forms
             descriptionLabel.Text = description;
         }
 
+        public InfoBox()
+        {
+            InitializeComponent();
+
+            informationPicture.Visible = true;
+            informationPicture.BackColor = Color.Transparent;
+
+            DarkTitleBarManager.UseImmersiveDarkMode(Handle, true);
+            BackColor = Color.FromArgb(255, 50, 50, 53);
+        }
+
         private void okButton_Click(object sender, EventArgs e)
         {
             this.Close();

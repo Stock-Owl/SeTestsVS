@@ -34,7 +34,7 @@ public static class JsonFormatter
             if (exportManager.m_Actions.m_Goto != null)
             {
                 var gotoData = new Dictionary<string, object>();
-                gotoData["url"] = exportManager.m_Actions.m_Goto.Value;
+                gotoData["url"] = exportManager.m_Actions.m_Goto.Value!;
                 actionsData["goto"] = gotoData;
             }
             jsonData["actions"] = actionsData;

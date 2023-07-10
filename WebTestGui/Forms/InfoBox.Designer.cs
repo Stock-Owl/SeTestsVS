@@ -44,11 +44,11 @@
             // 
             okButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             okButton.BackColor = Color.FromArgb(40, 40, 43);
-            okButton.Font = new Font("Segoe UI Semibold", 20F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+            okButton.Font = new Font("Segoe UI Semibold", 18F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
             okButton.ForeColor = Color.White;
-            okButton.Location = new Point(143, 149);
+            okButton.Location = new Point(157, 159);
             okButton.Name = "okButton";
-            okButton.Size = new Size(150, 50);
+            okButton.Size = new Size(120, 40);
             okButton.TabIndex = 10;
             okButton.Text = "OK";
             okButton.UseVisualStyleBackColor = false;
@@ -57,30 +57,30 @@
             // mainLabel
             // 
             mainLabel.AutoSize = true;
-            mainLabel.Font = new Font("Segoe UI Semibold", 23F, FontStyle.Bold, GraphicsUnit.Point);
+            mainLabel.Font = new Font("Segoe UI Semibold", 20F, FontStyle.Bold, GraphicsUnit.Point);
             mainLabel.ForeColor = Color.White;
-            mainLabel.Location = new Point(12, 16);
+            mainLabel.Location = new Point(12, 9);
             mainLabel.Name = "mainLabel";
-            mainLabel.Size = new Size(176, 42);
+            mainLabel.Size = new Size(142, 37);
             mainLabel.TabIndex = 11;
-            mainLabel.Text = "Cím helye...";
+            mainLabel.Text = "mainLabel";
             // 
             // descriptionLabel
             // 
             descriptionLabel.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point);
             descriptionLabel.ForeColor = Color.DarkGray;
-            descriptionLabel.Location = new Point(18, 70);
+            descriptionLabel.Location = new Point(18, 61);
             descriptionLabel.Name = "descriptionLabel";
-            descriptionLabel.Size = new Size(346, 66);
+            descriptionLabel.Size = new Size(346, 95);
             descriptionLabel.TabIndex = 12;
-            descriptionLabel.Text = "Leírás helye...";
+            descriptionLabel.Text = "subLabel";
             // 
             // informationPicture
             // 
             informationPicture.BackColor = Color.Transparent;
             informationPicture.Image = (Image)resources.GetObject("informationPicture.Image");
             informationPicture.InitialImage = (Image)resources.GetObject("informationPicture.InitialImage");
-            informationPicture.Location = new Point(372, 12);
+            informationPicture.Location = new Point(372, 6);
             informationPicture.Name = "informationPicture";
             informationPicture.Size = new Size(50, 50);
             informationPicture.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -93,7 +93,7 @@
             warningIcon.BackColor = Color.Transparent;
             warningIcon.Image = (Image)resources.GetObject("warningIcon.Image");
             warningIcon.InitialImage = (Image)resources.GetObject("warningIcon.InitialImage");
-            warningIcon.Location = new Point(372, 12);
+            warningIcon.Location = new Point(372, 5);
             warningIcon.Name = "warningIcon";
             warningIcon.Size = new Size(50, 50);
             warningIcon.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -106,7 +106,7 @@
             errorIcon.BackColor = Color.Transparent;
             errorIcon.Image = (Image)resources.GetObject("errorIcon.Image");
             errorIcon.InitialImage = null;
-            errorIcon.Location = new Point(372, 12);
+            errorIcon.Location = new Point(372, 5);
             errorIcon.Name = "errorIcon";
             errorIcon.Size = new Size(50, 50);
             errorIcon.SizeMode = PictureBoxSizeMode.StretchImage;

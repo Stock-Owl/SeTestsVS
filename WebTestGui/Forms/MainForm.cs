@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using WebTestGui.Forms;
+using WebTestGui.Forms.Controls;
 using WebTestGui.Managers;
 using WebTestGui.Utils;
 
@@ -25,16 +26,6 @@ namespace WebTestGui
             consoleFormatter.WriteToConsoleFormatted("Az {Yellow}[alkalmazás] {Cyan}[sikeresen] elindult, a {Orange}[konzol] mûködik!\n");
 
             AddActionField();
-
-            //pageLoadStrategyBox.Items.AddRange(Enum.GetValues(typeof(ExportManager.Options.PageLoadStrategies)).Cast<object>().ToArray());
-            //pageLoadStrategyBox.SelectedIndex = 0;
-
-            //timeoutsBox.Items.AddRange(Enum.GetValues(typeof(ExportManager.Options.Timeout.TimeoutType)).Cast<object>().ToArray());
-            //timeoutsBox.SelectedIndex = 0;
-
-            //unhandledPromprBehaviourBox.Items.AddRange(Enum.GetValues(typeof(ExportManager.Options.UnhandledPromptBehaviours)).Cast<object>().ToArray());
-            //unhandledPromprBehaviourBox.SelectedIndex = 2;
-
             PopulateOptionsPanel();
         }
 
@@ -103,50 +94,75 @@ namespace WebTestGui
 
         private void PopulateOptionsPanel()
         {
-            //optionsPanel.Controls.Add(pageLoadStrategyText);
-            //optionsPanel.Controls.Add(pageLoadStrategyBox);
+            // PageLoadStrategy
+            pageLoadStrategyOptionPanel.SetMainLabel("Lap betöltési stratégia:");
+            pageLoadStrategyOptionPanel.SetMainCombobox<ExportManager.Options.PageLoadStrategies>("Lap betöltési stratégia típus...");
+            pageLoadStrategyOptionPanel.SetSubElementsVisible(false);
+            pageLoadStrategyOptionPanel.SetInfoBox("Lap betöltés", "A web-illesztõprogram hogyan kezeli az új oldal betöltését." +
+                "Három különbözõ oldalbetöltési stratégia használható: Normál, Buzgó és Nincs.", InfoBox.InfoBoxType.Info);
+            flowLayoutPanel1.Controls.Add(pageLoadStrategyOptionPanel);
 
-            //optionsPanel.Controls.Add(acceptInsecureCertsText);
-            //optionsPanel.Controls.Add(acceptInsecureCertsCheckbox);
+            // AcceptInsecureCerts
+            acceptInsuranceOptionPanel.SetMainLabel("Nem biztonságos bizonyítványok elfogadása:", 10);
+            acceptInsuranceOptionPanel.SetMainCheckbox(false);
+            acceptInsuranceOptionPanel.SetSubElementsVisible(false);
+            acceptInsuranceOptionPanel.SetInfoBox("Bizonyítványok elfogadása", "Lehetõvé teszi, hogy a web-illesztõprogram olyan" +
+                "weboldalakat is megnyisson, amelyeknél érvénytelen, vagy biztonsági tanúsítvány nélküli (insecure) SSL/TLS tanúsítványt használnak.", InfoBox.InfoBoxType.Info);
+            flowLayoutPanel1.Controls.Add(acceptInsuranceOptionPanel);
 
-            //optionsPanel.Controls.Add(timeoutsText);
-            //optionsPanel.Controls.Add(timeoutsBox);
-            //optionsPanel.Controls.Add(timeoutsInfo);
-            //optionsPanel.Controls.Add(timeoutValueText);
+            // Timeouts
+            timeoutsOptionPanel.SetMainLabel("Idõtúllépések:");
+            timeoutsOptionPanel.SetMainCombobox<ExportManager.Options.Timeout.TimeoutType>("Idõtûllépési lehetõségek...");
+            timeoutsOptionPanel.SetSubElementsVisible(true);
+            timeoutsOptionPanel.SetSubLabel("Értéke:");
+            timeoutsOptionPanel.SetSubTextbox("Idõtúllépés értéke...*");
+            timeoutsOptionPanel.SetInfoBox("Idõtúllépés", "Amikor a web-illesztõprogram egy parancsot végrehajt, például egy elem keresését vagy egy kattintást," +
+                "elõfordulhat, hogy a weboldal betöltése vagy más folyamatok lassabban történnek, és idõre van szükségük a végrehajtáshoz.", InfoBox.InfoBoxType.Info);
+            flowLayoutPanel1.Controls.Add(timeoutsOptionPanel);
 
-            //optionsPanel.Controls.Add(unhandledPromprBehaviourText);
-            //optionsPanel.Controls.Add(unhandledPromprBehaviourBox);
+            // UnhandledPromptBehaviour
+            unhandledPromptBehaviourOptionPanel.SetMainLabel("Kezeletlen kérelmek:");
+            unhandledPromptBehaviourOptionPanel.SetMainCombobox<ExportManager.Options.UnhandledPromptBehaviours>("Kezeletlen kérelmek kezelése...", 2);
+            unhandledPromptBehaviourOptionPanel.SetSubElementsVisible(false);
+            unhandledPromptBehaviourOptionPanel.SetInfoBox("Kezeletlen kérelmek", "Hogyan kezelje a nem várt vagy kezeletlen promptokat a böngészõben." +
+                "Ez a beállítás hasznos lehet olyan helyzetekben, amikor a weboldalakon pop-up jelennek meg, amelyekhez választ vagy adatbevitelt igényelnek.", InfoBox.InfoBoxType.Info);
+            flowLayoutPanel1.Controls.Add(unhandledPromptBehaviourOptionPanel);
 
-            //optionsPanel.Controls.Add(keepBrowserOpenText);
-            //optionsPanel.Controls.Add(keepBrowserOpenCheckbox);
+            // KeepBrowserOpen
+            keepBrowserOpenOptionPanel.SetMainLabel("Böngészõ nyitva marad:");
+            keepBrowserOpenOptionPanel.SetMainCheckbox(false);
+            keepBrowserOpenOptionPanel.SetSubElementsVisible(false);
+            keepBrowserOpenOptionPanel.SetInfoBox("Böngészõ állapot", "A teszt befelyezése után bezáródjon-e a böngészõ ablak. Ha az 'Igen' opció van beállítva," +
+                "akkor a böngészõn nyitva marad ameddig manuálisan vagy más program be nem zárja. Ellenkezõ esetben a teszt után automatikusa bezáródik.", InfoBox.InfoBoxType.Info);
+            flowLayoutPanel1.Controls.Add(keepBrowserOpenOptionPanel);
 
-            //optionsPanel.Controls.Add(argsText);
-            //optionsPanel.Controls.Add(splitterInfoText);
-            //optionsPanel.Controls.Add(argsBox);
+            // Args
+            browserArgsOptionPanel.SetMainLabel("Böngészõ indítási paraméterek:");
+            browserArgsOptionPanel.SetMainTextbox("Extra paraméterek...");
+            browserArgsOptionPanel.GiveHint("Spacel elválasztva)");
+            browserArgsOptionPanel.SetSubElementsVisible(false);
+            browserArgsOptionPanel.SetInfoBox("Böngészõ paraméterek", "Extra paraméterek amivel a program elindítja a böngészõt." +
+                "Ezek a használt böngészõtõl függenek.", InfoBox.InfoBoxType.Info);
+            flowLayoutPanel1.Controls.Add(browserArgsOptionPanel);
 
-            //optionsPanel.Controls.Add(serviceLogPathText);
-            //optionsPanel.Controls.Add(serviceLogPathBox);
+            // ServiceLogPath
+            serviceLogOptionPanel.SetMainLabel("Web-illesztõprogram tevékenységeinek logolása:", 9);
+            serviceLogOptionPanel.SetMainTextbox("A log fájl elérési útja...");
+            serviceLogOptionPanel.SetSubElementsVisible(false);
+            serviceLogOptionPanel.SetInfoBox("Web-illesztõprogram logolása", "A \"service log\" a Web-illesztõprogram tevékenységét rögzíti egy naplófájlba." +
+                "Ez a naplófájl tartalmazza a szolgáltatás indításával és futtatásával kapcsolatos információkat és hibákat." +
+                "Ezek a használt böngészõtõl függenek.", InfoBox.InfoBoxType.Info);
+            flowLayoutPanel1.Controls.Add(serviceLogOptionPanel);
 
-            int y = 10;
+            // ServiceArgs
+            serviceArgsOptionPanel.SetMainLabel("Konfigurációs paraméterek:");
+            serviceArgsOptionPanel.SetMainTextbox("Extra paraméterek az programnak...");
+            serviceArgsOptionPanel.GiveHint("(Spacel elválasztva)");
+            serviceArgsOptionPanel.SetSubElementsVisible(false);
+            serviceArgsOptionPanel.SetInfoBox("Konfigurációs paraméterek", "A \"service args\" lehetõvé teszi további parancssori argumentumok megadását" +
+                "a web-illesztõprogram szolgáltatásának indításakor.", InfoBox.InfoBoxType.Info);
+            flowLayoutPanel1.Controls.Add(serviceArgsOptionPanel);
 
-            foreach (Control control in optionsPanel.Controls)
-            {
-                if (control is PictureBox)
-                {
-
-                }
-
-                if (control is ComboBox || control is CheckBox || control is TextBox)
-                {
-                    control.Location = new Point(40, y);
-                    y += control.Height + 20;
-                }
-                else
-                {
-                    control.Location = new Point(30, y);
-                    y += control.Height + 3;
-                }
-            }
         }
 
         private void testStartButton_Click(object sender, EventArgs e)
@@ -154,31 +170,31 @@ namespace WebTestGui
             ExportManager exportManager = new ExportManager();
             try
             {
-                //exportManager.m_Options.m_PageLoadStrategy =
-                //    (ExportManager.Options.PageLoadStrategies)Enum.Parse(typeof(ExportManager.Options.PageLoadStrategies), pageLoadStrategyBox.Text);
-                //exportManager.m_Options.m_AcceptInsecureCerts = acceptInsecureCertsCheckbox.Checked;
-                //exportManager.m_Options.m_Timeout.m_Type =
-                //    (ExportManager.Options.Timeout.TimeoutType)Enum.Parse(typeof(ExportManager.Options.Timeout.TimeoutType), timeoutsBox.Text);
+                exportManager.m_Options.m_PageLoadStrategy =
+                    EnumHelpers.EnumTypeFromString<ExportManager.Options.PageLoadStrategies>(pageLoadStrategyOptionPanel.GetMainComboboxValue());
+                exportManager.m_Options.m_AcceptInsecureCerts = acceptInsuranceOptionPanel.GetMainCheckboxValue();
+                exportManager.m_Options.m_Timeout.m_Type =
+                    EnumHelpers.EnumTypeFromString<ExportManager.Options.Timeout.TimeoutType>(timeoutsOptionPanel.GetMainComboboxValue());
+                exportManager.m_Options.m_Timeout.m_ValueInMiliseconds = int.Parse(timeoutsOptionPanel.GetSubTextboxValue());
+                exportManager.m_Options.m_unhandledPromptBehaviour =
+                    EnumHelpers.EnumTypeFromString<ExportManager.Options.UnhandledPromptBehaviours>(unhandledPromptBehaviourOptionPanel.GetMainComboboxValue());
+                exportManager.m_Options.m_KeepBrowserOpen = keepBrowserOpenOptionPanel.GetMainCheckboxValue();
 
-                //exportManager.m_Options.m_Timeout.m_ValueInMiliseconds = int.Parse(timeoutValueBox.Text);
+                List<string> browserArgsList = new List<string>();
+                browserArgsList.AddRange(browserArgsOptionPanel.GetMainTextboxValue().Split(' '));
+                exportManager.m_Options.m_Args = browserArgsList;
 
-                //exportManager.m_Options.m_unhandledPromptBehaviour =
-                //    (ExportManager.Options.UnhandledPromptBehaviours)Enum.Parse(typeof(ExportManager.Options.UnhandledPromptBehaviours), unhandledPromprBehaviourBox.Text);
+                exportManager.m_Options.m_ServiceLogPath = serviceLogOptionPanel.GetMainTextboxValue();
 
-                //exportManager.m_Options.m_KeepBrowserOpen = keepBrowserOpenCheckbox.Checked;
+                List<string> serviceArgsList = new List<string>();
+                serviceArgsList.AddRange(serviceArgsOptionPanel.GetMainTextboxValue().Split(' '));
+                exportManager.m_Options.m_ServiceArgs = serviceArgsList;
 
-                //List<string> argsList = new List<string>();
-                //argsList.AddRange(argsBox.Text.Split(';'));
-                //exportManager.m_Options.m_Args = argsList;
-
-                //exportManager.m_Options.m_ServiceLogPath = serviceLogPathBox.Text;
-                //exportManager.m_Options.m_ServiceArgs = new List<string>() { "one", "two", "three" }; // ADD GUI FUNCTIONALITY
-
-                //exportManager.m_Actions.m_Goto = new ExportManager.Actions.ActionKeyValuePair() { Key = "url", Value = urlTextField.Text };
+                exportManager.m_Actions.m_Goto = new ExportManager.Actions.ActionKeyValuePair() { Key = "url", Value = urlTextField.Text };
             }
             catch
             {
-                InfoBox infoBox = new InfoBox("Hiányzó információ!", "Ki kell töltenie az összes '*'-gal jelölt mezõt!", InfoBox.InfoBoxType.Warning);
+                InfoBox infoBox = new InfoBox("Hiányzó információ!", "Ki kell töltenie az összes mezõt!", InfoBox.InfoBoxType.Warning);
                 infoBox.ShowDialog();
                 return;
             }
@@ -188,19 +204,7 @@ namespace WebTestGui
             console.AppendText(JSON + "\n");
         }
 
-
-
-        private void acceptInsecureCertsCheckbox_CheckedChanged(object sender, EventArgs e)
-        {
-            //if (acceptInsecureCertsCheckbox.Checked)
-            //{
-            //    acceptInsecureCertsCheckbox.Text = "Igen";
-            //}
-            //else
-            //{
-            //    acceptInsecureCertsCheckbox.Text = "Nem";
-            //}
-        }
+        #region Browser button functions
 
         private void searchForFolderButton_Click(object sender, EventArgs e)
         {
@@ -221,6 +225,8 @@ namespace WebTestGui
             string url = string.IsNullOrEmpty(urlTextField.Text) ? "google.com" : urlTextField.Text;
             Process.Start($"{executable}", url);
         }
+
+        #endregion
 
         #region Browser Checkboxes logic functions
 
@@ -314,36 +320,15 @@ namespace WebTestGui
             infoBox.ShowDialog();
         }
 
-        private void pageLoadStrategyInfo_Click(object sender, EventArgs e)
-        {
-            InfoBox infoBox = new InfoBox("Lapbetöltés", "Meghatározza a lapbetöltés módját a teszt megkezdése elõtt.", InfoBox.InfoBoxType.Info);
-            infoBox.ShowDialog();
-        }
-
-        private void acceptInsecureCertsInfo_Click(object sender, EventArgs e)
-        {
-            InfoBox infoBox = new InfoBox("Bizonyítványok kezelése", "Meghatárózza, hogy az applikáció elfogadja-e a nem biztonságos kérelmeket.", InfoBox.InfoBoxType.Info);
-            infoBox.ShowDialog();
-        }
-
-        private void timeoutsInfo_Click(object sender, EventArgs e)
-        {
-            InfoBox infoBox = new InfoBox("Idõtúllépés", "Hogyan reagáljon a program az idõtúllépés elõfordulásakor.", InfoBox.InfoBoxType.Info);
-            infoBox.ShowDialog();
-        }
-
-        private void unhandledPromprBehaviourInfo_Click(object sender, EventArgs e)
-        {
-            InfoBox infoBox = new InfoBox("Kezeletlen kérelem", "Kezeletlen kérelem esetén hogyan reagáljon a program", InfoBox.InfoBoxType.Info);
-            infoBox.ShowDialog();
-        }
-
-        private void argsInfo_Click(object sender, EventArgs e)
-        {
-            InfoBox infoBox = new InfoBox("Extra paraméterek", "Plusz lehetséges paraméterek a teszt elindításához. (Opcionális)", InfoBox.InfoBoxType.Info);
-            infoBox.ShowDialog();
-        }
-
         #endregion
+
+        OptionPanel pageLoadStrategyOptionPanel = new OptionPanel();
+        OptionPanel acceptInsuranceOptionPanel = new OptionPanel();
+        OptionPanel timeoutsOptionPanel = new OptionPanel();
+        OptionPanel unhandledPromptBehaviourOptionPanel = new OptionPanel();
+        OptionPanel keepBrowserOpenOptionPanel = new OptionPanel();
+        OptionPanel browserArgsOptionPanel = new OptionPanel();
+        OptionPanel serviceLogOptionPanel = new OptionPanel();
+        OptionPanel serviceArgsOptionPanel = new OptionPanel();
     }
 }
