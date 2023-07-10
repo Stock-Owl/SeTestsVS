@@ -1,6 +1,6 @@
 # SeTestsVS
 
-Automated Selenium tests for web (VS)
+Automatizált Web tesztek Seleniummal (VS)
 
 ### Options
 
@@ -8,28 +8,28 @@ Automated Selenium tests for web (VS)
 
 **Page Load Startegy**:
 
-Default: normal
+Alapérték: normal
 
 * normal
 * eager
 * none
 
 **Accept Insecure Certs**:
-Boolean (true/false)
-Not case sensitive
-Default: false
+Logikai érték  (igaz/hamis)
+Nem kapitál-érzékeny
+Alapérték: hamis
 
-**Timeouts** (in milliseconds):
+**Timeouts** (milliszekundumban):
 
-Default: pageLoad (default value)
+Alapérték: pageLoad
 
-* pageLoad: default 300,000
-* script: default 30,000
-* implicit: default 0
+* pageLoad: alap 300,000
+* script: alap 30,000
+* implicit: alap 0
 
 **Unhandled prompt behavior**:
 
-Default: dismiss and notify
+Alapérték: dismiss and notify
 
 * dismiss
 * accept
@@ -38,8 +38,8 @@ Default: dismiss and notify
 * ignore
 
 **Keep browser open**:
-Boolean (true/false)
-Default: true
+Logikai érték  (igaz/hamis)
+Alapérték: igaz
 
 ### Actions
 
@@ -47,32 +47,35 @@ Default: true
 
 **goto**:
 
-1 parameter: `url`
-Navigates to the specified URL
+1 paraméter: `url`
+A megadott URL-re navigál
 
-The URL **must** contain the Protocol (`https://` etc.)
-For example:
+Az URL-ben benne **KELL** lennie a protokollnak (`https://` stb.)
+Például:
 
-    Valid:`"https://google.com"`
-    Invalid: `"google.com"`
+    Jó:`"https://google.com"`
+    Rossz: `"google.com"`
 
 **find element**:
 
-2 parameters: `locator`, `value`
-`locator` specifies what element attribute to locate / what type of attribute to search for
+2 paraméter: `locator`, `value`
+`locator` megadja, hogy milyen módszerrel / mi után keressen
 
-Available locators are:
+A következő lokátorok elérhetőek:
 
-* class_name: get elements by their classname
-* css_selector: get elements using CSS-style selectors
-  For example:
-  * `#id1` — finds the elements with the `id1` id
-  * `.center` — finds the elements with the `center` class
-  * `div.menu` — finds the `div` elements with the `menu` class
-  * And so on...
-* id: get elements by their id
-* name: get elements by their name attribute
-* link_text: get link elements by their displayed text
-* partial_link_text: get link elements by their displayed text if their displayed text contains the given string
-* tag_name: get elements by their HTML tag
-* xpath: get elements with an xpath (see [Selenium documentation](https://www.selenium.dev/documentation/webdriver/elements/locators/#xpath))
+* class_name: osztálynév-attribútum alapján keres elemeket
+* css_selector: CSS-selectorok (kiválasztók) alapján keres elemeket
+  Például:
+  * `#id1` — megtalál minden elemet `id1` id-val
+  * `.center` — megtalál minden `center` osztályú elemet
+  * `div.menu` — megtall minden `menu` osztályú `div` elemet
+  * És így továbbb...
+* id: id-attribútum alapján keres elemeket
+* name: név-attribútum alapján keres elemeket
+* link_text: link-elemeket keres megjelenített szöveg alapján
+  Például: `<a href="https://youtube.com">YouTube</a>` — YouTube a megjelenített szöveg
+* partial_link_text: link-elemeket keres megjelenített szövegrészlet alapján
+  tehát, ha a megadott szöveg részlegesen szerepel a megjelenített szövegben, találatnak számít
+  Például: `<a href="https://youtube.com">YouTube hivatalos oldal</a>` — 'hivatalos oldal' kereséssel találat
+* tag_name: HTML tag alapján keres elemeket
+* xpath: xpath alapján keres elemeket (lásd: [Selenium dokumentáció](https://www.selenium.dev/documentation/webdriver/elements/locators/#xpath))
