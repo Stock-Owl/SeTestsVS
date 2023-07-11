@@ -1,8 +1,10 @@
-﻿namespace WebTestGui.Managers
+﻿using System.Reflection;
+
+namespace WebTestGui.Managers
 {
-    public class ExportManager
+    public class DriverManager
     {
-        public ExportManager()
+        public DriverManager()
         {
             m_Options = new Options();
             m_Actions = new Actions();
@@ -21,6 +23,7 @@
             public Options()
             {
                 m_Timeout = new Timeout();
+                m_LogJs = new LogJS();
             }
 
             public PageLoadStrategies m_PageLoadStrategy;
@@ -28,9 +31,11 @@
             public Timeout m_Timeout;
             public UnhandledPromptBehaviours m_unhandledPromptBehaviour;
             public bool m_KeepBrowserOpen;
-            public List<string> m_Args = new List<string>();
+            public List<string> m_BrowserArgs = new List<string>();
 
-            public string m_ServiceLogPath;
+            public LogJS m_LogJs;
+
+            public string? m_ServiceLogPath;
             public List<string> m_ServiceArgs = new List<string>();
 
             public enum PageLoadStrategies
@@ -61,17 +66,19 @@
                 acceptAndNotify = 3,
                 ignore = 4
             }
+
+            public class LogJS
+            {
+                public bool m_Active;
+                public const string m_Path = "./JS.log";
+                public const int m_RefreshRate = 1000;
+                public const int m_RetryTimeout = 1000;
+            }
         }
 
         public class Actions
         {
-            public ActionKeyValuePair? m_Goto;
-             
-            public class ActionKeyValuePair
-            {
-                public string? Key;
-                public string? Value;
-            }
+            public List<Forms.Controls.Action> m_Actions = new List<Forms.Controls.Action>();
         }
     }
 }

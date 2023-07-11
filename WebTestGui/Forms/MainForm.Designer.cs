@@ -37,30 +37,31 @@
             pictureBox2 = new PictureBox();
             firefoxCheckBox = new CheckBox();
             testStartButton = new Button();
-            actionsPanel = new Panel();
             actionText = new Label();
-            addButton = new Button();
             actionHeaderPanel = new Panel();
+            label1 = new Label();
+            addActionComboBox = new ComboBox();
             actionsPanelInfo = new PictureBox();
             logPathBox = new TextBox();
             searchForFolderButton = new Button();
             logPathInfo = new PictureBox();
             pictureBox3 = new PictureBox();
-            pictureBox4 = new PictureBox();
+            folderIcon = new PictureBox();
             urlTextFieldInfo = new PictureBox();
             optionText = new Label();
             optionHeaderPanel = new Panel();
             panel1 = new Panel();
             optionInfo = new PictureBox();
             button1 = new Button();
-            flowLayoutPanel1 = new FlowLayoutPanel();
+            optionsPanel = new FlowLayoutPanel();
+            actionsPanel = new FlowLayoutPanel();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             actionHeaderPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)actionsPanelInfo).BeginInit();
             ((System.ComponentModel.ISupportInitialize)logPathInfo).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)pictureBox4).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)folderIcon).BeginInit();
             ((System.ComponentModel.ISupportInitialize)urlTextFieldInfo).BeginInit();
             optionHeaderPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)optionInfo).BeginInit();
@@ -175,16 +176,6 @@
             testStartButton.UseVisualStyleBackColor = false;
             testStartButton.Click += testStartButton_Click;
             // 
-            // actionsPanel
-            // 
-            actionsPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            actionsPanel.AutoScroll = true;
-            actionsPanel.BackColor = Color.FromArgb(45, 45, 50);
-            actionsPanel.Location = new Point(243, 137);
-            actionsPanel.Name = "actionsPanel";
-            actionsPanel.Size = new Size(386, 379);
-            actionsPanel.TabIndex = 8;
-            // 
             // actionText
             // 
             actionText.AutoSize = true;
@@ -197,26 +188,13 @@
             actionText.TabIndex = 9;
             actionText.Text = "Akciók:";
             // 
-            // addButton
-            // 
-            addButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            addButton.BackColor = Color.FromArgb(40, 40, 43);
-            addButton.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
-            addButton.ForeColor = Color.DarkGray;
-            addButton.Location = new Point(276, 2);
-            addButton.Name = "addButton";
-            addButton.Size = new Size(108, 28);
-            addButton.TabIndex = 10;
-            addButton.Text = "Hozzáadás...";
-            addButton.UseVisualStyleBackColor = false;
-            addButton.Click += addButton_Click;
-            // 
             // actionHeaderPanel
             // 
             actionHeaderPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             actionHeaderPanel.AutoScroll = true;
             actionHeaderPanel.BackColor = Color.FromArgb(40, 40, 45);
-            actionHeaderPanel.Controls.Add(addButton);
+            actionHeaderPanel.Controls.Add(label1);
+            actionHeaderPanel.Controls.Add(addActionComboBox);
             actionHeaderPanel.Controls.Add(actionsPanelInfo);
             actionHeaderPanel.Controls.Add(actionText);
             actionHeaderPanel.Location = new Point(243, 106);
@@ -224,10 +202,38 @@
             actionHeaderPanel.Size = new Size(386, 96);
             actionHeaderPanel.TabIndex = 9;
             // 
+            // label1
+            // 
+            label1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            label1.AutoSize = true;
+            label1.BackColor = Color.FromArgb(40, 40, 43);
+            label1.Font = new Font("Segoe UI Semibold", 11F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+            label1.ForeColor = Color.LightGray;
+            label1.Location = new Point(213, 6);
+            label1.Name = "label1";
+            label1.Size = new Size(144, 20);
+            label1.TabIndex = 40;
+            label1.Text = "Akció hozzáadása...";
+            // 
+            // addActionComboBox
+            // 
+            addActionComboBox.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            addActionComboBox.BackColor = Color.FromArgb(40, 40, 43);
+            addActionComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            addActionComboBox.FlatStyle = FlatStyle.Popup;
+            addActionComboBox.Font = new Font("Segoe UI Semibold", 11F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+            addActionComboBox.ForeColor = Color.Silver;
+            addActionComboBox.FormattingEnabled = true;
+            addActionComboBox.Location = new Point(208, 2);
+            addActionComboBox.Name = "addActionComboBox";
+            addActionComboBox.Size = new Size(175, 28);
+            addActionComboBox.TabIndex = 43;
+            addActionComboBox.SelectedIndexChanged += addActionComboBox_SelectedIndexChanged;
+            // 
             // actionsPanelInfo
             // 
             actionsPanelInfo.Image = (Image)resources.GetObject("actionsPanelInfo.Image");
-            actionsPanelInfo.Location = new Point(84, 10);
+            actionsPanelInfo.Location = new Point(84, 8);
             actionsPanelInfo.Name = "actionsPanelInfo";
             actionsPanelInfo.Size = new Size(15, 15);
             actionsPanelInfo.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -284,16 +290,16 @@
             pictureBox3.TabIndex = 32;
             pictureBox3.TabStop = false;
             // 
-            // pictureBox4
+            // folderIcon
             // 
-            pictureBox4.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            pictureBox4.Image = (Image)resources.GetObject("pictureBox4.Image");
-            pictureBox4.Location = new Point(855, 71);
-            pictureBox4.Name = "pictureBox4";
-            pictureBox4.Size = new Size(25, 25);
-            pictureBox4.SizeMode = PictureBoxSizeMode.StretchImage;
-            pictureBox4.TabIndex = 33;
-            pictureBox4.TabStop = false;
+            folderIcon.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            folderIcon.Image = (Image)resources.GetObject("folderIcon.Image");
+            folderIcon.Location = new Point(855, 71);
+            folderIcon.Name = "folderIcon";
+            folderIcon.Size = new Size(25, 25);
+            folderIcon.SizeMode = PictureBoxSizeMode.StretchImage;
+            folderIcon.TabIndex = 33;
+            folderIcon.TabStop = false;
             // 
             // urlTextFieldInfo
             // 
@@ -369,29 +375,39 @@
             button1.Text = "Hozzáadás...";
             button1.UseVisualStyleBackColor = false;
             // 
-            // flowLayoutPanel1
+            // optionsPanel
             // 
-            flowLayoutPanel1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
-            flowLayoutPanel1.AutoScroll = true;
-            flowLayoutPanel1.BackColor = Color.FromArgb(45, 45, 50);
-            flowLayoutPanel1.Location = new Point(645, 137);
-            flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(327, 316);
-            flowLayoutPanel1.TabIndex = 38;
+            optionsPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
+            optionsPanel.AutoScroll = true;
+            optionsPanel.BackColor = Color.FromArgb(45, 45, 50);
+            optionsPanel.Location = new Point(645, 137);
+            optionsPanel.Name = "optionsPanel";
+            optionsPanel.Size = new Size(327, 316);
+            optionsPanel.TabIndex = 38;
+            // 
+            // actionsPanel
+            // 
+            actionsPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            actionsPanel.AutoScroll = true;
+            actionsPanel.BackColor = Color.FromArgb(45, 45, 50);
+            actionsPanel.Location = new Point(243, 137);
+            actionsPanel.Name = "actionsPanel";
+            actionsPanel.Size = new Size(386, 316);
+            actionsPanel.TabIndex = 39;
             // 
             // MainForm
             // 
             AutoScaleMode = AutoScaleMode.None;
             BackColor = Color.FromArgb(50, 50, 53);
             ClientSize = new Size(984, 511);
-            Controls.Add(flowLayoutPanel1);
+            Controls.Add(actionsPanel);
+            Controls.Add(optionsPanel);
             Controls.Add(urlTextFieldInfo);
-            Controls.Add(pictureBox4);
+            Controls.Add(folderIcon);
             Controls.Add(pictureBox3);
             Controls.Add(logPathInfo);
             Controls.Add(searchForFolderButton);
             Controls.Add(logPathBox);
-            Controls.Add(actionsPanel);
             Controls.Add(testStartButton);
             Controls.Add(pictureBox2);
             Controls.Add(firefoxCheckBox);
@@ -414,7 +430,7 @@
             ((System.ComponentModel.ISupportInitialize)actionsPanelInfo).EndInit();
             ((System.ComponentModel.ISupportInitialize)logPathInfo).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).EndInit();
-            ((System.ComponentModel.ISupportInitialize)pictureBox4).EndInit();
+            ((System.ComponentModel.ISupportInitialize)folderIcon).EndInit();
             ((System.ComponentModel.ISupportInitialize)urlTextFieldInfo).EndInit();
             optionHeaderPanel.ResumeLayout(false);
             optionHeaderPanel.PerformLayout();
@@ -433,15 +449,13 @@
         private PictureBox pictureBox2;
         private CheckBox firefoxCheckBox;
         private Button testStartButton;
-        private Panel actionsPanel;
         private Label actionText;
-        private Button addButton;
         private Panel actionHeaderPanel;
         private TextBox logPathBox;
         private Button searchForFolderButton;
         private PictureBox logPathInfo;
         private PictureBox pictureBox3;
-        private PictureBox pictureBox4;
+        private PictureBox folderIcon;
         private PictureBox actionsPanelInfo;
         private PictureBox urlTextFieldInfo;
         private Label optionText;
@@ -449,6 +463,9 @@
         private Button button1;
         private PictureBox optionInfo;
         private Panel panel1;
-        private FlowLayoutPanel flowLayoutPanel1;
+        private FlowLayoutPanel optionsPanel;
+        private FlowLayoutPanel actionsPanel;
+        private ComboBox addActionComboBox;
+        private Label label1;
     }
 }

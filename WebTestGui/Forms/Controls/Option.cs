@@ -2,9 +2,9 @@
 
 namespace WebTestGui.Forms.Controls
 {
-    public partial class OptionPanel : UserControl
+    public partial class Option : UserControl
     {
-        public OptionPanel()
+        public Option()
         {
             InitializeComponent();
 
@@ -17,11 +17,12 @@ namespace WebTestGui.Forms.Controls
             mainLabel.Font = new Font(mainLabel.Font.FontFamily, size, mainLabel.Font.Style);
         }
 
-        public void SetMainTextbox(string text)
+        public void SetMainTextbox(string text, string defaultValue = "")
         {
             mainComboBox.Visible = false;
             mainCheckbox.Visible = false;
             mainTextBox.PlaceholderText = text;
+            mainTextBox.Text = defaultValue;
         }
 
         public void SetMainCombobox<T>(string text, int defaultIndex = 0)
@@ -30,7 +31,7 @@ namespace WebTestGui.Forms.Controls
             mainCheckbox.Visible = false;
             mainComboBox.Text = text;
 
-            mainComboBox.Items.AddRange(EnumHelpers.GetEnumTypes<T>());
+            mainComboBox.Items.AddRange(TypeHelpers.GetEnumTypes<T>());
             mainComboBox.SelectedIndex = defaultIndex;
 
             infoBox.Location = new Point(194, infoBox.Location.Y);
@@ -50,9 +51,10 @@ namespace WebTestGui.Forms.Controls
             subLabel.Text = text;
         }
 
-        public void SetSubTextbox(string text)
+        public void SetSubTextbox(string text, string defaultValue = "")
         {
             subTextBox.PlaceholderText = text;
+            subTextBox.Text = defaultValue;
         }
 
         public void SetSubElementsVisible(bool visible)
@@ -93,6 +95,14 @@ namespace WebTestGui.Forms.Controls
             m_InfoBox = infoBox;
         }
 
+        public void AddFolderDialog()
+        {
+            folderIcon.Visible = true;
+            searchForFolderButton.Visible = true;
+
+            Size = new Size(Size.Width, 92);
+        }
+
         public string GetMainTextboxValue() { return mainTextBox.Text; }
         public string GetMainComboboxValue() { return mainComboBox.Text; }
         public bool GetMainCheckboxValue() { return mainCheckbox.Checked; }
@@ -112,6 +122,18 @@ namespace WebTestGui.Forms.Controls
             else
             {
                 mainCheckbox.Text = "Nem";
+            }
+        }
+        private void searchForFolderButton_Click(object sender, EventArgs e)
+        {
+            using (var folderDialog = new FolderBrowserDialog())
+            {
+                DialogResult result = folderDialog.ShowDialog();
+
+                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(folderDialog.SelectedPath))
+                {
+                    mainTextBox.Text = folderDialog.SelectedPath;
+                }
             }
         }
 

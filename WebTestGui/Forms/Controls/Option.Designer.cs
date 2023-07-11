@@ -1,6 +1,6 @@
 ﻿namespace WebTestGui.Forms.Controls
 {
-    partial class OptionPanel
+    partial class Option
     {
         /// <summary> 
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OptionPanel));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Option));
             mainLabel = new Label();
             mainTextBox = new TextBox();
             infoBox = new PictureBox();
@@ -37,7 +37,10 @@
             mainComboBox = new ComboBox();
             mainCheckbox = new CheckBox();
             hintLabel = new Label();
+            folderIcon = new PictureBox();
+            searchForFolderButton = new Button();
             ((System.ComponentModel.ISupportInitialize)infoBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)folderIcon).BeginInit();
             SuspendLayout();
             // 
             // mainLabel
@@ -139,11 +142,40 @@
             hintLabel.Text = "label1";
             hintLabel.Visible = false;
             // 
+            // folderIcon
+            // 
+            folderIcon.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            folderIcon.Image = (Image)resources.GetObject("folderIcon.Image");
+            folderIcon.Location = new Point(138, 61);
+            folderIcon.Name = "folderIcon";
+            folderIcon.Size = new Size(25, 25);
+            folderIcon.SizeMode = PictureBoxSizeMode.StretchImage;
+            folderIcon.TabIndex = 46;
+            folderIcon.TabStop = false;
+            folderIcon.Visible = false;
+            // 
+            // searchForFolderButton
+            // 
+            searchForFolderButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            searchForFolderButton.BackColor = Color.FromArgb(40, 40, 43);
+            searchForFolderButton.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            searchForFolderButton.ForeColor = Color.White;
+            searchForFolderButton.Location = new Point(168, 61);
+            searchForFolderButton.Name = "searchForFolderButton";
+            searchForFolderButton.Size = new Size(87, 25);
+            searchForFolderButton.TabIndex = 45;
+            searchForFolderButton.Text = "Kiválasztás...";
+            searchForFolderButton.UseVisualStyleBackColor = false;
+            searchForFolderButton.Visible = false;
+            searchForFolderButton.Click += searchForFolderButton_Click;
+            // 
             // OptionPanel
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(45, 45, 50);
+            Controls.Add(folderIcon);
+            Controls.Add(searchForFolderButton);
             Controls.Add(hintLabel);
             Controls.Add(mainCheckbox);
             Controls.Add(mainComboBox);
@@ -155,6 +187,7 @@
             Name = "OptionPanel";
             Size = new Size(295, 92);
             ((System.ComponentModel.ISupportInitialize)infoBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)folderIcon).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -168,5 +201,7 @@
         private ComboBox mainComboBox;
         private CheckBox mainCheckbox;
         private Label hintLabel;
+        private PictureBox folderIcon;
+        private Button searchForFolderButton;
     }
 }
