@@ -1,21 +1,58 @@
 {
+    "browser": "chrome",
     "options":
     {
         "page_load_startegy": "normal",
-        "accept_insecure_certs": "false",
-        "timeout": {"type": "pageLoad", "value": "300000"},
+        "accept_insecure_certs": false,
+        "timeout":
+        {
+            "type": "pageLoad",
+            "value": 300000
+        },
         "unhandled_prompt_behavior": "dismiss and notify",
-        "keep_browser_open": "true",
-        "args": [],
-
+        "keep_browser_open": true,
+        "browser_args": [],
+        "log_JS": 
+        {
+            "active": true,
+            "path": "./JS.log",
+            "refresh_rate": 1000,
+            "retry_timeout": 1000
+        },
         "service_log_path": ".",
         "service_args": []
     },
     
     "actions":
     {
-        "goto": {"url": "https://google.com"},
-        "click": {},
-        "find_element": {"locator": "name", "value": "myname"}
+        "1" :
+        {
+            "type": "goto",
+            "break": false,
+            "url": "https://google.com"
+        },
+        "2":
+        {
+            "type": "click",
+            "break": false,
+            "single": true,
+            "element":
+            {
+                "locator": "name",
+                "value": "myname",
+                "element": null
+            }
+        },
+        "3":
+        {
+            "type": "send_keys",
+            "break": false,
+            "element":
+            {
+                "locator": "name",
+                "value": "myname",
+                "element": null
+            }
+        }
     }
 }

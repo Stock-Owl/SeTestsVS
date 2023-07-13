@@ -1,21 +1,14 @@
 from selenium import webdriver
-import time
+from selenium.webdriver.common.by import By
 
-# Create a new Selenium WebDriver instance (e.g., for Chrome)
 driver = webdriver.Chrome()
+driver.get("https://www.example.com")
 
-# Enable the browser's logging capability
-driver.get('http://www.visionsoft.hu/')
-driver.execute_script('console.log("Example log message")')
+    # Get element with tag name 'div'
+element = driver.find_element(By.TAG_NAME, 'div')
 
-# Retrieve the JavaScript console logs
-browser_logs = driver.get_log('browser')
-
-# Print the logs
-for log in browser_logs:
-    print(log)
-
-time.sleep(10000000)
-
-# Close the browser
-# driver.quit()
+    # Get all the elements available with tag name 'p'
+elements = element.find_elements(By.TAG_NAME, 'p')
+for e in elements:
+    print(e.text)
+  
