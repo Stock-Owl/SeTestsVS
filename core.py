@@ -16,14 +16,14 @@ import multiprocessing as mp
 # chrome webdriver type: selenium.webdriver.chrome.webdriver.WebDriver
 # webdriver HTML element type: selenium.webdriver.remote.webelement.WebElement
 
-#                                                                               7 / 11
+#                                                                               7 / 12
 # TODO: Kitalálni, hogy vannak az argumentumok                                  ✅  1
 # TODO: Megszerelni a random useless conversionöket a JSON-ből                  ✅  2
 # TODO: Relative locators                                                       ❌  3
 # TODO: JSON so get elements gets passed                                        ✅  4
 # TODO: JS.Log setup    I.P.                                                    ✅  5
 # TODO: Check the JS.log file if it's empty, only write if and only if empty    ✅  6
-# TODO: JS execution on browser console action                                  ❗   7
+# TODO: New action: JS execution on browser console                             ❗   7
 # TODO: fix JS_log so it can use the existing driver                            ❌  8
 # TODO: Get two independent processes with MP.
 # Detect if one has terminated (it changes a shared variable to true/false
@@ -34,8 +34,42 @@ import multiprocessing as mp
 # TODO: rearrange JSON, so "options" only conatins browser options
 # or  make a new object for that since there are operation-level
 # varibales that must eb accessed and passed                                    ❌  11
+# TODO: make a defaultn json object and filter if there are differences         ❌  12
 class Core:
     class Chrome:
+
+        default_type: list[type] = [str | int | None | bool | dict]
+        default_driver_options_: dict[str, str | int | None | bool | dict[str, default_type]] = \
+        {
+            'browser': 'chrome',
+            'options':
+            {
+                'log_JS':
+                {
+                    'active': True,
+                    'path': './JS.log',
+                    'refresh_rate': 1000,
+                    'retry_timeout': 1000
+                }
+            },
+            'driver-options':
+            {
+                'page_load_startegy': 'normal',
+                'accept_insecure_certs': False,
+                'timeout':
+                {
+                    'type': 'pageLoad',
+                    'value': 300000
+                },
+                'unhandled_prompt_behavior': 'dismiss and notify',
+                'keep_browser_open': True,
+                'browser_args': [], 
+                'service_log_path': '.',
+                'service_args': []
+            },
+            'actions': {}
+        }
+
         def RunDriver(path: str | None = None, json_string: str | None = None) -> None:
             loaded_dict: dict
             if isinstance(path, json_string):
@@ -49,12 +83,12 @@ class Core:
                 except FileNotFoundError:
                     raise Exception("Invalid path, file not found")
             driver: ChromeDriver
-            options_ = loaded_dict["options"]
+            driver_options_ = loaded_dict["options"]
             # create the chrome driver with arguments
-            if options_ != []:
+            if driver_options_ != Core.Chrome.default_driver_options_:
                 # TODO: args need to be joined via " ".join(iterable) bc lists are for pussies
-                log_path: str = options_["service_log_path"]
-                service_args: list[str] = options_["service_args"]
+                log_path: str = driver_options_["service_log_path"]
+                service_args: list[str] = driver_options_["service_args"]
                 service = ChromeService(service_args = service_args, log_path = log_path)
 
                 opts = webdriver.ChromeOptions()
@@ -67,12 +101,12 @@ class Core:
 
                 Throws a ValueError if an unsupported page load startegy type is given.
                 """
-                opts.page_load_strategy(options_["page_load_strategy"])
+                opts.page_load_strategy(driver_options_["page_load_strategy"])
 
                 """
                 Accept insecure cert(ification)s is either true or false. Not case sensitive
                 """
-                opts.accept_insecure_certs(options_["accept_insecure_certs"])  # should be a bool
+                opts.accept_insecure_certs(driver_options_["accept_insecure_certs"])  # should be a bool
 
                 """
                 3 types of timeouts are available:
@@ -84,7 +118,7 @@ class Core:
 
                 The value of the timeout is the timespan [of the timteout] in MILLISECONDS (ms)
                 """
-                opts.timeouts({options_["timeout"]["type"]: options_["timeout"]["value"]})
+                opts.timeouts({driver_options_["timeout"]["type"]: driver_options_["timeout"]["value"]})
 
                 """
                 5 types of behaviors are available:
@@ -96,19 +130,21 @@ class Core:
 
                 Throws a ValueError if an unsupported behavior type is given.
                 """
-                opts.unhandled_prompt_behavior(options_["unhandled_promt_behavior"])
+                opts.unhandled_prompt_behavior(driver_options_["unhandled_promt_behavior"])
 
-                if options_["keep_browser_open"] != "":
-                    opts.add_experimental_option("detach", options_["keep_browser_open"])
+                if driver_options_["keep_browser_open"] != "":
+                    opts.add_experimental_option("detach", driver_options_["keep_browser_open"])
 
-                for option in options_["browser_arguments"]:
+                for option in driver_options_["browser_arguments"]:
                     opts.add_argument(option)
                 driver = webdriver.Chrome(options = opts, service = service)
             # create the chrome driver (as bare bones as it gets)
+            elif driver_options_ == Core.Chrome.default_driver_options_:
+                driver = webdriver.Chrome()
             else:
-                driver = webdriver.WebDriver()
+                raise Exception("Some shit got fucked up")
             #
-            if bool(options_["keep_browser_open"]):
+            if bool(driver_options_["keep_browser_open"]):
                 pass
             else:
                 driver.Quit()
@@ -167,8 +203,9 @@ class Core:
                 try:
                     driver.execute_script(command)
                 except SeJSException:
-                    print(f"Error: the command {command} was incorrect")
-                    Core.logJS(log_JS_args, SeJSException)                  #log_JS_args should be a global
+                    # print(f"Error: the command {command} was incorrect")
+                    Core.logJS(log_JS_args, SeJSException) #log_JS_args should be a global
+                    break
 
     def logJS(log_JS_args: dict[str, str | list | int | bool | None], log: str | SeJSException) -> None:
         from time import sleep
