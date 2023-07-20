@@ -1,7 +1,9 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.webdriver import WebDriver as ChromeDriver
+from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.firefox.webdriver import WebDriver as FirefoxDriver
+from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from selenium.webdriver.firefox.service import Service as FirefoxService
 from selenium.webdriver.remote.webelement import WebElement
 # from selenium.webdriver.chrome.options import Options
@@ -11,12 +13,13 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import JavascriptException as SeJSException
 from datetime import time
 import multiprocessing as mp
+from copy import copy
 # from selenium.webdriver.chrome.webdriver import WebDriver as chromedriver
 
 # chrome webdriver type: selenium.webdriver.chrome.webdriver.WebDriver
 # webdriver HTML element type: selenium.webdriver.remote.webelement.WebElement
 
-#                                                                               7 / 12
+#                                                                               8 / 13
 # TODO: Kitalálni, hogy vannak az argumentumok                                  ✅  1
 # TODO: Megszerelni a random useless conversionöket a JSON-ből                  ✅  2
 # TODO: Relative locators                                                       ❌  3
@@ -33,13 +36,14 @@ import multiprocessing as mp
 # to the JS console in the GUI (on request)                                     ✅  10
 # TODO: rearrange JSON, so "options" only conatins browser options
 # or  make a new object for that since there are operation-level
-# varibales that must eb accessed and passed                                    ❌  11
+# varibales that must be accessed and passed                                    ❌  11
 # TODO: make a defaultn json object and filter if there are differences         ❌  12
+# TODO: implement browser naviagtion funcitons and                              ✅  13
+
 class Core:
     class Chrome:
-
         default_type: list[type] = [str | int | None | bool | dict]
-        default_driver_options_: dict[str, str | int | None | bool | dict[str, default_type]] = \
+        default_driver_options_dict: dict[str, str | int | None | bool | dict[str, default_type]] = \
         {
             'browser': 'chrome',
             'options':
@@ -52,7 +56,7 @@ class Core:
                     'retry_timeout': 1000
                 }
             },
-            'driver-options':
+            'driver_options':
             {
                 'page_load_startegy': 'normal',
                 'accept_insecure_certs': False,
@@ -70,6 +74,15 @@ class Core:
             'actions': {}
         }
 
+        def DefaultOptions(path: str = "./default.json") -> ChromeOptions:
+            with open(path, mode = 'r', encoding='utf-8') as f:
+                content = loads(f.read())
+                options = copy(content["driver-options"])
+                del content
+            options = ChromeOptions()
+            options.page_load_strategy = content[]
+            pass
+
         def RunDriver(path: str | None = None, json_string: str | None = None) -> None:
             loaded_dict: dict
             if isinstance(path, json_string):
@@ -83,15 +96,15 @@ class Core:
                 except FileNotFoundError:
                     raise Exception("Invalid path, file not found")
             driver: ChromeDriver
-            driver_options_ = loaded_dict["options"]
+            driver_options_ = loaded_dict["driver_options"]
             # create the chrome driver with arguments
-            if driver_options_ != Core.Chrome.default_driver_options_:
+            if driver_options_ != Core.Chrome.default_driver_options_dict:
                 # TODO: args need to be joined via " ".join(iterable) bc lists are for pussies
                 log_path: str = driver_options_["service_log_path"]
                 service_args: list[str] = driver_options_["service_args"]
                 service = ChromeService(service_args = service_args, log_path = log_path)
 
-                opts = webdriver.ChromeOptions()
+                opts = ChromeOptions()
 
                 """
                 3 types of page load startegies are available:
@@ -101,12 +114,12 @@ class Core:
 
                 Throws a ValueError if an unsupported page load startegy type is given.
                 """
-                opts.page_load_strategy(driver_options_["page_load_strategy"])
+                opts.page_load_strategy = driver_options_["page_load_strategy"]
 
                 """
                 Accept insecure cert(ification)s is either true or false. Not case sensitive
                 """
-                opts.accept_insecure_certs(driver_options_["accept_insecure_certs"])  # should be a bool
+                opts.accept_insecure_certs = driver_options_["accept_insecure_certs"]  # should be a bool
 
                 """
                 3 types of timeouts are available:
@@ -118,7 +131,7 @@ class Core:
 
                 The value of the timeout is the timespan [of the timteout] in MILLISECONDS (ms)
                 """
-                opts.timeouts({driver_options_["timeout"]["type"]: driver_options_["timeout"]["value"]})
+                opts.timeouts = {driver_options_["timeout"]["type"]: driver_options_["timeout"]["value"]}
 
                 """
                 5 types of behaviors are available:
@@ -130,16 +143,18 @@ class Core:
 
                 Throws a ValueError if an unsupported behavior type is given.
                 """
-                opts.unhandled_prompt_behavior(driver_options_["unhandled_promt_behavior"])
+                opts.unhandled_prompt_behavior = driver_options_["unhandled_promt_behavior"]
 
                 if driver_options_["keep_browser_open"] != "":
                     opts.add_experimental_option("detach", driver_options_["keep_browser_open"])
 
-                for option in driver_options_["browser_arguments"]:
+                for option in driver_options_["browser_args"]:
                     opts.add_argument(option)
                 driver = webdriver.Chrome(options = opts, service = service)
             # create the chrome driver (as bare bones as it gets)
-            elif driver_options_ == Core.Chrome.default_driver_options_:
+            elif driver_options_ == Core.Chrome.default_driver_options_dict:
+                opts = Core.Chrome.default_driver_options_
+                service = Core.Chrome.default_driver_service
                 driver = webdriver.Chrome()
             else:
                 raise Exception("Some shit got fucked up")
@@ -172,6 +187,18 @@ class Core:
         def goto(driver: ChromeDriver, url: str):
             Core.Chrome.checkDriverExists(driver)
             driver.get(url)
+
+        def back(driver: ChromeDriver):
+            Core.Chrome.checkDriverExists(driver)
+            driver.back()
+
+        def forward(driver: ChromeDriver):
+            Core.Chrome.checkDriverExists(driver)
+            driver.forward()
+
+        def refresh(driver: ChromeDriver):
+            Core.Chrome.checkDriverExists(driver)
+            driver.refresh()
 
         def getElement(_obj: ChromeDriver | WebElement, _by: By | str, value: str):
             if isinstance(_by, By):
