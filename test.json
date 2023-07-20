@@ -12,18 +12,24 @@
     },
     "driver-options":
     {
-        "page_load_startegy": "normal",
-        "accept_insecure_certs": false,
-        "timeout":
+        "options":
         {
-            "type": "pageLoad",
-            "value": 300000
+            "page_load_startegy": "normal",
+            "accept_insecure_certs": false,
+            "timeout":
+            {
+                "type": "pageLoad",
+                "value": 300000
+            },
+            "unhandled_prompt_behavior": "dismiss and notify",
+            "keep_browser_open": true,
+            "browser_arguments": []
         },
-        "unhandled_prompt_behavior": "dismiss and notify",
-        "keep_browser_open": true,
-        "browser_args": [],
-        "service_log_path": ".",
-        "service_args": []
+        "service":
+        {
+            "service_log_path": ".",
+            "service_args": []
+        }
     },
     
     "actions":
@@ -36,9 +42,42 @@
         },
         "2":
         {
+            "type": "back",
+            "break": false
+        },
+        "3":
+        {
+            "type": "forward",
+            "break": false
+        },
+        "4":
+        {
+            "type": "refresh",
+            "break": false
+        },
+        "5":
+        {
+            "type": "js_execute",
+            "break": false,
+            "commands":
+            [
+                "console.log('Anyád')",
+                "for(let i = 0; i < 5; i++){console.log(i);}",
+                "document.getElementById('myid').innerHTML = 'valami'"
+            ]
+        },
+        "6":
+        {
+            
+        },
+        "7":
+        {
             "type": "click",
             "break": false,
             "single": true,
+            "diplayed": null,
+            "enabled": null,
+            "selected": null,
             "element":
             {
                 "locator": "name",
@@ -46,11 +85,29 @@
                 "element": null
             }
         },
-        "3":
+        "8":
         {
             "type": "send_keys",
             "break": false,
             "single": true,
+            "diplayed": null,
+            "enabled": null,
+            "selected": null,
+            "element":
+            {
+                "locator": "name",
+                "value": "myname",
+                "element": null
+            }
+        },
+        "9":
+        {
+            "type": "clear",
+            "break": false,
+            "single": true,
+            "diplayed": null,
+            "enabled": null,
+            "selected": null,
             "element":
             {
                 "locator": "name",
