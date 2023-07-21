@@ -6,18 +6,12 @@ from selenium.webdriver.firefox.webdriver import WebDriver as FirefoxDriver
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from selenium.webdriver.firefox.service import Service as FirefoxService
 from selenium.webdriver.remote.webelement import WebElement
-# from selenium.webdriver.chrome.options import Options
 from json import loads
-import selenium
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import JavascriptException as SeJSException
 from datetime import time
 import multiprocessing as mp
 from copy import copy
-# from selenium.webdriver.chrome.webdriver import WebDriver as chromedriver
-
-# chrome webdriver type: selenium.webdriver.chrome.webdriver.WebDriver
-# webdriver HTML element type: selenium.webdriver.remote.webelement.WebElement
 
 #                                                                               8 / 13
 # TODO: Kitalálni, hogy vannak az argumentumok                                  ✅  1
@@ -80,7 +74,7 @@ class Core:
                 options = copy(content["driver-options"])
                 del content
             options = ChromeOptions()
-            options.page_load_strategy = content[]
+            options.page_load_strategy = content
             pass
 
         def RunDriver(path: str | None = None, json_string: str | None = None) -> None:

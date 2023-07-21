@@ -68,9 +68,30 @@
         },
         "6":
         {
-            
+            "type": "wait",
+            "break": false,
+            "amount": 1000
         },
         "7":
+        {
+            "type": "waitfor",
+            "break": false,
+            "element":
+            {
+                "single": true,
+                "diplayed": null,
+                "enabled": null,
+                "selected": null,
+                "element":
+                {
+                    "type": "element",
+                    "locator": "name",
+                    "value": "myname",
+                    "element": null
+                }
+            }
+        },
+        "8":
         {
             "type": "click",
             "break": false,
@@ -80,12 +101,13 @@
             "selected": null,
             "element":
             {
+                "type": "element",
                 "locator": "name",
                 "value": "myname",
                 "element": null
             }
         },
-        "8":
+        "9":
         {
             "type": "send_keys",
             "break": false,
@@ -95,12 +117,13 @@
             "selected": null,
             "element":
             {
+                "type": "element",
                 "locator": "name",
                 "value": "myname",
                 "element": null
             }
         },
-        "9":
+        "10":
         {
             "type": "clear",
             "break": false,
@@ -110,6 +133,7 @@
             "selected": null,
             "element":
             {
+                "type": "element",
                 "locator": "name",
                 "value": "myname",
                 "element": null
