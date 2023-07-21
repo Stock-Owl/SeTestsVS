@@ -28,7 +28,7 @@
         "service":
         {
             "service_log_path": ".",
-            "service_args": []
+            "service_arguments": []
         }
     },
     

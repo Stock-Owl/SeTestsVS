@@ -6,6 +6,18 @@ Automatizált Web tesztek Seleniummal (VS)
 
 ---
 
+**Log JS**:
+
+* Active:
+  Logikai érték (igaz/hamis)
+  Aktív-e a valós idejű JavaScript naplózás
+* path:
+  belső paraméter, nem átállítható
+* referesh rate:
+  milyen gyakran frissíti a naplót a program
+* retry timeout:
+  ha hibába ütközik frissítés közben, milyen gyakran próbálkozzon újra
+
 **Page Load Startegy**:
 
 Alapérték: normal
@@ -43,6 +55,23 @@ Alapérték: igaz
 
 A tesztek futása után nyitva tartja a böngészőt, ameddig a driver nem kap `driver.Quit` parancsot
 
+**Browser arguments**:
+Szöveg lista
+Minden elemét átadja a böngészőnek a böngésző indításakor
+
+[Chrome argumentumok](https://peter.sh/experiments/chromium-command-line-switches/)
+[Firefox argumentumok](https://wiki.mozilla.org/Firefox/CommandLineOptions)
+
+**Service log path**:
+Útvonal ahol van / létrehozásra kerül a `service.log` fájl.
+A driver ide írja az akciók utáni logokat
+
+**Service arguments:**
+
+* [1](https://gist.github.com/ntamvl/4f93bbb7c9b4829c601104a2d2f91fe5)
+* [2](https://www.selenium.dev/documentation/webdriver/drivers/service/)
+* [3](https://www.selenium.dev/documentation/webdriver/browsers/chrome/#service)
+
 ### Actions
 
 ---
@@ -57,6 +86,29 @@ Például:
 
     Jó:`"https://google.com"`
     Rossz: `"google.com"`
+
+**back**:
+
+nincs paramétere
+Visszalép az előző oldalra a böngészőben, ha van
+
+**forward**:
+
+nincs paramétere
+Előrelép a következő oldalra a böngészőben, ha van
+
+**refresh**:
+
+nincs paramétere
+Újratölti az aktív lapot	
+
+**JS execute**:
+
+1 paraméter: `commands`
+`commands` egy lista JavaScript utasítás / kód
+
+Sorban lefuttatja a listában szereplő JavaScript kódokat
+Miért lista? Hogy pontosabb legyen a hiba-kezelés!
 
 **find element**:
 
