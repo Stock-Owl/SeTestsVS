@@ -119,10 +119,37 @@ Eseménytől függetlenül vár `amount` milliszekundumot
 
 **waitfor**:
 
-2 paraméter: `element` (find element funkció), `timeout`
+4 paraméter: `condition`, `timeout`, `frequency`, `element` (find element funkció)
+`condition`: mire várjon az akció
+Elérhető `condition` típusok:
+
+* loaded (element exists)
+* alert (alert is present)
+* (!) visible (element is visible)
+* contains (title contains)
+* is (title is)
+* stale (element staleness)
+* readable (visible text)
+
+A `visible` típust lehet tagadni egy ! jellel
+`timeout`: maximum mennyi ideig próbálkozzon milliszekundumban.
+`frequency`: mennyit várjon két feltétel ellenőrzés között (pl.: betöltött-e az elem?)  milliszekundumban
 `element`: megad egy elemet vagy elemcsoportot
 
-Addig várkaozik, ameddig be nem tölt a megadott elem vagy elemcsoport (`element`)
+Ha `frequency` és `timeout` nincs megadva, akkor addig várkaozik, ameddig be nem tölt a megadott elem vagy elemcsoport (`element`)
+Ha `frequency` és `timeout` meg van adva, akkor `timeout`-ig várakozik, hogy betöltsön az elem.
+Ha csak az egyik van megadva, a másik alapértéket vesz fel:
+
+* `frequency`: 1000
+* `timeout`: 10000
+
+**click**:
+
+5 paraméter
+
+### Funkciók
+
+---
 
 **find element**:
 

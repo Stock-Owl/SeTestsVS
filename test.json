@@ -76,6 +76,7 @@
         {
             "type": "waitfor",
             "break": false,
+            "condition": "loaded",
             "frequency": 1000,
             "timeout": 10000,
             "element":
