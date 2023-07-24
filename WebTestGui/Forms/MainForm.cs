@@ -293,7 +293,9 @@ namespace WebTestGui
             switchToJsLogButton_Click(sender, e);
             m_ConsoleManager.Print("\nExportált {Magenta}[JSON] fájl:\n\n");
 
-            console.AppendText(GetTestJSON() + "\n");
+            string JSONString = GetTestJSON();
+            console.AppendText(JSONString + "\n");
+            AppConsts.StartTestWithPythonScript(JSONString);
         }
 
         private void saveTestButton_Click(object sender, EventArgs e)

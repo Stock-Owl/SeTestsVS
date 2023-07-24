@@ -114,7 +114,7 @@ namespace WebTestGui
             m_ElementEditor.SetElementsData(data);
         }
 
-        public string m_ActionType { get { return "waitfor"; } }
+        public string m_ActionType { get { return "wait_for"; } }
         public MainForm m_ParentForm { get; set; }
         public bool m_HaveBreakpoint { get; set; }
 

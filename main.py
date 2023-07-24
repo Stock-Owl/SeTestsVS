@@ -1,1 +1,2 @@
 print("SHIT WILL RUN! SIT YOUR ASS BACK DOWN")
+input()
