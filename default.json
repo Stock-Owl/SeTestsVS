@@ -10,11 +10,11 @@
             "retry_timeout": 1000
         }
     },
-    "driver-options":
+    "driver_options":
     {
         "options":
         {
-            "page_load_startegy": "normal",
+            "page_load_strategy": "normal",
             "accept_insecure_certs": false,
             "timeout":
             {
@@ -27,8 +27,8 @@
         },
         "service":
         {
-            "service_log_path": ".",
-            "service_args": []
+            "log_path": ".",
+            "arguments": []
         }
     },
     

@@ -10,7 +10,7 @@
             "retry_timeout": 1000
         }
     },
-    "driver-options":
+    "driver_options":
     {
         "options":
         {
@@ -27,8 +27,8 @@
         },
         "service":
         {
-            "service_log_path": ".",
-            "service_arguments": []
+            "log_path": ".",
+            "arguments": []
         }
     },
     
