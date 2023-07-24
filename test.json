@@ -79,19 +79,16 @@
             "condition": "loaded",
             "frequency": 1000,
             "timeout": 10000,
+            "single": true,
+            "diplayed": null,
+            "enabled": null,
+            "selected": null,
             "element":
             {
-                "single": true,
-                "diplayed": null,
-                "enabled": null,
-                "selected": null,
-                "element":
-                {
-                    "type": "element",
-                    "locator": "name",
-                    "value": "myname",
-                    "element": null
-                }
+                "type": "element",
+                "locator": "name",
+                "value": "myname",
+                "element": null
             }
         },
         "8":
