@@ -125,7 +125,7 @@ Elérhető `condition` típusok:
 
 * loaded (element exists)
 * alert (alert is present)
-* (!) visible (element is visible)
+* (!) visible (invisible/visible) (element is visible)
 * contains (title contains)
 * is (title is)
 * stale (element staleness)
