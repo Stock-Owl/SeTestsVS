@@ -1,21 +1,14 @@
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.remote.webdriver import WebDriver
 from selenium import webdriver
-import time
+from selenium.webdriver.common.by import By
 
-# Create a new Selenium WebDriver instance (e.g., for Chrome)
 driver = webdriver.Chrome()
 
-# Enable the browser's logging capability
-driver.get('http://www.visionsoft.hu/')
-driver.execute_script('console.log("Example log message")')
+def document_initialised(driver):
+    return driver.execute_script("return 0")
 
-# Retrieve the JavaScript console logs
-browser_logs = driver.get_log('browser')
-
-# Print the logs
-for log in browser_logs:
-    print(log)
-
-time.sleep(10000000)
-
-# Close the browser
-# driver.quit()
+driver.get("https://wikipedia.org")
+WebDriverWait(driver, timeout=10).until(document_initialised, message = "your mom")
+print("done")
+  
