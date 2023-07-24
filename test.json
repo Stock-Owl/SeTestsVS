@@ -76,6 +76,8 @@
         {
             "type": "waitfor",
             "break": false,
+            "frequency": 1000,
+            "timeout": 10000,
             "element":
             {
                 "single": true,

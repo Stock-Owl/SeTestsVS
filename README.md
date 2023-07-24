@@ -100,7 +100,7 @@ Előrelép a következő oldalra a böngészőben, ha van
 **refresh**:
 
 nincs paramétere
-Újratölti az aktív lapot	
+Újratölti az aktív lapot
 
 **JS execute**:
 
@@ -109,6 +109,20 @@ nincs paramétere
 
 Sorban lefuttatja a listában szereplő JavaScript kódokat
 Miért lista? Hogy pontosabb legyen a hiba-kezelés!
+
+**wait**:
+
+1 paraméter: `amount`
+`amount` mennyi ideig várjon (milliszekundumban)
+
+Eseménytől függetlenül vár `amount` milliszekundumot
+
+**waitfor**:
+
+2 paraméter: `element` (find element funkció), `timeout`
+`element`: megad egy elemet vagy elemcsoportot
+
+Addig várkaozik, ameddig be nem tölt a megadott elem vagy elemcsoport (`element`)
 
 **find element**:
 
