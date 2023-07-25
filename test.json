@@ -6,6 +6,7 @@
         {
             "active": true,
             "path": "./JS.log",
+            "create_path": true,
             "refresh_rate": 1000,
             "retry_timeout": 1000
         }
@@ -74,7 +75,7 @@
         },
         "7":
         {
-            "type": "waitfor",
+            "type": "wait_for",
             "break": false,
             "condition": "loaded",
             "frequency": 1000,
