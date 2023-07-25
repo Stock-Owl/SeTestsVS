@@ -47,9 +47,8 @@
             "break": false,
             "commands":
             [
-                "console.log('Anyád')",
-                "for(let i = 0; i < 5; i++){console.log(i);}",
-                "document.getElementById('myid').innerHTML = 'valami'"
+                "console.log('Hello Wolrd!')",
+                "for(let i = 0; i < 5; i++){console.log(i);}"
             ]
         },
     "3":

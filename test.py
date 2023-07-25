@@ -12,6 +12,10 @@ options.add_experimental_option("detach", True)
 service = ChromeService(service_args=['--log-level=DEBUG'], log_path = "./service.log")
 driver = ChromeDriver(options=options, service=service)
 
+driver.get("https://index.hu")
+driver.get("https://pestisracok.hu")
+driver.back()
+
 print("works")
 
 driver.quit()

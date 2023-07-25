@@ -85,7 +85,6 @@ class Core:
             service = ChromeService(service_args = args, log_path = log_path)
             return service
         
-
         def RunDriver(path: str | None = None, json_string: str | None = None) -> None:
             # loads json file or loads the string and instanciates the actions par and the 
             loaded_dict: dict
@@ -163,6 +162,7 @@ class Core:
 
                 for option in options_["browser_arguments"]:
                     opts.add_argument(option)
+
             # create the chrome driver (as bare bones as it gets)
             elif driver_options_ == Core.Chrome.default_driver_options_dict_:
                 opts = Core.Chrome.DefaultOptions()
@@ -241,6 +241,7 @@ class Core:
             driver.refresh()
 
         def wait(driver: ChromeDriver, time_: int):
+            Core.Chrome.checkDriverExists(driver)
             time = float(time_ / 1000)
             driver.implicitly_wait(time)
 
