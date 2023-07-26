@@ -2,39 +2,41 @@ from selenium import webdriver
 from selenium.webdriver.chrome.webdriver import WebDriver as ChromeDriver
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.chrome.service import Service as ChromeService
+from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.firefox.webdriver import WebDriver as FirefoxDriver
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from selenium.webdriver.firefox.service import Service as FirefoxService
 from selenium.webdriver.remote.webelement import WebElement
-from json import loads
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import JavascriptException as SeJSException
+
+from json import loads
 from datetime import time
 import multiprocessing as mp
 from copy import copy
 
-#                                                                               12 / 14
+#                                                                               12 / 13
 # TODO: Kitalálni, hogy vannak az argumentumok                                  ✅  1
 # TODO: Megszerelni a random useless conversionöket a JSON-ből                  ✅  2
-# TODO: Relative locators                                                       ❌  3
-# TODO: JSON so get elements gets passed                                        ✅  4
-# TODO: JS.Log setup    I.P.                                                    ✅  5
-# TODO: Check the JS.log file if it's empty, only write if and only if empty    ✅  6
-# TODO: New action: JS execution on browser console                             ✅  7
-# TODO: fix JS_log so it can use the existing driver                            ✅  8
+# TODO: Relative locators                                                       ❌  NAH FUCK that shit
+# TODO: JSON so get elements gets passed                                        ✅  3
+# TODO: JS.Log setup    I.P.                                                    ✅  4
+# TODO: Check the JS.log file if it's empty, only write if and only if empty    ✅  5
+# TODO: New action: JS execution on browser console                             ✅  6
+# TODO: fix JS_log so it can use the existing driver                            ✅  7
 # TODO: Get two independent processes with MP.
 # Detect if one has terminated (it changes a shared variable to true/false
 # on termination) And then stop the execution of the other one.
-# Essentially, pipe without pipe bc pipe bulk ||                                ✅  9
+# Essentially, pipe without pipe bc pipe bulk ||                                ✅  8
 # TODO: make a saparate function for logging JS
-# to the JS console in the GUI (on request)                                     ✅  10
+# to the JS console in the GUI (on request)                                     ✅  9
 # TODO: rearrange JSON, so "options" only conatins browser options
 # or  make a new object for that since there are operation-level
-# varibales that must be accessed and passed                                    ✅  11
+# varibales that must be accessed and passed                                    ✅  10
 # TODO: make a function that returns a default json object and filter
-# if there are differences                                                      ✅  12
-# TODO: implement browser naviagtion funcitons and                              ✅  13
-# TODO: Units and binding                                                       ❌  14
+# if there are differences                                                      ✅  11
+# TODO: implement browser naviagtion funcitons and                              ✅  12
+# TODO: Units and binding                                                       ❌  13
 
 none = ""
 
@@ -204,45 +206,25 @@ class Core:
                 pass
             else:
                 driver.Quit()
-        
-        def checkDriverExists(driver: object, omit_exceptions: bool = True) -> None | bool | Exception:
-            try:
-                assert driver
-            except AssertionError:
-                if omit_exceptions:
-                    print("Shit doesn't exist mate")
-                    return False
-                raise AssertionError("Shit doesn't exist mate")
-            
-            try:
-                assert isinstance(driver, ChromeDriver)
-            except AssertionError:
-                if omit_exceptions:
-                    print("Invalid fuckin' type mate")
-                    return False
-                raise AssertionError("Invalid fuckin' type mate")
-            if omit_exceptions:            
-                return True
-            return None
 
         def goto(driver: ChromeDriver, url: str):
-            Core.Chrome.checkDriverExists(driver)
+            Core.checkDriverExists(driver)
             driver.get(url)
 
         def back(driver: ChromeDriver):
-            Core.Chrome.checkDriverExists(driver)
+            Core.checkDriverExists(driver)
             driver.back()
 
         def forward(driver: ChromeDriver):
-            Core.Chrome.checkDriverExists(driver)
+            Core.checkDriverExists(driver)
             driver.forward()
 
         def refresh(driver: ChromeDriver):
-            Core.Chrome.checkDriverExists(driver)
+            Core.checkDriverExists(driver)
             driver.refresh()
 
         def wait(driver: ChromeDriver, time_: int):
-            Core.Chrome.checkDriverExists(driver)
+            Core.checkDriverExists(driver)
             time = float(time_ / 1000)
             driver.implicitly_wait(time)
 
@@ -316,17 +298,31 @@ class Core:
                 isEnabled: bool | None = None,
                 **action_kwargs
                 ) -> bool | None:
-            pass
+            if isDisplayed is not None:
+                assert isDisplayed == _obj.is_displayed(), f"Element is{' 'if isDisplayed is False else 'not '}displayed"
+            if isSelected is not None:
+                assert isSelected == _obj.is_selected(), f"Element is{' 'if isDisplayed is False else ' not '}selected"
+            if isEnabled is not None:
+                assert isEnabled == _obj.is_enabled(), f"Element is{' 'if isDisplayed is False else ' not '}enabled"
 
-
-
-
-
-
-
-
-
-
+            match action:
+                case "wait_for":
+                    args: dict = action_kwargs
+                    timeout = args['timeout']
+                    frequency = args['frequency']
+                    if frequency is None:
+                        frequency = 1000
+                    wait = WebDriverWait(args['driver'], timeout=timeout)
+                    
+                case "click":
+                    _obj.click()
+                case "send_keys":
+                    _obj.send_keys(**action_kwargs['keys'])
+                case "clear":
+                    _obj.clear()
+                case _:
+                    raise ValueError("Invalid action type")
+                
 
         def getElement(
                 driver: ChromeDriver,
@@ -356,49 +352,6 @@ class Core:
             
             if root['type'] == 'iframe':
                 driver.switch_to.frame(result)
-            
-            
-            # root: dict = json_str
-            # root_element: dict = json_str['element']
-            # result: WebElement | list[WebElement]
-
-            # # print(f"root : {root},\ntype: {root['type']}")
-            # if root['element'] == "":
-            #     if isSingle:
-            #         result = Core.Chrome.matchElement(_obj, root_element)
-            #     elif isSingle == False:     # If the element is a group, then use find_elements.()
-            #         result = Core.Chrome.matchElements(_obj, root_element)
-            #     return result
-            
-            # if isSingle:
-            #     result = Core.Chrome.matchElement(_obj, root_element)
-            # elif isSingle == False:     # If the element is a group, then use find_elements.()
-            #     result = Core.Chrome.matchElements(_obj, root_element)
-
-            # if root_element['type'] == 'iframe':
-            #     driver.switch_to().frame(result)
-            #     driver.getElement(driver, driver, root_element['element'])
-
-            # result = Core.Chrome.getElement(driver, result, root_element['element'])
-
-            # return result
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                     
         def execute_js(
             driver: ChromeDriver,
@@ -411,7 +364,7 @@ class Core:
                     "retry_timeout": 1000
                 }
             ):
-            Core.Chrome.checkDriverExists(driver)
+            Core.checkDriverExists(driver)
             for command in commands:
                 try:
                     driver.execute_script(command)
@@ -472,6 +425,26 @@ class Core:
         except NameError:
             print("Successfully quit and deleted")
         """
+
+    def checkDriverExists(driver: object, omit_exceptions: bool = True) -> None | bool | Exception:
+        try:
+            assert driver
+        except AssertionError:
+            if omit_exceptions:
+                print("Shit doesn't exist mate")
+                return False
+            raise AssertionError("Shit doesn't exist mate")
+            
+        try:
+            assert isinstance(driver, ChromeDriver)
+        except AssertionError:
+            if omit_exceptions:
+                print("Invalid fuckin' type mate")
+                return False
+            raise AssertionError("Invalid fuckin' type mate")
+        if omit_exceptions:            
+            return True
+        return None
                     
     def auto_logJS(driver: ChromeDriver, log_JS_args: dict[str, str | list | int | bool | None]) -> None:
             from time import sleep
