@@ -13,15 +13,15 @@ from datetime import time
 import multiprocessing as mp
 from copy import copy
 
-#                                                                               9 / 13
+#                                                                               12 / 14
 # TODO: Kitalálni, hogy vannak az argumentumok                                  ✅  1
 # TODO: Megszerelni a random useless conversionöket a JSON-ből                  ✅  2
 # TODO: Relative locators                                                       ❌  3
 # TODO: JSON so get elements gets passed                                        ✅  4
 # TODO: JS.Log setup    I.P.                                                    ✅  5
 # TODO: Check the JS.log file if it's empty, only write if and only if empty    ✅  6
-# TODO: New action: JS execution on browser console                             ❗   7
-# TODO: fix JS_log so it can use the existing driver                            ❌  8
+# TODO: New action: JS execution on browser console                             ✅  7
+# TODO: fix JS_log so it can use the existing driver                            ✅  8
 # TODO: Get two independent processes with MP.
 # Detect if one has terminated (it changes a shared variable to true/false
 # on termination) And then stop the execution of the other one.
@@ -32,8 +32,9 @@ from copy import copy
 # or  make a new object for that since there are operation-level
 # varibales that must be accessed and passed                                    ✅  11
 # TODO: make a function that returns a default json object and filter
-# if there are differences                                                      ❌  12
+# if there are differences                                                      ✅  12
 # TODO: implement browser naviagtion funcitons and                              ✅  13
+# TODO: Units and binding                                                       ❌  14
 
 none = ""
 
@@ -247,29 +248,143 @@ class Core:
 
         # PART FUNCS
 
-        def getElement(_obj: ChromeDriver | WebElement, _by: By | str, value: str):
-            if isinstance(_by, By):
-                _obj.find_element(_by, value)
-            elif isinstance(_by, str):
-                match _by.lower():
-                    case "id":
-                        _obj.find_element(By.ID, value)
-                    case "name":
-                        _obj.find_element(By.NAME, value)
-                    case "css_selector":
-                        _obj.find_element(By.CSS_SELECTOR, value)
-                    case "class", "class_name":
-                        _obj.find_element(By.CLASS_NAME, value)
-                    case "tag", "tag_name":
-                        _obj.find_element(By.TAG_NAME, value)
-                    case "link", "link_text":
-                        _obj.find_element(By.LINK_TEXT, value)
-                    case "partial_link", "partial_link_text":
-                        _obj.find_element(By.PARTIAL_LINK_TEXT, value)
-                    case "xpath":
-                        _obj.find_element(By.XPATH, value)
-                    case _:
-                        raise ValueError("This doesn't exist mate")
+        def matchElement(_obj: WebElement | ChromeDriver, root: dict) -> WebElement:
+            match root["locator"]:
+                case "id":
+                    return _obj.find_element(By.ID, root["value"])
+                case "name":
+                    return _obj.find_element(By.NAME, root["value"])
+                case "css_selector":
+                    return _obj.find_element(By.CSS_SELECTOR, root["value"])
+                case "class":
+                    return _obj.find_element(By.CLASS_NAME, root["value"])
+                case "class_name":
+                    return _obj.find_element(By.CLASS_NAME, root["value"])
+                case "link":
+                    return _obj.find_element(By.LINK_TEXT, root["value"])
+                case "link_text":
+                    return _obj.find_element(By.LINK_TEXT, root["value"])
+                case "partial_link":
+                    return _obj.find_element(By.PARTIAL_LINK_TEXT, root["value"])
+                case "partial_link_text":
+                    return _obj.find_element(By.PARTIAL_LINK_TEXT, root["value"])
+                case "tag":
+                    return _obj.find_element(By.TAG_NAME, root["value"])
+                case "tag_name":
+                    return _obj.find_element(By.TAG_NAME, root["value"])
+                case "xpath":
+                    return _obj.find_element(By.XPATH, root["value"])
+                case _:
+                    raise ValueError(f"Invalid locator in {root}")
+
+        def matchElements(_obj, root: dict) -> list[WebElement]:
+            match root["locator"]:
+                case "id":
+                    elements = _obj.find_elements(By.ID, root["value"])
+                case "name":
+                    elements = _obj.find_elements(By.NAME, root["value"])
+                case "css_selector":
+                    elements = _obj.find_elements(By.CSS_SELECTOR, root["value"])
+                case "class":
+                    elements = _obj.find_elements(By.CLASS_NAME, root["value"])
+                case "class_name":
+                    elements = _obj.find_elements(By.CLASS_NAME, root["value"])
+                case "link":
+                    elements = _obj.find_elements(By.LINK_TEXT, root["value"])
+                case "link_text":
+                    elements = _obj.find_elements(By.LINK_TEXT, root["value"])
+                case "partial_link":
+                    elements = _obj.find_elements(By.PARTIAL_LINK_TEXT, root["value"])
+                case "partial_link_text":
+                    elements = _obj.find_elements(By.PARTIAL_LINK_TEXT, root["value"])
+                case "tag":
+                    elements = _obj.find_elements(By.TAG_NAME, root["value"])
+                case "tag_name":
+                    elements = _obj.find_elements(By.TAG_NAME, root["value"])
+                case "xpath":
+                    elements = _obj.find_elements(By.XPATH, root["value"])
+                case _:
+                    raise ValueError(f"Invalid locator in {root}")
+            return elements
+
+
+
+
+
+
+
+
+
+
+
+
+
+        def getElement(driver: ChromeDriver, _obj: ChromeDriver | WebElement, root: dict, isSingle: bool = True) -> WebElement | list[WebElement]:
+            # * get the element specified  
+            # * if the next element is None, return the found element, else call again
+            # * if the type of the element is iframe, then switch the driver into the iframe, then call again
+            # * if the element to be returned is not single, use the group returning method
+            # print(f"root {root}\nroot object: {_obj}\n element: {root['element']}")
+            result: WebElement | list[WebElement]
+            if root['element'] is None:
+                if isSingle:
+                    result = Core.Chrome.matchElement(_obj, root)
+                    print(f"returned result: {result}, tag: {result.tag_name} \n")
+                    return result.tag_name
+                elif isSingle == False:
+                    result = Core.Chrome.matchElements(_obj, root)
+                    print(f"returned result: {result}, tag: {result.tag_name} \n")
+                    return result.tag_name
+            else:
+                result = Core.Chrome.matchElement(_obj, root)
+                # print(f"\nobj: {_obj} \nresult: {result} \n")
+                Core.Chrome.getElement(driver, result, root['element'], isSingle = isSingle)
+            
+            if root['type'] == 'iframe':
+                driver.switch_to.frame(result)
+            
+            
+            # root: dict = json_str
+            # root_element: dict = json_str['element']
+            # result: WebElement | list[WebElement]
+
+            # # print(f"root : {root},\ntype: {root['type']}")
+            # if root['element'] == "":
+            #     if isSingle:
+            #         result = Core.Chrome.matchElement(_obj, root_element)
+            #     elif isSingle == False:     # If the element is a group, then use find_elements.()
+            #         result = Core.Chrome.matchElements(_obj, root_element)
+            #     return result
+            
+            # if isSingle:
+            #     result = Core.Chrome.matchElement(_obj, root_element)
+            # elif isSingle == False:     # If the element is a group, then use find_elements.()
+            #     result = Core.Chrome.matchElements(_obj, root_element)
+
+            # if root_element['type'] == 'iframe':
+            #     driver.switch_to().frame(result)
+            #     driver.getElement(driver, driver, root_element['element'])
+
+            # result = Core.Chrome.getElement(driver, result, root_element['element'])
+
+            # return result
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                     
         def execute_js(
             driver: ChromeDriver,
@@ -344,13 +459,6 @@ class Core:
             print("Successfully quit and deleted")
         """
                     
-    def mpprocess(func: object):
-        def proc( *args, **kwargs):
-            all_args = tuple(*args, **kwargs)
-            return mp.Process(target=func, args = (all_args))
-        return proc()
-
-    @mpprocess 
     def auto_logJS(driver: ChromeDriver, log_JS_args: dict[str, str | list | int | bool | None]) -> None:
             from time import sleep
             from os.path import exists
@@ -447,4 +555,20 @@ jsonstring = """{
     }
 }"""
 
-# Core.Chrome.RunDriver(json_string = jsonstring)
+test_dict: dict = \
+{
+    "single": True,
+    "element":
+    {
+        "type": "element",
+        "locator": "class",
+        "value": "central-textlogo",
+        "element": {
+            "type": "element",
+            "locator": "class",
+            "value": "central-featured-logo",
+            "element": None
+        }
+    }
+}
+
