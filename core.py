@@ -247,27 +247,32 @@ class Core:
         from time import sleep
         from os.path import exists
 
+        terminal_mode: bool = log_JS_args['terminal_mode']
         path: str = log_JS_args['path']
         fuckup: int | float = log_JS_args['retry_timeout']  / 1000
         assert exists(path), F"{path} does not exist"
 
-        while True:
-            with open(path, mode = 'r', encoding = "utf-8") as f:
-                contents: str = f.read()
-            if contents != '':
-                sleep(fuckup)
-                continue
-            else:
-                if isinstance(log, SeJSException):
-                    to_write: str = f"JavaScript Error:\n{log.msg}"
-                    with open(path, mode ='w', encoding='utf-8') as f:
-                        f.write(to_write)
-                    break
-                elif isinstance(log, str):
-                    with open(path, mode ='w', encoding='utf-8') as f:
-                        f.write(log)
-                    break
-                else: raise ValueError("logJS takes either a string or a selenium.common.exceptions.JavascriptException as an argument")
+        if terminal_mode:
+            with open(path, 'a', encoding='utf-8') as f:
+                f.write(log)
+        else:
+            while True:
+                with open(path, mode = 'r', encoding = "utf-8") as f:
+                    contents: str = f.read()
+                if contents != '':
+                    sleep(fuckup)
+                    continue
+                else:
+                    if isinstance(log, SeJSException):
+                        to_write: str = f"JavaScript Error:\n{log.msg}"
+                        with open(path, mode ='w', encoding='utf-8') as f:
+                            f.write(to_write)
+                        break
+                    elif isinstance(log, str):
+                        with open(path, mode ='w', encoding='utf-8') as f:
+                            f.write(log)
+                        break
+                    else: raise ValueError("logJS takes either a string or a selenium.common.exceptions.JavascriptException as an argument")
 
                     
     def quit_driver(driver: object):
@@ -336,6 +341,3 @@ class Core:
                     sleep(mimir)
                 else:
                     sleep(fuckup)
-
-print(Core.Chrome.DefaultOptions())
-print(Core.Chrome.DefaultService())
