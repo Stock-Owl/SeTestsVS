@@ -307,6 +307,16 @@ class Core:
                     raise ValueError(f"Invalid locator in {root}")
             return elements
 
+        def executeElementAction(
+                _obj: WebElement | list[WebElement],
+                action: str,
+                *action_args,
+                isDisplayed: bool | None = None,
+                isSelected: bool | None = None,
+                isEnabled: bool | None = None,
+                **action_kwargs
+                ) -> bool | None:
+            pass
 
 
 
@@ -318,8 +328,12 @@ class Core:
 
 
 
-
-        def getElement(driver: ChromeDriver, _obj: ChromeDriver | WebElement, root: dict, isSingle: bool = True) -> WebElement | list[WebElement]:
+        def getElement(
+                driver: ChromeDriver,
+                _obj: ChromeDriver | WebElement,
+                root: dict,
+                isSingle: bool = True
+                ) -> WebElement | list[WebElement]:
             # * get the element specified  
             # * if the next element is None, return the found element, else call again
             # * if the type of the element is iframe, then switch the driver into the iframe, then call again
