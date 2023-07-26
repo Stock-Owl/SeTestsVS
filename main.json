@@ -1,0 +1,33 @@
+{
+  "browser": "chrome",
+  "options": {
+    "log_JS": {
+      "active": true,
+      "path": "./JS.log",
+      "refresh_rate": 1000,
+      "retry_timeout": 1000
+    }
+  },
+  "driver-options": {
+    "options": {
+      "page_load_strategy": "normal",
+      "accept_insecure_certs": "false",
+      "timeout": {
+        "type": "pageLoad",
+        "value": "300000"
+      },
+      "unhandled_prompt_behavior": "dismissAndNotify",
+      "keep_browser_open": "true",
+      "browser_arguments": [
+        ""
+      ]
+    },
+    "service": {
+      "service_log_path": "",
+      "service_arguments": [
+        ""
+      ]
+    }
+  },
+  "actions": {}
+}

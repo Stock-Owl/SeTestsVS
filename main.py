@@ -1,1 +1,5 @@
-print("SHIT WILL RUN! SIT YOUR ASS BACK DOWN")
+from core import Core
+Run = Core.Chrome.RunDriver
+json = './run.json'
+Run(json)
+input()

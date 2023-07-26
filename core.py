@@ -85,13 +85,12 @@ class Core:
             service = ChromeService(service_args = args, log_path = log_path)
             return service
         
-
         def RunDriver(path: str | None = None, json_string: str | None = None) -> None:
             # loads json file or loads the string and instanciates the actions par and the 
             loaded_dict: dict
-            if isinstance(path, json_string):
+            if type(json_string) == type(path):
                 raise Exception("You either give a path to the json file or parse the json string raw, bitch.\nNOT both! Which one am I supposed to use, you expired coupon?!")
-            elif isinstance(path, None):
+            elif path is None:
                 loaded_dict = loads(json_string)
             else:
                 try:
@@ -102,9 +101,14 @@ class Core:
                 
             driver: ChromeDriver
             driver_options_ =  loaded_dict["driver_options"]
+            global_options = loaded_dict["options"]
+            print(loaded_dict)
+            actions: dict = loaded_dict["actions"]
+
+            LogJSArgs = global_options["log_JS"]
 
             # create the chrome driver with arguments
-            if driver_options_ != Core.Chrome.default_driver_options_dict:
+            if driver_options_ != Core.Chrome.default_driver_options_dict_:
                 options_: dict = driver_options_["options"]
                 service_: dict = driver_options_["service"]
                 
@@ -151,24 +155,51 @@ class Core:
 
                 Throws a ValueError if an unsupported behavior type is given.
                 """
-                opts.unhandled_prompt_behavior = options_["unhandled_promt_behavior"]
+                opts.unhandled_prompt_behavior = options_["unhandled_prompt_behavior"]
 
                 if options_["keep_browser_open"] != "":
                     opts.add_experimental_option("detach", options_["keep_browser_open"])
 
-                for option in options_["browser_args"]:
+                for option in options_["browser_arguments"]:
                     opts.add_argument(option)
+
             # create the chrome driver (as bare bones as it gets)
-            elif driver_options_ == Core.Chrome.default_driver_options_dict:
+            elif driver_options_ == Core.Chrome.default_driver_options_dict_:
                 opts = Core.Chrome.DefaultOptions()
                 service = Core.Chrome.DefaultService()
             else:
                 raise Exception("Some shit got fucked up")
-            driver = webdriver.Chrome(options = opts, service = service)
+            driver = ChromeDriver(options = opts)   # , service = service
             # 
-            # 
+            for index, action in actions.items():
+                print(action)
+                if action["break"]:
+                    pass        # majd ide kell egy intermediate comms file megint mint a JS-nél
+                match action["type"]:
+                    case "goto":
+                        url = action["url"]
+                        Core.Chrome.goto(driver, url)
+                    case "back":
+                        Core.Chrome.back(driver)
+                    case "forward":
+                        Core.Chrome.forward(driver)
+                    case "refresh":
+                        Core.Chrome.refresh(driver)
+                    case "js_execute":
+                        commands = action["commands"]
+                        Core.Chrome.execute_js(driver, commands, log_JS_args=LogJSArgs)
+                    case "wait":
+                        pass
+                    case "wait_for":
+                        pass
+                    case "click":
+                        pass
+                    case "send_keys":
+                        pass
+                    case "clear":
+                        pass
             #
-            if bool(driver_options_["keep_browser_open"]):
+            if driver_options_["options"]["keep_browser_open"]:
                 pass
             else:
                 driver.Quit()
@@ -209,6 +240,13 @@ class Core:
             Core.Chrome.checkDriverExists(driver)
             driver.refresh()
 
+        def wait(driver: ChromeDriver, time_: int):
+            Core.Chrome.checkDriverExists(driver)
+            time = float(time_ / 1000)
+            driver.implicitly_wait(time)
+
+        # PART FUNCS
+
         def getElement(_obj: ChromeDriver | WebElement, _by: By | str, value: str):
             if isinstance(_by, By):
                 _obj.find_element(_by, value)
@@ -233,29 +271,56 @@ class Core:
                     case _:
                         raise ValueError("This doesn't exist mate")
                     
-        def execute_js(driver: ChromeDriver, commands: list[str]):
+        def execute_js(
+            driver: ChromeDriver,
+            commands: list[str],
+            log_JS_args: dict[str, str | list | int | bool | None] = \
+                {
+                    "active": True,
+                    "path": "./JS.log",
+                    "refresh_rate": 1000,
+                    "retry_timeout": 1000
+                }
+            ):
             Core.Chrome.checkDriverExists(driver)
             for command in commands:
                 try:
                     driver.execute_script(command)
-                except SeJSException:
+                except SeJSException as e:
                     # print(f"Error: the command {command} was incorrect")
-                    Core.logJS(log_JS_args, SeJSException) #log_JS_args should be a global
+                    Core.logJS(log_JS_args, e) #log_JS_args should be a global
                     break
 
-    def logJS(log_JS_args: dict[str, str | list | int | bool | None], log: str | SeJSException) -> None:
+    def logJS(log_JS_args: dict[str, str | list | int | bool | None], log: str | SeJSException, terminal_mode = False) -> None:
         from time import sleep
         from os.path import exists
 
         terminal_mode: bool = log_JS_args['terminal_mode']
         path: str = log_JS_args['path']
         fuckup: int | float = log_JS_args['retry_timeout']  / 1000
+<<<<<<< HEAD
         assert exists(path), F"{path} does not exist"
 
         if terminal_mode:
             with open(path, 'a', encoding='utf-8') as f:
                 f.write(log)
         else:
+=======
+        try:
+            assert exists(path), F"{path} does not exist"
+        except AssertionError:
+            if log_JS_args["create_path"]:
+                with open(path, mode='w', encoding='utf-8') as f:
+                    pass
+            else:
+                raise       # raises the original AssertionError
+
+        if terminal_mode:
+            with open(path, mode="a", encoding="UTF-8") as f:
+                f.write(log)
+
+        else:        
+>>>>>>> 3d95c84152ac67fcb9b3a150273639c1c09e3444
             while True:
                 with open(path, mode = 'r', encoding = "utf-8") as f:
                     contents: str = f.read()
@@ -264,7 +329,12 @@ class Core:
                     continue
                 else:
                     if isinstance(log, SeJSException):
+<<<<<<< HEAD
                         to_write: str = f"JavaScript Error:\n{log.msg}"
+=======
+                        stacktrace = "\n".join(log.stacktrace)
+                        to_write: str = f"{log.msg}\nSteack Trace:\n{stacktrace}"
+>>>>>>> 3d95c84152ac67fcb9b3a150273639c1c09e3444
                         with open(path, mode ='w', encoding='utf-8') as f:
                             f.write(to_write)
                         break
@@ -273,6 +343,11 @@ class Core:
                             f.write(log)
                         break
                     else: raise ValueError("logJS takes either a string or a selenium.common.exceptions.JavascriptException as an argument")
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 3d95c84152ac67fcb9b3a150273639c1c09e3444
 
                     
     def quit_driver(driver: object):
@@ -341,3 +416,62 @@ class Core:
                     sleep(mimir)
                 else:
                     sleep(fuckup)
+<<<<<<< HEAD
+=======
+
+jsonstring = """{
+    "browser": "chrome",
+    "options":
+    {
+        "log_JS": 
+        {
+            "active": true,
+            "path": "./JS.log",
+            "refresh_rate": 1000,
+            "retry_timeout": 1000
+        }
+    },
+    "driver_options":
+    {
+        "options":
+        {
+            "page_load_strategy": "normal",
+            "accept_insecure_certs": false,
+            "timeout":
+            {
+                "type": "pageLoad",
+                "value": 300000
+            },
+            "unhandled_prompt_behavior": "dismiss and notify",
+            "keep_browser_open": true,
+            "browser_arguments": []
+        },
+        "service":
+        {
+            "log_path": ".",
+            "arguments": []
+        }
+    },
+    
+    "actions":
+    {
+    "2":
+        {
+            "type": "goto",
+            "break": false,
+            "url": "https://wikipedia.org"
+        },
+    "1":
+        {
+            "type": "js_execute",
+            "break": false,
+            "commands":
+            [
+                "console.log('Anyád')"
+            ]
+        }
+    }
+}"""
+
+# Core.Chrome.RunDriver(json_string = jsonstring)
+>>>>>>> 3d95c84152ac67fcb9b3a150273639c1c09e3444
