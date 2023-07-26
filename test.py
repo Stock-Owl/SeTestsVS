@@ -1,14 +1,21 @@
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.remote.webdriver import WebDriver
 from selenium import webdriver
-from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.webdriver import WebDriver as ChromeDriver
+from selenium.webdriver.chrome.options import Options as ChromeOptions
+from selenium.webdriver.chrome.service import Service as ChromeService
 
-driver = webdriver.Chrome()
+options = ChromeOptions()
+options.accept_insecure_certs = True
+options.page_load_strategy = "normal"
+options.unhandled_prompt_behavior = "dismiss and notify"
+options.add_experimental_option("detach", True)
 
-def document_initialised(driver):
-    return driver.execute_script("return 0")
+service = ChromeService(service_args=['--log-level=DEBUG'], log_path = "./service.log")
+driver = ChromeDriver(options=options, service=service)
 
-driver.get("https://wikipedia.org")
-WebDriverWait(driver, timeout=10).until(document_initialised, message = "your mom")
-print("done")
-  
+driver.get("https://index.hu")
+driver.get("https://pestisracok.hu")
+driver.back()
+
+print("works")
+
+driver.quit()

@@ -28,12 +28,43 @@
         },
         "service":
         {
-            "log_path": ".",
+            "log_path": "./service.log",
             "arguments": []
         }
     },
     
     "actions":
     {
+    "1":
+        {
+            "type": "goto",
+            "break": false,
+            "url": "https://wikipedia.org"
+        },
+    "2":
+        {
+            "type": "js_execute",
+            "break": false,
+            "commands":
+            [
+                "console.log('Hello Wolrd!')",
+                "for(let i = 0; i < 5; i++){console.log(i);}"
+            ]
+        },
+    "3":
+        {
+            "type": "wait",
+            "break": false,
+            "amount": 1000
+        },
+    "4":
+        {
+            "type": "js_execute",
+            "break": false,
+            "commands":
+            [
+                "for(let i = 0; i < 5; i++){console.log(i);}"
+            ]
+        }
     }
 }
