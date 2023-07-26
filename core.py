@@ -420,6 +420,196 @@ class Core:
                     Core.logJS(log_JS_args, e) #log_JS_args should be a global
                     break
 
+    class Firefox:
+
+        default_driver_options_dict_: dict = \
+        {
+            "options":
+            {
+                "page_load_strategy": "normal",
+                "accept_insecure_certs": False,
+                "timeout":
+                {
+                    "type": "pageLoad",
+                    "value": 300000
+                },
+                "unhandled_prompt_behavior": "dismiss and notify",
+                "keep_browser_open": True,
+                "browser_arguments": []
+            },
+            "service":
+            {
+                "log_path": ".",
+                "arguments": []
+            }
+        }
+
+        def DefaultOptions() -> FirefoxOptions:
+            content = Core.Firefox.default_driver_options_dict_
+            opts = copy(content["options"])
+            del content
+            options = FirefoxOptions()
+            options.page_load_strategy = opts["page_load_strategy"]
+            options.accept_insecure_certs = opts["accept_insecure_certs"]
+            options.timeouts = {opts["timeout"]["type"]: opts["timeout"]["value"]}
+            options.unhandled_prompt_behavior = opts["unhandled_prompt_behavior"]
+            options.add_experimental_option("detach", opts["keep_browser_open"])
+            for option in opts["browser_arguments"]:
+                    options.add_argument(option)
+            return options
+        
+        def DefaultService() -> FirefoxService:
+            content = Core.Firefox.default_driver_options_dict_
+            serv = copy(content["service"])
+            del content
+            log_path: str = serv["log_path"]
+            args = serv["arguments"]
+            service = FirefoxService(service_args = args, log_path = log_path)
+            return service
+        
+            """
+        def RunDriver(path: str | None = None, json_string: str | None = None) -> None:
+
+
+            # loads json file or loads the string and instanciates the actions par and the 
+            loaded_dict: dict
+            if type(json_string) == type(path):
+                raise Exception("You either give a path to the json file or parse the json string raw, bitch.\nNOT both! Which one am I supposed to use, you expired coupon?!")
+            elif path is None:
+                loaded_dict = loads(json_string)
+            else:
+                try:
+                    with open(path, 'r', encoding='utf-8') as f:
+                       loaded_dict = loads(f.read())
+                except FileNotFoundError:
+                    raise Exception("Invalid path, file not found")
+                
+            driver: FirefoxDriver
+            driver_options_ =  loaded_dict["driver_options"]
+            global_options = loaded_dict["options"]
+            print(loaded_dict)
+            actions: dict = loaded_dict["actions"]
+
+            LogJSArgs = global_options["log_JS"]
+
+            # create the chrome driver with arguments
+            if driver_options_ != Core.Firefox.default_driver_options_dict_:
+                options_: dict = driver_options_["options"]
+                service_: dict = driver_options_["service"]
+                
+                log_path: str = service_["log_path"]
+                service_args: list[str] = service_["arguments"]
+                service = FirefoxService(service_args = service_args, log_path = log_path)
+
+                opts = FirefoxOptions()
+
+            """
+            """
+                3 types of page load startegies are available:
+                * normal
+                * eager
+                * none
+
+                Throws a ValueError if an unsupported page load startegy type is given.
+            """
+            
+            """
+                opts.page_load_strategy = options_["page_load_strategy"]
+
+            """
+            
+            """
+                Accept insecure cert(ification)s is either true or false. Not case sensitive
+                """
+            
+            """
+                opts.accept_insecure_certs = options_["accept_insecure_certs"]  # should be a bool
+
+            """
+            
+            """
+
+                3 types of timeouts are available:
+                * impilicit
+                * pageLoad
+                * script
+
+                Throws a ValueError if an unsupported timeout type is given.
+
+                The value of the timeout is the timespan [of the timteout] in MILLISECONDS (ms)
+            """
+            
+            """
+                opts.timeouts = {options_["timeout"]["type"]: options_["timeout"]["value"]}
+
+            """
+            
+            """
+                5 types of behaviors are available:
+                * dismiss
+                * accept
+                * dismiss and notify
+                * accept and notify
+                * ignore
+
+                Throws a ValueError if an unsupported behavior type is given.
+            """
+            
+            """
+                opts.unhandled_prompt_behavior = options_["unhandled_prompt_behavior"]
+
+                if options_["keep_browser_open"] != "":
+                    opts.add_experimental_option("detach", options_["keep_browser_open"])
+
+                for option in options_["browser_arguments"]:
+                    opts.add_argument(option)
+
+            # create the chrome driver (as bare bones as it gets)
+            elif driver_options_ == Core.Firefox.default_driver_options_dict_:
+                opts = Core.Firefox.DefaultOptions()
+                service = Core.Firefox.DefaultService()
+            else:
+                raise Exception("Some shit got fucked up")
+            driver = FirefoxDriver(options = opts)   # , service = service
+
+            """
+            #
+            """ 
+            for index, action in actions.items():
+                print(action)
+                if action["break"]:
+                    pass        # majd ide kell egy intermediate comms file megint mint a JS-nél
+                match action["type"]:
+                    case "goto":
+                        url = action["url"]
+                        Core.Firefox.goto(driver, url)
+                    case "back":
+                        Core.Firefox.back(driver)
+                    case "forward":
+                        Core.Firefox.forward(driver)
+                    case "refresh":
+                        Core.Firefox.refresh(driver)
+                    case "js_execute":
+                        commands = action["commands"]
+                        Core.Chrome.execute_js(driver, commands, log_JS_args=LogJSArgs)
+                    case "wait":
+                        pass
+                    case "wait_for":
+                        pass
+                    case "click":
+                        pass
+                    case "send_keys":
+                        pass
+                    case "clear":
+                        pass
+            #
+            if driver_options_["options"]["keep_browser_open"]:
+                pass
+            else:
+                driver.Quit()
+
+            """
+
     def logJS(log_JS_args: dict[str, str | list | int | bool | None], log: str | SeJSException, terminal_mode = False) -> None:
         from time import sleep
         from os.path import exists
