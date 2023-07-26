@@ -614,8 +614,13 @@ class Core:
         from time import sleep
         from os.path import exists
 
+        terminal_mode: bool = log_JS_args['terminal_mode']
         path: str = log_JS_args['path']
         fuckup: int | float = log_JS_args['retry_timeout']  / 1000
+
+        assert exists(path), F"{path} does not exist"
+
+
         try:
             assert exists(path), F"{path} does not exist"
         except AssertionError:
@@ -630,6 +635,7 @@ class Core:
                 f.write(log)
 
         else:        
+
             while True:
                 with open(path, mode = 'r', encoding = "utf-8") as f:
                     contents: str = f.read()
@@ -638,8 +644,10 @@ class Core:
                     continue
                 else:
                     if isinstance(log, SeJSException):
+
                         stacktrace = "\n".join(log.stacktrace)
                         to_write: str = f"{log.msg}\nSteack Trace:\n{stacktrace}"
+
                         with open(path, mode ='w', encoding='utf-8') as f:
                             f.write(to_write)
                         break
@@ -648,7 +656,6 @@ class Core:
                             f.write(log)
                         break
                     else: raise ValueError("logJS takes either a string or a selenium.common.exceptions.JavascriptException as an argument")
-
 
 
                     
@@ -766,20 +773,4 @@ jsonstring = """{
     }
 }"""
 
-test_dict: dict = \
-{
-    "single": True,
-    "element":
-    {
-        "type": "element",
-        "locator": "class",
-        "value": "central-textlogo",
-        "element": {
-            "type": "element",
-            "locator": "class",
-            "value": "central-featured-logo",
-            "element": None
-        }
-    }
-}
-
+# Core.Chrome.RunDriver(json_string = jsonstring)
