@@ -1,0 +1,207 @@
+{
+    "browser": "chrome",
+    "options":
+    {
+        "log_JS": 
+        {
+            "active": true,
+            "path": "./JS.log",
+            "create_path": true,
+            "refresh_rate": 1000,
+            "retry_timeout": 1000
+        }
+    },
+    "driver_options":
+    {
+        "options":
+        {
+            "page_load_startegy": "normal",
+            "accept_insecure_certs": false,
+            "timeout":
+            {
+                "type": "pageLoad",
+                "value": 300000
+            },
+            "unhandled_prompt_behavior": "dismiss and notify",
+            "keep_browser_open": true,
+            "browser_arguments": []
+        },
+        "service":
+        {
+            "log_path": ".",
+            "arguments": []
+        }
+    },
+    "units":
+    {
+        "1" :
+        {
+        "bindings": null,
+        "actions":{
+            "1":{
+
+            "type": "goto",
+            "break": false,
+            "url": "https://google.com"
+        }
+        }
+        },
+        "2":
+        {
+        "bindings": null,
+        "actions":{
+            "1":{
+
+            "type": "back",
+            "break": false
+        }
+        }
+        },
+        "3":
+        {
+        "bindings": null,
+        "actions":{
+            "1":{
+
+            "type": "forward",
+            "break": false
+        }
+        }
+        },
+        "4":
+        {
+        "bindings": null,
+        "actions":{
+            "1":{
+
+            "type": "refresh",
+            "break": false
+        }
+        }
+        },
+        "5":
+        {
+        "bindings": null,
+        "actions":{
+            "1":{
+
+            "type": "js_execute",
+            "break": false,
+            "commands":
+            [
+                "console.log('Anyád')",
+                "for(let i = 0; i < 5; i++){console.log(i);}",
+                "document.getElementById('myid').innerHTML = 'valami'"
+            ]
+        }
+        }
+        },
+        "6":
+        {
+        "bindings": null,
+        "actions":{
+            "1":{
+
+            "type": "wait",
+            "break": false,
+            "amount": 1000
+        }
+        }
+        },
+        "7":
+        {
+        "bindings": null,
+        "actions":{
+            "1":{
+
+            "type": "wait_for",
+            "break": false,
+            "condition": "loaded",
+            "frequency": 1000,
+            "timeout": 10000,
+            "single": true,
+            "diplayed": null,
+            "enabled": null,
+            "selected": null,
+            "realtive": null,
+            "element":
+            {
+                "type": "element",
+                "locator": "name",
+                "value": "myname",
+                "element": null
+            }
+        }
+        }
+        },
+        "8":
+        {
+        "bindings": null,
+        "actions":{
+            "1":{
+
+            "type": "click",
+            "break": false,
+            "single": true,
+            "diplayed": null,
+            "enabled": null,
+            "selected": null,
+            "element":
+            {
+                "type": "element",
+                "locator": "name",
+                "value": "myname",
+                "element": null
+            }
+        }
+        }
+        },
+        "9":
+        {
+        "bindings": null,
+        "actions":{
+            "1":{
+
+            "type": "send_keys",
+            "break": false,
+            "single": true,
+            "diplayed": null,
+            "enabled": null,
+            "selected": null,
+            "realtive": null,
+            "element":
+            {
+                "type": "element",
+                "locator": "name",
+                "value": "myname",
+                "element": null
+            }
+        }
+        }
+        },
+        "10":
+        {
+        "bindings": null,
+        "actions":{
+            "1":{
+
+            "type": "clear",
+            "break": false,
+            "single": true,
+            "diplayed": null,
+            "enabled": null,
+            "selected": null,
+            "realtive": null,
+            "element":
+            {
+                "type": "element",
+                "locator": "name",
+                "value": "myname",
+                "element": null
+            }
+        }
+        }
+        }
+    }    
+
+}
