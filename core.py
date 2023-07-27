@@ -8,6 +8,7 @@ from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from selenium.webdriver.firefox.service import Service as FirefoxService
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions
 from selenium.common.exceptions import JavascriptException as SeJSException
 
 from json import loads
@@ -38,6 +39,7 @@ from copy import copy
 # TODO: implement browser naviagtion funcitons and                              ✅  12
 # TODO: Units and binding                                                       ❌  13
 
+# null nem lesz, mert C# for whatever reason, úgyhogy helyette ez van!
 none = ""
 
 class Core:
@@ -174,7 +176,7 @@ class Core:
                 raise Exception("Some shit got fucked up")
             driver = ChromeDriver(options = opts)   # , service = service
             # 
-            for index, action in actions.items():
+            for name, action in actions.items():
                 print(action)
                 if action["break"]:
                     pass        # majd ide kell egy intermediate comms file megint mint a JS-nél
@@ -194,13 +196,34 @@ class Core:
                     case "wait":
                         pass
                     case "wait_for":
-                        pass
+                        Core.Chrome.waitFor(driver, action)
                     case "click":
-                        pass
+                        Core.Chrome.ElementAction(driver,
+                            driver,
+                            action['element'],
+                            action = 'click',
+                            isSingle = action['single'],
+                            isDisplayed = action['displayed'],
+                            isEnabled = action['enabled'],
+                            isSelected = action['selected'])
                     case "send_keys":
-                        pass
+                        Core.Chrome.ElementAction(driver,
+                            driver,
+                            action['element'], 
+                            action = 'send_keys',
+                            isSingle = action['single'],
+                            isDisplayed = action['displayed'],
+                            isEnabled = action['enabled'],
+                            isSelected = action['selected'])
                     case "clear":
-                        pass
+                        Core.Chrome.ElementAction(driver,
+                            driver,
+                            action['element'],
+                            action = 'clear',
+                            isSingle = action['single'],
+                            isDisplayed = action['displayed'],
+                            isEnabled = action['enabled'],
+                            isSelected = action['selected'])
             #
             if driver_options_["options"]["keep_browser_open"]:
                 pass
@@ -228,6 +251,34 @@ class Core:
             time = float(time_ / 1000)
             driver.implicitly_wait(time)
 
+        def waitFor(driver: ChromeDriver, kwargs: dict[str]):
+            timeout = kwargs['timeout']
+            frequency = kwargs['frequency']
+            if timeout is None:
+                timeout = 1000
+            if frequency is None:
+                wait = WebDriverWait(driver, timeout=timeout)
+            else:
+                wait = WebDriverWait(driver, timeout=timeout, poll_frequency=frequency)
+
+            condition = kwargs['condition']
+            if condition in Core.Chrome.needs_element:
+                locator: tuple[str, str] = ('xpath', kwargs['xpath'])
+                match condition:
+                    case 'presence_of_element_located':
+                        wait.until(expected_conditions.presence_of_element_located(locator))
+                pass
+            elif condition in Core.Chrome.doesnt_need_element:
+                match condition:
+                    case 'alert':
+                        wait.until(expected_conditions.alert_is_present())
+                    case 'title_is':
+                        wait.until(expected_conditions.title_is(kwargs['title']))
+                    case 'title_contains':
+                        wait.until(expected_conditions.title_contains(kwargs['title']))
+            else:
+                raise ValueError(f"\'{condition}\' is not a valid condition to await")
+        
         # PART FUNCS
 
         def matchElement(_obj: WebElement | ChromeDriver, root: dict) -> WebElement:
@@ -292,7 +343,6 @@ class Core:
         def executeElementAction(
                 _obj: WebElement | list[WebElement],
                 action: str,
-                *action_args,
                 isDisplayed: bool | None = None,
                 isSelected: bool | None = None,
                 isEnabled: bool | None = None,
@@ -306,50 +356,50 @@ class Core:
                 assert isEnabled == _obj.is_enabled(), f"Element is{' 'if isDisplayed is False else ' not '}enabled"
 
             match action:
-                case "wait_for":
-                    args: dict = action_kwargs
-                    timeout = args['timeout']
-                    frequency = args['frequency']
-                    if frequency is None:
-                        frequency = 1000
-                    wait = WebDriverWait(args['driver'], timeout=timeout)
-                    
                 case "click":
                     _obj.click()
                 case "send_keys":
-                    _obj.send_keys(**action_kwargs['keys'])
+                    _obj.send_keys(action_kwargs['keys'])
                 case "clear":
                     _obj.clear()
                 case _:
                     raise ValueError("Invalid action type")
                 
-
-        def getElement(
+        def ElementAction(
                 driver: ChromeDriver,
                 _obj: ChromeDriver | WebElement,
                 root: dict,
-                isSingle: bool = True
+                action: str = "",
+                isSingle: bool = True,
+                **action_kwargs
                 ) -> WebElement | list[WebElement]:
             # * get the element specified  
             # * if the next element is None, return the found element, else call again
             # * if the type of the element is iframe, then switch the driver into the iframe, then call again
             # * if the element to be returned is not single, use the group returning method
             # print(f"root {root}\nroot object: {_obj}\n element: {root['element']}")
+
             result: WebElement | list[WebElement]
+
             if root['element'] is None:
                 if isSingle:
                     result = Core.Chrome.matchElement(_obj, root)
-                    print(f"returned result: {result}, tag: {result.tag_name} \n")
-                    return result.tag_name
+                    # print(f"returned result: {result}, tag: {result.tag_name} \n")
+                    Core.Chrome.executeElementAction(result, action, **action_kwargs)
+                    driver.switch_to.parent_frame()     #if there was an iframe, this goes back to the top of the frame
+                    return result
                 elif isSingle == False:
-                    result = Core.Chrome.matchElements(_obj, root)
-                    print(f"returned result: {result}, tag: {result.tag_name} \n")
-                    return result.tag_name
+                    results = Core.Chrome.matchElements(_obj, root)
+                    # print(f"returned result: {result}, tag: {result.tag_name} \n")
+                    for result in results:
+                        Core.Chrome.executeElementAction(result, action, **action_kwargs)
+                    driver.switch_to.parent_frame()     #if there was an iframe, this goes back to the top of the frame
+                    return result
             else:
                 result = Core.Chrome.matchElement(_obj, root)
                 # print(f"\nobj: {_obj} \nresult: {result} \n")
-                Core.Chrome.getElement(driver, result, root['element'], isSingle = isSingle)
-            
+                Core.Chrome.getElement(driver, result, root['element'], action = action, isSingle = isSingle, **action_kwargs)
+
             if root['type'] == 'iframe':
                 driver.switch_to.frame(result)
                     
@@ -360,6 +410,8 @@ class Core:
                 {
                     "active": True,
                     "path": "./JS.log",
+                    "create_path": True,
+                    "terminal_mode": True,
                     "refresh_rate": 1000,
                     "retry_timeout": 1000
                 }
@@ -379,6 +431,11 @@ class Core:
 
         path: str = log_JS_args['path']
         fuckup: int | float = log_JS_args['retry_timeout']  / 1000
+
+        if log_JS_args['terminal_mode']:
+            with open(path, 'w', encoding='utf-8') as f:
+                f.write(log)
+
         try:
             assert exists(path), F"{path} does not exist"
         except AssertionError:
@@ -406,7 +463,6 @@ class Core:
                         f.write(log)
                     break
                 else: raise ValueError("logJS takes either a string or a selenium.common.exceptions.JavascriptException as an argument")
-
                     
     def quit_driver(driver: object):
         """
@@ -447,46 +503,45 @@ class Core:
         return None
                     
     def auto_logJS(driver: ChromeDriver, log_JS_args: dict[str, str | list | int | bool | None]) -> None:
-            from time import sleep
-            from os.path import exists
-            """
-            Appends the current JavaScript Console Logs to the end of the file.
+        from time import sleep
+        from os.path import exists
+        """
+        Appends the current JavaScript Console Logs to the end of the file.
+        In return, we should get an empty file.
+        An empty file means that the other process has used the console logs,
+        and finished all tasks with the file. AKA the file is safe to write in.
 
-            In return, we should get an empty file.
-            An empty file means that the other process has used the console logs,
-            and finished all tasks with the file. AKA the file is safe to write in.
+        Args:
+            * (bool) active: wether the Logging process is active or not. (does it write to the output file?)
+            * (str) path: path to the log file
+            * (int) refresh_rate: the amout of time (in ms) the program waits before trying to update the logs
+            * (int) retry_timeout: the amout of time (in ms) the program waits before trying to write the logs (if the file was still in use)
+        """
 
-            Args:
-                * (bool) active: wether the Logging process is active or not. (does it write to the output file?)
-                * (str) path: path to the log file
-                * (int) refresh_rate: the amout of time (in ms) the program waits before trying to update the logs
-                * (int) retry_timeout: the amout of time (in ms) the program waits before trying to write the logs (if the file was still in use)
-            """
+        path: str = log_JS_args['path']
+        mimir: int | float = log_JS_args['refresh_rate']    / 1000
+        fuckup: int | float = log_JS_args['retry_timeout']  / 1000
 
-            path: str = log_JS_args['path']
-            mimir: int | float = log_JS_args['refresh_rate']    / 1000
-            fuckup: int | float = log_JS_args['retry_timeout']  / 1000
-            assert log_JS_args['active'] == True, "terminating"
-            assert exists(path), f"{path} does not exist"
+        assert log_JS_args['active'] == True, "terminating"
+        assert exists(path), f"{path} does not exist"
 
-
-            while True:
-                browser_logs = driver.get_log("browser")
-                try:
-                    assert driver
-                except AssertionError:
-                    break
-                with open(path, mode = 'r+', encoding = 'utf-8') as f:
-                    contents = f.read()
-                if contents == '':
-                    with open(path, mode = 'a+', encoding = 'utf-8') as f:
-                        for log in browser_logs:
-                            log_line = \
-                            f"{log['source']} — {log['level']}:\n{log['message']}\n\t{log['timestamp']}"
-                            f.write(log_line)
-                    sleep(mimir)
-                else:
-                    sleep(fuckup)
+        while True:
+            browser_logs = driver.get_log("browser")
+            try:
+                assert driver
+            except AssertionError:
+                break
+            with open(path, mode = 'r+', encoding = 'utf-8') as f:
+                contents = f.read()
+            if contents == '':
+                with open(path, mode = 'a+', encoding = 'utf-8') as f:
+                    for log in browser_logs:
+                        log_line = \
+                        f"{log['source']} — {log['level']}:\n{log['message']}\n\t{log['timestamp']}"
+                        f.write(log_line)
+                sleep(mimir)
+            else:
+                sleep(fuckup)
 
 jsonstring = """{
     "browser": "chrome",
@@ -558,4 +613,3 @@ test_dict: dict = \
         }
     }
 }
-

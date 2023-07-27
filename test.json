@@ -7,6 +7,7 @@
             "active": true,
             "path": "./JS.log",
             "create_path": true,
+            "terminal_mode": true,
             "refresh_rate": 1000,
             "retry_timeout": 1000
         }
@@ -78,20 +79,9 @@
             "type": "wait_for",
             "break": false,
             "condition": "loaded",
+            "xpath": "some_xpath",
             "frequency": 1000,
-            "timeout": 10000,
-            "single": true,
-            "diplayed": null,
-            "enabled": null,
-            "selected": null,
-            "realtive": null,
-            "element":
-            {
-                "type": "element",
-                "locator": "name",
-                "value": "myname",
-                "element": null
-            }
+            "timeout": 10000
         },
         "8":
         {

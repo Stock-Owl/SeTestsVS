@@ -7,6 +7,7 @@
             "active": true,
             "path": "./JS.log",
             "create_path": true,
+            "terminal_mode": true,
             "refresh_rate": 1000,
             "retry_timeout": 1000
         }
@@ -33,7 +34,12 @@
         }
     },
     
-    "actions":
+    "units":
     {
+        "1":
+        {
+            "binding": null,
+            "actions": {}
+        }
     }
 }
