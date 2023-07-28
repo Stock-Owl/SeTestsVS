@@ -1,0 +1,107 @@
+{
+    "browser": "chrome",
+    "options":
+    {
+        "log_JS": 
+        {
+            "active": true,
+            "path": "./JS.log",
+            "create_path": true,
+            "terminal_mode": true,
+            "refresh_rate": 1000,
+            "retry_timeout": 1000
+        }
+    },
+    "driver_options":
+    {
+        "options":
+        {
+            "page_load_strategy": "normal",
+            "accept_insecure_certs": false,
+            "timeout":
+            {
+                "type": "pageLoad",
+                "value": 300000
+            },
+            "unhandled_prompt_behavior": "dismiss and notify",
+            "keep_browser_open": true,
+            "browser_arguments": []
+        },
+        "service":
+        {
+            "log_path": "./service.log",
+            "arguments": []
+        }
+    },
+    "units":
+    {
+        "3":{
+            "bindings": null,
+            "actions":
+            {
+                "1":
+                {
+                    "type": "goto",
+                    "break": false,
+                    "url": "https://reddit.com"
+                },
+                "2":
+                {
+                    "type": "wait",
+                    "break": false,
+                    "amount": 5000
+                },
+                "3":{
+                    "type": "click",
+                    "break": false,
+                    "single": true,
+                    "diplayed": null,
+                    "enabled": null,
+                    "selected": null,
+                    "element":
+                    {
+                        "type": "element",
+                        "locator": "xpath",
+                        "value": "/html/body/shreddit-app/div/div[1]/reddit-sidebar-nav/nav/faceplate-expandable-section-helper/details/faceplate-auto-height-animator/div/faceplate-expandable-section-helper[1]/details/summary/left-nav-topic-tracker/li/div"
+                    }
+                }
+            },
+        "4":
+        {
+            "bindings": null,
+            "actions":
+            {
+            "1":{
+                "type": "click",
+                "break": false,
+                "single": true,
+                "diplayed": null,
+                "enabled": null,
+                "selected": null,
+                "element":
+                {
+                    "type": "element",
+                    "locator": "xpath",
+                    "value": "/html/body/div[1]/div/div[2]/div[3]/div[1]/section/div/section[2]/section[2]/form/button"
+                }
+                },
+            "2":
+            {
+                "type": "click",
+                "break": false,
+                "single": true,
+                "diplayed": null,
+                "enabled": null,
+                "selected": null,
+                "element":
+                {
+                    "type": "element",
+                    "locator": "xpath",
+                    "value": "/html/body/div[1]/div/div[2]/div[3]/div[1]/section/div/section[2]/section[2]/form"
+                }
+            }
+        }
+        }
+        }
+    }
+}

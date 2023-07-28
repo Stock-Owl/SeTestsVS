@@ -4,8 +4,9 @@
     {
         "log_JS": 
         {
+            "terminal_mode": true,
             "active": true,
-            "path": "./JS.log",
+            "path": "./JS.log_test",
             "create_path": true,
             "refresh_rate": 1000,
             "retry_timeout": 1000
@@ -15,7 +16,7 @@
     {
         "options":
         {
-            "page_load_startegy": "normal",
+            "page_load_strategy": "normal",
             "accept_insecure_certs": false,
             "timeout":
             {
@@ -123,7 +124,6 @@
             "diplayed": null,
             "enabled": null,
             "selected": null,
-            "realtive": null,
             "element":
             {
                 "type": "element",
@@ -150,8 +150,7 @@
             {
                 "type": "element",
                 "locator": "name",
-                "value": "myname",
-                "element": null
+                "value": "myname"
             }
         }
         }
