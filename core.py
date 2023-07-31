@@ -16,7 +16,7 @@ from json import loads
 from datetime import time
 import multiprocessing as mp
 
-#                                                                               12 / 13
+#                                                                               13 / 15
 # TODO: Kitalálni, hogy vannak az argumentumok                                  ✅  1
 # TODO: Megszerelni a random useless conversionöket a JSON-ből                  ✅  2
 # TODO: Relative locators                                                       ❌  NAH FUCK that shit
@@ -37,7 +37,9 @@ import multiprocessing as mp
 # TODO: make a function that returns a default json object and filter
 # if there are differences                                                      ✅  11
 # TODO: implement browser naviagtion funcitons and                              ✅  12
-# TODO: Units and binding                                                       ❌  13
+# TODO: Units and binding                                                       ✅  13
+# TODO: Beautify logging messages                                               ❌  14
+# TODO: Implement breaks                                                        ❌  15
 
 # null nem lesz, mert C# for whatever reason, úgyhogy helyette ez van!
 # Not used yet
