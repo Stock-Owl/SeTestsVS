@@ -15,6 +15,8 @@ from datetime import time
 import multiprocessing as mp
 from copy import copy
 from json import loads
+import traceback
+
 #                                                                               12 / 14
 # TODO: Kitalálni, hogy vannak az argumentumok                                  ✅  1
 # TODO: Megszerelni a random useless conversionöket a JSON-ből                  ✅  2
@@ -190,41 +192,46 @@ class Core:
                                 url = action["url"]
                                 Core.Firefox.goto(driver, url)
                             case "back":
-                                    Core.Firefox.back(driver)
+                                Core.Firefox.back(driver)
                             case "forward":
-                                    Core.Firefox.forward(driver)
+                                Core.Firefox.forward(driver)
                             case "refresh":
-                                    Core.Firefox.refresh(driver)
+                                Core.Firefox.refresh(driver)
                             case "js_execute":
-                                    commands = action["commands"]
-                                    Core.Firefox.execute_js(driver, commands, log_JS_args=LogJSArgs)
+                                commands = action["commands"]
+                                Core.Firefox.execute_js(driver, commands, log_JS_args=LogJSArgs)
                             case "wait":
-                                    pass
+                                time = action["amount"]
+                                Core.Firefox.wait(driver = driver, time_ = time)
                             case "wait_for":
-                                    pass
+                                Core.Firefox.waitFor(driver, action)
                             case "click":
-                                Core.Firefox.ElementAction(driver,
+                                Core.Firefox.ElementAction(
                                 driver,
-                                action['element'],
                                 action = 'click',
+                                locator = action['locator'],
+                                value = action['value'],
                                 isSingle = action['single'],
                                 isDisplayed = action['displayed'],
                                 isEnabled = action['enabled'],
                                 isSelected = action['selected'])
                             case "send_keys":
-                                Core.Firefox.ElementAction(driver,
+                                Core.Firefox.ElementAction(
                                 driver,
-                                action['element'], 
                                 action = 'send_keys',
+                                locator = action['locator'],
+                                value = action['value'],
+                                keys = action['keys'],
                                 isSingle = action['single'],
                                 isDisplayed = action['displayed'],
                                 isEnabled = action['enabled'],
                                 isSelected = action['selected'])
                             case "clear":
-                                Core.Chrome.ElementAction(driver,
-                                driver,
-                                action['element'],
+                                Core.Firefox.ElementAction(
+                                 driver,
                                 action = 'clear',
+                                locator = action['locator'],
+                                value = action['value'],
                                 isSingle = action['single'],
                                 isDisplayed = action['displayed'],
                                 isEnabled = action['enabled'],
@@ -232,7 +239,7 @@ class Core:
                 except Exception as e:
                     bindings = unit['bindings']
                     with open("log.txt", "a", encoding="UTF-8") as f:
-                        to_write = f"{str(e.__cause__)} — {str(e.__context__)} \n {str(e.__traceback__)}"
+                        to_write = (f"{str(e.__cause__)} — {str(e.__context__)} \n {traceback.format_exc()}")
                         f.write(to_write)
                     if bindings is None:
                         pass
@@ -370,94 +377,49 @@ class Core:
                     raise ValueError("Invalid action type")
 
         def ElementAction(
-                driver: FirefoxDriver,
-                _obj: FirefoxDriver | WebElement,
-                root: dict,
-                action: str = "",
-                isSingle: bool = True,
-                **action_kwargs
-                ) -> WebElement | list[WebElement]:
-            # * get the element specified  
-            # * if the next element is None, return the found element, else call again
-            # * if the type of the element is iframe, then switch the driver into the iframe, then call again
-            # * if the element to be returned is not single, use the group returning method
-            # print(f"root {root}\nroot object: {_obj}\n element: {root['element']}")
+            driver: FirefoxDriver,
+            **action_kwargs
+            ) -> WebElement | list[WebElement]:
 
             result: WebElement | list[WebElement]
 
+            isSingle = action_kwargs["isSingle"]
 
             if isSingle:
-                result = Core.Firefox.matchElement(_obj, root)
-                # print(f"returned result: {result}, tag: {result.tag_name} \n")
-                Core.Firefox.executeElementAction(result, action, **action_kwargs)
+                result = Core.Firefox.matchElement(driver, **action_kwargs)
+                
+                action = action_kwargs["action"]
+                match action:
+                    case "click":
+                        result.click()
+                    case "send_keys":
+                        keys = action_kwargs["keys"]
+                        result.send_keys(keys)
+                    case "clear":
+                        result.clear()
+                    case _:
+                        raise ValueError("Invalid action type")
+                    
                 driver.switch_to.parent_frame()     #if there was an iframe, this goes back to the top of the frame
-                return result
+
             elif isSingle == False:
-                results = Core.Firefox.matchElements(_obj, root)
-                # print(f"returned result: {result}, tag: {result.tag_name} \n")
+                results = Core.Firefox.matchElements(driver, **action_kwargs)
                 for result in results:
-                    Core.Firefox.executeElementAction(result, action, **action_kwargs)
+                    
+                    action = action_kwargs["action"]
+                    match action:
+                        case "click":
+                            result.click()
+                        case "send_keys":
+                            keys = action_kwargs["keys"]
+                            result.send_keys(keys)
+                        case "clear":
+                            result.clear()
+                        case _:
+                            raise ValueError("Invalid action type")
+                        
+
                 driver.switch_to.parent_frame()     #if there was an iframe, this goes back to the top of the frame
-                return result
-
-
-            if root['type'] == 'iframe':
-                driver.switch_to.frame(result)
-
-        def getElement(
-                driver: FirefoxDriver,
-                _obj: FirefoxDriver | WebElement,
-                root: dict,
-                isSingle: bool = True
-                ) -> WebElement | list[WebElement]:
-            # * get the element specified  
-            # * if the next element is None, return the found element, else call again
-            # * if the type of the element is iframe, then switch the driver into the iframe, then call again
-            # * if the element to be returned is not single, use the group returning method
-            # print(f"root {root}\nroot object: {_obj}\n element: {root['element']}")
-            result: WebElement | list[WebElement]
-            if root['element'] is None:
-                if isSingle:
-                    result = Core.Firefox.matchElement(_obj, root)
-                    print(f"returned result: {result}, tag: {result.tag_name} \n")
-                    return result.tag_name
-                elif isSingle == False:
-                    result = Core.Firefox.matchElements(_obj, root)
-                    print(f"returned result: {result}, tag: {result.tag_name} \n")
-                    return result.tag_name
-            else:
-                result = Core.Firefox.matchElement(_obj, root)
-                # print(f"\nobj: {_obj} \nresult: {result} \n")
-                Core.Firefox.getElement(driver, result, root['element'], isSingle = isSingle)
-            
-            if root['type'] == 'iframe':
-                driver.switch_to.frame(result)
-            
-            
-            # root: dict = json_str
-            # root_element: dict = json_str['element']
-            # result: WebElement | list[WebElement]
-
-            # # print(f"root : {root},\ntype: {root['type']}")
-            # if root['element'] == "":
-            #     if isSingle:
-            #         result = Core.Chrome.matchElement(_obj, root_element)
-            #     elif isSingle == False:     # If the element is a group, then use find_elements.()
-            #         result = Core.Chrome.matchElements(_obj, root_element)
-            #     return result
-            
-            # if isSingle:
-            #     result = Core.Chrome.matchElement(_obj, root_element)
-            # elif isSingle == False:     # If the element is a group, then use find_elements.()
-            #     result = Core.Chrome.matchElements(_obj, root_element)
-
-            # if root_element['type'] == 'iframe':
-            #     driver.switch_to().frame(result)
-            #     driver.getElement(driver, driver, root_element['element'])
-
-            # result = Core.Chrome.getElement(driver, result, root_element['element'])
-
-            # return result
 
         def logJS(log_JS_args: dict[str, str | list | int | bool | None], log: str | SeJSException) -> None:
             from time import sleep

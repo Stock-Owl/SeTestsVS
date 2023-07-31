@@ -1,3 +1,16 @@
 None — None 
- <traceback object at 0x00000146496B3300>None — None 
- <traceback object at 0x000001AFAAB12080>
+ Traceback (most recent call last):
+  File "C:\Users\kmarton\OneDrive - VISION-SOFTWARE Számítástechnikai Szolgáltató és Kereskedelmi\Asztal\Projects\SeTestsVS\core_fire.py", line 209, in RunDriver
+    Core.Firefox.ElementAction(
+  File "C:\Users\kmarton\OneDrive - VISION-SOFTWARE Számítástechnikai Szolgáltató és Kereskedelmi\Asztal\Projects\SeTestsVS\core_fire.py", line 389, in ElementAction
+    result = Core.Firefox.matchElement(driver, **action_kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: Core.Firefox.matchElement() got an unexpected keyword argument 'action'
+None — None 
+ Traceback (most recent call last):
+  File "C:\Users\kmarton\OneDrive - VISION-SOFTWARE Számítástechnikai Szolgáltató és Kereskedelmi\Asztal\Projects\SeTestsVS\core_fire.py", line 219, in RunDriver
+    Core.Firefox.ElementAction(
+  File "C:\Users\kmarton\OneDrive - VISION-SOFTWARE Számítástechnikai Szolgáltató és Kereskedelmi\Asztal\Projects\SeTestsVS\core_fire.py", line 389, in ElementAction
+    result = Core.Firefox.matchElement(driver, **action_kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: Core.Firefox.matchElement() got an unexpected keyword argument 'action'

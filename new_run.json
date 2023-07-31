@@ -1,0 +1,85 @@
+{
+    "browser": "chrome",
+    "options":
+    {
+        "log_JS": 
+        {
+            "active": true,
+            "path": "./JS.log",
+            "create_path": true,
+            "terminal_mode": true,
+            "refresh_rate": 1000,
+            "retry_timeout": 1000
+        },
+        "exception_log_path": "./exceptions.log",
+        "auto_exit_iframes": true
+    },
+    "driver_options":
+    {
+        "options":
+        {
+            "page_load_strategy": "normal",
+            "accept_insecure_certs": false,
+            "timeout":
+            {
+                "type": "pageLoad",
+                "value": 300000
+            },
+            "unhandled_prompt_behavior": "dismiss and notify",
+            "keep_browser_open": true,
+            "browser_arguments": []
+        },
+        "service":
+        {
+            "log_path": "./service.log",
+            "arguments": []
+        }
+    },
+    
+    "units":
+    {
+        "1":
+        {
+            "bindings": "2",
+            "actions":
+            {
+                "1":
+                {
+                    "type": "goto",
+                    "break": false,
+                    "url": "https://bestbyte.hu/blog"
+                }
+            }
+        },
+        "2":
+        {
+            "bindings": null,
+            "actions":
+            {
+                "1":
+                {
+                    "type": "click",
+                    "break": false,
+                    "single": true,
+                    "displayed": null,
+                    "enabled": null,
+                    "selected": null,
+                    "locator": "css_selector",
+                    "value": "[id$=\"EDI_search\"]"
+                },
+                "2":
+                {
+                    "type": "send_keys",
+                    "break": false,
+                    "single": true,
+                    "displayed": null,
+                    "enabled": null,
+                    "selected": null,
+                    "keys": "apple\n",
+                    "locator": "css_selector",
+                    "value": "[id$=\"EDI_search\"]"
+                }
+            }
+        }
+    }
+}
