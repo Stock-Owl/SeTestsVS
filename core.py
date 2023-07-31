@@ -11,10 +11,10 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.common.exceptions import JavascriptException as SeJSException
 
+from traceback import format_exc, format_stack
 from json import loads
 from datetime import time
 import multiprocessing as mp
-from copy import copy
 
 #                                                                               12 / 13
 # TODO: Kitalálni, hogy vannak az argumentumok                                  ✅  1
@@ -40,7 +40,8 @@ from copy import copy
 # TODO: Units and binding                                                       ❌  13
 
 # null nem lesz, mert C# for whatever reason, úgyhogy helyette ez van!
-none = ""
+# Not used yet
+# none = ""
 
 class Core:
     class Chrome:
@@ -68,6 +69,7 @@ class Core:
         }
 
         def DefaultOptions() -> ChromeOptions:
+            from copy import copy
             content = Core.Chrome.default_driver_options_dict_
             opts = copy(content["options"])
             del content
@@ -82,6 +84,7 @@ class Core:
             return options
         
         def DefaultService() -> ChromeService:
+            from copy import copy
             content = Core.Chrome.default_driver_options_dict_
             serv = copy(content["service"])
             del content
@@ -108,9 +111,10 @@ class Core:
             driver_options_ =  loaded_dict["driver_options"]
             global_options = loaded_dict["options"]
             print(loaded_dict)
-            actions: dict = loaded_dict["actions"]
+            units: dict = loaded_dict["units"]
 
             LogJSArgs = global_options["log_JS"]
+            exception_log_path = global_options["exception_log_path"]
 
             # create the chrome driver with arguments
             if driver_options_ != Core.Chrome.default_driver_options_dict_:
@@ -119,6 +123,8 @@ class Core:
                 
                 log_path: str = service_["log_path"]
                 service_args: list[str] = service_["arguments"]
+                # Not used bc the chromedriver is a bitch and crashes for some reason before even creating the driver...
+                # Akkor, a kurva anyját (:
                 service = ChromeService(service_args = service_args, log_path = log_path)
 
                 opts = ChromeOptions()
@@ -174,56 +180,100 @@ class Core:
                 service = Core.Chrome.DefaultService()
             else:
                 raise Exception("Some shit got fucked up")
+            # service commented out bc chromdriver shits itslef, ig
             driver = ChromeDriver(options = opts)   # , service = service
             # 
-            for name, action in actions.items():
-                print(action)
-                if action["break"]:
-                    pass        # majd ide kell egy intermediate comms file megint mint a JS-nél
-                match action["type"]:
-                    case "goto":
-                        url = action["url"]
-                        Core.Chrome.goto(driver, url)
-                    case "back":
-                        Core.Chrome.back(driver)
-                    case "forward":
-                        Core.Chrome.forward(driver)
-                    case "refresh":
-                        Core.Chrome.refresh(driver)
-                    case "js_execute":
-                        commands = action["commands"]
-                        Core.Chrome.execute_js(driver, commands, log_JS_args=LogJSArgs)
-                    case "wait":
-                        pass
-                    case "wait_for":
-                        Core.Chrome.waitFor(driver, action)
-                    case "click":
-                        Core.Chrome.ElementAction(driver,
-                            driver,
-                            action['element'],
-                            action = 'click',
-                            isSingle = action['single'],
-                            isDisplayed = action['displayed'],
-                            isEnabled = action['enabled'],
-                            isSelected = action['selected'])
-                    case "send_keys":
-                        Core.Chrome.ElementAction(driver,
-                            driver,
-                            action['element'], 
-                            action = 'send_keys',
-                            isSingle = action['single'],
-                            isDisplayed = action['displayed'],
-                            isEnabled = action['enabled'],
-                            isSelected = action['selected'])
-                    case "clear":
-                        Core.Chrome.ElementAction(driver,
-                            driver,
-                            action['element'],
-                            action = 'clear',
-                            isSingle = action['single'],
-                            isDisplayed = action['displayed'],
-                            isEnabled = action['enabled'],
-                            isSelected = action['selected'])
+            # clears the previous log file
+            with open(exception_log_path, mode='w', encoding='utf8') as f:
+                f.write("")
+
+            active_bindings = []
+            for uname, unit in units.items():
+                try:
+                    if uname in active_bindings:
+                        with open(exception_log_path, mode='a', encoding='utf-8') as f:
+                            f.write(f"\n{uname} skipped because previous unit failed\n")
+                        continue
+
+                    actions = unit['actions']
+                    for name, action in actions.items():
+                        print(action)
+                        if action["break"]:
+                            pass        # majd ide kell egy intermediate comms file megint mint a JS-nél
+                        match action["type"]:
+                            case "goto":
+                                url = action["url"]
+                                Core.Chrome.goto(driver, url)
+                            case "back":
+                                Core.Chrome.back(driver)
+                            case "forward":
+                                Core.Chrome.forward(driver)
+                            case "refresh":
+                                Core.Chrome.refresh(driver)
+                            case "js_execute":
+                                commands = action["commands"]
+                                Core.Chrome.execute_js(driver, commands, log_JS_args=LogJSArgs)
+                            case "wait":
+                                pass
+                            case "wait_for":
+                                Core.Chrome.waitFor(driver, action)
+                            case "click":
+                                Core.Chrome.ElementAction(
+                                    driver,
+                                    action = 'click',
+                                    locator = action['locator'],
+                                    value = action['value'],
+                                    isSingle = action['single'],
+                                    isDisplayed = action['displayed'],
+                                    isEnabled = action['enabled'],
+                                    isSelected = action['selected'])
+                            case "send_keys":
+                                Core.Chrome.ElementAction(
+                                    driver,
+                                    action = 'send_keys',
+                                    locator = action['locator'],
+                                    value = action['value'],
+                                    keys = action['keys'],
+                                    isSingle = action['single'],
+                                    isDisplayed = action['displayed'],
+                                    isEnabled = action['enabled'],
+                                    isSelected = action['selected'])
+                            case "clear":
+                                Core.Chrome.ElementAction(
+                                    driver,
+                                    action = 'clear',
+                                    locator = action['locator'],
+                                    value = action['value'],
+                                    isSingle = action['single'],
+                                    isDisplayed = action['displayed'],
+                                    isEnabled = action['enabled'],
+                                    isSelected = action['selected'])
+                except:
+                    bindings = unit['bindings']
+                    if bindings is not None:
+                        if isinstance(bindings, list):
+                            for binding in bindings:
+                                if isinstance(binding, str):
+                                    active_bindings.append(binding)
+                                else:
+                                    raise ValueError(f"Parameters in \'bindings\' must be of type str (string) not {type(binding)}")
+                        elif isinstance(bindings, str):
+                            active_bindings.append(bindings)
+                        else:
+                            raise ValueError(f"Parameter \'bindings\' must be of type str (string) not {type(bindings)}")
+
+                    with open(exception_log_path, mode='a', encoding='utf-8') as f:
+                            f.write("\n----------------------------------------------------------------\n")
+                            f.write(f"{format_exc()}\nStack:")
+                            stack = format_stack()
+                            # -1 to exclude this expression from stack
+                            for x in range(len(stack)-1):
+                                stack_parts = stack[x].split('\n')
+                                origin = stack_parts[0]
+                                root = stack_parts[1]
+                                f.write(f"\t[{x}] ORIGIN:\t{origin}\n\t[{x}] ROOT:{root}\n")
+                            f.write("\n----------------------------------------------------------------\n")
+
             #
             if driver_options_["options"]["keep_browser_open"]:
                 pass
@@ -281,140 +331,137 @@ class Core:
         
         # PART FUNCS
 
-        def matchElement(_obj: WebElement | ChromeDriver, root: dict) -> WebElement:
-            match root["locator"]:
-                case "id":
-                    return _obj.find_element(By.ID, root["value"])
-                case "name":
-                    return _obj.find_element(By.NAME, root["value"])
-                case "css_selector":
-                    return _obj.find_element(By.CSS_SELECTOR, root["value"])
-                case "class":
-                    return _obj.find_element(By.CLASS_NAME, root["value"])
-                case "class_name":
-                    return _obj.find_element(By.CLASS_NAME, root["value"])
-                case "link":
-                    return _obj.find_element(By.LINK_TEXT, root["value"])
-                case "link_text":
-                    return _obj.find_element(By.LINK_TEXT, root["value"])
-                case "partial_link":
-                    return _obj.find_element(By.PARTIAL_LINK_TEXT, root["value"])
-                case "partial_link_text":
-                    return _obj.find_element(By.PARTIAL_LINK_TEXT, root["value"])
-                case "tag":
-                    return _obj.find_element(By.TAG_NAME, root["value"])
-                case "tag_name":
-                    return _obj.find_element(By.TAG_NAME, root["value"])
-                case "xpath":
-                    return _obj.find_element(By.XPATH, root["value"])
-                case _:
-                    raise ValueError(f"Invalid locator in {root}")
+        def matchElement(_obj: ChromeDriver,
+                         **action_kwargs) -> WebElement:
+            
+            locator = action_kwargs["locator"]
+            value = action_kwargs["value"]
 
-        def matchElements(_obj, root: dict) -> list[WebElement]:
-            match root["locator"]:
-                case "id":
-                    elements = _obj.find_elements(By.ID, root["value"])
-                case "name":
-                    elements = _obj.find_elements(By.NAME, root["value"])
+            if locator is None:
+                # practically impossible, but just in case
+                raise ValueError("Locator must be a string, not None")
+            if value is None:
+                # practically impossible, but just in case
+                raise ValueError("Locator must be a string, not None")
+
+            isDisplayed = action_kwargs["isDisplayed"]
+            if isDisplayed is not None:
+                # Checks for for the condition, if it isn't it throws an error. Kinda weird syntax but it wokrs
+                assert isDisplayed == _obj.is_displayed(), f"Element is{' 'if isDisplayed is False else 'not '}displayed"
+            isSelected = action_kwargs["isSelected"]
+            if isSelected is not None:
+                # Checks for for the condition, if it isn't it throws an error. Kinda weird syntax but it wokrs
+                assert isSelected == _obj.is_selected(), f"Element is{' 'if isDisplayed is False else ' not '}selected"
+            isEnabled = action_kwargs["isEnabled"]
+            if isEnabled is not None:
+                # Checks for for the condition, if it isn't it throws an error. Kinda weird syntax but it wokrs
+                assert isEnabled == _obj.is_enabled(), f"Element is{' 'if isDisplayed is False else ' not '}enabled"
+
+            match locator:
                 case "css_selector":
-                    elements = _obj.find_elements(By.CSS_SELECTOR, root["value"])
-                case "class":
-                    elements = _obj.find_elements(By.CLASS_NAME, root["value"])
-                case "class_name":
-                    elements = _obj.find_elements(By.CLASS_NAME, root["value"])
-                case "link":
-                    elements = _obj.find_elements(By.LINK_TEXT, root["value"])
-                case "link_text":
-                    elements = _obj.find_elements(By.LINK_TEXT, root["value"])
-                case "partial_link":
-                    elements = _obj.find_elements(By.PARTIAL_LINK_TEXT, root["value"])
-                case "partial_link_text":
-                    elements = _obj.find_elements(By.PARTIAL_LINK_TEXT, root["value"])
-                case "tag":
-                    elements = _obj.find_elements(By.TAG_NAME, root["value"])
-                case "tag_name":
-                    elements = _obj.find_elements(By.TAG_NAME, root["value"])
+                    return _obj.find_element(By.CSS_SELECTOR, value)
                 case "xpath":
-                    elements = _obj.find_elements(By.XPATH, root["value"])
+                    return _obj.find_element(By.XPATH, value)
                 case _:
-                    raise ValueError(f"Invalid locator in {root}")
+                    raise ValueError(f"Invalid locator {locator}")
+
+        def matchElements(_obj: ChromeDriver, **action_kwargs) -> list[WebElement]:
+
+            locator = action_kwargs["locator"]
+            value = action_kwargs["value"]
+
+            if locator is None:
+                # practically impossible, but just in case
+                raise ValueError("Locator must be a string, not None")
+            if value is None:
+                # practically impossible, but just in case
+                raise ValueError("Locator must be a string, not None")
+
+            match locator:
+                case "css_selector":
+                    elements = _obj.find_elements(By.CSS_SELECTOR, value)
+                case "xpath":
+                    elements = _obj.find_elements(By.XPATH, value)
+                case _:
+                    raise ValueError(f"Invalid locator {locator}")
+                
+            isDisplayed = action_kwargs["isDisplayed"]
+            if isDisplayed is not None:
+                # Checks for for the condition, if it isn't it throws an error. Kinda weird syntax but it wokrs
+                for element in elements:
+                    assert isDisplayed == _obj.is_displayed(), f"Element is{' 'if isDisplayed is False else 'not '}displayed"
+            isSelected = action_kwargs["isSelected"]
+            if isSelected is not None:
+                # Checks for for the condition, if it isn't it throws an error. Kinda weird syntax but it wokrs
+                for element in elements:
+                    assert isSelected == _obj.is_selected(), f"Element is{' 'if isDisplayed is False else ' not '}selected"
+            isEnabled = action_kwargs["isEnabled"]
+            if isEnabled is not None:
+                # Checks for for the condition, if it isn't it throws an error. Kinda weird syntax but it wokrs
+                for element in elements:
+                    assert isEnabled == _obj.is_enabled(), f"Element is{' 'if isDisplayed is False else ' not '}enabled"
+
             return elements
 
         def executeElementAction(
-                _obj: WebElement | list[WebElement],
-                action: str,
-                isDisplayed: bool | None = None,
-                isSelected: bool | None = None,
-                isEnabled: bool | None = None,
+                _obj: WebElement,
                 **action_kwargs
                 ) -> bool | None:
-            if isDisplayed is not None:
-                assert isDisplayed == _obj.is_displayed(), f"Element is{' 'if isDisplayed is False else 'not '}displayed"
-            if isSelected is not None:
-                assert isSelected == _obj.is_selected(), f"Element is{' 'if isDisplayed is False else ' not '}selected"
-            if isEnabled is not None:
-                assert isEnabled == _obj.is_enabled(), f"Element is{' 'if isDisplayed is False else ' not '}enabled"
-
-            match action:
-                case "click":
-                    _obj.click()
-                case "send_keys":
-                    _obj.send_keys(action_kwargs['keys'])
-                case "clear":
-                    _obj.clear()
-                case _:
-                    raise ValueError("Invalid action type")
+            
+            # match action
+            pass
                 
         def ElementAction(
                 driver: ChromeDriver,
-                _obj: ChromeDriver | WebElement,
-                root: dict,
-                action: str = "",
-                isSingle: bool = True,
                 **action_kwargs
                 ) -> WebElement | list[WebElement]:
-            # * get the element specified  
-            # * if the next element is None, return the found element, else call again
-            # * if the type of the element is iframe, then switch the driver into the iframe, then call again
-            # * if the element to be returned is not single, use the group returning method
-            # print(f"root {root}\nroot object: {_obj}\n element: {root['element']}")
 
             result: WebElement | list[WebElement]
 
-            if root['element'] is None:
-                if isSingle:
-                    result = Core.Chrome.matchElement(_obj, root)
-                    # print(f"returned result: {result}, tag: {result.tag_name} \n")
-                    Core.Chrome.executeElementAction(result, action, **action_kwargs)
-                    driver.switch_to.parent_frame()     #if there was an iframe, this goes back to the top of the frame
-                    return result
-                elif isSingle == False:
-                    results = Core.Chrome.matchElements(_obj, root)
-                    # print(f"returned result: {result}, tag: {result.tag_name} \n")
-                    for result in results:
-                        Core.Chrome.executeElementAction(result, action, **action_kwargs)
-                    driver.switch_to.parent_frame()     #if there was an iframe, this goes back to the top of the frame
-                    return result
-            else:
-                result = Core.Chrome.matchElement(_obj, root)
-                # print(f"\nobj: {_obj} \nresult: {result} \n")
-                Core.Chrome.getElement(driver, result, root['element'], action = action, isSingle = isSingle, **action_kwargs)
+            isSingle = action_kwargs["isSingle"]
 
-            if root['type'] == 'iframe':
-                driver.switch_to.frame(result)
+            if isSingle:
+                result = Core.Chrome.matchElement(driver, **action_kwargs)
+                
+                action = action_kwargs["action"]
+                match action:
+                    case "click":
+                        result.click()
+                    case "send_keys":
+                        keys = action_kwargs["keys"]
+                        result.send_keys(keys)
+                    case "clear":
+                        result.clear()
+                    case _:
+                        raise ValueError("Invalid action type")
+                    
+                driver.switch_to.parent_frame()     #if there was an iframe, this goes back to the top of the frame
+
+            elif isSingle == False:
+                results = Core.Chrome.matchElements(driver, **action_kwargs)
+                for result in results:
+                    
+                    action = action_kwargs["action"]
+                    match action:
+                        case "click":
+                            result.click()
+                        case "send_keys":
+                            keys = action_kwargs["keys"]
+                            result.send_keys(keys)
+                        case "clear":
+                            result.clear()
+                        case _:
+                            raise ValueError("Invalid action type")
+                        
+
+                driver.switch_to.parent_frame()     #if there was an iframe, this goes back to the top of the frame
                     
         def execute_js(
             driver: ChromeDriver,
             commands: list[str],
             log_JS_args: dict[str, str | list | int | bool | None] = \
-                {
-                    "active": True,
-                    "path": "./JS.log",
-                    "create_path": True,
-                    "terminal_mode": True,
-                    "refresh_rate": 1000,
-                    "retry_timeout": 1000
-                }
+                    dict(active=True, path="./JS.log", create_path=True, terminal_mode=True, refresh_rate=1000,
+                         retry_timeout=1000)
             ):
             Core.checkDriverExists(driver)
             for command in commands:
@@ -542,74 +589,3 @@ class Core:
                 sleep(mimir)
             else:
                 sleep(fuckup)
-
-jsonstring = """{
-    "browser": "chrome",
-    "options":
-    {
-        "log_JS": 
-        {
-            "active": true,
-            "path": "./JS.log",
-            "refresh_rate": 1000,
-            "retry_timeout": 1000
-        }
-    },
-    "driver_options":
-    {
-        "options":
-        {
-            "page_load_strategy": "normal",
-            "accept_insecure_certs": false,
-            "timeout":
-            {
-                "type": "pageLoad",
-                "value": 300000
-            },
-            "unhandled_prompt_behavior": "dismiss and notify",
-            "keep_browser_open": true,
-            "browser_arguments": []
-        },
-        "service":
-        {
-            "log_path": ".",
-            "arguments": []
-        }
-    },
-    
-    "actions":
-    {
-    "2":
-        {
-            "type": "goto",
-            "break": false,
-            "url": "https://wikipedia.org"
-        },
-    "1":
-        {
-            "type": "js_execute",
-            "break": false,
-            "commands":
-            [
-                "console.log('Anyád')"
-            ]
-        }
-    }
-}"""
-
-test_dict: dict = \
-{
-    "single": True,
-    "element":
-    {
-        "type": "element",
-        "locator": "class",
-        "value": "central-textlogo",
-        "element": {
-            "type": "element",
-            "locator": "class",
-            "value": "central-featured-logo",
-            "element": None
-        }
-    }
-}

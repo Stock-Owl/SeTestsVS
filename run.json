@@ -10,7 +10,9 @@
             "terminal_mode": true,
             "refresh_rate": 1000,
             "retry_timeout": 1000
-        }
+        },
+        "exception_log_path": "./exceptions.log",
+        "auto_exit_iframes": true
     },
     "driver_options":
     {
@@ -34,38 +36,50 @@
         }
     },
     
-    "actions":
+    "units":
     {
-    "1":
+        "1":
         {
-            "type": "goto",
-            "break": false,
-            "url": "https://wikipedia.org"
+            "bindings": "2",
+            "actions":
+            {
+                "1":
+                {
+                    "type": "goto",
+                    "break": false,
+                    "url": "https://bestbyte.hu/blog"
+                }
+            }
         },
-    "2":
+        "2":
         {
-            "type": "js_execute",
-            "break": false,
-            "commands":
-            [
-                "console.log('Hello Wolrd!')",
-                "for(let i = 0; i < 5; i++){console.log(i);}"
-            ]
-        },
-    "3":
-        {
-            "type": "wait",
-            "break": false,
-            "amount": 1000
-        },
-    "4":
-        {
-            "type": "js_execute",
-            "break": false,
-            "commands":
-            [
-                "for(let i = 0; i < 5; i++){console.log(i);}"
-            ]
+            "bindings": null,
+            "actions":
+            {
+                "1":
+                {
+                    "type": "click",
+                    "break": false,
+                    "single": true,
+                    "displayed": null,
+                    "enabled": null,
+                    "selected": null,
+                    "locator": "css_selector",
+                    "value": "[id$=\"EDI_search\"]"
+                },
+                "2":
+                {
+                    "type": "send_keys",
+                    "break": false,
+                    "single": true,
+                    "displayed": null,
+                    "enabled": null,
+                    "selected": null,
+                    "keys": "apple\n",
+                    "locator": "css_selector",
+                    "value": "[id$=\"EDI_search\"]"
+                }
+            }
         }
     }
 }
