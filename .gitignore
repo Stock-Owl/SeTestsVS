@@ -399,3 +399,4 @@ FodyWeavers.xsd
 
 test.py
 run.py
+*/logs/*

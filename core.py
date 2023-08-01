@@ -16,7 +16,7 @@ from json import loads
 from datetime import time
 import multiprocessing as mp
 
-#                                                                               13 / 15
+#                                                                               15 / 19
 # TODO: Kitalálni, hogy vannak az argumentumok                                  ✅  1
 # TODO: Megszerelni a random useless conversionöket a JSON-ből                  ✅  2
 # TODO: Relative locators                                                       ❌  NAH FUCK that shit
@@ -38,8 +38,13 @@ import multiprocessing as mp
 # if there are differences                                                      ✅  11
 # TODO: implement browser naviagtion funcitons and                              ✅  12
 # TODO: Units and binding                                                       ✅  13
-# TODO: Beautify logging messages                                               ❌  14
-# TODO: Implement breaks                                                        ❌  15
+# TODO: Beautify logging messages                                               ✅  14
+# TODO: Implement breaks                                                        ✅  15
+# TODO: IF the logging is ready, try to use a decorator insted of the static    ❌  16
+# TODO: Finish wait_for implementation                                          ❌  17
+# TODO: auto_logJS needs to be patched so that it writes the logs
+# even if the driver exits while it tries to write into the intermediate file   ❌  18
+# TODO: Fix logJS so that it checks for log arg type and switches               ❌  19
 
 # null nem lesz, mert C# for whatever reason, úgyhogy helyette ez van!
 # Not used yet
@@ -50,8 +55,6 @@ class Core:
 
         default_driver_options_dict_: dict = \
         {
-            "options":
-            {
                 "page_load_strategy": "normal",
                 "accept_insecure_certs": False,
                 "timeout":
@@ -62,38 +65,20 @@ class Core:
                 "unhandled_prompt_behavior": "dismiss and notify",
                 "keep_browser_open": True,
                 "browser_arguments": []
-            },
-            "service":
-            {
-                "log_path": ".",
-                "arguments": []
-            }
         }
 
         def DefaultOptions() -> ChromeOptions:
             from copy import copy
-            content = Core.Chrome.default_driver_options_dict_
-            opts = copy(content["options"])
-            del content
+            defaults = copy(Core.Chrome.default_driver_options_dict_)
             options = ChromeOptions()
-            options.page_load_strategy = opts["page_load_strategy"]
-            options.accept_insecure_certs = opts["accept_insecure_certs"]
-            options.timeouts = {opts["timeout"]["type"]: opts["timeout"]["value"]}
-            options.unhandled_prompt_behavior = opts["unhandled_prompt_behavior"]
-            options.add_experimental_option("detach", opts["keep_browser_open"])
-            for option in opts["browser_arguments"]:
+            options.page_load_strategy = defaults["page_load_strategy"]
+            options.accept_insecure_certs = defaults["accept_insecure_certs"]
+            options.timeouts = {defaults["timeout"]["type"]: defaults["timeout"]["value"]}
+            options.unhandled_prompt_behavior = defaults["unhandled_prompt_behavior"]
+            options.add_experimental_option("detach", defaults["keep_browser_open"])
+            for option in defaults["browser_arguments"]:
                     options.add_argument(option)
             return options
-        
-        def DefaultService() -> ChromeService:
-            from copy import copy
-            content = Core.Chrome.default_driver_options_dict_
-            serv = copy(content["service"])
-            del content
-            log_path: str = serv["log_path"]
-            args = serv["arguments"]
-            service = ChromeService(service_args = args, log_path = log_path)
-            return service
         
         def RunDriver(path: str | None = None, json_string: str | None = None) -> None:
             # loads json file or loads the string and instanciates the actions par and the 
@@ -112,11 +97,12 @@ class Core:
             driver: ChromeDriver
             driver_options_ =  loaded_dict["driver_options"]
             global_options = loaded_dict["options"]
-            print(loaded_dict)
+            # print(loaded_dict)
             units: dict = loaded_dict["units"]
 
             LogJSArgs = global_options["log_JS"]
-            exception_log_path = global_options["exception_log_path"]
+            parent_log_path = global_options["parent_log_path"]
+            terminal_mode = global_options["terminal_mode"]
 
             # create the chrome driver with arguments
             if driver_options_ != Core.Chrome.default_driver_options_dict_:
@@ -127,7 +113,7 @@ class Core:
                 service_args: list[str] = service_["arguments"]
                 # Not used bc the chromedriver is a bitch and crashes for some reason before even creating the driver...
                 # Akkor, a kurva anyját (:
-                service = ChromeService(service_args = service_args, log_path = log_path)
+                # service = ChromeService(service_args = service_args, log_path = log_path)
 
                 opts = ChromeOptions()
 
@@ -179,29 +165,34 @@ class Core:
             # create the chrome driver (as bare bones as it gets)
             elif driver_options_ == Core.Chrome.default_driver_options_dict_:
                 opts = Core.Chrome.DefaultOptions()
-                service = Core.Chrome.DefaultService()
+                # NOT used. see line 110
+                # service = Core.Chrome.DefaultService()
             else:
                 raise Exception("Some shit got fucked up")
             # service commented out bc chromdriver shits itslef, ig
             driver = ChromeDriver(options = opts)   # , service = service
             # 
-            # clears the previous log file
-            with open(exception_log_path, mode='w', encoding='utf8') as f:
-                f.write("")
+            # clears the previous log filed
+            Support.clear_all_logs(parent_log_path)
 
             active_bindings = []
             for uname, unit in units.items():
                 try:
                     if uname in active_bindings:
-                        with open(exception_log_path, mode='a', encoding='utf-8') as f:
-                            f.write(f"\n{uname} skipped because previous unit failed\n")
+                        log_line = f"\'{uname}\' skipped because previous unit failed\n"
+                        Support.log_proc(parent_log_path, log_line)
                         continue
 
                     actions = unit['actions']
-                    for name, action in actions.items():
+                    for aname, action in actions.items():
                         print(action)
                         if action["break"]:
-                            pass        # majd ide kell egy intermediate comms file megint mint a JS-nél
+                            if terminal_mode:
+                                input("press enter to resume")
+                            else:
+                                pass   # majd ide kell egy intermediate comms file megint mint a JS-nél
+                            Support.log_proc(parent_log_path, "Breakpoint")
+
                         match action["type"]:
                             case "goto":
                                 url = action["url"]
@@ -216,7 +207,8 @@ class Core:
                                 commands = action["commands"]
                                 Core.Chrome.execute_js(driver, commands, log_JS_args=LogJSArgs)
                             case "wait":
-                                pass
+                                time = action['amount']
+                                Core.Chrome.wait(driver, time)
                             case "wait_for":
                                 Core.Chrome.waitFor(driver, action)
                             case "click":
@@ -250,6 +242,13 @@ class Core:
                                     isDisplayed = action['displayed'],
                                     isEnabled = action['enabled'],
                                     isSelected = action['selected'])
+                            case _:
+                                action_type = action['type']
+                                Support.log_proc(parent_log_path, f"Unknown action \'{action_type}\'")
+                                
+                        log_line = f"[{uname}][{aname}] of type \'{action['type']}\' successfully executed"
+                        Support.log_proc(parent_log_path, log_line)
+
                 except:
                     bindings = unit['bindings']
                     if bindings is not None:
@@ -258,26 +257,27 @@ class Core:
                                 if isinstance(binding, str):
                                     active_bindings.append(binding)
                                 else:
-                                    raise ValueError(f"Parameters in \'bindings\' must be of type str (string) not {type(binding)}")
+                                    # wrong element type in string list
+                                    Support.log_error(parent_log_path, f"Parameters in \'bindings\' must be of type str (string) not {type(binding)}")
                         elif isinstance(bindings, str):
                             active_bindings.append(bindings)
                         else:
-                            raise ValueError(f"Parameter \'bindings\' must be of type str (string) not {type(bindings)}")
+                            # wrong elmement type for `bindings` (should be string)
+                            Support.log_error(parent_log_path, f"Parameter \'bindings\' must be of type str (string) not {type(bindings)}")
 
-                    with open(exception_log_path, mode='a', encoding='utf-8') as f:
-                            f.write("\n----------------------------------------------------------------\n")
-                            f.write(f"{format_exc()}\nStack:")
-                            stack = format_stack()
-                            # -1 to exclude this expression from stack
-                            for x in range(len(stack)-1):
-                                stack_parts = stack[x].split('\n')
-                                origin = stack_parts[0]
-                                root = stack_parts[1]
-                                f.write(f"\t[{x}] ORIGIN:\t{origin}\n\t[{x}] ROOT:{root}\n")
-                            f.write("\n----------------------------------------------------------------\n")
+                    Support.log_error(parent_log_path, "----------------------------------------------------------------\n")
+                    Support.log_error(parent_log_path, f"{format_exc()}\nStack:\n", time_disabled=True)
+                    stack = format_stack()
+                    # -1 to exclude this expression from stack
+                    for x in range(len(stack)-1):
+                        stack_parts = stack[x].split('\n')
+                        origin = stack_parts[0]
+                        root = stack_parts[1]
+                        Support.log_error(parent_log_path, f"\t[{x}] ORIGIN:\t{origin}\n\t[{x}] ROOT:{root}\n\n", time_disabled=True)
+                    Support.log_error(parent_log_path, "----------------------------------------------------------------\n", time_disabled=True)
 
             #
-            if driver_options_["options"]["keep_browser_open"]:
+            if driver_options_["keep_browser_open"]:
                 pass
             else:
                 driver.Quit()
@@ -302,7 +302,7 @@ class Core:
             Core.checkDriverExists(driver)
             time = float(time_ / 1000)
             driver.implicitly_wait(time)
-
+        # NEEDS WORK
         def waitFor(driver: ChromeDriver, kwargs: dict[str]):
             timeout = kwargs['timeout']
             frequency = kwargs['frequency']
@@ -333,7 +333,7 @@ class Core:
         
         # PART FUNCS
 
-        def matchElement(_obj: ChromeDriver,
+        def matchElement(driver: ChromeDriver,
                          **action_kwargs) -> WebElement:
             
             locator = action_kwargs["locator"]
@@ -346,28 +346,30 @@ class Core:
                 # practically impossible, but just in case
                 raise ValueError("Locator must be a string, not None")
 
-            isDisplayed = action_kwargs["isDisplayed"]
-            if isDisplayed is not None:
-                # Checks for for the condition, if it isn't it throws an error. Kinda weird syntax but it wokrs
-                assert isDisplayed == _obj.is_displayed(), f"Element is{' 'if isDisplayed is False else 'not '}displayed"
-            isSelected = action_kwargs["isSelected"]
-            if isSelected is not None:
-                # Checks for for the condition, if it isn't it throws an error. Kinda weird syntax but it wokrs
-                assert isSelected == _obj.is_selected(), f"Element is{' 'if isDisplayed is False else ' not '}selected"
-            isEnabled = action_kwargs["isEnabled"]
-            if isEnabled is not None:
-                # Checks for for the condition, if it isn't it throws an error. Kinda weird syntax but it wokrs
-                assert isEnabled == _obj.is_enabled(), f"Element is{' 'if isDisplayed is False else ' not '}enabled"
-
             match locator:
                 case "css_selector":
-                    return _obj.find_element(By.CSS_SELECTOR, value)
+                    element =  driver.find_element(By.CSS_SELECTOR, value)
                 case "xpath":
-                    return _obj.find_element(By.XPATH, value)
+                    element =  driver.find_element(By.XPATH, value)
                 case _:
                     raise ValueError(f"Invalid locator {locator}")
 
-        def matchElements(_obj: ChromeDriver, **action_kwargs) -> list[WebElement]:
+            isDisplayed = action_kwargs["isDisplayed"]
+            if isDisplayed is not None:
+                # Checks for for the condition, if it isn't it throws an error. Kinda weird syntax but it wokrs
+                assert isDisplayed == element.is_displayed(), f"Element is{' 'if isDisplayed is False else 'not '}displayed"
+            isSelected = action_kwargs["isSelected"]
+            if isSelected is not None:
+                # Checks for for the condition, if it isn't it throws an error. Kinda weird syntax but it wokrs
+                assert isSelected == element.is_selected(), f"Element is{' 'if isDisplayed is False else ' not '}selected"
+            isEnabled = action_kwargs["isEnabled"]
+            if isEnabled is not None:
+                # Checks for for the condition, if it isn't it throws an error. Kinda weird syntax but it wokrs
+                assert isEnabled == element.is_enabled(), f"Element is{' 'if isDisplayed is False else ' not '}enabled"
+            
+            return element
+
+        def matchElements(driver: ChromeDriver, **action_kwargs) -> list[WebElement]:
 
             locator = action_kwargs["locator"]
             value = action_kwargs["value"]
@@ -381,37 +383,30 @@ class Core:
 
             match locator:
                 case "css_selector":
-                    elements = _obj.find_elements(By.CSS_SELECTOR, value)
+                    elements = driver.find_elements(By.CSS_SELECTOR, value)
                 case "xpath":
-                    elements = _obj.find_elements(By.XPATH, value)
+                    elements = driver.find_elements(By.XPATH, value)
                 case _:
                     raise ValueError(f"Invalid locator {locator}")
-                
-            isDisplayed = action_kwargs["isDisplayed"]
-            if isDisplayed is not None:
-                # Checks for for the condition, if it isn't it throws an error. Kinda weird syntax but it wokrs
-                for element in elements:
-                    assert isDisplayed == _obj.is_displayed(), f"Element is{' 'if isDisplayed is False else 'not '}displayed"
-            isSelected = action_kwargs["isSelected"]
-            if isSelected is not None:
-                # Checks for for the condition, if it isn't it throws an error. Kinda weird syntax but it wokrs
-                for element in elements:
-                    assert isSelected == _obj.is_selected(), f"Element is{' 'if isDisplayed is False else ' not '}selected"
-            isEnabled = action_kwargs["isEnabled"]
-            if isEnabled is not None:
-                # Checks for for the condition, if it isn't it throws an error. Kinda weird syntax but it wokrs
-                for element in elements:
-                    assert isEnabled == _obj.is_enabled(), f"Element is{' 'if isDisplayed is False else ' not '}enabled"
+            
+            for element in elements:
+                isDisplayed = action_kwargs["isDisplayed"]
+                if isDisplayed is not None:
+                    # Checks for for the condition, if it isn't it throws an error. Kinda weird syntax but it wokrs
+                    for element in elements:
+                        assert isDisplayed == element.is_displayed(), f"Element is{' 'if isDisplayed is False else 'not '}displayed"
+                isSelected = action_kwargs["isSelected"]
+                if isSelected is not None:
+                    # Checks for for the condition, if it isn't it throws an error. Kinda weird syntax but it wokrs
+                    for element in elements:
+                        assert isSelected == element.is_selected(), f"Element is{' 'if isDisplayed is False else ' not '}selected"
+                isEnabled = action_kwargs["isEnabled"]
+                if isEnabled is not None:
+                    # Checks for for the condition, if it isn't it throws an error. Kinda weird syntax but it wokrs
+                    for element in elements:
+                        assert isEnabled == element.is_enabled(), f"Element is{' 'if isDisplayed is False else ' not '}enabled"
 
             return elements
-
-        def executeElementAction(
-                _obj: WebElement,
-                **action_kwargs
-                ) -> bool | None:
-            
-            # match action
-            pass
                 
         def ElementAction(
                 driver: ChromeDriver,
@@ -461,58 +456,25 @@ class Core:
         def execute_js(
             driver: ChromeDriver,
             commands: list[str],
+            terminal_mode: bool = False,
+            path_ = "./logs",
             log_JS_args: dict[str, str | list | int | bool | None] = \
-                    dict(active=True, path="./JS.log", create_path=True, terminal_mode=True, refresh_rate=1000,
+                    dict(active=True,
+                         path="./JS.log",
+                         refresh_rate=1000,
                          retry_timeout=1000)
             ):
+
             Core.checkDriverExists(driver)
             for command in commands:
                 try:
                     driver.execute_script(command)
                 except SeJSException as e:
                     # print(f"Error: the command {command} was incorrect")
-                    Core.logJS(log_JS_args, e) #log_JS_args should be a global
+                    Support.logJS(path_, log_JS_args, e, terminal_mode=terminal_mode) #log_JS_args should be a global
                     break
 
-    def logJS(log_JS_args: dict[str, str | list | int | bool | None], log: str | SeJSException) -> None:
-        from time import sleep
-        from os.path import exists
-
-        path: str = log_JS_args['path']
-        fuckup: int | float = log_JS_args['retry_timeout']  / 1000
-
-        if log_JS_args['terminal_mode']:
-            with open(path, 'w', encoding='utf-8') as f:
-                f.write(log)
-
-        try:
-            assert exists(path), F"{path} does not exist"
-        except AssertionError:
-            if log_JS_args["create_path"]:
-                with open(path, mode='w', encoding='utf-8') as f:
-                    pass
-            else:
-                raise       # raises the original AssertionError
-
-        while True:
-            with open(path, mode = 'r', encoding = "utf-8") as f:
-                contents: str = f.read()
-            if contents != '':
-                sleep(fuckup)
-                continue
-            else:
-                if isinstance(log, SeJSException):
-                    stacktrace = "\n".join(log.stacktrace)
-                    to_write: str = f"{log.msg}\nSteack Trace:\n{stacktrace}"
-                    with open(path, mode ='w', encoding='utf-8') as f:
-                        f.write(to_write)
-                    break
-                elif isinstance(log, str):
-                    with open(path, mode ='w', encoding='utf-8') as f:
-                        f.write(log)
-                    break
-                else: raise ValueError("logJS takes either a string or a selenium.common.exceptions.JavascriptException as an argument")
-                    
+    # quite possibly useless
     def quit_driver(driver: object):
         """
         Quits the driver AND deletes the driver from the gloabl scope.
@@ -551,9 +513,99 @@ class Core:
             return True
         return None
                     
-    def auto_logJS(driver: ChromeDriver, log_JS_args: dict[str, str | list | int | bool | None]) -> None:
+
+class Support:
+    from os.path import exists
+
+    def clear_all_logs(path_: str) -> None:
+        paths: list[str] = [
+            f"{path_}/run.log",
+            f"{path_}/process.log",
+            f"{path_}/js.log",
+            f"{path_}/error.log"]
+        
+        for file in paths:
+            with open(file, mode='w', encoding='utf-8') as f:
+                f.write("")
+
+    def log_all(path_: str, log_line: str, time_disabled: bool = False) -> None:
+        from datetime import datetime as dt
+
+        path = f"{path_}/run.log"
+
+        try:
+            assert Support.exists(path)
+        except AssertionError:
+            with open(path, mode='w', encoding='utf-8') as f:
+                f.write("")
+
+        with open(path, "a", encoding="utf-8") as f:
+            if not time_disabled:
+                time_: str = dt.now().time().strftime("%H:%M:%S\n")
+                f.write(time_)
+            f.write(log_line)
+
+    def logJS(
+            path_: str,
+            log_JS_args: dict[str, str | list | int | bool | None],
+            log: str | SeJSException,
+            terminal_mode = False,
+            time_disabled: bool = False,
+            index: int | None = None) -> None:
         from time import sleep
-        from os.path import exists
+        
+
+        path: str = f"{path_}/js.log"
+        fuckup: int | float = log_JS_args['retry_timeout']  / 1000
+
+        try:
+            assert Support.exists(path)
+        except FileNotFoundError:
+            with open(path, mode='w', encoding='utf-8') as f:
+                f.write("")
+
+        if terminal_mode:
+            stacktrace = "\n".join(log.stacktrace)
+            with open(path, 'a+', encoding='utf-8') as f:
+                if index is not None:
+                    to_write = f"❗ JavaScript:\n{log.msg}\nSteack Trace:\n{stacktrace}\n"
+                else:
+                    to_write = f"❗ JavaScript:\n{log.msg}\nSteack Trace:\n{stacktrace}\n"
+                f.write(to_write)
+                Support.log_all(path_, to_write, time_disabled = time_disabled)
+        else:
+            while True:
+                with open(path, mode = 'r', encoding = "utf-8") as f:
+                    contents: str = f.read()
+                if contents != '':
+                    sleep(fuckup)
+                    continue
+                else:
+                    if isinstance(log, SeJSException):
+                        stacktrace = "\n".join(log.stacktrace)
+                        if index is not None:
+                            to_write: str = f"❗ JavaScript:\n{log.msg}\nSteack Trace:\n{stacktrace}\n"
+                        else:
+                            to_write: str = f"❗ JavaScript:\n{log.msg}\nSteack Trace:\n{stacktrace}\n"
+                        with open(path, mode ='a+', encoding='utf-8') as f:
+                            f.write(to_write)
+                            Support.log_all(path_, to_write, time_disabled = time_disabled)
+                        break
+                    elif isinstance(log, str):
+                        with open(path, mode ='a+', encoding='utf-8') as f:
+                            to_write = f"❗ JavaScript:\\n{log}\n"
+                            f.write(to_write)
+                            Support.log_all(path_, to_write, time_disabled = time_disabled)
+                        break
+                    else: raise ValueError("logJS takes either a string or a selenium.common.exceptions.JavascriptException as an argument")
+        
+    def auto_logJS(
+            driver: ChromeDriver,
+            path_: str,
+            log_JS_args: dict[str, str | list | int | bool | None],
+            terminal_mode: bool = False,
+            time_disabled: bool = False) -> None:
+        from time import sleep
         """
         Appends the current JavaScript Console Logs to the end of the file.
         In return, we should get an empty file.
@@ -567,27 +619,85 @@ class Core:
             * (int) retry_timeout: the amout of time (in ms) the program waits before trying to write the logs (if the file was still in use)
         """
 
-        path: str = log_JS_args['path']
+        path: str = f"{path_}/js.log"
         mimir: int | float = log_JS_args['refresh_rate']    / 1000
         fuckup: int | float = log_JS_args['retry_timeout']  / 1000
 
-        assert log_JS_args['active'] == True, "terminating"
-        assert exists(path), f"{path} does not exist"
+        assert log_JS_args['active'], "auto JavaScript logging is off"
+        try:
+            assert Support.exists(path)
+        except:
+            with open(path, mode='w', enocdintóg='utf-8') as f:
+                f.write("")
+
+        processed: list[str] = []
 
         while True:
             browser_logs = driver.get_log("browser")
-            try:
-                assert driver
-            except AssertionError:
-                break
-            with open(path, mode = 'r+', encoding = 'utf-8') as f:
-                contents = f.read()
-            if contents == '':
+            # shared vairable needs to be implemented
+
+            if terminal_mode:
                 with open(path, mode = 'a+', encoding = 'utf-8') as f:
-                    for log in browser_logs:
+                    for i in range(len(browser_logs)):
+                        log = browser_logs[i]
+                        if log in processed:
+                            continue
+                        # The reason it's processed with {i} and printed as such
+                        # is that no identical logs can exist in `processed`
                         log_line = \
-                        f"{log['source']} — {log['level']}:\n{log['message']}\n\t{log['timestamp']}"
+                        f"{i} ❗ JavaScript:\n{log['source']} — {log['level']}:\n{log['message']}\n\t{log['timestamp']}\n#\n"
                         f.write(log_line)
+                        Support.log_all(path = path_, log_line = log_line, time_disabled=time_disabled)
+                        processed.append(log_line)
                 sleep(mimir)
+
             else:
-                sleep(fuckup)
+                with open(path, mode = 'r+', encoding = 'utf-8') as f:
+                    contents = f.read()
+                if contents != '':
+                    sleep(fuckup)
+                    continue
+                else:
+                    with open(path, mode = 'a+', encoding = 'utf-8') as f:
+                        for i in range(len(browser_logs)):
+                            log = browser_logs[i]
+                            if log in processed:
+                                continue
+                            # The reason it's processed with {i} and printed as such
+                            # is that no identical logs can exist in `processed`
+                            log_line = \
+                            f"{i} ❗ JavaScript:\n{log['source']} — {log['level']}:\n{log['message']}\n\t{log['timestamp']}\n#\n"
+                            f.write(log_line)
+                            Support.log_all(path = path_, log_line = log_line, time_disabled=time_disabled)
+                            processed.append(log_line)
+                    sleep(mimir)
+
+    def log_proc(path_: str, log_line: str, time_disabled: bool = False) -> None:
+        
+        path = f"{path_}/process.log"
+
+        try:
+            assert Support.exists(path)
+        except:
+            with open(path, mode='w', encoding='utf-8') as f:
+                f.write("")
+        
+        log_line = f"✅ DONE: {log_line}\n"
+        with open(path, mode='a+', encoding='utf-8') as f:
+            f.write(log_line)
+        Support.log_all(path_, log_line, time_disabled=time_disabled)
+
+    def log_error(path_: str, log_line: str,  time_disabled: bool = False) -> None:
+
+        path = f"{path_}/error.log"
+
+        try:
+            assert Support.exists(path)
+        except:
+            with open(path, mode='w', encoding='utf-8') as f:
+                f.write("")
+
+        # log_line = f"❌ ERROR: {log_line}\n"
+        with open(path, mode='a+', encoding='utf-8') as f:
+            f.write(log_line)
+        Support.log_all(path_, log_line, time_disabled=time_disabled)
