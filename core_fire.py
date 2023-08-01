@@ -12,6 +12,7 @@ from selenium.webdriver.support import expected_conditions
 from selenium.common.exceptions import JavascriptException as SeJSException
 
 from datetime import time
+from traceback import format_exc, format_stack
 import multiprocessing as mp
 from copy import copy
 from json import loads
@@ -76,7 +77,7 @@ class Core:
             options.accept_insecure_certs = opts["accept_insecure_certs"]
             options.timeouts = {opts["timeout"]["type"]: opts["timeout"]["value"]}
             options.unhandled_prompt_behavior = opts["unhandled_prompt_behavior"]
-            # options.add_experimental_option("detach", opts["keep_browser_open"])
+            options.add_experimental_option("detach", opts["keep_browser_open"])
             for option in opts["browser_arguments"]:
                     options.add_argument(option)
             return options
@@ -112,6 +113,7 @@ class Core:
                 
 
             LogJSArgs = global_options["log_JS"]
+            exception_log_path = global_options["exception_log_path"]
 
             # create the chrome driver with arguments
             if driver_options_ != Core.Firefox.default_driver_options_dict_:
@@ -121,9 +123,8 @@ class Core:
                 log_path: str = service_["log_path"]
                 service_args: list[str] = service_["arguments"]
                 # service = FirefoxService(service_args = service_args, log_path = log_path)
-
+                service = FirefoxService(service_args = service_args, log_path = log_path)
                 opts = FirefoxOptions()
-
                 """
                 3 types of page load startegies are available:
                 * normal
@@ -162,9 +163,22 @@ class Core:
                 Throws a ValueError if an unsupported behavior type is given.
                 """
                 opts.unhandled_prompt_behavior = options_["unhandled_prompt_behavior"]
+        
+    #        Keep the browser open-es hülyeség. Valahogy hozzá kell vágni az option-okhoz, de nem vágom hogyan...
 
-                # if options_["keep_browser_open"] != "":
-                #     opts.add_experimental_option("detach", options_["keep_browser_open"]) 
+    #       Kód:
+    #            if options_["keep_browser_open"] != "":
+    #                opts.add_experemental_option("detach", options_["keep_browser_open"])
+    #        Eredeti error:
+    #            Exception has occurred: AttributeError
+    #            'Options' object has no attribute 'add_experimental_option'
+    #                File "C:\Users\kmarton\OneDrive - VISION-SOFTWARE Számítástechnikai Szolgáltató és Kereskedelmi\Asztal\Projects\SeTestsVS\core_fire.py", line 168, in RunDriver
+    #                    opts.add_experimental_option("detach", options_["keep_browser_open"])
+    #                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    #                File "C:\Users\kmarton\OneDrive - VISION-SOFTWARE Számítástechnikai Szolgáltató és Kereskedelmi\Asztal\Projects\SeTestsVS\main_fire.py", line 4, in <module>
+    #                    Run(json)
+    #            AttributeError: 'Options' object has no attribute 'add_experimental_option'
+
 
                 for option in options_["browser_arguments"]:
                     opts.add_argument(option)
@@ -172,17 +186,23 @@ class Core:
             # create the chrome driver (as bare bones as it gets)
             elif driver_options_ == Core.Firefox.default_driver_options_dict_:
                 opts = Core.Firefox.DefaultOptions()
-                # service = Core.Firefox.DefaultService()
+                service = Core.Firefox.DefaultService()
             else:
                 raise Exception("Some shit got fucked up")
             
+            with open(exception_log_path, mode='w', encoding='utf8') as f:
+                f.write("")
+
             active_binds = []
             driver = FirefoxDriver(options = opts)   # , service = service
             for  uname, unit in units.items():
-                if uname in active_binds:
-                    continue
-                actions = unit['actions']
                 try:
+                    if uname in active_binds:
+                        with open(exception_log_path, mode='a', encoding='UTF-8') as f:
+                                f.write(f"\n{uname} skipped because previous unit failed\n")
+                        continue
+    
+                    actions = unit['actions']
                     for index, action in actions.items():
                         print(action)
                         if action["break"]:
@@ -236,6 +256,7 @@ class Core:
                                 isDisplayed = action['displayed'],
                                 isEnabled = action['enabled'],
                                 isSelected = action['selected'])
+                    """
                 except Exception as e:
                     bindings = unit['bindings']
                     with open("log.txt", "a", encoding="UTF-8") as f:
@@ -250,7 +271,33 @@ class Core:
                             active_binds.append(binding)
                     else:
                         raise ValueError(f"\'bindings\' must be either string or list[string], not {type(bindings)}")
-                
+                    """
+                except:
+                    bindings = unit['bindings']
+                    if bindings is not None:
+                        if isinstance(bindings, list):
+                            for binding in bindings:
+                                if isinstance(binding, str):
+                                    Core.Firefox.RunDriver.active_bindings.append(binding)
+                                else:
+                                    raise ValueError(f"Parameters in \'bindings\' must be of type str (string) not {type(binding)}")
+                        elif isinstance(bindings, str):
+                            Core.Firefox.RunDriver.active_bindings.append(bindings)
+                        else:
+                            raise ValueError(f"Parameter \'bindings\' must be of type str (string) not {type(bindings)}")
+
+                    with open(exception_log_path, mode='a', encoding='utf-8') as f:
+                        f.write("\n----------------------------------------------------------------\n")
+                        f.write(f"{format_exc()}\nStack:")
+                        stack = format_stack()
+                        # -1 to exclude this expression from stack
+                        for x in range(len(stack)-1):
+                            stack_parts = stack[x].split('\n')
+                            origin = stack_parts[0]
+                            root = stack_parts[1]
+                            f.write(f"\t[{x}] ORIGIN:\t{origin}\n\t[{x}] ROOT:{root}\n")
+                        f.write("\n----------------------------------------------------------------\n")
+                    
             
 
             #
@@ -330,51 +377,84 @@ class Core:
         
 
         # PART FUNCS
+        def matchElement(_obj: WebElement | FirefoxDriver, **action_kwargs) -> WebElement:
 
-        def matchElement(_obj: WebElement | FirefoxDriver, root: dict) -> WebElement:
-            match root["locator"]:
-                case "css_selector":
-                    return _obj.find_element(By.CSS_SELECTOR, root["value"])
-                case "xpath":
-                    return _obj.find_element(By.XPATH, root["value"])
-                case _:
-                    raise ValueError(f"Invalid locator in {root}")
+            locator = action_kwargs["locator"]
+            value = action_kwargs["value"]
 
-        def matchElements(_obj, root: dict) -> list[WebElement]:
-            match root["locator"]:
+            if locator is None:
+                # practically impossible, but just in case
+                raise ValueError("Locator must be a string, not None")
+            if value is None:
+                # practically impossible, but just in case
+                raise ValueError("Locator must be a string, not None")
+
+            isDisplayed = action_kwargs["isDisplayed"]
+            if isDisplayed is not None:
+                # Checks for for the condition, if it isn't it throws an error. Kinda weird syntax but it wokrs
+                assert isDisplayed == _obj.is_displayed(), f"Element is{' 'if isDisplayed is False else 'not '}displayed"
+            isSelected = action_kwargs["isSelected"]
+            if isSelected is not None:
+                # Checks for for the condition, if it isn't it throws an error. Kinda weird syntax but it wokrs
+                assert isSelected == _obj.is_selected(), f"Element is{' 'if isDisplayed is False else ' not '}selected"
+            isEnabled = action_kwargs["isEnabled"]
+            if isEnabled is not None:
+                # Checks for for the condition, if it isn't it throws an error. Kinda weird syntax but it wokrs
+                assert isEnabled == _obj.is_enabled(), f"Element is{' 'if isDisplayed is False else ' not '}enabled"
+
+            match locator:
                 case "css_selector":
-                    elements = _obj.find_elements(By.CSS_SELECTOR, root["value"])
+                    return _obj.find_element(By.CSS_SELECTOR, value)
                 case "xpath":
-                    elements = _obj.find_elements(By.XPATH, root["value"])
+                    return _obj.find_element(By.XPATH, value)
                 case _:
-                    raise ValueError(f"Invalid locator in {root}")
+                    raise ValueError(f"Invalid locator {locator}")
+
+        def matchElements(_obj: FirefoxDriver, **action_kwargs) -> list[WebElement]:
+
+            locator = action_kwargs["locator"]
+            value = action_kwargs["value"]
+
+            if locator is None:
+                # practically impossible, but just in case
+                raise ValueError("Locator must be a string, not None")
+            if value is None:
+                # practically impossible, but just in case
+                raise ValueError("Locator must be a string, not None")
+
+            match locator:
+                case "css_selector":
+                    elements = _obj.find_elements(By.CSS_SELECTOR, value)
+                case "xpath":
+                    elements = _obj.find_elements(By.XPATH, value)
+                case _:
+                    raise ValueError(f"Invalid locator {locator}")
+            isDisplayed = action_kwargs["isDisplayed"]
+
+            if isDisplayed is not None:
+                # Checks for for the condition, if it isn't it throws an error. Kinda weird syntax but it wokrs
+                for element in elements:
+                    assert isDisplayed == _obj.is_displayed(), f"Element is{' 'if isDisplayed is False else 'not '}displayed"
+            isSelected = action_kwargs["isSelected"]
+            if isSelected is not None:
+                # Checks for for the condition, if it isn't it throws an error. Kinda weird syntax but it wokrs
+                for element in elements:
+                    assert isSelected == _obj.is_selected(), f"Element is{' 'if isDisplayed is False else ' not '}selected"
+            isEnabled = action_kwargs["isEnabled"]
+            if isEnabled is not None:
+                # Checks for for the condition, if it isn't it throws an error. Kinda weird syntax but it wokrs
+                for element in elements:
+                    assert isEnabled == _obj.is_enabled(), f"Element is{' 'if isDisplayed is False else ' not '}enabled"
+            
             return elements
 
         def executeElementAction(
-                _obj: WebElement | list[WebElement],
-                action: str,
-                *action_args,
-                isDisplayed: bool | None = None,
-                isSelected: bool | None = None,
-                isEnabled: bool | None = None,
+                _obj: WebElement,
                 **action_kwargs
                 ) -> bool | None:
-            if isDisplayed is not None:
-                assert isDisplayed == _obj.is_displayed(), f"Element is{' 'if isDisplayed is False else 'not '}displayed"
-            if isSelected is not None:
-                assert isSelected == _obj.is_selected(), f"Element is{' 'if isDisplayed is False else ' not '}selected"
-            if isEnabled is not None:
-                assert isEnabled == _obj.is_enabled(), f"Element is{' 'if isDisplayed is False else ' not '}enabled"
-
-            match action:
-                case "click":
-                    _obj.click()
-                case "send_keys":
-                    _obj.send_keys(action_kwargs['keys'])
-                case "clear":
-                    _obj.clear()
-                case _:
-                    raise ValueError("Invalid action type")
+            
+            # match action
+            pass
 
         def ElementAction(
             driver: FirefoxDriver,
@@ -474,7 +554,6 @@ class Core:
                         {
                             "active": True,
                             "path": "./JS.log",
-                            "create_path": True,
                             "terminal_mode": True,
                             "refresh_rate": 1000,
                             "retry_timeout": 1000

@@ -10,7 +10,9 @@
             "terminal_mode": true,
             "refresh_rate": 1000,
             "retry_timeout": 1000
-        }
+        },
+        "exception_log_path": "./exceptions.log",
+        "auto_exit_iframes": true
     },
     "driver_options":
     {
@@ -140,7 +142,7 @@
                     "displayed": null,
                     "enabled": null,
                     "selected": null,
-                    "keys": "intel cpu \ue007",
+                    "keys": "Suzuki Swift \ue007",
                         "locator": "xpath",
                         "value": "//*[@id=\"index-search\"]"
                     },
@@ -150,7 +152,6 @@
                     "amount": 3000
             }
             }
-            }
             },
             "5":{
                 "bindings": null,
@@ -158,7 +159,7 @@
                     "VÁRJÁ'":{
                         "type":"wait",
                         "break":false,
-                        "amount": 3000
+                        "amount": 5000
                     },
                     "1":{
                         "type": "click",
@@ -187,7 +188,7 @@
                         "displayed": null,
                         "enabled": null,
                         "selected": null,
-                        "keys": "5000",
+                        "keys": "3",
                         "locator": "xpath",
                         "value": "//*[@id=\"jfgsb_min_price\"]"                     
                     },
@@ -198,7 +199,7 @@
                         "displayed": null,
                         "enabled": null,
                         "selected": null,
-                        "keys": "60000",
+                        "keys": "4",
                         "locator": "xpath",
                         "value": "//*[@id=\"jfgsb_max_price\"]"                     
                     },
@@ -235,3 +236,4 @@
                 }
                 }
                 }
+            }
