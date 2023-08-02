@@ -1,7 +1,6 @@
-from selenium import webdriver
 from selenium.webdriver.chrome.webdriver import WebDriver as ChromeDriver
 from selenium.webdriver.chrome.options import Options as ChromeOptions
-from selenium.webdriver.chrome.service import Service as ChromeService
+# from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.firefox.webdriver import WebDriver as FirefoxDriver
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
