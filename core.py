@@ -13,10 +13,9 @@ from selenium.common.exceptions import JavascriptException as SeJSException
 
 from traceback import format_exc, format_stack
 from json import loads
-from datetime import time
 import multiprocessing as mp
 
-#                                                                               18 / 21
+#                                                                               20 / 21
 # TODO: Kitalálni, hogy vannak az argumentumok                                  ✅  1
 # TODO: Megszerelni a random useless conversionöket a JSON-ből                  ✅  2
 # TODO: Relative locators                                                       ❌  NAH FUCK that shit
@@ -45,8 +44,8 @@ import multiprocessing as mp
 # TODO: auto_logJS needs to be patched so that it writes the logs
 # even if the driver exits while it tries to write into the intermediate file   ✅  18
 # TODO: Fix logJS so that it checks for log arg type and switches               ✅  19
-# TODO: add a final append to tlogs after RunDrvier has exited                  ❌  20
-# TODO: add backups                                                             ❌  21
+# TODO: add a final append to tlogs after RunDrvier has exited                  ✅  20
+# TODO: add backups                                                             ✅  21
 
 # null nem lesz, mert C# for whatever reason, úgyhogy helyette ez van!
 # Not used yet
@@ -83,6 +82,8 @@ class Core:
             return options
         
         def RunDriver(path: str | None = None, json_string: str | None = None) -> None:
+            from time import sleep
+
             # loads json file or loads the string and instanciates the actions par and the 
             loaded_dict: dict
             if type(json_string) == type(path):
@@ -305,6 +306,35 @@ class Core:
             else:
                 driver.Quit()
 
+            from datetime import date as d
+            today: str = d.today().strftime("%Y-%m-%d")
+            # ltlogs = long term logs
+            path = f"{parent_log_path}/ltlogs/{today}.log"
+
+            # this path doesn't need type checking, because
+            # it must have been created at the start of the runtime for loop
+            # and therefore it must exist
+            current_log_path = f"{parent_log_path}/run.log"
+            
+            with open(current_log_path, mode='r', encoding='utf-8') as f:
+                current_log: str = f.read()
+
+            # try to append to the log file
+            try:
+                with open(path, mode='r', encoding='utf-8') as f:
+                    f.read()
+                with open(path, mode='a', encoding='utf-8') as f:
+                    to_write = \
+                    f"-------------------------------------\n\n{current_log}\n-------------------------------------\n"
+                    f.write(to_write)
+
+            # if the path doesn't exist, create it and log the current date at the top of it
+            except FileNotFoundError:
+                with open(path, mode='w', encoding='utf-8') as f:
+                    to_write = \
+                    f"DATE: {today}\n-------------------------------------\n\n{current_log}\n-------------------------------------\n"
+                    f.write(to_write)
+
         def goto(driver: ChromeDriver, url: str):
             Core.checkDriverExists(driver)
             driver.get(url)
@@ -344,29 +374,42 @@ class Core:
             else:
                 wait = WebDriverWait(driver, timeout=timeout, poll_frequency=frequency)
 
-            condition = kwargs['condition']
+            raw_condition: str = kwargs['condition']
+            condition = raw_condition
+            condition_container: function = expected_conditions.all_of
+            if raw_condition[0] == '!':
+                condition = raw_condition.removeprefix('!')
+                condition_container: function = expected_conditions.none_of
             match condition:
                 case 'element_exists':
                     locator_: str = kwargs['locator']
                     value_: str = kwargs['value']
                     internal_locator: tuple[str, str] = (locator_, value_)
-                    wait.until(expected_conditions.presence_of_element_located(internal_locator))
+
+                    expected = expected_conditions.presence_of_element_located(internal_locator)
+                    wait.until(condition_container(expected))
                 case 'element_visible':
                     locator_: str = kwargs['locator']
                     value_: str = kwargs['value']
                     element = Core.Chrome.matchElement(driver, locator = locator_, value = value_)
-                    # always waits until the visibility is true
-                    wait.unitl(expected_conditions.visibility_of(element))
+
+                    expected = expected_conditions.visibility_of(element)
+                    wait.unitl(expected)
                 case 'alert_present':
-                    wait.until(expected_conditions.alert_is_present())
+                    expected = expected_conditions.alert_is_present()
+                    wait.until(condition_container(expected))
                 case 'title_matches':
-                    wait.until(expected_conditions.title_is(kwargs['title']))
+                    expected = expected_conditions.title_is(kwargs['title'])
+                    wait.until(expected)
                 case 'title_contains':
-                    wait.until(expected_conditions.title_contains(kwargs['title_sub']))
+                    expected = expected_conditions.title_contains(kwargs['title_sub'])
+                    wait.until(expected)
                 case 'url_matches':
-                    wait.until(expected_conditions.url_matches(kwargs['url']))
+                    expected = expected_conditions.url_matches(kwargs['url'])
+                    wait.until(expected)
                 case 'url_contains':
-                    wait.until(expected_conditions.url_contains(kwargs['url_sub']))
+                    expected = expected_conditions.url_contains(kwargs['url_sub'])
+                    wait.until(expected)
                 case _:
                     raise ValueError(f"\'{condition}\' is not a valid condition to await")
         

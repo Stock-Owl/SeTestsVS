@@ -45,7 +45,7 @@
         "2":
         {
             "bindings": "3",
-            "backup_of": "1",
+            "backup_of": null,
             "actions":
             {
                 "1":
