@@ -16,7 +16,7 @@ from json import loads
 from datetime import time
 import multiprocessing as mp
 
-#                                                                               15 / 19
+#                                                                               16 / 20
 # TODO: Kitalálni, hogy vannak az argumentumok                                  ✅  1
 # TODO: Megszerelni a random useless conversionöket a JSON-ből                  ✅  2
 # TODO: Relative locators                                                       ❌  NAH FUCK that shit
@@ -43,8 +43,9 @@ import multiprocessing as mp
 # TODO: IF the logging is ready, try to use a decorator insted of the static    ❌  16
 # TODO: Finish wait_for implementation                                          ❌  17
 # TODO: auto_logJS needs to be patched so that it writes the logs
-# even if the driver exits while it tries to write into the intermediate file   ❌  18
+# even if the driver exits while it tries to write into the intermediate file   ✅  18
 # TODO: Fix logJS so that it checks for log arg type and switches               ❌  19
+# TODO: add a final append to tlogs after RunDrvier has exited                  ❌  20
 
 # null nem lesz, mert C# for whatever reason, úgyhogy helyette ez van!
 # Not used yet
@@ -84,7 +85,9 @@ class Core:
             # loads json file or loads the string and instanciates the actions par and the 
             loaded_dict: dict
             if type(json_string) == type(path):
-                raise Exception("You either give a path to the json file or parse the json string raw, bitch.\nNOT both! Which one am I supposed to use, you expired coupon?!")
+                log_line: str = "You either give a path to the json file or parse the json string raw, bitch.\nNOT both! Which one am I supposed to use, you expired coupon?!"
+                Support.log_error("./logs", log_line)
+                return None
             elif path is None:
                 loaded_dict = loads(json_string)
             else:
@@ -92,7 +95,9 @@ class Core:
                     with open(path, 'r', encoding='utf-8') as f:
                        loaded_dict = loads(f.read())
                 except FileNotFoundError:
-                    raise Exception("Invalid path, file not found")
+                    log_line: str = "Invalid path, file not found"
+                    Support.log_error("./logs", log_line)
+                    return None
                 
             driver: ChromeDriver
             driver_options_ =  loaded_dict["driver_options"]
@@ -111,7 +116,7 @@ class Core:
                 
                 log_path: str = service_["log_path"]
                 service_args: list[str] = service_["arguments"]
-                # Not used bc the chromedriver is a bitch and crashes for some reason before even creating the driver...
+                # Not used because the chromedriver is a bitch and crashes for some reason before even creating the driver...
                 # Akkor, a kurva anyját (:
                 # service = ChromeService(service_args = service_args, log_path = log_path)
 
@@ -168,7 +173,7 @@ class Core:
                 # NOT used. see line 110
                 # service = Core.Chrome.DefaultService()
             else:
-                raise Exception("Some shit got fucked up")
+                Support.log_error(parent_log_path, "Some shit got fucked up. But I have no clue what exactly.")
             # service commented out bc chromdriver shits itslef, ig
             driver = ChromeDriver(options = opts)   # , service = service
             # 
@@ -246,7 +251,7 @@ class Core:
                                 action_type = action['type']
                                 Support.log_proc(parent_log_path, f"Unknown action \'{action_type}\'")
                                 
-                        log_line = f"[{uname}][{aname}] of type \'{action['type']}\' successfully executed"
+                        log_line = f"[U:{uname}][A:{aname}] of type \'{action['type']}\' successfully executed"
                         Support.log_proc(parent_log_path, log_line)
 
                 except:
@@ -303,7 +308,15 @@ class Core:
             time = float(time_ / 1000)
             driver.implicitly_wait(time)
         # NEEDS WORK
-        def waitFor(driver: ChromeDriver, kwargs: dict[str]):
+        def waitFor(driver: ChromeDriver, **kwargs):
+            # title match       ✅
+            # title contains    ✅
+            # url match         ✅
+            # url contains      ✅
+            # alert present     ✅
+            # element present   ✅
+            # element visible   ✅
+            # 
             timeout = kwargs['timeout']
             frequency = kwargs['frequency']
             if timeout is None:
@@ -315,19 +328,29 @@ class Core:
 
             condition = kwargs['condition']
             if condition in Core.Chrome.needs_element:
-                locator: tuple[str, str] = ('xpath', kwargs['xpath'])
+                locator_: str = kwargs['locator']
+                value_: str = kwargs['value']
+                internal_locator: tuple[str, str] = (locator_, value_)
                 match condition:
-                    case 'presence_of_element_located':
-                        wait.until(expected_conditions.presence_of_element_located(locator))
+                    case 'element_exists':
+                        wait.until(expected_conditions.presence_of_element_located(internal_locator))
+                    case 'element_visible':
+                        element = Core.Chrome.matchElement(driver, locator = locator_, value = value_)
+                        # always waits until the visibility is true
+                        wait.unitl(expected_conditions.visibility_of(element))
                 pass
             elif condition in Core.Chrome.doesnt_need_element:
                 match condition:
-                    case 'alert':
+                    case 'alert_present':
                         wait.until(expected_conditions.alert_is_present())
-                    case 'title_is':
+                    case 'title_matches':
                         wait.until(expected_conditions.title_is(kwargs['title']))
                     case 'title_contains':
-                        wait.until(expected_conditions.title_contains(kwargs['title']))
+                        wait.until(expected_conditions.title_contains(kwargs['title_sub']))
+                    case 'url_matches':
+                        wait.until(expected_conditions.url_matches(kwargs['url']))
+                    case 'url_contains':
+                        wait.until(expected_conditions.url_contains(kwargs['url_sub']))
             else:
                 raise ValueError(f"\'{condition}\' is not a valid condition to await")
         
@@ -636,28 +659,10 @@ class Support:
             browser_logs = driver.get_log("browser")
             # shared vairable needs to be implemented
 
+            # inner whiles ensures that the autolog will not exit until all the logs are processed
+            # it only breaks the inner loops after the logs are processed and it didn't fuck up
             if terminal_mode:
-                with open(path, mode = 'a+', encoding = 'utf-8') as f:
-                    for i in range(len(browser_logs)):
-                        log = browser_logs[i]
-                        if log in processed:
-                            continue
-                        # The reason it's processed with {i} and printed as such
-                        # is that no identical logs can exist in `processed`
-                        log_line = \
-                        f"{i} ❗ JavaScript:\n{log['source']} — {log['level']}:\n{log['message']}\n\t{log['timestamp']}\n#\n"
-                        f.write(log_line)
-                        Support.log_all(path = path_, log_line = log_line, time_disabled=time_disabled)
-                        processed.append(log_line)
-                sleep(mimir)
-
-            else:
-                with open(path, mode = 'r+', encoding = 'utf-8') as f:
-                    contents = f.read()
-                if contents != '':
-                    sleep(fuckup)
-                    continue
-                else:
+                while True:
                     with open(path, mode = 'a+', encoding = 'utf-8') as f:
                         for i in range(len(browser_logs)):
                             log = browser_logs[i]
@@ -670,7 +675,31 @@ class Support:
                             f.write(log_line)
                             Support.log_all(path = path_, log_line = log_line, time_disabled=time_disabled)
                             processed.append(log_line)
-                    sleep(mimir)
+                    break
+                sleep(mimir)
+
+            else:
+                while True:
+                    with open(path, mode = 'r+', encoding = 'utf-8') as f:
+                        contents = f.read()
+                    if contents != '':
+                        sleep(fuckup)
+                        continue
+                    else:
+                        with open(path, mode = 'a+', encoding = 'utf-8') as f:
+                            for i in range(len(browser_logs)):
+                                log = browser_logs[i]
+                                if log in processed:
+                                    continue
+                                # The reason it's processed with {i} and printed as such
+                                # is that no identical logs can exist in `processed`
+                                log_line = \
+                                f"{i} ❗ JavaScript:\n{log['source']} — {log['level']}:\n{log['message']}\n\t{log['timestamp']}\n#\n"
+                                f.write(log_line)
+                                Support.log_all(path = path_, log_line = log_line, time_disabled=time_disabled)
+                                processed.append(log_line)
+                        break
+                sleep(mimir)
 
     def log_proc(path_: str, log_line: str, time_disabled: bool = False) -> None:
         

@@ -37,13 +37,13 @@
                 {
                     "type": "goto",
                     "break": false,
-                    "url": "https://bestbyte.hu/blog"
+                    "url": "https://festek96.hu"
                 }
             }
         },
         "2":
         {
-            "bindings": null,
+            "bindings": "3",
             "actions":
             {
                 "1":
@@ -54,8 +54,49 @@
                     "displayed": null,
                     "enabled": null,
                     "selected": null,
+                    "locator": "xpath",
+                    "value": "//*[@id=\"vsPopUp\"]/div"
+                },
+                "2":
+                {
+                    "type": "click",
+                    "break": false,
+                    "single": true,
+                    "displayed": null,
+                    "enabled": null,
+                    "selected": null,
+                    "locator": "xpath",
+                    "value": "//*[@id=\"vscookieAlertOk\"]"
+                },
+                "3":
+                {
+                    "type": "click",
+                    "break": false,
+                    "single": true,
+                    "displayed": null,
+                    "enabled": null,
+                    "selected": null,
+                    "locator": "xpath",
+                    "value": "//*[@id=\"app_header\"]/div[1]/div/div[2]/div[1]/div"
+                }
+            }
+        },
+        "3":
+        {
+            "bindings": null,
+            "actions":
+            {
+                "1":
+                {
+                    "type": "send_keys",
+                    "break": false,
+                    "single": true,
+                    "displayed": null,
+                    "enabled": null,
+                    "selected": null,
+                    "keys": "weblogin",
                     "locator": "css_selector",
-                    "value": "[id$=\"EDI_search\"]"
+                    "value": "[id$=\"EDI_loginnev\"]"
                 },
                 "2":
                 {
@@ -65,19 +106,20 @@
                     "displayed": null,
                     "enabled": null,
                     "selected": null,
-                    "keys": "ssd\n",
+                    "keys": "pimp@",
                     "locator": "css_selector",
-                    "value": "[id$=\"EDI_search\"]"
+                    "value": "[id$=\"EDI_jelszo\"]"
                 },
                 "3":
                 {
-                    "type": "js_execute",
+                    "type": "click",
                     "break": false,
-                    "commands":
-                    [
-                        "console.log('Hello World'",
-                        "for(let i = 0; i < 5; i++){console.log(i)}"
-                    ]
+                    "single": true,
+                    "displayed": null,
+                    "enabled": null,
+                    "selected": null,
+                    "locator": "xpath",
+                    "value": "//*[@id=\"BUT_login\"]"
                 }
             }
         }
