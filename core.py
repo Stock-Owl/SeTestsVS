@@ -16,7 +16,7 @@ from json import loads
 from datetime import time
 import multiprocessing as mp
 
-#                                                                               16 / 20
+#                                                                               18 / 21
 # TODO: Kitalálni, hogy vannak az argumentumok                                  ✅  1
 # TODO: Megszerelni a random useless conversionöket a JSON-ből                  ✅  2
 # TODO: Relative locators                                                       ❌  NAH FUCK that shit
@@ -41,11 +41,12 @@ import multiprocessing as mp
 # TODO: Beautify logging messages                                               ✅  14
 # TODO: Implement breaks                                                        ✅  15
 # TODO: IF the logging is ready, try to use a decorator insted of the static    ❌  16
-# TODO: Finish wait_for implementation                                          ❌  17
+# TODO: Finish wait_for implementation                                          ✅  17
 # TODO: auto_logJS needs to be patched so that it writes the logs
 # even if the driver exits while it tries to write into the intermediate file   ✅  18
-# TODO: Fix logJS so that it checks for log arg type and switches               ❌  19
+# TODO: Fix logJS so that it checks for log arg type and switches               ✅  19
 # TODO: add a final append to tlogs after RunDrvier has exited                  ❌  20
+# TODO: add backups                                                             ❌  21
 
 # null nem lesz, mert C# for whatever reason, úgyhogy helyette ez van!
 # Not used yet
@@ -111,11 +112,10 @@ class Core:
 
             # create the chrome driver with arguments
             if driver_options_ != Core.Chrome.default_driver_options_dict_:
-                options_: dict = driver_options_["options"]
-                service_: dict = driver_options_["service"]
+                # service_: dict = driver_options_["service"]
                 
-                log_path: str = service_["log_path"]
-                service_args: list[str] = service_["arguments"]
+                # log_path: str = service_["log_path"]
+                # service_args: list[str] = service_["arguments"]
                 # Not used because the chromedriver is a bitch and crashes for some reason before even creating the driver...
                 # Akkor, a kurva anyját (:
                 # service = ChromeService(service_args = service_args, log_path = log_path)
@@ -130,12 +130,12 @@ class Core:
 
                 Throws a ValueError if an unsupported page load startegy type is given.
                 """
-                opts.page_load_strategy = options_["page_load_strategy"]
+                opts.page_load_strategy = driver_options_["page_load_strategy"]
 
                 """
                 Accept insecure cert(ification)s is either true or false. Not case sensitive
                 """
-                opts.accept_insecure_certs = options_["accept_insecure_certs"]  # should be a bool
+                opts.accept_insecure_certs = driver_options_["accept_insecure_certs"]  # should be a bool
 
                 """
                 3 types of timeouts are available:
@@ -147,7 +147,7 @@ class Core:
 
                 The value of the timeout is the timespan [of the timteout] in MILLISECONDS (ms)
                 """
-                opts.timeouts = {options_["timeout"]["type"]: options_["timeout"]["value"]}
+                opts.timeouts = {driver_options_["timeout"]["type"]: driver_options_["timeout"]["value"]}
 
                 """
                 5 types of behaviors are available:
@@ -159,12 +159,12 @@ class Core:
 
                 Throws a ValueError if an unsupported behavior type is given.
                 """
-                opts.unhandled_prompt_behavior = options_["unhandled_prompt_behavior"]
+                opts.unhandled_prompt_behavior = driver_options_["unhandled_prompt_behavior"]
 
-                if options_["keep_browser_open"] != "":
-                    opts.add_experimental_option("detach", options_["keep_browser_open"])
+                if driver_options_["keep_browser_open"] != "":
+                    opts.add_experimental_option("detach", driver_options_["keep_browser_open"])
 
-                for option in options_["browser_arguments"]:
+                for option in driver_options_["browser_arguments"]:
                     opts.add_argument(option)
 
             # create the chrome driver (as bare bones as it gets)
@@ -180,10 +180,23 @@ class Core:
             # clears the previous log filed
             Support.clear_all_logs(parent_log_path)
 
-            active_bindings = []
+            active_bindings: list[str] = []
+            failed_units: list[str] = []
             for uname, unit in units.items():
                 try:
-                    if uname in active_bindings:
+                    backup = unit["backup_of"]
+                    if backup is not None:
+                        # if the backup is target failed, then run as normal
+                        if backup in failed_units:
+                            pass
+
+                        # if the backup target executed, skip the backup
+                        else:
+                            log_line = f"\'{uname}\' backup skipped because backup target unit sucessfully executed\n"
+                            Support.log_proc(parent_log_path, log_line)
+                            continue
+                    # elif, because if it's an inactive backup, it doesn't need to check for bindings
+                    elif uname in active_bindings:
                         log_line = f"\'{uname}\' skipped because previous unit failed\n"
                         Support.log_proc(parent_log_path, log_line)
                         continue
@@ -210,12 +223,15 @@ class Core:
                                 Core.Chrome.refresh(driver)
                             case "js_execute":
                                 commands = action["commands"]
-                                Core.Chrome.execute_js(driver, commands, log_JS_args=LogJSArgs)
+                                Core.Chrome.execute_js(driver, commands, path=parent_log_path, log_JS_args=LogJSArgs)
                             case "wait":
                                 time = action['amount']
                                 Core.Chrome.wait(driver, time)
                             case "wait_for":
                                 Core.Chrome.waitFor(driver, action)
+                                # timeout = action['timeout']
+                                # frequency = action['frequency']
+                                # condition = action['condition']
                             case "click":
                                 Core.Chrome.ElementAction(
                                     driver,
@@ -255,6 +271,8 @@ class Core:
                         Support.log_proc(parent_log_path, log_line)
 
                 except:
+                    # so, the unit has failed, and it needs to be added to the failed units to check for backups
+                    failed_units.append(uname)
                     bindings = unit['bindings']
                     if bindings is not None:
                         if isinstance(bindings, list):
@@ -308,7 +326,7 @@ class Core:
             time = float(time_ / 1000)
             driver.implicitly_wait(time)
         # NEEDS WORK
-        def waitFor(driver: ChromeDriver, **kwargs):
+        def waitFor(driver: ChromeDriver, kwargs: dict):
             # title match       ✅
             # title contains    ✅
             # url match         ✅
@@ -327,32 +345,30 @@ class Core:
                 wait = WebDriverWait(driver, timeout=timeout, poll_frequency=frequency)
 
             condition = kwargs['condition']
-            if condition in Core.Chrome.needs_element:
-                locator_: str = kwargs['locator']
-                value_: str = kwargs['value']
-                internal_locator: tuple[str, str] = (locator_, value_)
-                match condition:
-                    case 'element_exists':
-                        wait.until(expected_conditions.presence_of_element_located(internal_locator))
-                    case 'element_visible':
-                        element = Core.Chrome.matchElement(driver, locator = locator_, value = value_)
-                        # always waits until the visibility is true
-                        wait.unitl(expected_conditions.visibility_of(element))
-                pass
-            elif condition in Core.Chrome.doesnt_need_element:
-                match condition:
-                    case 'alert_present':
-                        wait.until(expected_conditions.alert_is_present())
-                    case 'title_matches':
-                        wait.until(expected_conditions.title_is(kwargs['title']))
-                    case 'title_contains':
-                        wait.until(expected_conditions.title_contains(kwargs['title_sub']))
-                    case 'url_matches':
-                        wait.until(expected_conditions.url_matches(kwargs['url']))
-                    case 'url_contains':
-                        wait.until(expected_conditions.url_contains(kwargs['url_sub']))
-            else:
-                raise ValueError(f"\'{condition}\' is not a valid condition to await")
+            match condition:
+                case 'element_exists':
+                    locator_: str = kwargs['locator']
+                    value_: str = kwargs['value']
+                    internal_locator: tuple[str, str] = (locator_, value_)
+                    wait.until(expected_conditions.presence_of_element_located(internal_locator))
+                case 'element_visible':
+                    locator_: str = kwargs['locator']
+                    value_: str = kwargs['value']
+                    element = Core.Chrome.matchElement(driver, locator = locator_, value = value_)
+                    # always waits until the visibility is true
+                    wait.unitl(expected_conditions.visibility_of(element))
+                case 'alert_present':
+                    wait.until(expected_conditions.alert_is_present())
+                case 'title_matches':
+                    wait.until(expected_conditions.title_is(kwargs['title']))
+                case 'title_contains':
+                    wait.until(expected_conditions.title_contains(kwargs['title_sub']))
+                case 'url_matches':
+                    wait.until(expected_conditions.url_matches(kwargs['url']))
+                case 'url_contains':
+                    wait.until(expected_conditions.url_contains(kwargs['url_sub']))
+                case _:
+                    raise ValueError(f"\'{condition}\' is not a valid condition to await")
         
         # PART FUNCS
 
@@ -483,19 +499,18 @@ class Core:
             path_ = "./logs",
             log_JS_args: dict[str, str | list | int | bool | None] = \
                     dict(active=True,
-                         path="./JS.log",
                          refresh_rate=1000,
                          retry_timeout=1000)
             ):
 
             Core.checkDriverExists(driver)
-            for command in commands:
+            for i in range(len(commands)):
                 try:
+                    command = commands[i]
                     driver.execute_script(command)
                 except SeJSException as e:
                     # print(f"Error: the command {command} was incorrect")
-                    Support.logJS(path_, log_JS_args, e, terminal_mode=terminal_mode) #log_JS_args should be a global
-                    break
+                    Support.logJS(path_, log_JS_args, e, index=0, terminal_mode=terminal_mode)
 
     # quite possibly useless
     def quit_driver(driver: object):
@@ -587,15 +602,28 @@ class Support:
             with open(path, mode='w', encoding='utf-8') as f:
                 f.write("")
 
+        # type checking required in both terminal and normal mode
+        # because exception logging requires a different log line
         if terminal_mode:
-            stacktrace = "\n".join(log.stacktrace)
-            with open(path, 'a+', encoding='utf-8') as f:
-                if index is not None:
-                    to_write = f"❗ JavaScript:\n{log.msg}\nSteack Trace:\n{stacktrace}\n"
-                else:
-                    to_write = f"❗ JavaScript:\n{log.msg}\nSteack Trace:\n{stacktrace}\n"
-                f.write(to_write)
-                Support.log_all(path_, to_write, time_disabled = time_disabled)
+            if isinstance(log, SeJSException):
+                stacktrace = "\n".join(log.stacktrace)
+                with open(path, 'a+', encoding='utf-8') as f:
+                    if index is not None:
+                        to_write = f"{index} ❗ JavaScript:\n{log.msg}\nSteack Trace:\n{stacktrace}\n"
+                    else:
+                        to_write = f"❗ JavaScript:\n{log.msg}\nSteack Trace:\n{stacktrace}\n"
+                    f.write(to_write)
+                    Support.log_all(path_, to_write, time_disabled = time_disabled)
+            elif isinstance(log, str):
+                with open(path, mode ='a+', encoding='utf-8') as f:
+                    if index is not None:
+                        to_write = f"{index} ❗ JavaScript:\\n{log}\n"
+                    else:
+                        to_write = f"❗ JavaScript:\\n{log}\n"
+                    f.write(to_write)
+                    Support.log_all(path_, to_write, time_disabled = time_disabled)
+            else: raise ValueError("logJS takes either a string or a selenium.common.exceptions.JavascriptException as an argument")
+
         else:
             while True:
                 with open(path, mode = 'r', encoding = "utf-8") as f:
@@ -607,7 +635,7 @@ class Support:
                     if isinstance(log, SeJSException):
                         stacktrace = "\n".join(log.stacktrace)
                         if index is not None:
-                            to_write: str = f"❗ JavaScript:\n{log.msg}\nSteack Trace:\n{stacktrace}\n"
+                            to_write: str = f"{index} ❗ JavaScript:\n{log.msg}\nSteack Trace:\n{stacktrace}\n"
                         else:
                             to_write: str = f"❗ JavaScript:\n{log.msg}\nSteack Trace:\n{stacktrace}\n"
                         with open(path, mode ='a+', encoding='utf-8') as f:

@@ -1,4 +1,4 @@
 from core import Core
 Run = Core.Chrome.RunDriver
-json = './run.json'
+json = './waitfortest.json'
 Run(json)
