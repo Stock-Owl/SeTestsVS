@@ -97,7 +97,7 @@
                     "displayed": null,
                     "enabled": null,
                     "selected": null,
-                    "keys": "weblogin",
+                    "keys": "",
                     "locator": "css_selector",
                     "value": "[id$=\"EDI_loginnev\"]"
                 },
@@ -109,7 +109,7 @@
                     "displayed": null,
                     "enabled": null,
                     "selected": null,
-                    "keys": "pimp@",
+                    "keys": "",
                     "locator": "css_selector",
                     "value": "[id$=\"EDI_jelszo\"]"
                 },
