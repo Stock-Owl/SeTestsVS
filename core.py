@@ -15,6 +15,7 @@ from traceback import format_exc, format_stack
 from json import loads
 import multiprocessing as mp
 
+# V.1.0
 #                                                                               20 / 21
 # TODO: Kitalálni, hogy vannak az argumentumok                                  ✅  1
 # TODO: Megszerelni a random useless conversionöket a JSON-ből                  ✅  2
