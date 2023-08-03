@@ -700,7 +700,7 @@ class Support:
             with open("log.txt", mode='w', encoding='utf-8') as f:
                 f.write("")
 
-        # log_line = f"❌ ERROR: {log_line}\n"
+        log_line = f"❌ ERROR: {log_line}\n"
         with open("log.txt", mode='a+', encoding='utf-8') as f:
             f.write(log_line)
         Support.log_all(path_, log_line, time_disabled=time_disabled)

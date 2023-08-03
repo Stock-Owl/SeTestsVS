@@ -94,7 +94,7 @@ class Core:
             loaded_dict: dict
             if type(json_string) == type(path):
                 log_line: str = ("You either give a path to the json file or parse the json string raw, bitch.\nNOT both! Which one am I supposed to use, you expired coupon?!")
-                Support.log_error("./logs", log_line)
+                Support.all_loggers.log_error("./logs", log_line)
                 return None
             elif path is None:
                 loaded_dict = loads(json_string)
@@ -104,7 +104,7 @@ class Core:
                        loaded_dict = loads(f.read())
                 except FileNotFoundError:
                     log_line: str = "Invalid path, file not found"
-                    Support.log_error("./logs", log_line)
+                    Support.all_loggers.log_error("./logs", log_line)
                     return None
                 
             driver: FirefoxDriver
@@ -191,7 +191,7 @@ class Core:
                 opts = Core.Firefox.DefaultOptions()
                 service = Core.Firefox.DefaultService()
             else:
-                Support.log_error(parent_log_path, "Some shit got fucked up. But I have no clue what exactly.")
+                Support.all_loggers.log_error(parent_log_path, "Some shit got fucked up. But I have no clue what exactly.")
             driver = FirefoxDriver(options = opts)
             Support.clear_all_logs(parent_log_path) # Átmegy takarítónőbe... minden eltűnik
 
@@ -201,7 +201,7 @@ class Core:
                 try:
                     if uname in active_binds:
                         log_line = f"\'{uname}\' skipped because previous unit failed\n"
-                        Support.log_proc(parent_log_path, log_line)
+                        Support.all_loggers.log_proc(parent_log_path, log_line)
                         continue
     
                     actions = unit['actions']
@@ -212,7 +212,7 @@ class Core:
                                 input("press enter to resume")
                             else:
                                 pass   # majd ide kell egy intermediate comms file megint mint a JS-nél
-                            Support.log_proc(parent_log_path, "Breakpoint")
+                            Support.all_loggers.log_proc(parent_log_path, "Breakpoint")
 
                         match action["type"]:
                             case "goto":
@@ -265,10 +265,10 @@ class Core:
                                 isSelected = action['selected'])
                             case _:
                                 action_type = action['type']
-                                Support.log_proc(parent_log_path, f"Unknown action \'{action_type}\'")
+                                Support.all_loggers.log_proc(parent_log_path, f"Unknown action \'{action_type}\'")
                                 
-                        log_line = f"[{uname}][{index}] of type \'{action['type']}\' successfully executed"
-                        Support.log_proc(parent_log_path, log_line)
+                        log_line = f"[Unit:{uname}][Action:{index}] of type \'{action['type']}\' successfully executed"
+                        Support.all_loggers.log_proc(parent_log_path, log_line)
                 except:
                     bindings = unit['bindings']
                     if bindings is not None:
@@ -278,23 +278,23 @@ class Core:
                                     active_binds.append(binding)
                                 else:
                                     # wrong element type in string list
-                                    Support.log_error(parent_log_path, f"Parameters in \'bindings\' must be of type str (string) not {type(binding)}")
+                                    Support.all_loggers.log_error(parent_log_path, f"Parameters in \'bindings\' must be of type str (string) not {type(binding)}")
                         elif isinstance(bindings, str):
                             active_binds.append(bindings)
                         else:
                             # wrong elmement type for `bindings` (should be string)
-                            Support.log_error(parent_log_path, f"Parameter \'bindings\' must be of type str (string) not {type(bindings)}")
-
-                    Support.log_error(parent_log_path, "----------------------------------------------------------------\n")
-                    Support.log_error(parent_log_path, f"{format_exc()}\nStack:\n", time_disabled=True)
+                            Support.all_loggers.log_error(parent_log_path, f"Parameter \'bindings\' must be of type str (string) not {type(bindings)}")
+                    
+                    #Support.all_loggers.log_error(parent_log_path, "----------------------------------------------------------------\n")
+                    #Support.all_loggers.log_error(parent_log_path, f"{format_exc()}\nStack:\n", time_disabled=True)
                     stack = format_stack()
                     # -1 to exclude this expression from stack
                     for x in range(len(stack)-1):
                         stack_parts = stack[x].split('\n')
                         origin = stack_parts[0]
                         root = stack_parts[1]
-                        Support.log_error(parent_log_path, f"\t[{x}] ORIGIN:\t{origin}\n\t[{x}] ROOT:{root}\n\n", time_disabled=True)
-                    Support.log_error(parent_log_path, "----------------------------------------------------------------\n", time_disabled=True)
+                        Support.all_loggers.log_error(parent_log_path, f"\t[{x}] ORIGIN:\t{origin}\n\t[{x}] ROOT:{root}\n\n", time_disabled=True)
+                    #Support.all_loggers.log_error(parent_log_path, "----------------------------------------------------------------\n", time_disabled=True)
             #
             if driver_options_["keep_browser_open"]:
                 pass
@@ -519,7 +519,7 @@ class Core:
                         Core.Firefox.logJS(log_JS_args, e) #log_JS_args should be a global
                         break
     
-    
+to_write = ""    
 class Support:
     from os.path import exists
 
@@ -533,141 +533,113 @@ class Support:
         for file in paths:
             with open("log.txt", mode='w', encoding='utf-8') as f:
                 f.write("")
-
-    def log_all(path_: str, log_line: str, time_disabled: bool = False) -> None:
+    def log_all(to_write, path_: str, time_disabled: bool = False) -> None:
+        from os.path import exists
         from datetime import datetime as dt
         path = f"{path_}/run.log"
 
         try:
-            assert Support.exists(path)
+            assert exists(path)
         except AssertionError:
-            with open("log.txt", mode='w', encoding='utf-8') as f: #"a"-ról írd át "w"-ra, ha egy sorosnak kell lennie
+            with open("log.txt", mode='a', encoding='utf-8') as f: #"a"-ról írd át "w"-ra, ha egy sorosnak kell lennie
                 f.write("")
 
         with open("log.txt", "a", encoding="utf-8") as f:
             if not time_disabled:
                 time_: str = dt.now().time().strftime("%H:%M:%S\n")
                 f.write(time_)
-            f.write(log_line)
+            f.write(str(to_write))
 
-    def logJS(
-            path_: str,
-            log_JS_args: dict[str, str | list | int | bool | None],
-            log: str | SeJSException,
-            terminal_mode = False,
-            time_disabled: bool = False,
-            index: int | None = None) -> None:
-        from time import sleep
-        
+    def all_loggers(driver: FirefoxDriver, path_: str, log_JS_args: dict[str, str | list | int | bool | None], terminal_mode: bool = False, time_disabled: bool = False) -> None:
+        from os.path import exists
+        logJS()
+        auto_logJS()
+        log_proc()
+        log_error()
+        def logJS(
+                path_: str,
+                log_JS_args: dict[str, str | list | int | bool | None],
+                log: str | SeJSException,
+                terminal_mode = False,
+                time_disabled: bool = False,
+                index: int | None = None) -> None:
+            from time import sleep
 
-        path: str = f"{path_}/js.log"
-        fuckup: int | float = log_JS_args['retry_timeout']  / 1000
 
-        try:
-            assert Support.exists(path)
-        except FileNotFoundError:
-            with open("log.txt", mode='w', encoding='utf-8') as f:
-                f.write("")
+            path: str = f"{path_}/js.log"
+            fuckup: int | float = log_JS_args['retry_timeout']  / 1000
 
-        # type checking required in both terminal and normal mode
-        # because exception logging requires a different log line
-        if terminal_mode:
-            if isinstance(log, SeJSException):
-                stacktrace = "\n".join(log.stacktrace)
-                with open("log.txt", 'a+', encoding='utf-8') as f:
+            try:
+                assert exists(path)
+            except FileNotFoundError:
+                with open("log.txt", mode='w', encoding='utf-8') as f:
+                    f.write("")
+
+            # type checking required in both terminal and normal mode
+            # because exception logging requires a different log line
+            if terminal_mode:
+                if isinstance(log, SeJSException):
+                    stacktrace = "\n".join(log.stacktrace)
                     if index is not None:
                         to_write = f"{index} ❗ JavaScript:\n{log.msg}\nSteack Trace:\n{stacktrace}\n"
                     else:
                         to_write = f"❗ JavaScript:\n{log.msg}\nSteack Trace:\n{stacktrace}\n"
-                    f.write(to_write)
-                    Support.log_all(path_, to_write, time_disabled = time_disabled)
-            elif isinstance(log, str):
-                with open("log.txt", mode ='a', encoding='utf-8') as f:
+                elif isinstance(log, str):
                     if index is not None:
                         to_write = f"{index} ❗ JavaScript:\\n{log}\n"
                     else:
                         to_write = f"❗ JavaScript:\\n{log}\n"
-                    f.write(to_write)
-                    Support.log_all(path_, to_write, time_disabled = time_disabled)
-            else: raise ValueError("logJS takes either a string or a selenium.common.exceptions.JavascriptException as an argument")
-
-        else:
-            while True:
-                with open("log.txt", mode = 'r', encoding = "utf-8") as f:
-                    contents: str = f.read()
-                if contents != '':
-                    sleep(fuckup)
-                    continue
-                else:
-                    if isinstance(log, SeJSException):
-                        stacktrace = "\n".join(log.stacktrace)
-                        if index is not None:
-                            to_write: str = f"{index} ❗ JavaScript:\n{log.msg}\nSteack Trace:\n{stacktrace}\n"
-                        else:
-                            to_write: str = f"❗ JavaScript:\n{log.msg}\nSteack Trace:\n{stacktrace}\n"
-                        with open("log.txt", mode ='a', encoding='utf-8') as f:
-                            f.write(to_write)
-                            Support.log_all(path_, to_write, time_disabled = time_disabled)
-                        break
-                    elif isinstance(log, str):
-                        with open("log.txt", mode ='a', encoding='utf-8') as f:
-                            to_write = f"❗ JavaScript:\\n{log}\n"
-                            f.write(to_write)
-                            Support.log_all(path_, to_write, time_disabled = time_disabled)
-                        break
-                    else: raise ValueError("logJS takes either a string or a selenium.common.exceptions.JavascriptException as an argument")
-    def auto_logJS(
-            driver: FirefoxDriver,
-            path_: str,
-            log_JS_args: dict[str, str | list | int | bool | None],
-            terminal_mode: bool = False,
-            time_disabled: bool = False) -> None:
-        from time import sleep
-
-        path: str = f"{path_}/js.log"
-        mimir: int | float = log_JS_args['refresh_rate']    / 1000
-        fuckup: int | float = log_JS_args['retry_timeout']  / 1000
-
-        assert log_JS_args['active'], "auto JavaScript logging is off"
-        try:
-            assert Support.exists(path)
-        except:
-            with open("log.txt", mode='a', enocoding='utf-8') as f:
-                f.write("")
-
-        processed: list[str] = []
-
-        while True:
-            browser_logs = driver.get_log("browser")
-            # shared vairable needs to be implemented
-
-            # inner whiles ensures that the autolog will not exit until all the logs are processed
-            # it only breaks the inner loops after the logs are processed and it didn't fuck up
-            if terminal_mode:
-                while True:
-                    with open("log.txt", mode = 'a', encoding = 'utf-8') as f:
-                        for i in range(len(browser_logs)):
-                            log = browser_logs[i]
-                            if log in processed:
-                                continue
-                            # The reason it's processed with {i} and printed as such
-                            # is that no identical logs can exist in `processed`
-                            log_line = \
-                            f"{i} ❗ JavaScript:\n{log['source']} — {log['level']}:\n{log['message']}\n\t{log['timestamp']}\n#\n"
-                            f.write(log_line)
-                            Support.log_all(path = path_, log_line = log_line, time_disabled=time_disabled)
-                            processed.append(log_line)
-                    break
-                sleep(mimir)
+                else: raise ValueError("logJS takes either a string or a selenium.common.exceptions.JavascriptException as an argument")
 
             else:
                 while True:
-                    with open("log.txt", mode = 'r+', encoding = 'utf-8') as f:
-                        contents = f.read()
+                    with open("log.txt", mode = 'r', encoding = "utf-8") as f:
+                        contents: str = f.read()
                     if contents != '':
                         sleep(fuckup)
                         continue
                     else:
+                        if isinstance(log, SeJSException):
+                            stacktrace = "\n".join(log.stacktrace)
+                            if index is not None:
+                                to_write: str = f"{index} ❗ JavaScript:\n{log.msg}\nSteack Trace:\n{stacktrace}\n"
+                            else:
+                                to_write: str = f"❗ JavaScript:\n{log.msg}\nSteack Trace:\n{stacktrace}\n"
+                            break
+                        elif isinstance(log, str):
+                            to_write = f"❗ JavaScript:\\n{log}\n"
+                            break
+                        else: raise ValueError("logJS takes either a string or a selenium.common.exceptions.JavascriptException as an argument")
+            return to_write
+        def auto_logJS(
+                driver: FirefoxDriver,
+                path_: str,
+                log_JS_args: dict[str, str | list | int | bool | None],
+                terminal_mode: bool = False,
+                time_disabled: bool = False) -> None:
+            from time import sleep
+
+            path: str = f"{path_}/js.log"
+            mimir: int | float = log_JS_args['refresh_rate']    / 1000
+            fuckup: int | float = log_JS_args['retry_timeout']  / 1000
+
+            assert log_JS_args['active'], "auto JavaScript logging is off"
+            try:
+                assert exists(path)
+            except:
+                with open("log.txt", mode='a', enocoding='utf-8') as f:
+                    f.write("")
+
+            processed: list[str] = []
+
+            while True:
+                browser_logs = driver.get_log("browser")
+                # shared vairable needs to be implemented
+
+                # inner whiles ensures that the autolog will not exit until all the logs are processed
+                # it only breaks the inner loops after the logs are processed and it didn't fuck up
+                if terminal_mode:
+                    while True:
                         with open("log.txt", mode = 'a', encoding = 'utf-8') as f:
                             for i in range(len(browser_logs)):
                                 log = browser_logs[i]
@@ -675,39 +647,56 @@ class Support:
                                     continue
                                 # The reason it's processed with {i} and printed as such
                                 # is that no identical logs can exist in `processed`
-                                log_line = \
-                                f"{i} ❗ JavaScript:\n{log['source']} — {log['level']}:\n{log['message']}\n\t{log['timestamp']}\n#\n"
-                                f.write(log_line)
-                                Support.log_all(path = path_, log_line = log_line, time_disabled=time_disabled)
-                                processed.append(log_line)
+                                to_write = f"{i} ❗ JavaScript:\n{log['source']} — {log['level']}:\n{log['message']}\n\t{log['timestamp']}\n#\n"
+                                processed.append(to_write)
                         break
-                sleep(mimir)
-    def log_proc(path_: str, log_line: str, time_disabled: bool = False) -> None:
+                    sleep(mimir)
+
+                else:
+                    while True:
+                        with open("log.txt", mode = 'r+', encoding = 'utf-8') as f:
+                            contents = f.read()
+                        if contents != '':
+                            sleep(fuckup)
+                            continue
+                        else:
+                            with open("log.txt", mode = 'a', encoding = 'utf-8') as f:
+                                for i in range(len(browser_logs)):
+                                    log = browser_logs[i]
+                                    if log in processed:
+                                        continue
+                                    # The reason it's processed with {i} and printed as such
+                                    # is that no identical logs can exist in `processed`
+                                    to_write = \
+                                    f"{i} ❗ JavaScript:\n{log['source']} — {log['level']}:\n{log['message']}\n\t{log['timestamp']}\n#\n"
+                                    f.write(to_write)
+                                    Support.all_loggers.log_all(path = path_, log_line = to_write, time_disabled=time_disabled)
+                                    processed.append(to_write)
+                            break
+                    sleep(mimir)
+            return to_write
+        def log_proc(path_: str, log_line: str, time_disabled: bool = False) -> None:
+            path = f"{path_}/process.log"
+
+            try:
+                assert exists(path)
+            except:
+                to_write = f"✅ DONE: {log_line}\n \n"
+
+            return to_write
+
+        def log_error(path_: str, log_line: str,  time_disabled: bool = False) -> None:
+            path = f"{path_}/error.log"
+
+            try:
+                assert exists(path)
+            except:
+                with open("log.txt", mode='a', encoding='utf-8') as f:
+                    f.write("---------------------------------------------------------------- \n")
+                    f.write("\n")
+                to_write = f"❌ ERROR: {log_line}\n"
+            return to_write
+        return to_write
         
-        path = f"{path_}/process.log"
 
-        try:
-            assert Support.exists(path)
-        except:
-            with open("log.txt", mode='a', encoding='utf-8') as f:
-                f.write("")
-        
-        log_line = f"✅ DONE: {log_line}\n"
-        with open("log.txt", mode='a', encoding='utf-8') as f:
-            f.write(log_line)
-        Support.log_all(path_, log_line, time_disabled=time_disabled)
-
-    def log_error(path_: str, log_line: str,  time_disabled: bool = False) -> None:
-
-        path = f"{path_}/error.log"
-
-        try:
-            assert Support.exists(path)
-        except:
-            with open("log.txt", mode='a', encoding='utf-8') as f:
-                f.write("")
-
-        # log_line = f"❌ ERROR: {log_line}\n"
-        with open("log.txt", mode='a+', encoding='utf-8') as f:
-            f.write(log_line)
-        Support.log_all(path_, log_line, time_disabled=time_disabled)
+    all_loggers = log_all(all_loggers, path_ = ".logs",)
