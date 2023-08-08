@@ -266,7 +266,9 @@ class Core:
                             case "switch_to_iframe":
                                 Core.Chrome.iframe_action(driver)
                             case "leave_iframe":
-                                Core.Chrome.iframe_leave(driver)
+                                Core.Chrome.iframe_leave_full(driver)
+                            case "leave_sub_iframe":
+                                Core.Chrome.iframe_leave_sub(driver)
                             case _:
                                 action_type = action['type']
                                 Support.log_proc(parent_log_path, f"Unknown action \'{action_type}\'")
@@ -415,12 +417,16 @@ class Core:
                     wait.until(expected)
                 case _:
                     raise ValueError(f"\'{condition}\' is not a valid condition to await")
+
         def iframe_switch(driver: ChromeDriver):
             iframe = driver.find_element(By.CSS_SELECTOR, "iframe")
             driver.switch_to_.iframe(iframe)
 
-        def iframe_leave(driver: ChromeDriver):
+        def iframe_leave_full(driver: ChromeDriver):
             driver.switch_to.default_content
+
+        def iframe_leave_sub(driver):
+            driver.switch_to.parentFrame
 
         # PART FUNCS
 

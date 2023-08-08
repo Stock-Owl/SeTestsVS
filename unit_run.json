@@ -9,7 +9,6 @@
             "retry_timeout": 1000
         },
         "terminal_mode": true,
-        "exception_log_path": "./exceptions.log",
         "auto_exit_iframes": true,
         "parent_log_path": "./logs"
     },

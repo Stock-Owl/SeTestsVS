@@ -81,6 +81,7 @@ class Core:
                     options.add_argument(option)
             return options
         
+        #Csak problémákat okoz
         # def DefaultService() -> FirefoxService:
         #     content = Core.Firefox.default_driver_options_dict_
         #     serv = copy(content["service"])
@@ -116,7 +117,6 @@ class Core:
                 
 
             LogJSArgs = global_options["log_JS"]
-            exception_log_path = global_options["exception_log_path"]
             parent_log_path = global_options["parent_log_path"]
             terminal_mode = global_options["terminal_mode"]
 
@@ -167,22 +167,6 @@ class Core:
                 Throws a ValueError if an unsupported behavior type is given.
                 """
                 opts.unhandled_prompt_behavior = driver_options_["unhandled_prompt_behavior"]
-        
-    #        Keep the browser open-es hülyeség. Valahogy hozzá kell vágni az option-okhoz, de nem vágom hogyan...
-
-    #       Kód:
-    #            if options_["keep_browser_open"] != "":
-    #                opts.add_experemental_option("detach", options_["keep_browser_open"])
-    #        Eredeti error:
-    #            Exception has occurred: AttributeError
-    #            'Options' object has no attribute 'add_experimental_option'
-    #                File "C:\Users\kmarton\OneDrive - VISION-SOFTWARE Számítástechnikai Szolgáltató és Kereskedelmi\Asztal\Projects\SeTestsVS\core_fire.py", line 168, in RunDriver
-    #                    opts.add_experimental_option("detach", options_["keep_browser_open"])
-    #                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    #                File "C:\Users\kmarton\OneDrive - VISION-SOFTWARE Számítástechnikai Szolgáltató és Kereskedelmi\Asztal\Projects\SeTestsVS\main_fire.py", line 4, in <module>
-    #                    Run(json)
-    #            AttributeError: 'Options' object has no attribute 'add_experimental_option'
-
 
                 for option in driver_options_["browser_arguments"]:
                     opts.add_argument(option)
@@ -277,6 +261,12 @@ class Core:
                                 isDisplayed = action['displayed'],
                                 isEnabled = action['enabled'],
                                 isSelected = action['selected'])
+                            case "switch_to_iframe":
+                                Core.Firefox.iframe_action(driver)
+                            case "leave_iframe":
+                                Core.Firefox.iframe_leave_full(driver)
+                            case "leave_sub_iframe":
+                                Core.Firefox.iframe_leave_sub(driver)
                             case _:
                                 action_type = action['type']
                                 Support.log_proc(parent_log_path, f"Unknown action \'{action_type}\'")
@@ -300,8 +290,8 @@ class Core:
                             # wrong elmement type for `bindings` (should be string)
                             Support.log_error(parent_log_path, f"Parameter \'bindings\' must be of type str (string) not {type(bindings)}")
                     
-                    Support.all_loggers.log_error(parent_log_path, "----------------------------------------------------------------\n")
-                    Support.all_loggers.log_error(parent_log_path, f"{format_exc()}\nStack:\n", time_disabled=True)
+                    Support.log_error(parent_log_path, "----------------------------------------------------------------\n")
+                    Support.log_error(parent_log_path, f"{format_exc()}\nStack:\n", time_disabled=True)
                     stack = format_stack()
                     # -1 to exclude this expression from stack
                     for x in range(len(stack)-1):
@@ -315,6 +305,33 @@ class Core:
                 pass
             else:
                 driver.Quit()
+
+            from datetime import date as d
+            today: str = d.today().strftime("%Y-%m-%d")
+            # ltlogs = long term logs
+            path = "log.txt"
+                        #f"{parent_log_path}/ltlogs/{today}.log" átmenetileg van kikommentelve tesztelésre 
+
+            # this path doesn't need type checking, because
+            # it must have been created at the start of the runtime for loop
+            # and therefore it must exist
+            current_log_path = f"{parent_log_path}/run.log"
+            
+            with open(current_log_path, mode='r', encoding='utf-8') as f: #Problémázik, de lefut és mindent amit kell kiír a log.txt-be EDIT: Már nem problémázik
+                current_log: str = f.read()
+
+            # try to append to the log file
+            to_write = f"DATE: {today}\n-------------------------------------\n\n{current_log}\n-------------------------------------\n"
+            try:
+                with open(path, mode='r', encoding='utf-8') as f:
+                    f.read()
+                with open(path, mode='a', encoding='utf-8') as f:
+                    f.write(to_write)
+
+            # if the path doesn't exist, create it and log the current date at the top of it
+            except FileNotFoundError:
+                with open(path, mode='w', encoding='utf-8') as f:
+                    f.write(to_write)
         
         def checkDriverExists(driver: object, omit_exceptions: bool = True) -> None | bool | Exception:
             try:
@@ -393,6 +410,15 @@ class Core:
                 case _:
                     raise ValueError(f"\'{condition}\' is not a valid condition to await")
         
+        def iframe_switch(driver: FirefoxDriver):
+            iframe = driver.find_element(By.CSS_SELECTOR, "iframe")
+            driver.switch_to_.iframe(iframe)
+
+        def iframe_leave_full(driver: FirefoxDriver):
+            driver.switch_to.default_content
+
+        def iframe_leave_sub(driver):
+            driver.switch_to.parentFrame
 
         # PART FUNCS
         def matchElement(driver: FirefoxDriver,
@@ -650,7 +676,7 @@ class Core:
             # create the chrome driver (as bare bones as it gets)
             elif driver_options_ == Core.Chrome.default_driver_options_dict_:
                 opts = Core.Chrome.DefaultOptions()
-                # NOT used. see line 110
+                # NOT used. see line 607
                 # service = Core.Chrome.DefaultService()
             else:
                 Support.log_error(parent_log_path, "Some shit got fucked up. But I have no clue what exactly.")
@@ -743,6 +769,12 @@ class Core:
                                     isDisplayed = action['displayed'],
                                     isEnabled = action['enabled'],
                                     isSelected = action['selected'])
+                            case "switch_to_iframe":
+                                Core.Chrome.iframe_action(driver)
+                            case "leave_iframe":
+                                Core.Chrome.iframe_leave_full(driver)
+                            case "leave_sub_iframe":
+                                Core.Chrome.iframe_leave_sub(driver)
                             case _:
                                 action_type = action['type']
                                 Support.log_proc(parent_log_path, f"Unknown action \'{action_type}\'")
@@ -768,7 +800,7 @@ class Core:
                             # wrong elmement type for `bindings` (should be string)
                             Support.log_error(parent_log_path, f"Parameter \'bindings\' must be of type str (string) not {type(bindings)}")
 
-                    Support.log_error(parent_log_path, "----------------------------------------------------------------\n")
+                    #Support.log_error(parent_log_path, "----------------------------------------------------------------\n")
                     Support.log_error(parent_log_path, f"{format_exc()}\nStack:\n", time_disabled=True)
                     stack = format_stack()
                     # -1 to exclude this expression from stack
@@ -777,7 +809,7 @@ class Core:
                         origin = stack_parts[0]
                         root = stack_parts[1]
                         Support.log_error(parent_log_path, f"\t[{x}] ORIGIN:\t{origin}\n\t[{x}] ROOT:{root}\n\n", time_disabled=True)
-                    Support.log_error(parent_log_path, "----------------------------------------------------------------\n", time_disabled=True)
+                    #Support.log_error(parent_log_path, "----------------------------------------------------------------\n", time_disabled=True)
 
             #
             if driver_options_["keep_browser_open"]:
@@ -794,25 +826,22 @@ class Core:
             # this path doesn't need type checking, because
             # it must have been created at the start of the runtime for loop
             # and therefore it must exist
-            current_log_path = f"{parent_log_path}/run.logs"
+            current_log_path = f"{parent_log_path}/run.log"
             
             with open(current_log_path, mode='r', encoding='utf-8') as f: #Problémázik, de lefut és mindent amit kell kiír a log.txt-be
                 current_log: str = f.read()
 
             # try to append to the log file
+            to_write = f"DATE: {today}\n-------------------------------------\n\n{current_log}\n-------------------------------------\n"
             try:
                 with open(path, mode='r', encoding='utf-8') as f:
                     f.read()
                 with open(path, mode='a', encoding='utf-8') as f:
-                    to_write = \
-                    f"-------------------------------------\n\n{current_log}\n-------------------------------------\n"
                     f.write(to_write)
 
             # if the path doesn't exist, create it and log the current date at the top of it
             except FileNotFoundError:
                 with open(path, mode='w', encoding='utf-8') as f:
-                    to_write = \
-                    f"DATE: {today}\n-------------------------------------\n\n{current_log}\n-------------------------------------\n"
                     f.write(to_write)
 
         def goto(driver: ChromeDriver, url: str):
@@ -892,6 +921,16 @@ class Core:
                     wait.until(expected)
                 case _:
                     raise ValueError(f"\'{condition}\' is not a valid condition to await")
+    
+        def iframe_switch(driver: ChromeDriver):
+            iframe = driver.find_element(By.CSS_SELECTOR, "iframe")
+            driver.switch_to_.iframe(iframe)
+
+        def iframe_leave_full(driver: ChromeDriver):
+            driver.switch_to.default_content
+
+        def iframe_leave_sub(driver):
+            driver.switch_to.parentFrame
         
         # PART FUNCS
 

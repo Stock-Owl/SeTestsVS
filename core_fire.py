@@ -115,7 +115,6 @@ class Core:
                 
 
             LogJSArgs = global_options["log_JS"]
-            exception_log_path = global_options["exception_log_path"]
             parent_log_path = global_options["parent_log_path"]
             terminal_mode = global_options["terminal_mode"]
 
@@ -299,8 +298,8 @@ class Core:
                             # wrong elmement type for `bindings` (should be string)
                             Support.log_error(parent_log_path, f"Parameter \'bindings\' must be of type str (string) not {type(bindings)}")
                     
-                    Support.all_loggers.log_error(parent_log_path, "----------------------------------------------------------------\n")
-                    Support.all_loggers.log_error(parent_log_path, f"{format_exc()}\nStack:\n", time_disabled=True)
+                    #Support.log_error(parent_log_path, "----------------------------------------------------------------\n")
+                    Support.log_error(parent_log_path, f"{format_exc()}\nStack:\n", time_disabled=True)
                     stack = format_stack()
                     # -1 to exclude this expression from stack
                     for x in range(len(stack)-1):
@@ -687,7 +686,7 @@ class Support:
                                 to_write = \
                                 f"{i} ❗ JavaScript:\n{log['source']} — {log['level']}:\n{log['message']}\n\t{log['timestamp']}\n#\n"
                                 f.write(to_write)
-                                Support.all_loggers.log_all(path = path_, log_line = to_write, time_disabled=time_disabled)
+                                Support.log_all(path = path_, log_line = to_write, time_disabled=time_disabled)
                                 processed.append(to_write)
                         break
                 sleep(mimir)

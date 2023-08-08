@@ -1,181 +1,66 @@
-17:00:03
+16:47:15
 ✅ DONE: [Unit:1][Action:1] of type 'goto' successfully executed
  
-17:00:03
+16:47:15
 ✅ DONE: [Unit:2][Action:1] of type 'wait' successfully executed
  
-17:00:04
+16:47:16
 ✅ DONE: [Unit:3][Action:1] of type 'click' successfully executed
  
-17:00:04
+16:47:16
 ✅ DONE: [Unit:3][Action:2] of type 'click' successfully executed
  
-17:00:04
+16:47:16
 ✅ DONE: [Unit:3][Action:3] of type 'click' successfully executed
  
-17:00:04
+16:47:17
 ✅ DONE: [Unit:3][Action:4] of type 'click' successfully executed
  
-17:00:04
+16:47:17
 ✅ DONE: [Unit:3][Action:5] of type 'click' successfully executed
  
-17:00:05
+16:47:17
 ✅ DONE: [Unit:3][Action:6] of type 'click' successfully executed
  
-17:00:05
+16:47:17
 ✅ DONE: [Unit:4][Action:1] of type 'wait' successfully executed
  
-17:00:08
+16:47:18
 ✅ DONE: [Unit:4][Action:2] of type 'send_keys' successfully executed
  
-17:00:08
+16:47:18
 ✅ DONE: [Unit:4][Action:3] of type 'wait' successfully executed
  
-17:00:08
+16:47:18
 ✅ DONE: [Unit:5][Action:VÁRJÁ'] of type 'wait' successfully executed
  
----------------------------------------------------------------- 
-
-❌ ERROR: 
- ----------------------------------------------------------------
-
----------------------------------------------------------------- 
-
-❌ ERROR: 
- Traceback (most recent call last):
-  File "C:\Users\kmarton\OneDrive - VISION-SOFTWARE Számítástechnikai Szolgáltató és Kereskedelmi\Asztal\Projects\SeTestsVS\core_combined.py", line 716, in RunDriver
-    Core.Chrome.ElementAction(
-  File "C:\Users\kmarton\OneDrive - VISION-SOFTWARE Számítástechnikai Szolgáltató és Kereskedelmi\Asztal\Projects\SeTestsVS\core_combined.py", line 988, in ElementAction
-    result.click()
-  File "C:\Users\kmarton\AppData\Local\Programs\Python\Python311\Lib\site-packages\selenium\webdriver\remote\webelement.py", line 94, in click
-    self._execute(Command.CLICK_ELEMENT)
-  File "C:\Users\kmarton\AppData\Local\Programs\Python\Python311\Lib\site-packages\selenium\webdriver\remote\webelement.py", line 395, in _execute
-    return self._parent.execute(command, params)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\kmarton\AppData\Local\Programs\Python\Python311\Lib\site-packages\selenium\webdriver\remote\webdriver.py", line 346, in execute
-    self.error_handler.check_response(response)
-  File "C:\Users\kmarton\AppData\Local\Programs\Python\Python311\Lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 245, in check_response
-    raise exception_class(message, screen, stacktrace)
-selenium.common.exceptions.ElementNotInteractableException: Message: element not interactable
-  (Session info: chrome=115.0.5790.170)
-Stacktrace:
-Backtrace:
-	GetHandleVerifier [0x0069A813+48355]
-	(No symbol) [0x0062C4B1]
-	(No symbol) [0x00535220]
-	(No symbol) [0x00561846]
-	(No symbol) [0x00559F5C]
-	(No symbol) [0x0057A73C]
-	(No symbol) [0x00559A36]
-	(No symbol) [0x0057AA94]
-	(No symbol) [0x0058C922]
-	(No symbol) [0x0057A536]
-	(No symbol) [0x005582DC]
-	(No symbol) [0x005593DD]
-	GetHandleVerifier [0x008FAABD+2539405]
-	GetHandleVerifier [0x0093A78F+2800735]
-	GetHandleVerifier [0x0093456C+2775612]
-	GetHandleVerifier [0x007251E0+616112]
-	(No symbol) [0x00635F8C]
-	(No symbol) [0x00632328]
-	(No symbol) [0x0063240B]
-	(No symbol) [0x00624FF7]
-	BaseThreadInitThunk [0x754A7D59+25]
-	RtlInitializeExceptionChain [0x7703B79B+107]
-	RtlClearBits [0x7703B71F+191]
-
-
-Stack:
-
----------------------------------------------------------------- 
-
-❌ ERROR: 
- 	[0] ORIGIN:	  File "C:\Users\kmarton\AppData\Local\Programs\Python\Python311\Lib\runpy.py", line 198, in _run_module_as_main
-	[0] ROOT:    return _run_code(code, main_globals, None,
-
-
----------------------------------------------------------------- 
-
-❌ ERROR: 
- 	[1] ORIGIN:	  File "C:\Users\kmarton\AppData\Local\Programs\Python\Python311\Lib\runpy.py", line 88, in _run_code
-	[1] ROOT:    exec(code, run_globals)
-
-
----------------------------------------------------------------- 
-
-❌ ERROR: 
- 	[2] ORIGIN:	  File "c:\Users\kmarton\.vscode\extensions\ms-python.python-2023.14.0\pythonFiles\lib\python\debugpy\adapter/../..\debugpy\launcher/../..\debugpy\__main__.py", line 39, in <module>
-	[2] ROOT:    cli.main()
-
-
----------------------------------------------------------------- 
-
-❌ ERROR: 
- 	[3] ORIGIN:	  File "c:\Users\kmarton\.vscode\extensions\ms-python.python-2023.14.0\pythonFiles\lib\python\debugpy\adapter/../..\debugpy\launcher/../..\debugpy/..\debugpy\server\cli.py", line 430, in main
-	[3] ROOT:    run()
-
-
----------------------------------------------------------------- 
-
-❌ ERROR: 
- 	[4] ORIGIN:	  File "c:\Users\kmarton\.vscode\extensions\ms-python.python-2023.14.0\pythonFiles\lib\python\debugpy\adapter/../..\debugpy\launcher/../..\debugpy/..\debugpy\server\cli.py", line 284, in run_file
-	[4] ROOT:    runpy.run_path(target, run_name="__main__")
-
-
----------------------------------------------------------------- 
-
-❌ ERROR: 
- 	[5] ORIGIN:	  File "c:\Users\kmarton\.vscode\extensions\ms-python.python-2023.14.0\pythonFiles\lib\python\debugpy\_vendored\pydevd\_pydevd_bundle\pydevd_runpy.py", line 321, in run_path
-	[5] ROOT:    return _run_module_code(code, init_globals, run_name,
-
-
----------------------------------------------------------------- 
-
-❌ ERROR: 
- 	[6] ORIGIN:	  File "c:\Users\kmarton\.vscode\extensions\ms-python.python-2023.14.0\pythonFiles\lib\python\debugpy\_vendored\pydevd\_pydevd_bundle\pydevd_runpy.py", line 135, in _run_module_code
-	[6] ROOT:    _run_code(code, mod_globals, init_globals,
-
-
----------------------------------------------------------------- 
-
-❌ ERROR: 
- 	[7] ORIGIN:	  File "c:\Users\kmarton\.vscode\extensions\ms-python.python-2023.14.0\pythonFiles\lib\python\debugpy\_vendored\pydevd\_pydevd_bundle\pydevd_runpy.py", line 124, in _run_code
-	[7] ROOT:    exec(code, run_globals)
-
-
----------------------------------------------------------------- 
-
-❌ ERROR: 
- 	[8] ORIGIN:	  File "C:\Users\kmarton\OneDrive - VISION-SOFTWARE Számítástechnikai Szolgáltató és Kereskedelmi\Asztal\Projects\SeTestsVS\main_combined.py", line 14, in <module>
-	[8] ROOT:    Run(json)
-
-
----------------------------------------------------------------- 
-
-❌ ERROR: 
- ----------------------------------------------------------------
-
-17:00:18
-✅ DONE: [Unit:Chrome's backup][Action:1] of type 'click' successfully executed
+16:47:21
+✅ DONE: [Unit:5][Action:1] of type 'click' successfully executed
  
-17:00:18
-✅ DONE: [Unit:Chrome's backup][Action:2] of type 'click' successfully executed
+16:47:21
+✅ DONE: [Unit:5][Action:2] of type 'click' successfully executed
  
-17:00:18
-✅ DONE: [Unit:Chrome's backup][Action:3] of type 'click' successfully executed
+16:47:22
+✅ DONE: [Unit:5][Action:3] of type 'send_keys' successfully executed
  
-17:00:19
-✅ DONE: [Unit:Chrome's backup][Action:4] of type 'send_keys' successfully executed
+16:47:22
+✅ DONE: [Unit:5][Action:4] of type 'send_keys' successfully executed
  
-17:00:19
-✅ DONE: [Unit:Chrome's backup][Action:5] of type 'send_keys' successfully executed
+16:47:23
+✅ DONE: [Unit:5][Action:5] of type 'click' successfully executed
  
-17:00:24
-✅ DONE: [Unit:Chrome's backup][Action:6] of type 'click' successfully executed
+16:47:24
+✅ DONE: [Unit:5][Action:6] of type 'click' successfully executed
  
-17:00:24
-✅ DONE: [Unit:Chrome's backup][Action:7] of type 'click' successfully executed
+16:47:26
+✅ DONE: [Unit:5][Action:7] of type 'click' successfully executed
  
-17:00:26
-✅ DONE: [Unit:Chrome's backup][Action:8] of type 'click' successfully executed
+16:47:26
+✅ DONE: 'Chrome's backup' backup skipped because backup target unit sucessfully executed
+
  
+DATE: 2023-08-08
+-------------------------------------
+
+
+-------------------------------------
