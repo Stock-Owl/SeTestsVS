@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <iostream>
-#include "prerequisites.hpp"
+#include "prerequisites.h"
 
 using namespace Installer;
 

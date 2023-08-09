@@ -9,7 +9,6 @@
 #include <iostream>
 #include <string>
 #include <conio.h>
-#include <string>
 #include <vector>
 
 namespace Installer
@@ -17,7 +16,7 @@ namespace Installer
     class Menu
     {
         public:
-            Menu(const std::vector<std::string> options, const std::vector<std::string> values);      // constructor
+            Menu(std::vector<std::string> options, std::vector<std::string> values);      // constructor
             void takeinput();
             enum inputkeycodes
             {

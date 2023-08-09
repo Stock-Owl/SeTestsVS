@@ -2,11 +2,11 @@
 #include <string>
 #include <conio.h>
 #include <vector>
-#include "menu.hpp"
+#include "menu.h"
 
 using namespace Installer;
 
-Menu::Menu(const std::vector<std::string> options, const std::vector<std::string> values)
+Menu::Menu(std::vector<std::string> options, std::vector<std::string> values)
 {
     for (int idx = 0; idx < options.size(); ++idx)
     {
@@ -25,6 +25,6 @@ Menu::Menu(const std::vector<std::string> options, const std::vector<std::string
 
 void Menu::takeinput()
 {
-    int got = getch();
-    std::cout << "got: " << got << "type: " << std::endl;
+    int got = _getch();
+    std::cout << "got: " << got << std::endl;
 }
