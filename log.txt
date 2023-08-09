@@ -1,65 +1,471 @@
-16:47:15
+16:31:19
 ✅ DONE: [Unit:1][Action:1] of type 'goto' successfully executed
  
-16:47:15
+16:31:19
 ✅ DONE: [Unit:2][Action:1] of type 'wait' successfully executed
  
-16:47:16
+16:31:19
 ✅ DONE: [Unit:3][Action:1] of type 'click' successfully executed
  
-16:47:16
+16:31:20
 ✅ DONE: [Unit:3][Action:2] of type 'click' successfully executed
  
-16:47:16
+16:31:20
 ✅ DONE: [Unit:3][Action:3] of type 'click' successfully executed
  
-16:47:17
+16:31:20
 ✅ DONE: [Unit:3][Action:4] of type 'click' successfully executed
  
-16:47:17
+16:31:20
 ✅ DONE: [Unit:3][Action:5] of type 'click' successfully executed
  
-16:47:17
-✅ DONE: [Unit:3][Action:6] of type 'click' successfully executed
- 
-16:47:17
+---------------------------------------------------------------- 
+
+❌ ERROR: 
+ Traceback (most recent call last):
+  File "C:\Users\kmarton\OneDrive - VISION-SOFTWARE Számítástechnikai Szolgáltató és Kereskedelmi\Asztal\Projects\SeTestsVS\core_combined.py", line 742, in RunDriver
+    Core.Chrome.ElementAction(
+  File "C:\Users\kmarton\OneDrive - VISION-SOFTWARE Számítástechnikai Szolgáltató és Kereskedelmi\Asztal\Projects\SeTestsVS\core_combined.py", line 1036, in ElementAction
+    driver.switch_to.parent_frame()     #if there was an iframe, this goes back to the top of the frame
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kmarton\AppData\Local\Programs\Python\Python311\Lib\site-packages\selenium\webdriver\remote\switch_to.py", line 117, in parent_frame
+    self._driver.execute(Command.SWITCH_TO_PARENT_FRAME)
+  File "C:\Users\kmarton\AppData\Local\Programs\Python\Python311\Lib\site-packages\selenium\webdriver\remote\webdriver.py", line 346, in execute
+    self.error_handler.check_response(response)
+  File "C:\Users\kmarton\AppData\Local\Programs\Python\Python311\Lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 245, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.NoSuchWindowException: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=115.0.5790.171)
+Stacktrace:
+Backtrace:
+	GetHandleVerifier [0x009BA813+48355]
+	(No symbol) [0x0094C4B1]
+	(No symbol) [0x00855358]
+	(No symbol) [0x0083D293]
+	(No symbol) [0x0089E37B]
+	(No symbol) [0x008AC473]
+	(No symbol) [0x0089A536]
+	(No symbol) [0x008782DC]
+	(No symbol) [0x008793DD]
+	GetHandleVerifier [0x00C1AABD+2539405]
+	GetHandleVerifier [0x00C5A78F+2800735]
+	GetHandleVerifier [0x00C5456C+2775612]
+	GetHandleVerifier [0x00A451E0+616112]
+	(No symbol) [0x00955F8C]
+	(No symbol) [0x00952328]
+	(No symbol) [0x0095240B]
+	(No symbol) [0x00944FF7]
+	BaseThreadInitThunk [0x76B07D59+25]
+	RtlInitializeExceptionChain [0x77E2B79B+107]
+	RtlClearBits [0x77E2B71F+191]
+
+
+Stack:
+
+---------------------------------------------------------------- 
+
+❌ ERROR: 
+ 	[0] ORIGIN:	  File "C:\Users\kmarton\AppData\Local\Programs\Python\Python311\Lib\runpy.py", line 198, in _run_module_as_main
+	[0] ROOT:    return _run_code(code, main_globals, None,
+
+
+---------------------------------------------------------------- 
+
+❌ ERROR: 
+ 	[1] ORIGIN:	  File "C:\Users\kmarton\AppData\Local\Programs\Python\Python311\Lib\runpy.py", line 88, in _run_code
+	[1] ROOT:    exec(code, run_globals)
+
+
+---------------------------------------------------------------- 
+
+❌ ERROR: 
+ 	[2] ORIGIN:	  File "c:\Users\kmarton\.vscode\extensions\ms-python.python-2023.14.0\pythonFiles\lib\python\debugpy\adapter/../..\debugpy\launcher/../..\debugpy\__main__.py", line 39, in <module>
+	[2] ROOT:    cli.main()
+
+
+---------------------------------------------------------------- 
+
+❌ ERROR: 
+ 	[3] ORIGIN:	  File "c:\Users\kmarton\.vscode\extensions\ms-python.python-2023.14.0\pythonFiles\lib\python\debugpy\adapter/../..\debugpy\launcher/../..\debugpy/..\debugpy\server\cli.py", line 430, in main
+	[3] ROOT:    run()
+
+
+---------------------------------------------------------------- 
+
+❌ ERROR: 
+ 	[4] ORIGIN:	  File "c:\Users\kmarton\.vscode\extensions\ms-python.python-2023.14.0\pythonFiles\lib\python\debugpy\adapter/../..\debugpy\launcher/../..\debugpy/..\debugpy\server\cli.py", line 284, in run_file
+	[4] ROOT:    runpy.run_path(target, run_name="__main__")
+
+
+---------------------------------------------------------------- 
+
+❌ ERROR: 
+ 	[5] ORIGIN:	  File "c:\Users\kmarton\.vscode\extensions\ms-python.python-2023.14.0\pythonFiles\lib\python\debugpy\_vendored\pydevd\_pydevd_bundle\pydevd_runpy.py", line 321, in run_path
+	[5] ROOT:    return _run_module_code(code, init_globals, run_name,
+
+
+---------------------------------------------------------------- 
+
+❌ ERROR: 
+ 	[6] ORIGIN:	  File "c:\Users\kmarton\.vscode\extensions\ms-python.python-2023.14.0\pythonFiles\lib\python\debugpy\_vendored\pydevd\_pydevd_bundle\pydevd_runpy.py", line 135, in _run_module_code
+	[6] ROOT:    _run_code(code, mod_globals, init_globals,
+
+
+---------------------------------------------------------------- 
+
+❌ ERROR: 
+ 	[7] ORIGIN:	  File "c:\Users\kmarton\.vscode\extensions\ms-python.python-2023.14.0\pythonFiles\lib\python\debugpy\_vendored\pydevd\_pydevd_bundle\pydevd_runpy.py", line 124, in _run_code
+	[7] ROOT:    exec(code, run_globals)
+
+
+---------------------------------------------------------------- 
+
+❌ ERROR: 
+ 	[8] ORIGIN:	  File "C:\Users\kmarton\OneDrive - VISION-SOFTWARE Számítástechnikai Szolgáltató és Kereskedelmi\Asztal\Projects\SeTestsVS\main_combined.py", line 11, in <module>
+	[8] ROOT:    Run(json)
+
+
+16:31:20
 ✅ DONE: [Unit:4][Action:1] of type 'wait' successfully executed
  
-16:47:18
-✅ DONE: [Unit:4][Action:2] of type 'send_keys' successfully executed
- 
-16:47:18
-✅ DONE: [Unit:4][Action:3] of type 'wait' successfully executed
- 
-16:47:18
+---------------------------------------------------------------- 
+
+❌ ERROR: 
+ Traceback (most recent call last):
+  File "C:\Users\kmarton\OneDrive - VISION-SOFTWARE Számítástechnikai Szolgáltató és Kereskedelmi\Asztal\Projects\SeTestsVS\core_combined.py", line 752, in RunDriver
+    Core.Chrome.ElementAction(
+  File "C:\Users\kmarton\OneDrive - VISION-SOFTWARE Számítástechnikai Szolgáltató és Kereskedelmi\Asztal\Projects\SeTestsVS\core_combined.py", line 1022, in ElementAction
+    result = Core.Chrome.matchElement(driver, **action_kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kmarton\OneDrive - VISION-SOFTWARE Számítástechnikai Szolgáltató és Kereskedelmi\Asztal\Projects\SeTestsVS\core_combined.py", line 954, in matchElement
+    element =  driver.find_element(By.XPATH, value)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kmarton\AppData\Local\Programs\Python\Python311\Lib\site-packages\selenium\webdriver\remote\webdriver.py", line 740, in find_element
+    return self.execute(Command.FIND_ELEMENT, {"using": by, "value": value})["value"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kmarton\AppData\Local\Programs\Python\Python311\Lib\site-packages\selenium\webdriver\remote\webdriver.py", line 346, in execute
+    self.error_handler.check_response(response)
+  File "C:\Users\kmarton\AppData\Local\Programs\Python\Python311\Lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 245, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.NoSuchWindowException: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=115.0.5790.171)
+Stacktrace:
+Backtrace:
+	GetHandleVerifier [0x009BA813+48355]
+	(No symbol) [0x0094C4B1]
+	(No symbol) [0x00855358]
+	(No symbol) [0x0083D293]
+	(No symbol) [0x0089E37B]
+	(No symbol) [0x008AC473]
+	(No symbol) [0x0089A536]
+	(No symbol) [0x008782DC]
+	(No symbol) [0x008793DD]
+	GetHandleVerifier [0x00C1AABD+2539405]
+	GetHandleVerifier [0x00C5A78F+2800735]
+	GetHandleVerifier [0x00C5456C+2775612]
+	GetHandleVerifier [0x00A451E0+616112]
+	(No symbol) [0x00955F8C]
+	(No symbol) [0x00952328]
+	(No symbol) [0x0095240B]
+	(No symbol) [0x00944FF7]
+	BaseThreadInitThunk [0x76B07D59+25]
+	RtlInitializeExceptionChain [0x77E2B79B+107]
+	RtlClearBits [0x77E2B71F+191]
+
+
+Stack:
+
+---------------------------------------------------------------- 
+
+❌ ERROR: 
+ 	[0] ORIGIN:	  File "C:\Users\kmarton\AppData\Local\Programs\Python\Python311\Lib\runpy.py", line 198, in _run_module_as_main
+	[0] ROOT:    return _run_code(code, main_globals, None,
+
+
+---------------------------------------------------------------- 
+
+❌ ERROR: 
+ 	[1] ORIGIN:	  File "C:\Users\kmarton\AppData\Local\Programs\Python\Python311\Lib\runpy.py", line 88, in _run_code
+	[1] ROOT:    exec(code, run_globals)
+
+
+---------------------------------------------------------------- 
+
+❌ ERROR: 
+ 	[2] ORIGIN:	  File "c:\Users\kmarton\.vscode\extensions\ms-python.python-2023.14.0\pythonFiles\lib\python\debugpy\adapter/../..\debugpy\launcher/../..\debugpy\__main__.py", line 39, in <module>
+	[2] ROOT:    cli.main()
+
+
+---------------------------------------------------------------- 
+
+❌ ERROR: 
+ 	[3] ORIGIN:	  File "c:\Users\kmarton\.vscode\extensions\ms-python.python-2023.14.0\pythonFiles\lib\python\debugpy\adapter/../..\debugpy\launcher/../..\debugpy/..\debugpy\server\cli.py", line 430, in main
+	[3] ROOT:    run()
+
+
+---------------------------------------------------------------- 
+
+❌ ERROR: 
+ 	[4] ORIGIN:	  File "c:\Users\kmarton\.vscode\extensions\ms-python.python-2023.14.0\pythonFiles\lib\python\debugpy\adapter/../..\debugpy\launcher/../..\debugpy/..\debugpy\server\cli.py", line 284, in run_file
+	[4] ROOT:    runpy.run_path(target, run_name="__main__")
+
+
+---------------------------------------------------------------- 
+
+❌ ERROR: 
+ 	[5] ORIGIN:	  File "c:\Users\kmarton\.vscode\extensions\ms-python.python-2023.14.0\pythonFiles\lib\python\debugpy\_vendored\pydevd\_pydevd_bundle\pydevd_runpy.py", line 321, in run_path
+	[5] ROOT:    return _run_module_code(code, init_globals, run_name,
+
+
+---------------------------------------------------------------- 
+
+❌ ERROR: 
+ 	[6] ORIGIN:	  File "c:\Users\kmarton\.vscode\extensions\ms-python.python-2023.14.0\pythonFiles\lib\python\debugpy\_vendored\pydevd\_pydevd_bundle\pydevd_runpy.py", line 135, in _run_module_code
+	[6] ROOT:    _run_code(code, mod_globals, init_globals,
+
+
+---------------------------------------------------------------- 
+
+❌ ERROR: 
+ 	[7] ORIGIN:	  File "c:\Users\kmarton\.vscode\extensions\ms-python.python-2023.14.0\pythonFiles\lib\python\debugpy\_vendored\pydevd\_pydevd_bundle\pydevd_runpy.py", line 124, in _run_code
+	[7] ROOT:    exec(code, run_globals)
+
+
+---------------------------------------------------------------- 
+
+❌ ERROR: 
+ 	[8] ORIGIN:	  File "C:\Users\kmarton\OneDrive - VISION-SOFTWARE Számítástechnikai Szolgáltató és Kereskedelmi\Asztal\Projects\SeTestsVS\main_combined.py", line 11, in <module>
+	[8] ROOT:    Run(json)
+
+
+16:31:20
 ✅ DONE: [Unit:5][Action:VÁRJÁ'] of type 'wait' successfully executed
  
-16:47:21
-✅ DONE: [Unit:5][Action:1] of type 'click' successfully executed
- 
-16:47:21
-✅ DONE: [Unit:5][Action:2] of type 'click' successfully executed
- 
-16:47:22
-✅ DONE: [Unit:5][Action:3] of type 'send_keys' successfully executed
- 
-16:47:22
-✅ DONE: [Unit:5][Action:4] of type 'send_keys' successfully executed
- 
-16:47:23
-✅ DONE: [Unit:5][Action:5] of type 'click' successfully executed
- 
-16:47:24
-✅ DONE: [Unit:5][Action:6] of type 'click' successfully executed
- 
-16:47:26
-✅ DONE: [Unit:5][Action:7] of type 'click' successfully executed
- 
-16:47:26
-✅ DONE: 'Chrome's backup' backup skipped because backup target unit sucessfully executed
+---------------------------------------------------------------- 
 
- 
-DATE: 2023-08-08
+❌ ERROR: 
+ Traceback (most recent call last):
+  File "C:\Users\kmarton\OneDrive - VISION-SOFTWARE Számítástechnikai Szolgáltató és Kereskedelmi\Asztal\Projects\SeTestsVS\core_combined.py", line 742, in RunDriver
+    Core.Chrome.ElementAction(
+  File "C:\Users\kmarton\OneDrive - VISION-SOFTWARE Számítástechnikai Szolgáltató és Kereskedelmi\Asztal\Projects\SeTestsVS\core_combined.py", line 1022, in ElementAction
+    result = Core.Chrome.matchElement(driver, **action_kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kmarton\OneDrive - VISION-SOFTWARE Számítástechnikai Szolgáltató és Kereskedelmi\Asztal\Projects\SeTestsVS\core_combined.py", line 954, in matchElement
+    element =  driver.find_element(By.XPATH, value)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kmarton\AppData\Local\Programs\Python\Python311\Lib\site-packages\selenium\webdriver\remote\webdriver.py", line 740, in find_element
+    return self.execute(Command.FIND_ELEMENT, {"using": by, "value": value})["value"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kmarton\AppData\Local\Programs\Python\Python311\Lib\site-packages\selenium\webdriver\remote\webdriver.py", line 346, in execute
+    self.error_handler.check_response(response)
+  File "C:\Users\kmarton\AppData\Local\Programs\Python\Python311\Lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 245, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.NoSuchWindowException: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=115.0.5790.171)
+Stacktrace:
+Backtrace:
+	GetHandleVerifier [0x009BA813+48355]
+	(No symbol) [0x0094C4B1]
+	(No symbol) [0x00855358]
+	(No symbol) [0x0083D293]
+	(No symbol) [0x0089E37B]
+	(No symbol) [0x008AC473]
+	(No symbol) [0x0089A536]
+	(No symbol) [0x008782DC]
+	(No symbol) [0x008793DD]
+	GetHandleVerifier [0x00C1AABD+2539405]
+	GetHandleVerifier [0x00C5A78F+2800735]
+	GetHandleVerifier [0x00C5456C+2775612]
+	GetHandleVerifier [0x00A451E0+616112]
+	(No symbol) [0x00955F8C]
+	(No symbol) [0x00952328]
+	(No symbol) [0x0095240B]
+	(No symbol) [0x00944FF7]
+	BaseThreadInitThunk [0x76B07D59+25]
+	RtlInitializeExceptionChain [0x77E2B79B+107]
+	RtlClearBits [0x77E2B71F+191]
+
+
+Stack:
+
+---------------------------------------------------------------- 
+
+❌ ERROR: 
+ 	[0] ORIGIN:	  File "C:\Users\kmarton\AppData\Local\Programs\Python\Python311\Lib\runpy.py", line 198, in _run_module_as_main
+	[0] ROOT:    return _run_code(code, main_globals, None,
+
+
+---------------------------------------------------------------- 
+
+❌ ERROR: 
+ 	[1] ORIGIN:	  File "C:\Users\kmarton\AppData\Local\Programs\Python\Python311\Lib\runpy.py", line 88, in _run_code
+	[1] ROOT:    exec(code, run_globals)
+
+
+---------------------------------------------------------------- 
+
+❌ ERROR: 
+ 	[2] ORIGIN:	  File "c:\Users\kmarton\.vscode\extensions\ms-python.python-2023.14.0\pythonFiles\lib\python\debugpy\adapter/../..\debugpy\launcher/../..\debugpy\__main__.py", line 39, in <module>
+	[2] ROOT:    cli.main()
+
+
+---------------------------------------------------------------- 
+
+❌ ERROR: 
+ 	[3] ORIGIN:	  File "c:\Users\kmarton\.vscode\extensions\ms-python.python-2023.14.0\pythonFiles\lib\python\debugpy\adapter/../..\debugpy\launcher/../..\debugpy/..\debugpy\server\cli.py", line 430, in main
+	[3] ROOT:    run()
+
+
+---------------------------------------------------------------- 
+
+❌ ERROR: 
+ 	[4] ORIGIN:	  File "c:\Users\kmarton\.vscode\extensions\ms-python.python-2023.14.0\pythonFiles\lib\python\debugpy\adapter/../..\debugpy\launcher/../..\debugpy/..\debugpy\server\cli.py", line 284, in run_file
+	[4] ROOT:    runpy.run_path(target, run_name="__main__")
+
+
+---------------------------------------------------------------- 
+
+❌ ERROR: 
+ 	[5] ORIGIN:	  File "c:\Users\kmarton\.vscode\extensions\ms-python.python-2023.14.0\pythonFiles\lib\python\debugpy\_vendored\pydevd\_pydevd_bundle\pydevd_runpy.py", line 321, in run_path
+	[5] ROOT:    return _run_module_code(code, init_globals, run_name,
+
+
+---------------------------------------------------------------- 
+
+❌ ERROR: 
+ 	[6] ORIGIN:	  File "c:\Users\kmarton\.vscode\extensions\ms-python.python-2023.14.0\pythonFiles\lib\python\debugpy\_vendored\pydevd\_pydevd_bundle\pydevd_runpy.py", line 135, in _run_module_code
+	[6] ROOT:    _run_code(code, mod_globals, init_globals,
+
+
+---------------------------------------------------------------- 
+
+❌ ERROR: 
+ 	[7] ORIGIN:	  File "c:\Users\kmarton\.vscode\extensions\ms-python.python-2023.14.0\pythonFiles\lib\python\debugpy\_vendored\pydevd\_pydevd_bundle\pydevd_runpy.py", line 124, in _run_code
+	[7] ROOT:    exec(code, run_globals)
+
+
+---------------------------------------------------------------- 
+
+❌ ERROR: 
+ 	[8] ORIGIN:	  File "C:\Users\kmarton\OneDrive - VISION-SOFTWARE Számítástechnikai Szolgáltató és Kereskedelmi\Asztal\Projects\SeTestsVS\main_combined.py", line 11, in <module>
+	[8] ROOT:    Run(json)
+
+
+---------------------------------------------------------------- 
+
+❌ ERROR: 
+ Traceback (most recent call last):
+  File "C:\Users\kmarton\OneDrive - VISION-SOFTWARE Számítástechnikai Szolgáltató és Kereskedelmi\Asztal\Projects\SeTestsVS\core_combined.py", line 742, in RunDriver
+    Core.Chrome.ElementAction(
+  File "C:\Users\kmarton\OneDrive - VISION-SOFTWARE Számítástechnikai Szolgáltató és Kereskedelmi\Asztal\Projects\SeTestsVS\core_combined.py", line 1022, in ElementAction
+    result = Core.Chrome.matchElement(driver, **action_kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kmarton\OneDrive - VISION-SOFTWARE Számítástechnikai Szolgáltató és Kereskedelmi\Asztal\Projects\SeTestsVS\core_combined.py", line 954, in matchElement
+    element =  driver.find_element(By.XPATH, value)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kmarton\AppData\Local\Programs\Python\Python311\Lib\site-packages\selenium\webdriver\remote\webdriver.py", line 740, in find_element
+    return self.execute(Command.FIND_ELEMENT, {"using": by, "value": value})["value"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kmarton\AppData\Local\Programs\Python\Python311\Lib\site-packages\selenium\webdriver\remote\webdriver.py", line 346, in execute
+    self.error_handler.check_response(response)
+  File "C:\Users\kmarton\AppData\Local\Programs\Python\Python311\Lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 245, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.NoSuchWindowException: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=115.0.5790.171)
+Stacktrace:
+Backtrace:
+	GetHandleVerifier [0x009BA813+48355]
+	(No symbol) [0x0094C4B1]
+	(No symbol) [0x00855358]
+	(No symbol) [0x0083D293]
+	(No symbol) [0x0089E37B]
+	(No symbol) [0x008AC473]
+	(No symbol) [0x0089A536]
+	(No symbol) [0x008782DC]
+	(No symbol) [0x008793DD]
+	GetHandleVerifier [0x00C1AABD+2539405]
+	GetHandleVerifier [0x00C5A78F+2800735]
+	GetHandleVerifier [0x00C5456C+2775612]
+	GetHandleVerifier [0x00A451E0+616112]
+	(No symbol) [0x00955F8C]
+	(No symbol) [0x00952328]
+	(No symbol) [0x0095240B]
+	(No symbol) [0x00944FF7]
+	BaseThreadInitThunk [0x76B07D59+25]
+	RtlInitializeExceptionChain [0x77E2B79B+107]
+	RtlClearBits [0x77E2B71F+191]
+
+
+Stack:
+
+---------------------------------------------------------------- 
+
+❌ ERROR: 
+ 	[0] ORIGIN:	  File "C:\Users\kmarton\AppData\Local\Programs\Python\Python311\Lib\runpy.py", line 198, in _run_module_as_main
+	[0] ROOT:    return _run_code(code, main_globals, None,
+
+
+---------------------------------------------------------------- 
+
+❌ ERROR: 
+ 	[1] ORIGIN:	  File "C:\Users\kmarton\AppData\Local\Programs\Python\Python311\Lib\runpy.py", line 88, in _run_code
+	[1] ROOT:    exec(code, run_globals)
+
+
+---------------------------------------------------------------- 
+
+❌ ERROR: 
+ 	[2] ORIGIN:	  File "c:\Users\kmarton\.vscode\extensions\ms-python.python-2023.14.0\pythonFiles\lib\python\debugpy\adapter/../..\debugpy\launcher/../..\debugpy\__main__.py", line 39, in <module>
+	[2] ROOT:    cli.main()
+
+
+---------------------------------------------------------------- 
+
+❌ ERROR: 
+ 	[3] ORIGIN:	  File "c:\Users\kmarton\.vscode\extensions\ms-python.python-2023.14.0\pythonFiles\lib\python\debugpy\adapter/../..\debugpy\launcher/../..\debugpy/..\debugpy\server\cli.py", line 430, in main
+	[3] ROOT:    run()
+
+
+---------------------------------------------------------------- 
+
+❌ ERROR: 
+ 	[4] ORIGIN:	  File "c:\Users\kmarton\.vscode\extensions\ms-python.python-2023.14.0\pythonFiles\lib\python\debugpy\adapter/../..\debugpy\launcher/../..\debugpy/..\debugpy\server\cli.py", line 284, in run_file
+	[4] ROOT:    runpy.run_path(target, run_name="__main__")
+
+
+---------------------------------------------------------------- 
+
+❌ ERROR: 
+ 	[5] ORIGIN:	  File "c:\Users\kmarton\.vscode\extensions\ms-python.python-2023.14.0\pythonFiles\lib\python\debugpy\_vendored\pydevd\_pydevd_bundle\pydevd_runpy.py", line 321, in run_path
+	[5] ROOT:    return _run_module_code(code, init_globals, run_name,
+
+
+---------------------------------------------------------------- 
+
+❌ ERROR: 
+ 	[6] ORIGIN:	  File "c:\Users\kmarton\.vscode\extensions\ms-python.python-2023.14.0\pythonFiles\lib\python\debugpy\_vendored\pydevd\_pydevd_bundle\pydevd_runpy.py", line 135, in _run_module_code
+	[6] ROOT:    _run_code(code, mod_globals, init_globals,
+
+
+---------------------------------------------------------------- 
+
+❌ ERROR: 
+ 	[7] ORIGIN:	  File "c:\Users\kmarton\.vscode\extensions\ms-python.python-2023.14.0\pythonFiles\lib\python\debugpy\_vendored\pydevd\_pydevd_bundle\pydevd_runpy.py", line 124, in _run_code
+	[7] ROOT:    exec(code, run_globals)
+
+
+---------------------------------------------------------------- 
+
+❌ ERROR: 
+ 	[8] ORIGIN:	  File "C:\Users\kmarton\OneDrive - VISION-SOFTWARE Számítástechnikai Szolgáltató és Kereskedelmi\Asztal\Projects\SeTestsVS\main_combined.py", line 11, in <module>
+	[8] ROOT:    Run(json)
+
+
+DATE: 2023-08-09
 -------------------------------------
 
 

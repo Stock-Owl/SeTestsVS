@@ -333,7 +333,7 @@ class Core:
 
             match locator:
                 case "css_selector":
-                    element =  driver.find_element(By.CSS_SELECTOR, value)
+                    element =  driver.find_element(By.ECTOR, value)
                 case "xpath":
                     element =  driver.find_element(By.XPATH, value)
                 case _:

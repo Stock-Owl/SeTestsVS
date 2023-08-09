@@ -130,9 +130,9 @@
             "backup_of": null,
             "actions":{
                 "1":{
-                "type": "wait",
-                "break": false,
-                "amount": 1500
+                    "type": "wait",
+                    "break": false,
+                    "amount": 1500
                 },
                 "2":{
                     "type": "send_keys",
