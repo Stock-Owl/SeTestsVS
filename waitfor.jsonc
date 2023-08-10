@@ -1,0 +1,68 @@
+// Only examples. Not executable
+{
+    "title_matches":
+    {
+        "type": "wait_for",
+        "break": false,
+        "timeout": 10000,
+        "frequency": 1000,
+        "condition": "title_matches",
+        "title": "some title"
+    },
+    "title_contains":
+    {
+        "type": "wait_for",
+        "break": false,
+        "timeout": 10000,
+        "frequency": 1000,
+        "condition": "title_contains",
+        "title_sub": "some" // sub stands for substring
+    },
+    "url_matches":
+    {
+        "type": "wait_for",
+        "break": false,
+        "timeout": 10000,
+        "frequency": 1000,
+        "condition": "url_matches",
+        "url": "some url"
+    },
+    "url_contains":
+    {
+        "type": "wait_for",
+        "break": false,
+        "timeout": 10000,
+        "frequency": 1000,
+        "condition": "url_contains",
+        "url_sub": "some"   // sub stands for substring
+    },
+    "alert_present":
+    {
+        "type": "wait_for",
+        "break": false,
+        "timeout": 10000,
+        "frequency": 1000,
+        "condition": "alert_present"
+    },
+    // element requiring stuff
+    "element_exists":
+    {
+        "type": "wait_for",
+        "break": false,
+        "timeout": 10000,
+        "frequency": 1000,
+        "condition": "element_exists",
+        "locator": "xpath",
+        "value": "some xpath"
+    },
+    "element_visible":
+    {
+        "type": "wait_for",
+        "break": false,
+        "timeout": 10000,
+        "frequency": 1000,
+        "condition": "element_visible",
+        "locator": "xpath",
+        "value": "some xpath"
+    }
+}
