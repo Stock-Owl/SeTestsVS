@@ -7,6 +7,7 @@
             "active": true,
             "path": "./JS.log",
             "create_path": true,
+            "terminal_mode": true,
             "refresh_rate": 1000,
             "retry_timeout": 1000
         }
@@ -62,9 +63,8 @@
             "break": false,
             "commands":
             [
-                "console.log('Anyád')",
-                "for(let i = 0; i < 5; i++){console.log(i);}",
-                "document.getElementById('myid').innerHTML = 'valami'"
+                "console.log('Hello World')",
+                "for(let i = 0; i < 5; i++){console.log(i);}"
             ]
         },
         "6":
@@ -78,70 +78,50 @@
             "type": "wait_for",
             "break": false,
             "condition": "loaded",
+            "xpath": "some_xpath",
             "frequency": 1000,
-            "timeout": 10000,
-            "single": true,
-            "diplayed": null,
-            "enabled": null,
-            "selected": null,
-            "realtive": null,
-            "element":
-            {
-                "type": "element",
-                "locator": "name",
-                "value": "myname",
-                "element": null
-            }
+            "timeout": 10000
         },
         "8":
         {
             "type": "click",
             "break": false,
             "single": true,
-            "diplayed": null,
+            "displayed": null,
             "enabled": null,
             "selected": null,
-            "element":
-            {
-                "type": "element",
-                "locator": "name",
-                "value": "myname",
-                "element": null
-            }
+            "locator": "name",
+            "value": "myname"
         },
         "9":
         {
             "type": "send_keys",
             "break": false,
             "single": true,
-            "diplayed": null,
+            "displayed": null,
             "enabled": null,
             "selected": null,
-            "realtive": null,
-            "element":
-            {
-                "type": "element",
-                "locator": "name",
-                "value": "myname",
-                "element": null
-            }
+            "keys": "",
+            "locator": "xpath",
+            "value": "some_xpath"
         },
         "10":
         {
             "type": "clear",
             "break": false,
             "single": true,
-            "diplayed": null,
+            "displayed": null,
             "enabled": null,
             "selected": null,
-            "realtive": null,
-            "element":
-            {
-                "type": "element",
-                "locator": "name",
-                "value": "myname",
-                "element": null
-            }
+            "locator": "xpath",
+            "value": "some_xpath"
+        },
+        "11":
+        {
+            "type": "switch_to_iframe",
+            "break": false,
+            "locator": "xpath",
+            "value": "some_xpath"
         }
     }
 }
