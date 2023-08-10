@@ -1,0 +1,127 @@
+{
+    "browser": "chrome",
+    "options":
+    {
+        "log_JS": 
+        {
+            "active": true,
+            "path": "./JS.log",
+            "create_path": true,
+            "terminal_mode": true,
+            "refresh_rate": 1000,
+            "retry_timeout": 1000
+        }
+    },
+    "driver_options":
+    {
+        "options":
+        {
+            "page_load_startegy": "normal",
+            "accept_insecure_certs": false,
+            "timeout":
+            {
+                "type": "pageLoad",
+                "value": 300000
+            },
+            "unhandled_prompt_behavior": "dismiss and notify",
+            "keep_browser_open": true,
+            "browser_arguments": []
+        },
+        "service":
+        {
+            "log_path": ".",
+            "arguments": []
+        }
+    },
+    
+    "actions":
+    {
+        "1" :
+        {
+            "type": "goto",
+            "break": false,
+            "url": "https://google.com"
+        },
+        "2":
+        {
+            "type": "back",
+            "break": false
+        },
+        "3":
+        {
+            "type": "forward",
+            "break": false
+        },
+        "4":
+        {
+            "type": "refresh",
+            "break": false
+        },
+        "5":
+        {
+            "type": "js_execute",
+            "break": false,
+            "commands":
+            [
+                "console.log('Hello World')",
+                "for(let i = 0; i < 5; i++){console.log(i);}"
+            ]
+        },
+        "6":
+        {
+            "type": "wait",
+            "break": false,
+            "amount": 1000
+        },
+        "7":
+        {
+            "type": "wait_for",
+            "break": false,
+            "condition": "loaded",
+            "xpath": "some_xpath",
+            "frequency": 1000,
+            "timeout": 10000
+        },
+        "8":
+        {
+            "type": "click",
+            "break": false,
+            "single": true,
+            "displayed": null,
+            "enabled": null,
+            "selected": null,
+            "locator": "name",
+            "value": "myname"
+        },
+        "9":
+        {
+            "type": "send_keys",
+            "break": false,
+            "single": true,
+            "displayed": null,
+            "enabled": null,
+            "selected": null,
+            "keys": "",
+            "locator": "xpath",
+            "value": "some_xpath"
+        },
+        "10":
+        {
+            "type": "clear",
+            "break": false,
+            "single": true,
+            "displayed": null,
+            "enabled": null,
+            "selected": null,
+            "locator": "xpath",
+            "value": "some_xpath"
+        },
+        "11":
+        {
+            "type": "switch_to_iframe",
+            "break": false,
+            "locator": "xpath",
+            "value": "some_xpath"
+        }
+    }
+}
