@@ -399,4 +399,7 @@ FodyWeavers.xsd
 
 test.py
 run.py
-*/logs/*
+/*logs*/
+*/vsinstaller/*
+wininstaller.cpp
+wininstaller.exe
