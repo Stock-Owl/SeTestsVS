@@ -104,6 +104,7 @@ class Core:
             driver: ChromeDriver
             driver_options_ =  loaded_dict["driver_options"]
             global_options = loaded_dict["options"]
+            auto_exit_iframes = globals["auto_exit_iframes"]
             # print(loaded_dict)
             units: dict = loaded_dict["units"]
 
@@ -242,7 +243,8 @@ class Core:
                                     isSingle = action['single'],
                                     isDisplayed = action['displayed'],
                                     isEnabled = action['enabled'],
-                                    isSelected = action['selected'])
+                                    isSelected = action['selected'],
+                                    autoExitIframes = auto_exit_iframes)
                             case "send_keys":
                                 Core.Chrome.ElementAction(
                                     driver,
@@ -253,7 +255,8 @@ class Core:
                                     isSingle = action['single'],
                                     isDisplayed = action['displayed'],
                                     isEnabled = action['enabled'],
-                                    isSelected = action['selected'])
+                                    isSelected = action['selected'],
+                                    autoExitIframes = auto_exit_iframes)
                             case "clear":
                                 Core.Chrome.ElementAction(
                                     driver,
@@ -263,7 +266,14 @@ class Core:
                                     isSingle = action['single'],
                                     isDisplayed = action['displayed'],
                                     isEnabled = action['enabled'],
-                                    isSelected = action['selected'])
+                                    isSelected = action['selected'],
+                                    autoExitIframes = auto_exit_iframes)
+                            case "switch_to_iframe":
+                                Core.Chrome.iframe_action(driver)
+                            case "leave_iframe":
+                                Core.Chrome.iframe_leave_full(driver)
+                            case "leave_sub_iframe":
+                                Core.Chrome.iframe_leave_sub(driver)
                             case _:
                                 action_type = action['type']
                                 Support.log_proc(parent_log_path, f"Unknown action \'{action_type}\'")
@@ -412,7 +422,16 @@ class Core:
                     wait.until(expected)
                 case _:
                     raise ValueError(f"\'{condition}\' is not a valid condition to await")
-        
+
+        def iframe_switch(driver: ChromeDriver):
+            iframe = driver.find_element(By.CSS_SELECTOR, "iframe")
+            driver.switch_to_.iframe(iframe)
+
+        def iframe_leave_full(driver: ChromeDriver):
+            driver.switch_to.default_content
+
+        def iframe_leave_sub(driver):
+            driver.switch_to.parentFrame
         # PART FUNCS
 
         def matchElement(driver: ChromeDriver,
@@ -513,8 +532,8 @@ class Core:
                         result.clear()
                     case _:
                         raise ValueError("Invalid action type")
-                    
-                driver.switch_to.parent_frame()     #if there was an iframe, this goes back to the top of the frame
+                if action_kwargs["autoExitIframes"]:
+                    driver.switch_to.parent_frame()     #if there was an iframe, this goes back to the top of the frame
 
             elif isSingle == False:
                 results = Core.Chrome.matchElements(driver, **action_kwargs)
@@ -532,9 +551,9 @@ class Core:
                         case _:
                             raise ValueError("Invalid action type")
                         
+                if action_kwargs["autoExitIframes"]:
+                    driver.switch_to.parent_frame()     #if there was an iframe, this goes back to the top of the frame
 
-                driver.switch_to.parent_frame()     #if there was an iframe, this goes back to the top of the frame
-                    
         def execute_js(
             driver: ChromeDriver,
             commands: list[str],
