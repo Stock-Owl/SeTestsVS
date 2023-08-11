@@ -30,7 +30,7 @@ A `refresh rate` és a `retry timeout` értéke alapértelmezett esetben 1s / **
 
 ### Driver beállítások beállítások:
 
-Nem nyulka piszka, mert a kurva anyád!
+semmi
 
 A `DefaultOptions()` beolvassa ezeket.
 
