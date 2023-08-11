@@ -1,5 +1,5 @@
 {
-    "browser": "chrome",
+    "browser": ["chrome"],
     "options":
     {
         "log_JS": 
@@ -23,7 +23,8 @@
         },
         "unhandled_prompt_behavior": "dismiss and notify",
         "keep_browser_open": true,
-        "browser_arguments": []
+        "browser_arguments": [],
+        "service_arguments": []
     },
     
     "units":
