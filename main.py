@@ -1,4 +1,4 @@
 from core import Core
-Run = Core.Chrome.RunDriver
+Run = Core.RunChromeDriver
 json = './run.json'
 Run(json)
