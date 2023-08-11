@@ -309,7 +309,6 @@ class Core:
         driver: ChromeDriver
         driver_options_ =  loaded_dict["driver_options"]
         global_options = loaded_dict["options"]
-        auto_exit_iframes = global_options["auto_exit_iframes"]
         # print(loaded_dict)
 
         units: dict = loaded_dict["units"]
@@ -446,8 +445,7 @@ class Core:
                                 isSingle = action['single'],
                                 isDisplayed = action['displayed'],
                                 isEnabled = action['enabled'],
-                                isSelected = action['selected'],
-                                autoExitIframes = auto_exit_iframes)
+                                isSelected = action['selected'])
                         case "send_keys":
                             Core.ElementAction(
                                 driver,
@@ -458,8 +456,7 @@ class Core:
                                 isSingle = action['single'],
                                 isDisplayed = action['displayed'],
                                 isEnabled = action['enabled'],
-                                isSelected = action['selected'],
-                                autoExitIframes = auto_exit_iframes)
+                                isSelected = action['selected'])
                         case "clear":
                             Core.ElementAction(
                                 driver,
@@ -469,14 +466,7 @@ class Core:
                                 isSingle = action['single'],
                                 isDisplayed = action['displayed'],
                                 isEnabled = action['enabled'],
-                                isSelected = action['selected'],
-                                autoExitIframes = auto_exit_iframes)
-                        case "switch_to_iframe":
-                            Core.iframe_action(driver)
-                        case "leave_iframe":
-                            Core.iframe_leave_full(driver)
-                        case "leave_sub_iframe":
-                            Core.iframe_leave_sub(driver)
+                                isSelected = action['selected'])
                         case _:
                             action_type = action['type']
                             Support.LogProc(parent_log_path, f"Unknown action \'{action_type}\'")
@@ -652,15 +642,6 @@ class Core:
                 # print(f"Error: the command {command} was incorrect")
                 Support.LogJS(path_, log_JS_args, e, index=0, terminal_mode=terminal_mode)
 
-    def iframe_switch(driver: ChromeDriver | FirefoxDriver):
-        iframe = driver.find_element(By.CSS_SELECTOR, "iframe")
-        driver.switch_to_.iframe(iframe)
-
-    def iframe_leave_full(driver: ChromeDriver | FirefoxDriver):
-        driver.switch_to.default_content
-
-    def iframe_leave_sub(driver: ChromeDriver | FirefoxDriver):
-        driver.switch_to.parentFrame
     # PART FUNCS
     def MatchElement(
             driver: ChromeDriver | FirefoxDriver,
@@ -764,8 +745,8 @@ class Core:
                     result.clear()
                 case _:
                     raise ValueError("Invalid action type") 
-            if action_kwargs["autoExitIframes"]:                
-                driver.switch_to.parent_frame()     #if there was an iframe, this goes back to the top of the frame
+                                   
+            driver.switch_to.parent_frame()     #if there was an iframe, this goes back to the top of the frame
 
         elif isSingle == False:
             results = Core.MatchElements(driver, **action_kwargs)
@@ -781,8 +762,8 @@ class Core:
                         result.clear()
                     case _:
                         raise ValueError("Invalid action type")
-            if action_kwargs["autoExitIframes"]:         
-                driver.switch_to.parent_frame()     #if there was an iframe, this goes back to the top of the frame 
+                                          
+            driver.switch_to.parent_frame()     #if there was an iframe, this goes back to the top of the frame 
 
     def CheckDriverExists(driver: object, omit_exceptions: bool = True) -> None | bool | Exception:
         try:
