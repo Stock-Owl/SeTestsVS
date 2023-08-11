@@ -15,7 +15,7 @@ from json import loads
 import multiprocessing as mp
 
 # V.1.0
-#                                                                               20 / 21
+#                                                                               20 / 21 + 1
 # TODO: Kitalálni, hogy vannak az argumentumok                                  ✅  1
 # TODO: Megszerelni a random useless conversionöket a JSON-ből                  ✅  2
 # TODO: Relative locators                                                       ❌  NAH FUCK that shit
@@ -39,13 +39,14 @@ import multiprocessing as mp
 # TODO: Units and binding                                                       ✅  13
 # TODO: Beautify logging messages                                               ✅  14
 # TODO: Implement breaks                                                        ✅  15
-# TODO: IF the logging is ready, try to use a decorator insted of the static    ❌  16
+# TODO: IF the logging is ready, try to use a decorator insted of the static    ❓   16
 # TODO: Finish wait_for implementation                                          ✅  17
 # TODO: auto_logJS needs to be patched so that it writes the logs
 # even if the driver exits while it tries to write into the intermediate file   ✅  18
 # TODO: Fix logJS so that it checks for log arg type and switches               ✅  19
 # TODO: add a final append to tlogs after RunDrvier has exited                  ✅  20
 # TODO: add backups                                                             ✅  21
+# TODO: the multiprocessing funy                                                ❌  22
 
 # null nem lesz, mert C# for whatever reason, úgyhogy helyette ez van!
 # Not used yet
