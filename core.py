@@ -117,6 +117,7 @@ class Core:
             service_args: list[str] = driver_options_["service_arguments"]
             service = FirefoxService(service_args = service_args, log_path = log_path)
             opts = FirefoxOptions()
+            
             """
             3 types of page load startegies are available:
             * normal
@@ -125,10 +126,12 @@ class Core:
             Throws a ValueError if an unsupported page load startegy type is given.
             """
             opts.page_load_strategy = driver_options_["page_load_strategy"]
+            
             """
             Accept insecure cert(ification)s is either true or false. Not case sensitive
             """
             opts.accept_insecure_certs = driver_options_["accept_insecure_certs"]  # should be a bool
+            
             """
             3 types of timeouts are available:
             * impilicit
@@ -138,6 +141,7 @@ class Core:
             The value of the timeout is the timespan [of the timteout] in MILLISECONDS (ms)
             """
             opts.timeouts = {driver_options_["timeout"]["type"]: driver_options_["timeout"]["value"]}
+            
             """
             5 types of behaviors are available:
             * dismiss
@@ -148,17 +152,23 @@ class Core:
             Throws a ValueError if an unsupported behavior type is given.
             """
             opts.unhandled_prompt_behavior = driver_options_["unhandled_prompt_behavior"]
+            
             for option in driver_options_["browser_arguments"]:
                 opts.add_argument(option)
+
         # create the chrome driver (as bare bones as it gets)
         elif driver_options_ == Core.default_driver_options_dict_:
             defaults: tuple[FirefoxOptions, FirefoxService] = Core.DefaultFirefoxOptions()
             opts = defaults[0]
             service = defaults[1]
+
         else:
             Support.LogError(parent_log_path, "Some shit got fucked up. But I have no clue what exactly.")
+
         driver = FirefoxDriver(options = opts, service = service)
+
         Support.ClearAllLogs(parent_log_path) # Átmegy takarítónőbe... minden eltűnik
+        
         active_binds: list[str] = []
         for  uname, unit in units.items():
             try:
@@ -282,24 +292,30 @@ class Core:
             log_line: str = "You either give a path to the json file or parse the json string raw, bitch.\nNOT both! Which one am I supposed to use, you expired coupon?!"
             Support.LogError("./logs", log_line)
             return None
+        
         elif path is None:
             loaded_dict = loads(json_string)
+
         else:
             try:
                 with open(path, 'r', encoding='utf-8') as f:
                     loaded_dict = loads(f.read())
+
             except FileNotFoundError:
                 log_line: str = "Invalid path, file not found"
                 Support.LogError("./logs", log_line)
-                return None                
+                return None
+                      
         driver: ChromeDriver
         driver_options_ =  loaded_dict["driver_options"]
         global_options = loaded_dict["options"]
         # print(loaded_dict)
+
         units: dict = loaded_dict["units"]
         LogJSArgs = global_options["log_JS"]
         parent_log_path: str = global_options["parent_log_path"]
         terminal_mode: bool = global_options["terminal_mode"]
+
         # create the chrome driver with arguments
         if driver_options_ != Core.default_driver_options_dict_:
             # service_: dict = driver_options_["service"]                
@@ -309,6 +325,7 @@ class Core:
             # Akkor, a kurva anyját (:
             # service = ChromeService(service_args = service_args, log_path = log_path)
             opts = ChromeOptions()
+
             """
             3 types of page load startegies are available:
             * normal
@@ -317,10 +334,12 @@ class Core:
             Throws a ValueError if an unsupported page load startegy type is given.
             """
             opts.page_load_strategy = driver_options_["page_load_strategy"]
+
             """
             Accept insecure cert(ification)s is either true or false. Not case sensitive
             """
             opts.accept_insecure_certs = driver_options_["accept_insecure_certs"]  # should be a bool
+
             """
             3 types of timeouts are available:
             * impilicit
@@ -330,6 +349,7 @@ class Core:
             The value of the timeout is the timespan [of the timteout] in MILLISECONDS (ms)
             """
             opts.timeouts = {driver_options_["timeout"]["type"]: driver_options_["timeout"]["value"]}
+
             """
             5 types of behaviors are available:
             * dismiss
@@ -340,27 +360,35 @@ class Core:
             Throws a ValueError if an unsupported behavior type is given.
             """
             opts.unhandled_prompt_behavior = driver_options_["unhandled_prompt_behavior"]
+
             if driver_options_["keep_browser_open"] != "":
                 opts.add_experimental_option("detach", driver_options_["keep_browser_open"])
+
             for option in driver_options_["browser_arguments"]:
                 opts.add_argument(option)
+
         # create the chrome driver (as bare bones as it gets)
         elif driver_options_ == Core.default_driver_options_dict_:
             opts = Core.DefaultChromeOptions()
-            # NOT used. see line 110
+            # NOT used. see line 308
             # service = Core.DefaultService()
+
         else:
             Support.LogError(parent_log_path, "Some shit got fucked up. But I have no clue what exactly.")
+
         # service commented out bc chromdriver shits itslef, ig
         driver = ChromeDriver(options = opts)   # , service = service
         # 
         # clears the previous log filed
         Support.ClearAllLogs(parent_log_path)
+
         active_bindings: list[str] = []
         failed_units: list[str] = []
+
         for uname, unit in units.items():
             try:
                 backup = unit["backup_of"]
+
                 if backup is not None:
                     # if the backup is target failed, then run as normal
                     if backup in failed_units:
@@ -370,20 +398,23 @@ class Core:
                         log_line = f"\'{uname}\' backup skipped because backup target unit sucessfully executed\n"
                         Support.LogProc(parent_log_path, log_line)
                         continue
+
                 # elif, because if it's an inactive backup, it doesn't need to check for bindings
                 elif uname in active_bindings:
                     log_line = f"\'{uname}\' skipped because previous unit failed\n"
                     Support.LogProc(parent_log_path, log_line)
                     continue
+
                 actions = unit['actions']
                 for aname, action in actions.items():
-                    print(action)
+                    # print(action)
                     if action["break"]:
                         if terminal_mode:
                             input("press enter to resume")
                         else:
                             pass   # majd ide kell egy intermediate comms file megint mint a JS-nél
                         Support.LogProc(parent_log_path, "Breakpoint")
+
                     match action["type"]:
                         case "goto":
                             url = action["url"]
