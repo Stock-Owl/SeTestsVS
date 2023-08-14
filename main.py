@@ -1,4 +1,4 @@
 from core import Core
-Run = Core.RunChromeDriver
+Run = Core.RunFirefoxDriver
 json = './run.json'
 Run(json)
