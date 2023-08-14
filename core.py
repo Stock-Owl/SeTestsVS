@@ -14,10 +14,9 @@ from support import Support
 
 from traceback import format_exc, format_stack
 from json import loads
-import multiprocessing as mp
 
 # V.1.0
-#                                                                               20 / 21 + 1
+#                                                                               20 / 22 + 1
 # TODO: Kitalálni, hogy vannak az argumentumok                                  ✅  1
 # TODO: Megszerelni a random useless conversionöket a JSON-ből                  ✅  2
 # TODO: Relative locators                                                       ❌  NAH FUCK that shit
@@ -49,6 +48,7 @@ import multiprocessing as mp
 # TODO: add a final append to tlogs after RunDrvier has exited                  ✅  19
 # TODO: add backups                                                             ✅  20
 # TODO: multiprocessing funny (O = O(n)/2)                                      ❌  21
+# TODO: FIrefoxDriver typecheck in CheckDriverExists so it won't cry abt it     ❌  22
 
 # null nem lesz, mert C# for whatever reason, úgyhogy helyette ez van!
 # Not used yet
@@ -69,7 +69,8 @@ class Core:
         "browser_arguments": [],
         "service_arguments": []
     }
-    def DefaultFirefoxOptions(service_logpath: str) -> tuple[FirefoxOptions, FirefoxService]:
+
+    def DefaultFirefoxOptions() -> FirefoxOptions:
         from copy import copy
         defaults = copy(Core.default_driver_options_dict_)
         options = FirefoxOptions()
@@ -77,12 +78,11 @@ class Core:
         options.accept_insecure_certs = defaults["accept_insecure_certs"]
         options.timeouts = {defaults["timeout"]["type"]: defaults["timeout"]["value"]}
         options.unhandled_prompt_behavior = defaults["unhandled_prompt_behavior"]
-        options.add_experimental_option("detach", defaults["keep_browser_open"])
+        # options.add_experimental_option("detach", defaults["keep_browser_open"])  not present, apparently
         for option in defaults["browser_arguments"]:
                 options.add_argument(option)
-        service_args: list[str] = defaults["service_arguments"]
-        service = FirefoxService(service_args = service_args, log_path = service_logpath)
-        return (options, service)        
+
+        return options       
     
     def RunFirefoxDriver(path: str | None = None, json_string: str | None = None) -> None:
         # loads json file or loads the string and instanciates the actions par and the 
@@ -100,22 +100,21 @@ class Core:
             except FileNotFoundError:
                 log_line: str = "Invalid path, file not found"
                 Support.LogError("./logs", log_line)
-                return None                
+                return None     
+                       
         driver: FirefoxDriver
         driver_options_ =  loaded_dict["driver_options"]
         global_options = loaded_dict["options"]
+
         #print(loaded_dict)
         units: dict = loaded_dict["units"]                
         LogJSArgs = global_options["log_JS"]
-        exception_log_path = global_options["exception_log_path"]
         parent_log_path = global_options["parent_log_path"]
         terminal_mode = global_options["terminal_mode"]
+
         # create the chrome driver with arguments
         if driver_options_ != Core.default_driver_options_dict_:
             # creates the firefox service since for firefox that's a reqirement
-            log_path: str = f"{parent_log_path}/service.log"
-            service_args: list[str] = driver_options_["service_arguments"]
-            service = FirefoxService(service_args = service_args, log_path = log_path)
             opts = FirefoxOptions()
             
             """
@@ -158,14 +157,13 @@ class Core:
 
         # create the chrome driver (as bare bones as it gets)
         elif driver_options_ == Core.default_driver_options_dict_:
-            defaults: tuple[FirefoxOptions, FirefoxService] = Core.DefaultFirefoxOptions()
-            opts = defaults[0]
-            service = defaults[1]
+            opts = Core.DefaultFirefoxOptions()
 
         else:
             Support.LogError(parent_log_path, "Some shit got fucked up. But I have no clue what exactly.")
 
-        driver = FirefoxDriver(options = opts, service = service)
+        # service = FirefoxService()
+        driver = FirefoxDriver(options = opts)  # , service = service
 
         Support.ClearAllLogs(parent_log_path) # Átmegy takarítónőbe... minden eltűnik
         
@@ -237,7 +235,7 @@ class Core:
                         case _:
                             action_type = action['type']
                             Support.LogProc(parent_log_path, f"Unknown action \'{action_type}\'")                                
-                    log_line = f"[Unit:{uname}][Action:{index}] of type \'{action['type']}\' successfully executed"
+                    log_line = f"[U:{uname}][A:{index}] of type \'{action['type']}\' successfully executed"
                     Support.LogProc(parent_log_path, log_line)
             except:
                 bindings = unit['bindings']
@@ -253,10 +251,11 @@ class Core:
                         active_binds.append(bindings)
                     else:
                         # wrong elmement type for `bindings` (should be string)
-                        Support.LogError(parent_log_path, f"Parameter \'bindings\' must be of type str (string) not {type(bindings)}")                    
-                #Support.LogError(parent_log_path, "----------------------------------------------------------------\n")
-                #Support.LogError(parent_log_path, f"{format_exc()}\nStack:\n", time_disabled=True)
-                # Belezavarnak a log-ba való hibakiírásnál.
+                        Support.LogError(parent_log_path, f"Parameter \'bindings\' must be of type str (string) not {type(bindings)}")
+
+                Support.LogError(parent_log_path, "❌ ERROR:\n----------------------------------------------------------------\n")
+                Support.LogError(parent_log_path, f"{format_exc()}Stack:\n", time_disabled=True)
+
                 stack = format_stack()
                 # -1 to exclude this expression from stack
                 for x in range(len(stack)-1):
@@ -264,8 +263,8 @@ class Core:
                     origin = stack_parts[0]
                     root = stack_parts[1]
                     Support.LogError(parent_log_path, f"\t[{x}] ORIGIN:\t{origin}\n\t[{x}] ROOT: {root}\t\n", time_disabled=True)
-                #Support.LogError(parent_log_path, "----------------------------------------------------------------\n", time_disabled=True)
-                # Úgyszintén belezavar
+                Support.LogError(parent_log_path, "----------------------------------------------------------------\n", time_disabled=True)
+                
         if driver_options_["keep_browser_open"]:
             pass
         else:
@@ -494,8 +493,8 @@ class Core:
                         # wrong elmement type for `bindings` (should be string)
                         Support.LogError(parent_log_path, f"Parameter \'bindings\' must be of type str (string) not {type(bindings)}")
 
-                Support.LogError(parent_log_path, "----------------------------------------------------------------\n")
-                Support.LogError(parent_log_path, f"{format_exc()}\nStack:\n", time_disabled=True)
+                Support.LogAll(parent_log_path, "❌ ERROR:\n----------------------------------------------------------------\n")
+                Support.LogError(parent_log_path, f"{format_exc()}Stack:\n", time_disabled=True)
                 stack = format_stack()
 
                 # -1 to exclude this expression from stack
@@ -504,7 +503,7 @@ class Core:
                     origin = stack_parts[0]
                     root = stack_parts[1]
                     Support.LogError(parent_log_path, f"\t[{x}] ORIGIN:\t{origin}\n\t[{x}] ROOT:{root}\n\n", time_disabled=True)
-                Support.LogError(parent_log_path, "----------------------------------------------------------------\n", time_disabled=True)
+                Support.LogAll(parent_log_path, "----------------------------------------------------------------\n", time_disabled=True)
         
         #
         if driver_options_["keep_browser_open"]:
