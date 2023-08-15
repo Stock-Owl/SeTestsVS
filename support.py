@@ -128,7 +128,7 @@ class Support:
         try:
             assert Support.exists(path)
         except:
-            with open(path, mode='w', enocdintóg='utf-8') as f:
+            with open(path, mode='w', enocoding='utf-8') as f:
                 f.write("")
 
         processed: list[str] = []

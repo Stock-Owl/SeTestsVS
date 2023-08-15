@@ -4,7 +4,7 @@ from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.firefox.webdriver import WebDriver as FirefoxDriver
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
-from selenium.webdriver.firefox.service import Service as FirefoxService
+# from selenium.webdriver.firefox.service import Service as FirefoxService
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
@@ -15,8 +15,12 @@ from support import Support
 from traceback import format_exc, format_stack
 from json import loads
 
+from multiprocessing import Process, Array
+from ctypes import c_char_p as cstring
+from copy import copy
+
 # V.1.0
-#                                                                               20 / 22 + 1
+#                                                                               20 / 23 + 1
 # TODO: Kitalálni, hogy vannak az argumentumok                                  ✅  1
 # TODO: Megszerelni a random useless conversionöket a JSON-ből                  ✅  2
 # TODO: Relative locators                                                       ❌  NAH FUCK that shit
@@ -49,6 +53,7 @@ from json import loads
 # TODO: add backups                                                             ✅  20
 # TODO: multiprocessing funny (O = O(n)/2)                                      ❌  21
 # TODO: FIrefoxDriver typecheck in CheckDriverExists so it won't cry abt it     ❌  22
+# TODO: add test names to JSON and combined logs                                ❌  23
 
 # null nem lesz, mert C# for whatever reason, úgyhogy helyette ez van!
 # Not used yet
@@ -66,9 +71,235 @@ class Core:
         },
         "unhandled_prompt_behavior": "dismiss and notify",
         "keep_browser_open": True,
-        "browser_arguments": [],
-        "service_arguments": []
+        "chrome_arguments": [],
+        "firefox_arguments": []
     }
+
+    # returns the default options
+    def DefaultOptions() -> tuple[ChromeOptions, FirefoxOptions]:
+        defaults = copy(Core.default_driver_options_dict_)
+        chrome = ChromeOptions()
+        firefox = FirefoxOptions()
+
+        chrome.page_load_strategy = defaults["page_load_strategy"]
+        firefox.page_load_strategy = defaults["page_load_strategy"]
+
+        chrome.accept_insecure_certs = defaults["accept_insecure_certs"]
+        firefox.accept_insecure_certs = defaults["accept_insecure_certs"]
+
+        chrome.timeouts = {defaults["timeout"]["type"]: defaults["timeout"]["value"]}
+        firefox.timeouts = {defaults["timeout"]["type"]: defaults["timeout"]["value"]}
+
+        chrome.unhandled_prompt_behavior = defaults["unhandled_prompt_behavior"]
+        firefox.unhandled_prompt_behavior = defaults["unhandled_prompt_behavior"]
+
+        chrome.add_experimental_option("detach", defaults["keep_browser_open"])
+
+        for option in defaults["chrome_arguments"]:
+                chrome.add_argument(option)
+        for option in defaults["firefox_arguments"]:
+                firefox.add_argument(option)
+
+        return (chrome, firefox)
+
+
+    # loads options
+    def LoadOptions(options: dict[str]) -> tuple[ChromeOptions, FirefoxOptions]:
+        """
+        Loads the options from the given dict into both a ChromeOptions and FirefoxOptions object.
+
+        Returns a tuple[2]:
+        * [0]: ChromeOptions
+        * [1]: FirefoxOptions
+        """
+
+        chrome = ChromeOptions()
+        firefox = FirefoxOptions()
+
+        """
+        3 types of page load startegies are available:
+        * normal
+        * eager
+        * none
+        Throws a ValueError if an unsupported page load startegy type is given.
+        """
+        chrome.page_load_strategy = options["page_load_strategy"]
+        firefox.page_load_strategy = options["page_load_strategy"]
+
+        """
+        Accept insecure cert(ification)s is either true or false. Not case sensitive
+        """
+        chrome.accept_insecure_certs = options["accept_insecure_certs"]  # should be a bool
+        firefox.accept_insecure_certs = options["accept_insecure_certs"]  # should be a bool
+
+        """
+        3 types of timeouts are available:
+        * impilicit
+        * pageLoad
+        * script
+        Throws a ValueError if an unsupported timeout type is given.
+        The value of the timeout is the timespan [of the timteout] in MILLISECONDS (ms)
+        """
+        chrome.timeouts = {options["timeout"]["type"]: options["timeout"]["value"]}
+        firefox.timeouts = {options["timeout"]["type"]: options["timeout"]["value"]}
+
+        """
+        5 types of behaviors are available:
+        * dismiss
+        * accept
+        * dismiss and notify
+        * accept and notify
+        * ignore
+        Throws a ValueError if an unsupported behavior type is given.
+        """
+        chrome.unhandled_prompt_behavior = options["unhandled_prompt_behavior"]            
+        firefox.unhandled_prompt_behavior = options["unhandled_prompt_behavior"]            
+
+        # sets the keep browser open argument
+        if options["keep_browser_open"] != "":
+            chrome.add_experimental_option("detach", options["keep_browser_open"])
+
+        # passes the browser arguments individually
+        for option in options["chrome_arguments"]:
+            chrome.add_argument(option)
+        for option in options["firefox_arguments"]:
+            firefox.add_argument(option)
+
+        return (chrome, firefox)
+
+    # should be preloaded JSON ergo dictionary
+    def RunDrivers(json: dict[str]):
+        browsers: list[str] = []
+        for browser in json['browsers']:
+            browsers.append(browser.lower())
+
+        driver_options: dict = json["driver_options"]
+
+        if driver_options != Core.default_driver_options_dict_:
+            browser_options: tuple[ChromeOptions, FirefoxOptions] = Core.LoadOptions(driver_options)
+        
+        else:
+            browser_options: tuple[ChromeOptions, FirefoxOptions] = Core.DefaultOptions()
+
+        units = json["units"]
+        options: dict = json["options"]
+        parent_log_path = options["parent_log_path"]
+        log_js_args = options["log_JS"]
+        terminal_mode = options["terminal_mode"]
+
+        processes: list[Process] = []
+        if "chrome" in browsers:
+            # we will probably never need more than 16 (on log's size is 4, therefore 4 * 16 = 64)
+            s_chrome = Array(cstring, 64)
+            parent_log_path = "{}/chrome".format(options["parent_log_path"])
+
+            kwargs: dict = \
+            {
+                "options": browser_options[0],
+                "json": json,
+                "shared_arr": s_chrome,
+                "log_js_args": log_js_args,
+                "parent_log_path": parent_log_path,
+                "terminal_mode": terminal_mode
+            }
+            chrome_exec = Process(target=Core.ChromeExec, kwargs=copy(kwargs))
+            chrome_logger = Process(target= Core.AutoLogger, kwargs=copy(kwargs))
+
+            del kwargs, logger_kwargs
+
+            processes.append(chrome_exec)
+            processes.append(chrome_logger)
+
+        if "firefox" in browsers:
+            # we will probably never need more than 16 (on log's size is 4, therefore 4 * 16 = 64)
+            s_firefox: Array = Array(cstring, 64)
+            parent_log_path = "{}/firefox".format(options["parent_log_path"])
+
+            kwargs: dict = \
+            {
+                "options": browser_options[1],
+                "json": json,
+                "shared_arr": s_firefox,
+                "log_js_args": log_js_args,
+                "parent_log_path": parent_log_path,
+                "terminal_mode": terminal_mode
+            }
+            firefox_exec = Process(target=Core.FirefoxExec , kwargs=copy(kwargs))
+            firefox_logger = Process(target= Core.AutoLogger, kwargs=copy(kwargs))
+
+            del kwargs, logger_kwargs
+
+            processes.append(firefox_exec)
+            processes.append(firefox_logger)
+
+        for process in processes:
+            process.start()
+
+# külön egy host ami spawnoltatja a processeket a respektív optionökkel
+
+
+# külön egy-egy driver runnner function
+# külön autologger function
+
+    def ChromeExec(
+        options: ChromeOptions = None,
+        json: dict[str] = None,
+        shared_arr = Array) -> None:
+        pass
+
+    def FirefoxExec(
+        options: FirefoxOptions = None,
+        json: dict[str] = None,
+        shared_arr = Array) -> None:
+        pass
+
+    def AutoLogger(**kwargs):
+        # will be referenced from support.py (AutoLogJS), placeholder for now
+        pass
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     def DefaultFirefoxOptions() -> FirefoxOptions:
         from copy import copy
@@ -155,7 +386,6 @@ class Core:
             for option in driver_options_["browser_arguments"]:
                 opts.add_argument(option)
 
-        # create the chrome driver (as bare bones as it gets)
         elif driver_options_ == Core.default_driver_options_dict_:
             opts = Core.DefaultFirefoxOptions()
 
