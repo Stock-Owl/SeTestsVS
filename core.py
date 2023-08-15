@@ -109,7 +109,7 @@ class Core:
         #print(loaded_dict)
         units: dict = loaded_dict["units"]                
         LogJSArgs = global_options["log_JS"]
-        parent_log_path = global_options["parent_log_path"]
+        parent_log_path = "{}/firefox".format(global_options["parent_log_path"])
         terminal_mode = global_options["terminal_mode"]
 
         # create the chrome driver with arguments
@@ -312,7 +312,7 @@ class Core:
 
         units: dict = loaded_dict["units"]
         LogJSArgs = global_options["log_JS"]
-        parent_log_path: str = global_options["parent_log_path"]
+        parent_log_path: str = "{}/chrome".format(global_options["parent_log_path"])
         terminal_mode: bool = global_options["terminal_mode"]
 
         # create the chrome driver with arguments
