@@ -1,6 +1,4 @@
-﻿using WebTestGui.Managers;
-
-namespace WebTestGui.Forms
+﻿namespace WebTestGui
 {
     public partial class InfoBox : Form
     {

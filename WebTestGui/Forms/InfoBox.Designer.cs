@@ -1,4 +1,4 @@
-﻿namespace WebTestGui.Forms
+﻿namespace WebTestGui
 {
     partial class InfoBox
     {

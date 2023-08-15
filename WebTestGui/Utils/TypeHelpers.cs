@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace WebTestGui.Utils
+namespace WebTestGui
 {
     public static class TypeHelpers
     {
@@ -42,6 +42,22 @@ namespace WebTestGui.Utils
                 {
                     subClasses.Add(myType.Name);
                 }
+            }
+            return subClasses.ToArray();
+        }
+
+        public static object[] GetAllSubClassesFromInterface<T>()
+        {
+            Type interfaceType = typeof(T);
+            List<object> subClasses = new List<object>();
+
+            var implementingClasses = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(a => a.GetTypes())
+                .Where(t => interfaceType.IsAssignableFrom(t) && !t.IsInterface);
+
+            foreach (var implementingClass in implementingClasses)
+            {
+                subClasses.Add(implementingClass.Name);
             }
             return subClasses.ToArray();
         }

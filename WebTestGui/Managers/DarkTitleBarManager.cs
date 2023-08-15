@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace WebTestGui.Managers
+namespace WebTestGui
 {
     internal class DarkTitleBarManager
     {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Win32;
 
-namespace WebTestGui.Utils
+namespace WebTestGui
 {
     internal static class BrowserHelper
     {
@@ -8,7 +8,7 @@ namespace WebTestGui.Utils
         {
             string chromePath = null;
 
-            using (RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\chrome.exe"))
+            using (RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\chrome.exe")!)
             {
                 if (key != null)
                 {
@@ -23,14 +23,14 @@ namespace WebTestGui.Utils
         {
             string firefoxPath = null;
 
-            using (RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Mozilla\Mozilla Firefox"))
+            using (RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Mozilla\Mozilla Firefox")!)
             {
                 if (key != null)
                 {
                     string path = key.GetValue("CurrentVersion") as string;
                     if (!string.IsNullOrEmpty(path))
                     {
-                        using (RegistryKey pathKey = key.OpenSubKey(path))
+                        using (RegistryKey pathKey = key.OpenSubKey(path)!)
                         {
                             if (pathKey != null)
                             {
