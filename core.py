@@ -20,7 +20,7 @@ from ctypes import c_char_p as cstring
 from copy import copy
 
 # V.1.0
-#                                                                               20 / 23 + 1
+#                                                                               20 / 24 + 1
 # TODO: Kitalálni, hogy vannak az argumentumok                                  ✅  1
 # TODO: Megszerelni a random useless conversionöket a JSON-ből                  ✅  2
 # TODO: Relative locators                                                       ❌  NAH FUCK that shit
@@ -54,6 +54,7 @@ from copy import copy
 # TODO: multiprocessing funny (O = O(n)/2)                                      ❌  21
 # TODO: FIrefoxDriver typecheck in CheckDriverExists so it won't cry abt it     ❌  22
 # TODO: add test names to JSON and combined logs                                ❌  23
+# TODO: add request shit for drivers. Seleniumwire!!! Needs to be implemented!  ❌  24
 
 # null nem lesz, mert C# for whatever reason, úgyhogy helyette ez van!
 # Not used yet
@@ -392,33 +393,33 @@ class Core:
         
         # will be referenced from support.py (AutoLogJS), placeholder for now
         pass
-        
+
     def SharedLogDumper(
         logs: list[dict] = None,
         target: Array = None,
         target_size: int = None) -> None: 
-    
+
         # each log is a dictionary with 4 K-VPs inside
         target_values: list[str] = []
-    
+
         # only process 
         for log in logs:
             for value in log.values():
                 target_values.append(bytes(str(value), 'utf-8'))
-    
+
         if len(target_values) < target_size:
             for i in range(target_size - len(target_values)):
                 target_values.append(bytes("", 'utf-8'))
-    
+
         target[:] = target_values
-    
+
     def SharedLogLoader(root: Array = None) -> list[dict[str]]:
-    
+
         logs: list = []
         keys: tuple = ("level", "message", "source", "timestamp")
         # used only to detect / eleminate empty logs
         empty_log: dict = {"level": '', "message": '', "source": '', "timestamp": ''}
-    
+
         field_index = 0
         log: dict = {}
         for item in root:
@@ -431,7 +432,7 @@ class Core:
             # need to remove the b'' bounds from the item. because when you convert `bytes` to `str` that happens (builtin, I guess) ¯\_(ツ)_/¯
             log[keys[field_index]] = str(item).removeprefix('b\'').removesuffix('\'').removeprefix('b\"').removesuffix('\"')
             field_index += 1
-        
+
         return logs
 
 
