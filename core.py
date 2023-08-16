@@ -15,7 +15,7 @@ from support import Support
 from traceback import format_exc, format_stack
 from json import loads
 
-from multiprocessing import Process, Array
+from multiprocessing import Process, Array, Value
 from ctypes import c_char_p as cstring
 from copy import copy
 
@@ -186,26 +186,28 @@ class Core:
         parent_log_path = options["parent_log_path"]
         log_js_args = options["log_JS"]
         terminal_mode = options["terminal_mode"]
+        keep_browser_open = json["driver_options"]["keep_browser_open"]
 
         processes: list[Process] = []
         if "chrome" in browsers:
             # we will probably never need more than 16 (on log's size is 4, therefore 4 * 16 = 64)
             s_chrome = Array(cstring, 64)
+            s_chrome_state = Value('b', True)
             parent_log_path = "{}/chrome".format(options["parent_log_path"])
 
-            kwargs: dict = \
+            chrome_kwargs: dict = \
             {
                 "options": browser_options[0],
-                "json": json,
+                "units": units,
+                "shared_state": s_chrome_state,
                 "shared_arr": s_chrome,
                 "log_js_args": log_js_args,
                 "parent_log_path": parent_log_path,
-                "terminal_mode": terminal_mode
+                "terminal_mode": terminal_mode,
+                "keep_browser_open": keep_browser_open
             }
-            chrome_exec = Process(target=Core.ChromeExec, kwargs=copy(kwargs))
-            chrome_logger = Process(target= Core.AutoLogger, kwargs=copy(kwargs))
-
-            del kwargs, logger_kwargs
+            chrome_exec = Process(target=Core.ChromeExec, kwargs=copy(chrome_kwargs))
+            chrome_logger = Process(target= Core.AutoLogger, kwargs=copy(chrome_kwargs))
 
             processes.append(chrome_exec)
             processes.append(chrome_logger)
@@ -213,21 +215,22 @@ class Core:
         if "firefox" in browsers:
             # we will probably never need more than 16 (on log's size is 4, therefore 4 * 16 = 64)
             s_firefox: Array = Array(cstring, 64)
+            s_firefox_state = Value('b', True)
             parent_log_path = "{}/firefox".format(options["parent_log_path"])
 
-            kwargs: dict = \
+            firefox_kwargs: dict = \
             {
                 "options": browser_options[1],
-                "json": json,
+                "units": units,
+                "shared_state": s_firefox_state,
                 "shared_arr": s_firefox,
                 "log_js_args": log_js_args,
                 "parent_log_path": parent_log_path,
-                "terminal_mode": terminal_mode
+                "terminal_mode": terminal_mode,
+                "keep_browser_open": keep_browser_open
             }
-            firefox_exec = Process(target=Core.FirefoxExec , kwargs=copy(kwargs))
-            firefox_logger = Process(target= Core.AutoLogger, kwargs=copy(kwargs))
-
-            del kwargs, logger_kwargs
+            firefox_exec = Process(target=Core.FirefoxExec , kwargs=copy(firefox_kwargs))
+            firefox_logger = Process(target= Core.AutoLogger, kwargs=copy(firefox_kwargs))
 
             processes.append(firefox_exec)
             processes.append(firefox_logger)
@@ -243,24 +246,193 @@ class Core:
 
     def ChromeExec(
         options: ChromeOptions = None,
-        json: dict[str] = None,
-        shared_arr = Array) -> None:
+        units: dict[str] = None,
+        shared_state: Value = None,
+        shared_arr: Array = None,
+        terminal_mode: bool = None,
+        keep_browser_open: bool = None,
+        parent_log_path: str = None,
+        log_js_args: dict[str] = None) -> None:
+
         pass
 
     def FirefoxExec(
         options: FirefoxOptions = None,
-        json: dict[str] = None,
-        shared_arr = Array) -> None:
-        pass
+        units: dict[str] = None,
+        shared_state: Value = None,
+        shared_arr: Array = None,
+        terminal_mode: bool = None,
+        keep_browser_open: bool = None,
+        parent_log_path: str = None,
+        log_js_args: dict[str] = None) -> None:
 
-    def AutoLogger(**kwargs):
+        driver = FirefoxDriver(options = options)  # , service = service
+
+        Support.ClearAllLogs(parent_log_path) # Átmegy takarítónőbe... minden eltűnik
+        
+        active_binds: list[str] = []
+        # deepcode ignore AttributeLoadOnNone: <Keyword arguments only set to None to make them a keyword argument. All parameters will be passed from the host funciton>
+        for  uname, unit in units.items():
+            try:
+                if uname in active_binds:
+                    log_line = f"\'{uname}\' skipped because previous unit failed\n"
+                    Support.LogProc(parent_log_path, log_line)
+                    continue    
+                actions = unit['actions']
+                for index, action in actions.items():
+                    print(action)
+                    if action["break"]:
+                        if terminal_mode:
+                            input("press enter to resume")
+                        else:
+                            pass   # majd ide kell egy intermediate comms file megint mint a JS-nél
+                        Support.LogProc(parent_log_path, "Breakpoint")
+                    match action["type"]:
+                        case "goto":
+                            url = action["url"]
+                            Core.Goto(driver, url)
+                        case "back":
+                            Core.Back(driver)
+                        case "forward":
+                            Core.Forward(driver)
+                        case "refresh":
+                            Core.Refresh(driver)
+                        case "js_execute":
+                            commands = action["commands"]
+                            Core.ExecuteJS(driver, commands, log_JS_args=log_js_args)
+                        case "wait":
+                            time = action["amount"]
+                            Core.Wait(driver = driver, time_ = time)
+                        case "wait_for":
+                            Core.WaitFor(driver, action)
+                        case "click":
+                            Core.ElementAction(
+                            driver,
+                            action = 'click',
+                            locator = action['locator'],
+                            value = action['value'],
+                            isSingle = action['single'],
+                            isDisplayed = action['displayed'],
+                            isEnabled = action['enabled'],
+                            isSelected = action['selected'])
+                        case "send_keys":
+                            Core.ElementAction(
+                            driver,
+                            action = 'send_keys',
+                            locator = action['locator'],
+                            value = action['value'],
+                            keys = action['keys'],
+                            isSingle = action['single'],
+                            isDisplayed = action['displayed'],
+                            isEnabled = action['enabled'],
+                            isSelected = action['selected'])
+                        case "clear":
+                            Core.ElementAction(
+                                driver,
+                            action = 'clear',
+                            locator = action['locator'],
+                            value = action['value'],
+                            isSingle = action['single'],
+                            isDisplayed = action['displayed'],
+                            isEnabled = action['enabled'],
+                            isSelected = action['selected'])
+                        case _:
+                            action_type = action['type']
+                            Support.LogProc(parent_log_path, f"Unknown action \'{action_type}\'")
+
+                    log_line = f"[U:{uname}][A:{index}] of type \'{action['type']}\' successfully executed"
+                    Support.LogProc(parent_log_path, log_line)
+
+            except:
+                bindings = unit['bindings']
+                if bindings is not None:
+                    if isinstance(bindings, list):
+                        for binding in bindings:
+                            if isinstance(binding, str):
+                                active_binds.append(binding)
+                            else:
+                                # wrong element type in string list
+                                Support.LogError(parent_log_path, f"Parameters in \'bindings\' must be of type str (string) not {type(binding)}")
+
+                    elif isinstance(bindings, str):
+                        active_binds.append(bindings)
+
+                    else:
+                        # wrong elmement type for `bindings` (should be string)
+                        Support.LogError(parent_log_path, f"Parameter \'bindings\' must be of type str (string) not {type(bindings)}")
+
+                Support.LogError(parent_log_path, "❌ ERROR:\n----------------------------------------------------------------\n")
+                Support.LogError(parent_log_path, f"{format_exc()}Stack:\n", time_disabled=True)
+
+                stack = format_stack()
+                # -1 to exclude this expression from stack
+                for x in range(len(stack)-1):
+                    stack_parts = stack[x].split('\n')
+                    origin = stack_parts[0]
+                    root = stack_parts[1]
+                    Support.LogError(parent_log_path, f"\t[{x}] ORIGIN:\t{origin}\n\t[{x}] ROOT: {root}\t\n", time_disabled=True)
+                Support.LogError(parent_log_path, "----------------------------------------------------------------\n", time_disabled=True)
+                
+            # this is the part that processes the brwoser logs and puts them into the shared array
+            # use finally clause
+
+        if keep_browser_open:
+            pass
+
+        else:
+            driver.Quit()
+
+        shared_state.value = False
+
+    def AutoLogger(
+            shared_arr: Array = None,
+            shared_state: Value = None,
+            log_js_args: dict[str] = None,
+            **overflow) -> None:    #overflow not used
+        
         # will be referenced from support.py (AutoLogJS), placeholder for now
         pass
-
-
-
-
-
+        
+    def SharedLogDumper(
+        logs: list[dict] = None,
+        target: Array = None,
+        target_size: int = None) -> None: 
+    
+        # each log is a dictionary with 4 K-VPs inside
+        target_values: list[str] = []
+    
+        # only process 
+        for log in logs:
+            for value in log.values():
+                target_values.append(bytes(str(value), 'utf-8'))
+    
+        if len(target_values) < target_size:
+            for i in range(target_size - len(target_values)):
+                target_values.append(bytes("", 'utf-8'))
+    
+        target[:] = target_values
+    
+    def SharedLogLoader(root: Array = None) -> list[dict[str]]:
+    
+        logs: list = []
+        keys: tuple = ("level", "message", "source", "timestamp")
+        # used only to detect / eleminate empty logs
+        empty_log: dict = {"level": '', "message": '', "source": '', "timestamp": ''}
+    
+        field_index = 0
+        log: dict = {}
+        for item in root:
+            if field_index == 4:
+                if log == empty_log:
+                    break
+                logs.append(copy(log))
+                field_index = 0
+                log.clear()
+            # need to remove the b'' bounds from the item. because when you convert `bytes` to `str` that happens (builtin, I guess) ¯\_(ツ)_/¯
+            log[keys[field_index]] = str(item).removeprefix('b\'').removesuffix('\'').removeprefix('b\"').removesuffix('\"')
+            field_index += 1
+        
+        return logs
 
 
 
