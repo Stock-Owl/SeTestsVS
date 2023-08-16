@@ -2,6 +2,17 @@ namespace WebTestGui
 {
     public partial class MainForm : Form
     {
+        /* TODO:
+        - Tabok (egyszerre több teszt szerkeztése egy ablakban)
+        - Mindegyik konzol elérhetõ (4 darab, abból csak a napi az, amit el is kell menteni)
+        - Gomb ami megnyitja a feladatkezelõben a log mappát
+        - Idõzítõ különálló applikáció (tesztek futtatásának idõzítése, és beállítása)
+        - Python backend meghívása és kommunikációs fájlok kezelése
+        
+        - Komplex Action (több Action egymásba pakolása, mint egy sablon)
+        - Opciók sablonok létrehozása, import és exportálása
+        */
+
         public MainForm()
         {
             InitializeComponent();
@@ -12,7 +23,7 @@ namespace WebTestGui
 
             m_ConsoleManager = new TextboxFormatter(console);
             m_JsConsoleManager = new TextboxFormatter(jsConsole);
-            m_DriverManager = new DriverManager(this);
+            m_DriverStorage = new DriverStorage(this);
 
             m_ConsoleManager.Print("{Yellow}[Applikáció] indítása...\n");
             m_ConsoleManager.Print("Verzió: {LightSeaGreen}" + $"[{AppConsts.s_AppVersion}]\n");
@@ -24,131 +35,106 @@ namespace WebTestGui
             m_JsConsoleManager.Print("A teszt ideje alatt minden {Yellow}[JavaScript] {Orange}[log] " +
                 "információ {Cyan}[ide] lesz kiiratva.");
 
-            PopulateOptionsPanel();
+            PopulateComboBoxes();
+        }
+
+        public void PopulateComboBoxes()
+        {
+            object[] optionClasses = TypeHelpers.GetAllSubClassesFromInterface<IOption>();
+            addOptionComboBox.Items.AddRange(optionClasses);
+            object[] driverOptionClasses = TypeHelpers.GetAllSubClassesFromInterface<IDriverOption>();
+            addDriverActionComboBox.Items.AddRange(driverOptionClasses);
+
             object[] actionClasses = TypeHelpers.GetAllSubClassesFromInterface<IAction>();
             addActionComboBox.Items.AddRange(actionClasses);
         }
 
         #region Option panel functions
 
-        private void PopulateOptionsPanel()
+        private void OnOptionComboBoxItemSelect(object sender, EventArgs e)
         {
-            // PageLoadStrategy
-            m_PageLoadStrategyOptionPanel.SetMainLabel("Lap betöltési stratégia:");
-            m_PageLoadStrategyOptionPanel.SetMainCombobox<Option.PageLoadStrategies>("Lap betöltési stratégia típus...");
-            m_PageLoadStrategyOptionPanel.SetSubElementsVisible(false);
-            m_PageLoadStrategyOptionPanel.SetInfoBox("Lap betöltés", "A web-illesztõprogram hogyan kezeli az új oldal betöltését." +
-                "Három különbözõ oldalbetöltési stratégia használható: Normál, Buzgó és Nincs.", InfoBox.InfoBoxType.Info);
-            optionsPanel.Controls.Add(m_PageLoadStrategyOptionPanel);
+            string selected = addOptionComboBox.GetItemText(addOptionComboBox.SelectedItem)!;
+            addOptionComboBox.Items.Remove(selected);
+            addOptionComboBox.Text = "";
 
-            // AcceptInsecureCerts
-            m_AcceptInsuranceOptionPanel.SetMainLabel("Nem biztonságos bizonyítványok elfogadása:", 10);
-            m_AcceptInsuranceOptionPanel.SetMainCheckbox(false);
-            m_AcceptInsuranceOptionPanel.SetSubElementsVisible(false);
-            m_AcceptInsuranceOptionPanel.SetInfoBox("Bizonyítványok elfogadása", "Lehetõvé teszi, hogy a web-illesztõprogram olyan" +
-                "weboldalakat is megnyisson, amelyeknél érvénytelen, vagy biztonsági tanúsítvány nélküli (insecure) SSL/TLS tanúsítványt használnak.", InfoBox.InfoBoxType.Info);
-            optionsPanel.Controls.Add(m_AcceptInsuranceOptionPanel);
+            Type optionType = TypeHelpers.GetClassFromString(selected);
+            IOption option = (IOption)Activator.CreateInstance(optionType)!;
+            option.m_ParentForm = this;
 
-            // Timeouts
-            m_TimeoutsOptionPanel.SetMainLabel("Idõtúllépések:");
-            m_TimeoutsOptionPanel.SetMainCombobox<Option.Timeout.TimeoutType>("Idõtûllépési lehetõségek...");
-            m_TimeoutsOptionPanel.SetSubElementsVisible(true);
-            m_TimeoutsOptionPanel.SetSubLabel("Értéke:");
-            m_TimeoutsOptionPanel.SetSubTextbox("Idõtúllépés értéke (ms)...*", "300000");
-            m_TimeoutsOptionPanel.SetInfoBox("Idõtúllépés", "Amikor a web-illesztõprogram egy parancsot végrehajt, például egy elem keresését vagy egy kattintást," +
-                "elõfordulhat, hogy a weboldal betöltése vagy más folyamatok lassabban történnek, és idõre van szükségük a végrehajtáshoz.", InfoBox.InfoBoxType.Info);
-            optionsPanel.Controls.Add(m_TimeoutsOptionPanel);
+            m_DriverStorage.m_Options.m_Options.Add(option);
+            RefreshOptionsPanel();
+        }
 
-            // UnhandledPromptBehaviour
-            m_UnhandledPromptBehaviourOptionPanel.SetMainLabel("Kezeletlen kérelmek:");
-            m_UnhandledPromptBehaviourOptionPanel.SetMainCombobox<Option.UnhandledPromptBehaviours>("Kezeletlen kérelmek kezelése...", 2);
-            m_UnhandledPromptBehaviourOptionPanel.SetSubElementsVisible(false);
-            m_UnhandledPromptBehaviourOptionPanel.SetInfoBox("Kezeletlen kérelmek", "Hogyan kezelje a nem várt vagy kezeletlen promptokat a böngészõben." +
-                "Ez a beállítás hasznos lehet olyan helyzetekben, amikor a weboldalakon pop-up jelennek meg, amelyekhez választ vagy adatbevitelt igényelnek.", InfoBox.InfoBoxType.Info);
-            optionsPanel.Controls.Add(m_UnhandledPromptBehaviourOptionPanel);
+        private void OnDriverOptionComboBoxItemSelect(object sender, EventArgs e)
+        {
+            string selected = addDriverActionComboBox.GetItemText(addDriverActionComboBox.SelectedItem)!;
+            addDriverActionComboBox.Items.Remove(selected);
+            addDriverActionComboBox.Text = "";
 
-            // KeepBrowserOpen
-            m_KeepBrowserOpenOptionPanel.SetMainLabel("Böngészõ nyitva marad:");
-            m_KeepBrowserOpenOptionPanel.SetMainCheckbox(true);
-            m_KeepBrowserOpenOptionPanel.SetSubElementsVisible(false);
-            m_KeepBrowserOpenOptionPanel.SetInfoBox("Böngészõ állapot", "A teszt befelyezése után bezáródjon-e a böngészõ ablak. Ha az 'Igen' opció van beállítva," +
-                "akkor a böngészõn nyitva marad ameddig manuálisan vagy más program be nem zárja. Ellenkezõ esetben a teszt után automatikusa bezáródik.", InfoBox.InfoBoxType.Info);
-            optionsPanel.Controls.Add(m_KeepBrowserOpenOptionPanel);
+            Type driverOptionType = TypeHelpers.GetClassFromString(selected);
+            IDriverOption driverOption = (IDriverOption)Activator.CreateInstance(driverOptionType)!;
+            driverOption.m_ParentForm = this;
 
-            // BrowserArgs
-            m_BrowserArgsOptionPanel.SetMainLabel("Böngészõ indítási paraméterek:");
-            m_BrowserArgsOptionPanel.SetMainTextbox("Extra paraméterek...");
-            m_BrowserArgsOptionPanel.GiveHint("(Spacel elválasztva)");
-            m_BrowserArgsOptionPanel.SetSubElementsVisible(false);
-            m_BrowserArgsOptionPanel.SetInfoBox("Böngészõ paraméterek", "Extra paraméterek amivel a program elindítja a böngészõt." +
-                "Ezek a használt böngészõtõl függenek.", InfoBox.InfoBoxType.Info);
-            optionsPanel.Controls.Add(m_BrowserArgsOptionPanel);
+            m_DriverStorage.m_DriverOptions.m_DriverOptions.Add(driverOption);
+            RefreshOptionsPanel();
+        }
 
-            // LogJSActive
-            m_LogJsActiveOptionPanel.SetMainLabel("JS aktív logolása:");
-            m_LogJsActiveOptionPanel.SetMainCheckbox(true);
-            m_LogJsActiveOptionPanel.SetSubElementsVisible(false);
-            m_LogJsActiveOptionPanel.SetInfoBox("JavaScript log", "A teszt ideje alatt legyen-e aktív logolása a böngészõnek. Ez kiírja az összes " +
-                "információt, amit a JavaScript szkript végez. Esetlegesen tartalmazhat fontos információkat.", InfoBox.InfoBoxType.Info);
-            optionsPanel.Controls.Add(m_LogJsActiveOptionPanel);
+        public void RefreshOptionsPanel()
+        {
+            optionsPanel.Controls.Clear();
 
-            // ServiceLogPath
-            m_ServiceLogOptionPanel.SetMainLabel("Web-illesztõprogram tevékenységeinek logolása:", 9);
-            m_ServiceLogOptionPanel.SetMainTextbox("A log fájl elérési útja...");
-            m_ServiceLogOptionPanel.SetSubElementsVisible(false);
-            m_ServiceLogOptionPanel.AddFolderDialog();
-            m_ServiceLogOptionPanel.SetInfoBox("Web-illesztõprogram logolása", "A \"service log\" a Web-illesztõprogram tevékenységét rögzíti egy naplófájlba." +
-                "Ez a naplófájl tartalmazza a szolgáltatás indításával és futtatásával kapcsolatos információkat és hibákat." +
-                "Ezek a használt böngészõtõl függenek.", InfoBox.InfoBoxType.Info);
-            optionsPanel.Controls.Add(m_ServiceLogOptionPanel);
+            Control[] optionControls = new Control[m_DriverStorage.m_Options.m_Options.Count];
+            for (int i = 0; i < optionControls.Length; i++)
+            {
+                optionControls[i] = (Control)m_DriverStorage.m_Options.m_Options[i];
+            }
+            optionsPanel.Controls.AddRange(optionControls);
 
-            // ServiceArgs
-            m_ServiceArgsOptionPanel.SetMainLabel("Konfigurációs paraméterek:");
-            m_ServiceArgsOptionPanel.SetMainTextbox("Extra paraméterek az programnak...");
-            m_ServiceArgsOptionPanel.GiveHint("(Spacel elválasztva)");
-            m_ServiceArgsOptionPanel.SetSubElementsVisible(false);
-            m_ServiceArgsOptionPanel.SetInfoBox("Konfigurációs paraméterek", "A \"service args\" lehetõvé teszi további parancssori argumentumok megadását" +
-                "a web-illesztõprogram szolgáltatásának indításakor.", InfoBox.InfoBoxType.Info);
-            optionsPanel.Controls.Add(m_ServiceArgsOptionPanel);
+            Control[] driverOptionControls = new Control[m_DriverStorage.m_DriverOptions.m_DriverOptions.Count];
+            for (int i = 0; i < driverOptionControls.Length; i++)
+            {
+                driverOptionControls[i] = (Control)m_DriverStorage.m_DriverOptions.m_DriverOptions[i];
+            }
+            optionsPanel.Controls.AddRange(driverOptionControls);
         }
 
         #endregion
 
         #region Actions handlers and functions
 
-        private void addActionComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void OnActionComboBoxItemSelect(object sender, EventArgs e)
         {
-            string selected = this.addActionComboBox.GetItemText(this.addActionComboBox.SelectedItem)!;
+            string selected = addActionComboBox.GetItemText(addActionComboBox.SelectedItem)!;
             addActionComboBox.Text = "";
             Type actionType = TypeHelpers.GetClassFromString(selected);
             IAction action = (IAction)Activator.CreateInstance(actionType)!;
             action.m_ParentForm = this;
 
             action.SetId(actionsPanel.Controls.Count);
-            m_DriverManager.m_Actions.m_Actions.Add(action);
+            m_DriverStorage.m_Actions.m_Actions.Add(action);
             RefreshActionsPanel();
         }
 
         public void DeleteAction(IAction action)
         {
-            m_DriverManager.m_Actions.m_Actions.Remove(action);
+            m_DriverStorage.m_Actions.m_Actions.Remove(action);
             RefreshActionsPanel();
         }
 
         public void MoveAction(IAction action, int newId)
         {
-            m_DriverManager.m_Actions.MoveElement(action, newId);
+            m_DriverStorage.m_Actions.MoveElement(action, newId);
             RefreshActionsPanel();
         }
 
         public void RefreshActionsPanel()
         {
-            Control[] controls = new Control[m_DriverManager.m_Actions.m_Actions.Count];
+            Control[] controls = new Control[m_DriverStorage.m_Actions.m_Actions.Count];
 
             for (int i = 0; i < controls.Length; i++)
             {
-                m_DriverManager.m_Actions.m_Actions[i].SetId(i);
-                controls[i] = (Control)m_DriverManager.m_Actions.m_Actions[i];
+                m_DriverStorage.m_Actions.m_Actions[i].SetId(i);
+                controls[i] = (Control)m_DriverStorage.m_Actions.m_Actions[i];
             }
 
             actionsPanel.Controls.Clear();
@@ -164,20 +150,19 @@ namespace WebTestGui
 
         #region Browser Checkboxes logic functions
 
-        private void chromeCheckBox_CheckedChanged(object sender, EventArgs e)
+        private void OnChromeCheckBoxChecked(object sender, EventArgs e)
         {
             if (chromeCheckBox.Checked)
             {
                 chromeCheckBox.Checked = true;
                 chromeCheckBox.Font = new Font(chromeCheckBox.Font, FontStyle.Bold);
-                m_DriverManager.m_Browser = DriverManager.Browser.chrome;
-                s_IsChromeChecked = true;
-
-                firefoxCheckBox.Checked = false;
-                firefoxCheckBox.Font = new Font(firefoxCheckBox.Font, FontStyle.Regular);
+                m_DriverStorage.m_Browsers.AddIfNotExists("chrome");
             }
             else
             {
+                chromeCheckBox.Font = new Font(chromeCheckBox.Font, FontStyle.Regular);
+                m_DriverStorage.m_Browsers.Remove("chrome");
+
                 if (!firefoxCheckBox.Checked)
                 {
                     firefoxCheckBox.Checked = true;
@@ -185,20 +170,19 @@ namespace WebTestGui
             }
         }
 
-        private void firefoxCheckBox_CheckedChanged(object sender, EventArgs e)
+        private void OnFirefoxCheckBoxChecked(object sender, EventArgs e)
         {
             if (firefoxCheckBox.Checked)
             {
                 firefoxCheckBox.Checked = true;
                 firefoxCheckBox.Font = new Font(firefoxCheckBox.Font, FontStyle.Bold);
-                m_DriverManager.m_Browser = DriverManager.Browser.firefox;
-                s_IsChromeChecked = false;
-
-                chromeCheckBox.Checked = false;
-                chromeCheckBox.Font = new Font(chromeCheckBox.Font, FontStyle.Regular);
+                m_DriverStorage.m_Browsers.AddIfNotExists("firefox");
             }
             else
             {
+                firefoxCheckBox.Font = new Font(chromeCheckBox.Font, FontStyle.Regular);
+                m_DriverStorage.m_Browsers.Remove("firefox");
+
                 if (!chromeCheckBox.Checked)
                 {
                     chromeCheckBox.Checked = true;
@@ -210,54 +194,25 @@ namespace WebTestGui
 
         #region Methods for handling picture ratios when the window got resized
 
-        private void pictureBox1_Resize(object sender, EventArgs e)
+        private void OnChromeLogoResize(object sender, EventArgs e)
         {
             pictureBox1.Size = new Size(25, 25);
         }
 
-        private void pictureBox2_Resize(object sender, EventArgs e)
+        private void OnFirefoxLogoResize(object sender, EventArgs e)
         {
             pictureBox2.Size = new Size(25, 25);
         }
 
         #endregion
 
-        #region Information pop-up boxes and functions
-
-        private void urlTextFieldInfo_Click(object sender, EventArgs e)
-        {
-            InfoBox infoBox = new InfoBox("Tesztelendõ weblap", "Annak a weblapnak az URL-je, amin fusson a tesztelés.", InfoBox.InfoBoxType.Info);
-            infoBox.ShowDialog();
-        }
-
-        private void logPathInfo_Click(object sender, EventArgs e)
-        {
-            InfoBox infoBox = new InfoBox("Logolási útvonal", "Az egyéb, esetleg fontos információkat a tesztrõl az applikáció kiírja az adott mappába.", InfoBox.InfoBoxType.Info);
-            infoBox.ShowDialog();
-        }
-
-        private void fieldPanelInfo_Click(object sender, EventArgs e)
-        {
-            InfoBox infoBox = new InfoBox("Akciók", "A tesztelendõ oldalon végrehajtandó akciók és feladatok listája.", InfoBox.InfoBoxType.Info);
-            infoBox.ShowDialog();
-        }
-
-        private void optionInfo_Click(object sender, EventArgs e)
-        {
-            InfoBox infoBox = new InfoBox("Opciók", "Egyes tesztelés közben elõfordulható eseményeket lehet beállítani.", InfoBox.InfoBoxType.Info);
-            infoBox.ShowDialog();
-        }
-
-        #endregion
-
         #region Logic switching between options and JS console
 
-        private void switchToOptionsButton_Click(object sender, EventArgs e)
+        private void OnSwitchToOptionsButtonPressed(object sender, EventArgs e)
         {
             optionHeaderPanel.Visible = true;
             optionsPanel.Visible = true;
             optionLabel.Visible = true;
-            optionInfo.Visible = true;
 
             jsConsole.Visible = false;
 
@@ -268,14 +223,13 @@ namespace WebTestGui
             switchToJsLogButton.Font = new Font(switchToOptionsButton.Font, FontStyle.Italic);
         }
 
-        private void switchToJsLogButton_Click(object sender, EventArgs e)
+        private void OnSwitchToJsLogButtonPressed(object sender, EventArgs e)
         {
             jsConsole.Visible = true;
 
             optionHeaderPanel.Visible = false;
             optionsPanel.Visible = false;
             optionLabel.Visible = false;
-            optionInfo.Visible = false;
 
             switchToJsLogButton.ForeColor = Color.White;
             switchToJsLogButton.Font = new Font(switchToOptionsButton.Font, FontStyle.Bold);
@@ -286,55 +240,32 @@ namespace WebTestGui
 
         #endregion
 
-        private void testStartButton_Click(object sender, EventArgs e)
+        #region Manage Tests Buttons and Functions
+
+        private void OnStartTestButtonPressed(object sender, EventArgs e)
         {
             m_ConsoleManager.Print("\n\n{LightSeaGreen}[Teszt] indítása... {DarkGray}" + $"[-{DateTime.Now}]\n");
             m_JsConsoleManager.Print("\n\n{LightSeaGreen}[Teszt] indítása... {DarkGray}" + $"[-{DateTime.Now}]\n");
-            switchToJsLogButton_Click(sender, e);
+            OnSwitchToJsLogButtonPressed(sender, e);
             m_ConsoleManager.Print("\nExportált {Magenta}[JSON] fájl:\n\n");
 
             string JSONString = GetTestJSON();
             console.AppendText(JSONString + "\n");
         }
 
-        private void saveTestButton_Click(object sender, EventArgs e)
+        private void OnSaveTestButtonPressed(object sender, EventArgs e)
         {
             SaveTest();
         }
 
-        private void loadTestButton_Click(object sender, EventArgs e)
+        private void OnLoadTestButtonPressed(object sender, EventArgs e)
         {
             LoadTest();
         }
 
         private string GetTestJSON()
         {
-            m_DriverManager.m_Options.m_PageLoadStrategy =
-                    TypeHelpers.EnumTypeFromString<Option.PageLoadStrategies>(m_PageLoadStrategyOptionPanel.GetMainComboboxValue());
-            m_DriverManager.m_Options.m_AcceptInsecureCerts = m_AcceptInsuranceOptionPanel.GetMainCheckboxValue();
-            m_DriverManager.m_Options.m_Timeout.m_Type =
-                TypeHelpers.EnumTypeFromString<Option.Timeout.TimeoutType>(m_TimeoutsOptionPanel.GetMainComboboxValue());
-            m_DriverManager.m_Options.m_Timeout.m_ValueInMiliseconds = int.Parse(m_TimeoutsOptionPanel.GetSubTextboxValue());
-            m_DriverManager.m_Options.m_unhandledPromptBehaviour =
-                TypeHelpers.EnumTypeFromString<Option.UnhandledPromptBehaviours>(m_UnhandledPromptBehaviourOptionPanel.GetMainComboboxValue());
-            m_DriverManager.m_Options.m_KeepBrowserOpen = m_KeepBrowserOpenOptionPanel.GetMainCheckboxValue();
-
-            List<string> browserArgsList = new List<string>();
-            browserArgsList.AddRange(m_BrowserArgsOptionPanel.GetMainTextboxValue().Split(' '));
-            m_DriverManager.m_Options.m_BrowserArgs = browserArgsList;
-
-            bool test = m_LogJsActiveOptionPanel.GetMainCheckboxValue();
-            m_DriverManager.m_Options.m_LogJs.m_Active = test;
-
-            m_DriverManager.m_Options.m_ServiceLogPath = m_ServiceLogOptionPanel.GetMainTextboxValue();
-
-            List<string> serviceArgsList = new List<string>();
-            serviceArgsList.AddRange(m_ServiceArgsOptionPanel.GetMainTextboxValue().Split(' '));
-            m_DriverManager.m_Options.m_ServiceArgs = serviceArgsList;
-
-            // Actions aren't collected here, they're collected and managed during runtime.
-            // The Json converter saves and loads them directly from the DriverManager class instance
-            string JSON = m_DriverManager.FormatDataToJson();
+            string JSON = TestFormatter.SaveDriverManagerToJson(m_DriverStorage);
             return JSON;
         }
 
@@ -367,64 +298,39 @@ namespace WebTestGui
             of.Filter = $"Teszt fájl|*{AppConsts.s_AppDefaultFileExtension}|Any File|*.*";
             if (of.ShowDialog() == DialogResult.OK)
             {
-                try
+                string loadedInfo = File.ReadAllText(of.FileName);
+                m_DriverStorage.m_Options.m_Options.Clear();
+                m_DriverStorage.m_DriverOptions.m_DriverOptions.Clear();
+                m_DriverStorage.m_Actions.m_Actions.Clear();
+                m_DriverStorage.m_Browsers.Clear();
+                m_DriverStorage = TestFormatter.LoadDriverManagerFromJson(loadedInfo, m_DriverStorage);
+
+                chromeCheckBox.Checked = false;
+                firefoxCheckBox.Checked = false;
+                if (m_DriverStorage.m_Browsers.Contains("chrome"))
                 {
-                    string loadedInfo = File.ReadAllText(of.FileName);
-                    m_DriverManager.m_Actions.m_Actions.Clear();
-                    m_DriverManager = TestFormatter.ConvertManagerFromJson(loadedInfo, m_DriverManager);
-
-                    if (m_DriverManager.m_Browser == DriverManager.Browser.chrome)
-                    {
-                        chromeCheckBox.Checked = true;
-                        firefoxCheckBox.Checked = false;
-                    }
-                    else
-                    {
-                        chromeCheckBox.Checked = false;
-                        firefoxCheckBox.Checked = true;
-                    }
-
-                    m_PageLoadStrategyOptionPanel.SetMainComboboxSelected(m_DriverManager.m_Options.m_PageLoadStrategy.ToString());
-                    m_AcceptInsuranceOptionPanel.SetMainCheckboxValue(m_DriverManager.m_Options.m_AcceptInsecureCerts);
-                    m_TimeoutsOptionPanel.SetMainComboboxSelected(m_DriverManager.m_Options.m_Timeout.m_Type.ToString());
-                    m_TimeoutsOptionPanel.SetSubTextboxText(m_DriverManager.m_Options.m_Timeout.m_ValueInMiliseconds.ToString());
-                    m_UnhandledPromptBehaviourOptionPanel.SetMainComboboxSelected(m_DriverManager.m_Options.m_unhandledPromptBehaviour.ToString());
-                    m_KeepBrowserOpenOptionPanel.SetMainCheckboxValue(m_DriverManager.m_Options.m_KeepBrowserOpen);
-                    m_BrowserArgsOptionPanel.SetMainTextBoxText(string.Join(' ', m_DriverManager.m_Options.m_BrowserArgs));
-                    m_LogJsActiveOptionPanel.SetMainCheckboxValue(m_DriverManager.m_Options.m_LogJs.m_Active);
-                    m_ServiceLogOptionPanel.SetMainTextBoxText(m_DriverManager.m_Options.m_ServiceLogPath!);
-                    m_ServiceArgsOptionPanel.SetMainTextBoxText(string.Join(' ', m_DriverManager.m_Options.m_ServiceArgs));
-
-                    RefreshActionsPanel();
-
-                    m_ConsoleManager.Print("\n\n{Orange}[Teszt] {Cyan}[sikeresen] importálva és betöltve az alábbi helyrõl... {DarkGray}" + $"[-{of.FileName}]\n");
-
-                    AppConsts.s_IsEditingAlreadyExistingTest = true;
-                    AppConsts.s_LoadedTestFilepath = of.FileName;
-                    currentlyEditedText.Text = AppConsts.s_LoadedTestFilepath;
+                    chromeCheckBox.Checked = true;
                 }
-                catch
+
+                if (m_DriverStorage.m_Browsers.Contains("firefox"))
                 {
-                    InfoBox infoBox = new InfoBox("Sikertelen betöltés", "A mentett tesztfájl betöltése sikertelen volt! " +
-                        "ellenõrizze a fájl épségét, és hogy nincs-e megnyitva más programban futási idõ alatt!", InfoBox.InfoBoxType.Error);
-                    infoBox.ShowDialog();
-
-                    m_ConsoleManager.Print("\n\n{Orange}[Teszt] betöltése {Red}[sikertelen] az alábbi helyrõl... {DarkGray}" + $"[-{of.FileName}]\n");
+                    firefoxCheckBox.Checked = true;
                 }
+
+                RefreshOptionsPanel();
+                RefreshActionsPanel();
+
+                m_ConsoleManager.Print("\n\n{Orange}[Teszt] {Cyan}[sikeresen] importálva és betöltve az alábbi helyrõl... {DarkGray}" + $"[-{of.FileName}]\n");
+
+                AppConsts.s_IsEditingAlreadyExistingTest = true;
+                AppConsts.s_LoadedTestFilepath = of.FileName;
+                currentlyEditedText.Text = AppConsts.s_LoadedTestFilepath;
             }
         }
 
-        Options m_PageLoadStrategyOptionPanel = new Options();
-        Options m_AcceptInsuranceOptionPanel = new Options();
-        Options m_TimeoutsOptionPanel = new Options();
-        Options m_UnhandledPromptBehaviourOptionPanel = new Options();
-        Options m_KeepBrowserOpenOptionPanel = new Options();
-        Options m_BrowserArgsOptionPanel = new Options();
-        Options m_LogJsActiveOptionPanel = new Options();
-        Options m_ServiceLogOptionPanel = new Options();
-        Options m_ServiceArgsOptionPanel = new Options();
+        #endregion
 
-        public static bool s_IsChromeChecked = true;
+        public static bool s_IsChromeChecked = true; // Certain Actions need to know which one is selected
 
         TextboxFormatter m_ConsoleManager;
         public void PrintToConsole(string msg) { m_ConsoleManager.Print(msg); }
@@ -432,7 +338,7 @@ namespace WebTestGui
         TextboxFormatter m_JsConsoleManager;
         public void PrintToJsConsole(string msg) { m_JsConsoleManager.Print(msg); }
 
-        DriverManager m_DriverManager;
-        public DriverManager GetDriverManager() { return m_DriverManager; }
+        DriverStorage m_DriverStorage;
+        public DriverStorage GetDriverManager() { return m_DriverStorage; }
     }
 }

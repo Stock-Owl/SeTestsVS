@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using Newtonsoft.Json.Linq;
+using System.Reflection;
 
 namespace WebTestGui
 {
@@ -60,6 +61,17 @@ namespace WebTestGui
                 subClasses.Add(implementingClass.Name);
             }
             return subClasses.ToArray();
+        }
+
+        public static bool AddIfNotExists<T>(this List<T> list, T value)
+        {
+            if (!list.Contains(value))
+            {
+
+                list.Add(value);
+                return true;
+            }
+            return false;
         }
     }
 }

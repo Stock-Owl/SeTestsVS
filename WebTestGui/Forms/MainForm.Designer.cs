@@ -39,10 +39,12 @@
             actionHeaderPanel = new Panel();
             label1 = new Label();
             addActionComboBox = new ComboBox();
-            actionsPanelInfo = new PictureBox();
             optionHeaderPanel = new Panel();
+            label3 = new Label();
+            addDriverActionComboBox = new ComboBox();
+            label2 = new Label();
+            addOptionComboBox = new ComboBox();
             optionLabel = new Label();
-            optionInfo = new PictureBox();
             optionsPanel = new FlowLayoutPanel();
             actionsPanel = new FlowLayoutPanel();
             switchToOptionsButton = new Button();
@@ -61,9 +63,7 @@
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             actionHeaderPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)actionsPanelInfo).BeginInit();
             optionHeaderPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)optionInfo).BeginInit();
             flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
             ((System.ComponentModel.ISupportInitialize)vsLogo).BeginInit();
@@ -91,8 +91,6 @@
             chromeCheckBox.Anchor = AnchorStyles.Top;
             chromeCheckBox.AutoSize = true;
             chromeCheckBox.BackColor = Color.FromArgb(60, 60, 65);
-            chromeCheckBox.Checked = true;
-            chromeCheckBox.CheckState = CheckState.Checked;
             chromeCheckBox.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
             chromeCheckBox.ForeColor = Color.White;
             chromeCheckBox.Location = new Point(528, 10);
@@ -101,7 +99,7 @@
             chromeCheckBox.TabIndex = 3;
             chromeCheckBox.Text = "Chrome";
             chromeCheckBox.UseVisualStyleBackColor = false;
-            chromeCheckBox.CheckedChanged += chromeCheckBox_CheckedChanged;
+            chromeCheckBox.CheckedChanged += OnChromeCheckBoxChecked;
             // 
             // pictureBox1
             // 
@@ -114,7 +112,7 @@
             pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox1.TabIndex = 4;
             pictureBox1.TabStop = false;
-            pictureBox1.Resize += pictureBox1_Resize;
+            pictureBox1.Resize += OnChromeLogoResize;
             // 
             // pictureBox2
             // 
@@ -127,7 +125,7 @@
             pictureBox2.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox2.TabIndex = 6;
             pictureBox2.TabStop = false;
-            pictureBox2.Resize += pictureBox2_Resize;
+            pictureBox2.Resize += OnFirefoxLogoResize;
             // 
             // firefoxCheckBox
             // 
@@ -142,7 +140,7 @@
             firefoxCheckBox.TabIndex = 5;
             firefoxCheckBox.Text = "Firefox";
             firefoxCheckBox.UseVisualStyleBackColor = false;
-            firefoxCheckBox.CheckedChanged += firefoxCheckBox_CheckedChanged;
+            firefoxCheckBox.CheckedChanged += OnFirefoxCheckBoxChecked;
             // 
             // testStartButton
             // 
@@ -156,7 +154,7 @@
             testStartButton.TabIndex = 7;
             testStartButton.Text = "Tesztelés...";
             testStartButton.UseVisualStyleBackColor = false;
-            testStartButton.Click += testStartButton_Click;
+            testStartButton.Click += OnStartTestButtonPressed;
             // 
             // actionText
             // 
@@ -177,7 +175,6 @@
             actionHeaderPanel.BackColor = Color.FromArgb(40, 40, 45);
             actionHeaderPanel.Controls.Add(label1);
             actionHeaderPanel.Controls.Add(addActionComboBox);
-            actionHeaderPanel.Controls.Add(actionsPanelInfo);
             actionHeaderPanel.Controls.Add(actionText);
             actionHeaderPanel.Location = new Point(243, 64);
             actionHeaderPanel.Name = "actionHeaderPanel";
@@ -210,30 +207,78 @@
             addActionComboBox.Name = "addActionComboBox";
             addActionComboBox.Size = new Size(175, 28);
             addActionComboBox.TabIndex = 43;
-            addActionComboBox.SelectedIndexChanged += addActionComboBox_SelectedIndexChanged;
-            // 
-            // actionsPanelInfo
-            // 
-            actionsPanelInfo.Image = (Image)resources.GetObject("actionsPanelInfo.Image");
-            actionsPanelInfo.Location = new Point(84, 8);
-            actionsPanelInfo.Name = "actionsPanelInfo";
-            actionsPanelInfo.Size = new Size(15, 15);
-            actionsPanelInfo.SizeMode = PictureBoxSizeMode.StretchImage;
-            actionsPanelInfo.TabIndex = 34;
-            actionsPanelInfo.TabStop = false;
-            actionsPanelInfo.Click += fieldPanelInfo_Click;
+            addActionComboBox.SelectedIndexChanged += OnActionComboBoxItemSelect;
             // 
             // optionHeaderPanel
             // 
-            optionHeaderPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
+            optionHeaderPanel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             optionHeaderPanel.AutoScroll = true;
             optionHeaderPanel.BackColor = Color.FromArgb(40, 40, 45);
+            optionHeaderPanel.Controls.Add(label3);
+            optionHeaderPanel.Controls.Add(addDriverActionComboBox);
+            optionHeaderPanel.Controls.Add(label2);
+            optionHeaderPanel.Controls.Add(addOptionComboBox);
             optionHeaderPanel.Controls.Add(optionLabel);
-            optionHeaderPanel.Controls.Add(optionInfo);
             optionHeaderPanel.Location = new Point(645, 95);
             optionHeaderPanel.Name = "optionHeaderPanel";
-            optionHeaderPanel.Size = new Size(327, 28);
+            optionHeaderPanel.Size = new Size(327, 46);
             optionHeaderPanel.TabIndex = 37;
+            // 
+            // label3
+            // 
+            label3.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            label3.AutoSize = true;
+            label3.BackColor = Color.FromArgb(40, 40, 43);
+            label3.Font = new Font("Segoe UI Semibold", 8F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+            label3.ForeColor = Color.LightGray;
+            label3.Location = new Point(167, 29);
+            label3.Name = "label3";
+            label3.Size = new Size(139, 13);
+            label3.TabIndex = 48;
+            label3.Text = "Vezető opció hozzáadása...";
+            // 
+            // addDriverActionComboBox
+            // 
+            addDriverActionComboBox.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            addDriverActionComboBox.BackColor = Color.FromArgb(40, 40, 43);
+            addDriverActionComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            addDriverActionComboBox.FlatStyle = FlatStyle.Popup;
+            addDriverActionComboBox.Font = new Font("Segoe UI Semibold", 8F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+            addDriverActionComboBox.ForeColor = Color.Silver;
+            addDriverActionComboBox.FormattingEnabled = true;
+            addDriverActionComboBox.Location = new Point(163, 25);
+            addDriverActionComboBox.Name = "addDriverActionComboBox";
+            addDriverActionComboBox.Size = new Size(164, 21);
+            addDriverActionComboBox.TabIndex = 49;
+            addDriverActionComboBox.SelectedIndexChanged += OnDriverOptionComboBoxItemSelect;
+            // 
+            // label2
+            // 
+            label2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            label2.AutoSize = true;
+            label2.BackColor = Color.FromArgb(40, 40, 43);
+            label2.Font = new Font("Segoe UI Semibold", 8F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+            label2.ForeColor = Color.LightGray;
+            label2.Location = new Point(203, 4);
+            label2.Name = "label2";
+            label2.Size = new Size(104, 13);
+            label2.TabIndex = 46;
+            label2.Text = "Opció hozzáadása...";
+            // 
+            // addOptionComboBox
+            // 
+            addOptionComboBox.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            addOptionComboBox.BackColor = Color.FromArgb(40, 40, 43);
+            addOptionComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            addOptionComboBox.FlatStyle = FlatStyle.Popup;
+            addOptionComboBox.Font = new Font("Segoe UI Semibold", 8F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+            addOptionComboBox.ForeColor = Color.Silver;
+            addOptionComboBox.FormattingEnabled = true;
+            addOptionComboBox.Location = new Point(199, 0);
+            addOptionComboBox.Name = "addOptionComboBox";
+            addOptionComboBox.Size = new Size(128, 21);
+            addOptionComboBox.TabIndex = 47;
+            addOptionComboBox.SelectedIndexChanged += OnOptionComboBoxItemSelect;
             // 
             // optionLabel
             // 
@@ -241,31 +286,20 @@
             optionLabel.BackColor = Color.FromArgb(40, 40, 43);
             optionLabel.Font = new Font("Segoe UI Semibold", 14F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
             optionLabel.ForeColor = Color.White;
-            optionLabel.Location = new Point(2, 2);
+            optionLabel.Location = new Point(2, 11);
             optionLabel.Name = "optionLabel";
             optionLabel.Size = new Size(77, 25);
             optionLabel.TabIndex = 45;
             optionLabel.Text = "Opciók:";
-            // 
-            // optionInfo
-            // 
-            optionInfo.Image = (Image)resources.GetObject("optionInfo.Image");
-            optionInfo.Location = new Point(86, 8);
-            optionInfo.Name = "optionInfo";
-            optionInfo.Size = new Size(15, 15);
-            optionInfo.SizeMode = PictureBoxSizeMode.StretchImage;
-            optionInfo.TabIndex = 38;
-            optionInfo.TabStop = false;
-            optionInfo.Click += optionInfo_Click;
             // 
             // optionsPanel
             // 
             optionsPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             optionsPanel.AutoScroll = true;
             optionsPanel.BackColor = Color.FromArgb(45, 45, 50);
-            optionsPanel.Location = new Point(645, 123);
+            optionsPanel.Location = new Point(645, 140);
             optionsPanel.Name = "optionsPanel";
-            optionsPanel.Size = new Size(327, 284);
+            optionsPanel.Size = new Size(327, 267);
             optionsPanel.TabIndex = 38;
             // 
             // actionsPanel
@@ -290,7 +324,7 @@
             switchToOptionsButton.TabIndex = 40;
             switchToOptionsButton.Text = "Opciók...";
             switchToOptionsButton.UseVisualStyleBackColor = false;
-            switchToOptionsButton.Click += switchToOptionsButton_Click;
+            switchToOptionsButton.Click += OnSwitchToOptionsButtonPressed;
             // 
             // switchToJsLogButton
             // 
@@ -304,7 +338,7 @@
             switchToJsLogButton.TabIndex = 41;
             switchToJsLogButton.Text = "JS log...";
             switchToJsLogButton.UseVisualStyleBackColor = false;
-            switchToJsLogButton.Click += switchToJsLogButton_Click;
+            switchToJsLogButton.Click += OnSwitchToJsLogButtonPressed;
             // 
             // jsConsole
             // 
@@ -381,7 +415,7 @@
             saveTestButton.TabIndex = 48;
             saveTestButton.Text = "Teszt mentése...";
             saveTestButton.UseVisualStyleBackColor = false;
-            saveTestButton.Click += saveTestButton_Click;
+            saveTestButton.Click += OnSaveTestButtonPressed;
             // 
             // loadTestButton
             // 
@@ -395,7 +429,7 @@
             loadTestButton.TabIndex = 49;
             loadTestButton.Text = "Teszt betöltése...";
             loadTestButton.UseVisualStyleBackColor = false;
-            loadTestButton.Click += loadTestButton_Click;
+            loadTestButton.Click += OnLoadTestButtonPressed;
             // 
             // currentlyEditedLabel
             // 
@@ -451,6 +485,7 @@
             AutoScaleMode = AutoScaleMode.None;
             BackColor = Color.FromArgb(50, 50, 53);
             ClientSize = new Size(984, 511);
+            Controls.Add(optionHeaderPanel);
             Controls.Add(currentlyEditedLabel);
             Controls.Add(loadTestButton);
             Controls.Add(saveTestButton);
@@ -467,7 +502,6 @@
             Controls.Add(chromeCheckBox);
             Controls.Add(console);
             Controls.Add(actionHeaderPanel);
-            Controls.Add(optionHeaderPanel);
             Controls.Add(jsConsole);
             Controls.Add(flowLayoutPanel1);
             Controls.Add(currentlyEditedText);
@@ -481,10 +515,8 @@
             ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
             actionHeaderPanel.ResumeLayout(false);
             actionHeaderPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)actionsPanelInfo).EndInit();
             optionHeaderPanel.ResumeLayout(false);
             optionHeaderPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)optionInfo).EndInit();
             flowLayoutPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pictureBox3).EndInit();
             ((System.ComponentModel.ISupportInitialize)vsLogo).EndInit();
@@ -504,9 +536,7 @@
         private Button testStartButton;
         private Label actionText;
         private Panel actionHeaderPanel;
-        private PictureBox actionsPanelInfo;
         private Panel optionHeaderPanel;
-        private PictureBox optionInfo;
         private FlowLayoutPanel optionsPanel;
         private FlowLayoutPanel actionsPanel;
         private ComboBox addActionComboBox;
@@ -525,5 +555,9 @@
         private FlowLayoutPanel flowLayoutPanel2;
         private PictureBox pictureBox4;
         private Label currentlyEditedText;
+        private Label label2;
+        private ComboBox addOptionComboBox;
+        private Label label3;
+        private ComboBox addDriverActionComboBox;
     }
 }

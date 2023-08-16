@@ -51,6 +51,39 @@
     <Compile Update="Core\Actions\ClickAction.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="Core\DriverOptions\FirefoxArgumentDriverOption.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Core\DriverOptions\KeepBrowserOpenDriverOption.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Core\DriverOptions\AcceptInsecureCertsDriverOption.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Core\DriverOptions\ChromeArgumentDriverOption.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Core\DriverOptions\UnhandledPromptBehaviourDriverOption.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Core\DriverOptions\TimeoutDriverOption.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Core\DriverOptions\PageLoadStrategyDriverOption.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Core\Options\AutoExitIFramesOption.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Core\Options\ParentLogPathOption.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Core\Options\TerminalModeOption.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Core\Options\LogJSOption.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

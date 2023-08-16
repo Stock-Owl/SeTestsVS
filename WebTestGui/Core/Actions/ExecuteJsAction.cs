@@ -89,6 +89,7 @@ namespace WebTestGui
                 SetBreakpoint(false);
             }
 
+            m_CommandEditor.m_ParentForm = m_ParentForm;
             m_CommandEditor.SetCommands(data["commmands"]!);
         }
 
