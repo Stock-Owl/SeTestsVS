@@ -1,0 +1,76 @@
+{
+  "browser": [
+    "firefox"
+  ],
+  "options": {
+    "parent_log_path": "dwadaw",
+    "terminal_mode": true
+  },
+  "driver_options": {
+    "page_load_strategy": "normal",
+    "chrome_arguments": [
+      "dwaw",
+      "wdada",
+      "dawdada"
+    ]
+  },
+  "units": {
+    "UNIT 12": {
+      "bindings": "UNIT 12",
+      "backup_of": "UNIT 34",
+      "actions": {
+        "0": {
+          "type": "click",
+          "break": false,
+          "single": true,
+          "displayed": false,
+          "enabled": true,
+          "selected": false,
+          "locator": "dadwadawdwa",
+          "value": "wadwad"
+        },
+        "1": {
+          "type": "wait",
+          "break": true,
+          "amount": "10000"
+        }
+      }
+    },
+    "UNIT 22": {
+      "bindings": null,
+      "backup_of": "UNIT 22",
+      "actions": {
+        "0": {
+          "type": "clear",
+          "break": false,
+          "single": false,
+          "displayed": false,
+          "enabled": true,
+          "selected": true,
+          "locator": "dawdawd",
+          "value": "wdadwdaw"
+        },
+        "1": {
+          "type": "refresh",
+          "break": false
+        }
+      }
+    },
+    "UNIT 34": {
+      "bindings": null,
+      "backup_of": null,
+      "actions": {
+        "0": {
+          "type": "clear",
+          "break": true,
+          "single": true,
+          "displayed": false,
+          "enabled": true,
+          "selected": false,
+          "locator": "dwadawd",
+          "value": "dwawdwad"
+        }
+      }
+    }
+  }
+}

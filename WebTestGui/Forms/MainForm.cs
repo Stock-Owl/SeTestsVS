@@ -11,6 +11,8 @@ namespace WebTestGui
         
         - Komplex Action (több Action egymásba pakolása, mint egy sablon)
         - Opciók sablonok létrehozása, import és exportálása
+        - Unit panel oldalán egy mini-map (overview a unitokról)
+        - Komplex idõmérési
         */
 
         public MainForm()

@@ -15,7 +15,7 @@ namespace WebTestGui
             addActionComboBox.Items.AddRange(actionClasses);
 
             m_Actions = new Actions();
-            Refresh();
+            OnCollapseActionsButtonClick(null!, null!);
         }
 
         // ACTION INTERFACE FUNCTIONS AND MEMBERS
@@ -39,15 +39,6 @@ namespace WebTestGui
                     int newId = int.Parse(idTextBox.Text);
                     m_ParentForm.MoveUnit(this, newId);
                 }
-            }
-        }
-
-        private void OnUIdTextBoxFocusLeave(object sender, EventArgs e)
-        {
-            if (int.TryParse(idTextBox.Text, out int _))
-            {
-                int newId = int.Parse(idTextBox.Text);
-                m_ParentForm.MoveUnit(this, newId);
             }
         }
 
@@ -141,20 +132,74 @@ namespace WebTestGui
 
         public void SetData(JToken data)
         {
-            // Load bindings and backups
+            if (data["bindings"]! != null)
+            {
+                bindingsLabel.Text = (string)data["bindings"]!;
+            }
+            if (bindingsLabel.Text == "")
+            {
+                bindingsLabel.Text = "null";
+            }
+            if (data["backup_of"]! != null)
+            {
+                backupOfLabel.Text = (string)data["backup_of"]!;
+            }
+            if (backupOfLabel.Text == "")
+            {
+                backupOfLabel.Text = "null";
+            }
 
-            // JToken actionsData = data["actions"]!;
-            // foreach (JToken actionRawData in actionsData.Children())
-            // {
-            //     JToken actionData = actionRawData.First!;
-            //     string actionType = (string)actionRawData.First!.First!;
-            // 
-            //     IAction action = Actions.CreateActionByType(actionType);
-            //     action.m_ParentUnit = this;
-            //     action.SetData(actionData);
-            //     m_Actions.m_Actions.Add(action);
-            // }
+            JToken actionsData = data["actions"]!;
+            foreach (JToken actionRawData in actionsData.Children())
+            {
+                JToken actionData = actionRawData.First!;
+                string actionType = (string)actionRawData.First!.First!;
+            
+                IAction action = Actions.CreateActionByType(actionType);
+                action.m_ParentUnit = this;
+                action.SetData(actionData);
+                m_Actions.m_Actions.Add(action);
+            }
         }
+
+        public void SetUnitBindings()
+        {
+            if (bindingsLabel.Text != "null")
+            {
+                for (int i = 0; i < m_ParentForm.GetTestObject().m_Units.m_Units.Count; i++)
+                {
+                    if (bindingsLabel.Text == m_ParentForm.GetTestObject().m_Units.m_Units[i].m_UnitName)
+                    {
+                        m_Bindings = m_ParentForm.GetTestObject().m_Units.m_Units[i];
+                    }
+                }
+                Refresh();
+            }
+        }
+
+        public void SetUnitBackupOf()
+        {
+            if (backupOfLabel.Text != "null")
+            {
+                for (int i = 0; i < m_ParentForm.GetTestObject().m_Units.m_Units.Count; i++)
+                {
+                    if (backupOfLabel.Text == m_ParentForm.GetTestObject().m_Units.m_Units[i].m_UnitName)
+                    {
+                        m_BackupOf = m_ParentForm.GetTestObject().m_Units.m_Units[i];
+                    }
+                }
+                Refresh();
+            }
+        }
+
+        public MainForm m_ParentForm { get; set; }
+        public Actions m_Actions { get; set; }
+
+        public string m_UnitName { get; set; }
+        public IUnit m_Bindings { get; set; }
+        public IUnit m_BackupOf { get; set; }
+
+        // UNIT PANEL SPECIFIC METHODS AND MEMBERS
 
         private void OnActionComboBoxItemSelect(object sender, EventArgs e)
         {
@@ -169,35 +214,21 @@ namespace WebTestGui
             Refresh();
         }
 
-        private void unitBindingsComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void OnUnitBindingsComboBoxSelectedIndexChanged(object sender, EventArgs e)
         {
             bindingsLabel.Text = unitBindingsComboBox.GetItemText(unitBindingsComboBox.SelectedItem)!;
             unitBindingsComboBox.Text = "";
-            for (int i = 0; i < m_ParentForm.GetTestObject().m_Units.m_Units.Count; i++)
-            {
-                if (bindingsLabel.Text == m_ParentForm.GetTestObject().m_Units.m_Units[i].m_UnitName)
-                {
-                    m_Bindings = m_ParentForm.GetTestObject().m_Units.m_Units[i];
-                }
-            }
-            Refresh();
+            SetUnitBindings();
         }
 
-        private void unitBackupComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void OnUnitBackupComboBoxSelectedIndexChanged(object sender, EventArgs e)
         {
             backupOfLabel.Text = unitBackupComboBox.GetItemText(unitBackupComboBox.SelectedItem)!;
             unitBackupComboBox.Text = "";
-            for (int i = 0; i < m_ParentForm.GetTestObject().m_Units.m_Units.Count; i++)
-            {
-                if (backupOfLabel.Text == m_ParentForm.GetTestObject().m_Units.m_Units[i].m_UnitName)
-                {
-                    m_BackupOf = m_ParentForm.GetTestObject().m_Units.m_Units[i];
-                }
-            }
-            Refresh();
+            SetUnitBackupOf();
         }
 
-        private void unitBindingsComboBox_DropDown(object sender, EventArgs e)
+        private void OnUnitBindingsComboBoxDropDown(object sender, EventArgs e)
         {
             unitBindingsComboBox.Items.Clear();
             string[] unitNames = new string[m_ParentForm.GetTestObject().m_Units.m_Units.Count];
@@ -209,7 +240,7 @@ namespace WebTestGui
             unitBindingsComboBox.Items.AddRange(unitNames);
         }
 
-        private void unitBackupComboBox_DropDown(object sender, EventArgs e)
+        private void OnUnitBackupComboBoxDropDown(object sender, EventArgs e)
         {
             unitBackupComboBox.Items.Clear();
             string[] unitNames = new string[m_ParentForm.GetTestObject().m_Units.m_Units.Count];
@@ -221,7 +252,7 @@ namespace WebTestGui
             unitBackupComboBox.Items.AddRange(unitNames);
         }
 
-        private void collapseActionsButton_Click(object sender, EventArgs e)
+        private void OnCollapseActionsButtonClick(object sender, EventArgs e)
         {
             Size = new Size(1000, 97);
             actionsPanel.Controls.Clear();
@@ -231,7 +262,7 @@ namespace WebTestGui
             expandActionsButtton.Visible = true;
         }
 
-        private void expandActionsButtton_Click(object sender, EventArgs e)
+        private void OnExpandActionsButttonClick(object sender, EventArgs e)
         {
             m_IsCollapsed = false;
             Refresh();
@@ -244,23 +275,26 @@ namespace WebTestGui
         {
             if (e.KeyChar == (char)Keys.Return)
             {
-                unitNameTextField_Leave(sender, e);
+                OnUnitNameTextFieldChanged(sender, e);
             }
         }
 
-        private void unitNameTextField_Leave(object sender, EventArgs e)
+        private void OnUnitNameTextFieldChanged(object sender, EventArgs e)
         {
             m_UnitName = unitNameTextField.Text;
             m_ParentForm.RefreshUnitsPanel();
         }
 
-        public bool m_IsCollapsed = false;
-        public MainForm m_ParentForm { get; set; }
-        public Actions m_Actions { get; set; }
+        private void OnUIdTextBoxFocusLeave(object sender, EventArgs e)
+        {
+            if (int.TryParse(idTextBox.Text, out int _))
+            {
+                int newId = int.Parse(idTextBox.Text);
+                m_ParentForm.MoveUnit(this, newId);
+            }
+        }
 
-        public string m_UnitName { get; set; }
-        public IUnit m_Bindings { get; set; }
-        public IUnit m_BackupOf { get; set; }
+        public bool m_IsCollapsed = false;
     }
 }
 

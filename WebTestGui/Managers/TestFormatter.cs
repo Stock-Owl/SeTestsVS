@@ -86,18 +86,26 @@ namespace WebTestGui
 
             // Units
             {
-                // JToken unitsData = jsonObject["units"]!;
-                // foreach (JToken unitRawData in unitsData.Children())
-                // {
-                //     JToken unitData = unitRawData.First!.First!;
-                //     string unitName = (string)unitRawData.First!;
-                // 
-                //     IUnit unit = new UnitPanel();
-                //     unit.m_ParentForm = driverManager.m_MainForm;
-                //     unit.m_UnitName = unitName;
-                //     unit.SetData(unitData);
-                //     driverManager.m_Units.m_Units.Add(unit);
-                // }
+                JToken unitsData = jsonObject["units"]!;
+                JObject unitsObject = JObject.Parse(unitsData.ToString());
+                foreach (JProperty unitProperty in unitsObject.Properties())
+                {
+                    string key = unitProperty.Name;
+                    JToken value = unitProperty.Value;
+
+                    IUnit unit = new UnitPanel();
+                    unit.m_ParentForm = driverManager.m_MainForm;
+                    unit.m_UnitName = key;
+                    unit.SetData(value);
+                    driverManager.m_Units.m_Units.Add(unit);
+                }
+
+                // Must happen after all the Units have loaded, because of the refernces
+                foreach (IUnit unit in driverManager.m_Units.m_Units)
+                {
+                    unit.SetUnitBindings();
+                    unit.SetUnitBackupOf();
+                }
             }
 
             return driverManager;

@@ -53,6 +53,10 @@ namespace WebTestGui
 
         public Dictionary<string, object> GetJSONFormatted();
         public void SetData(JToken jSondata);
+
+        public void SetUnitBindings();
+        public void SetUnitBackupOf();
+
         public string m_UnitName { get; set; }
         public MainForm m_ParentForm { get; set; }
 
