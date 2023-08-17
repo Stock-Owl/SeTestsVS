@@ -13,7 +13,4 @@
 ✅ DONE: [U:5][A:1] of type 'click' successfully executed
 ✅ DONE: [U:5][A:2] of type 'click' successfully executed
 ✅ DONE: [U:5][A:3] of type 'send_keys' successfully executed
-✅ DONE: [U:5][A:4] of type 'send_keys' successfully executed
-✅ DONE: [U:5][A:5] of type 'click' successfully executed
-✅ DONE: [U:5][A:6] of type 'click' successfully executed
-✅ DONE: [U:5][A:7] of type 'click' successfully executed
+✅ DONE: [U:5][A:100] of type 'back' successfully executed

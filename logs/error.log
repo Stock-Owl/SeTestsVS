@@ -1,0 +1,33 @@
+❌ ERROR:
+----------------------------------------------------------------
+
+Traceback (most recent call last):
+  File "C:\Users\balaz\Desktop\Programs\VS\SeTestsVS\core.py", line 618, in RunFirefoxDriver
+    Core.ElementAction(
+  File "C:\Users\balaz\Desktop\Programs\VS\SeTestsVS\core.py", line 1138, in ElementAction
+    result = Core.MatchElement(driver, **action_kwargs)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\balaz\Desktop\Programs\VS\SeTestsVS\core.py", line 1066, in MatchElement
+    element =  driver.find_element(By.XPATH, value)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\balaz\AppData\Local\Programs\Python\Python311\Lib\site-packages\selenium\webdriver\remote\webdriver.py", line 740, in find_element
+    return self.execute(Command.FIND_ELEMENT, {"using": by, "value": value})["value"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\balaz\AppData\Local\Programs\Python\Python311\Lib\site-packages\selenium\webdriver\remote\webdriver.py", line 346, in execute
+    self.error_handler.check_response(response)
+  File "C:\Users\balaz\AppData\Local\Programs\Python\Python311\Lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 245, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.NoSuchElementException: Message: Unable to locate element: //*[@id="jfgsb_max_price"]; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+RemoteError@chrome://remote/content/shared/RemoteError.sys.mjs:8:8
+WebDriverError@chrome://remote/content/shared/webdriver/Errors.sys.mjs:187:5
+NoSuchElementError@chrome://remote/content/shared/webdriver/Errors.sys.mjs:505:5
+dom.find/</<@chrome://remote/content/shared/DOM.sys.mjs:132:16
+
+Stack:
+
+	[0] ORIGIN:	  File "C:\Users\balaz\Desktop\Programs\VS\SeTestsVS\main.py", line 4, in <module>
+	[0] ROOT:     Run(json)	
+
+----------------------------------------------------------------
+

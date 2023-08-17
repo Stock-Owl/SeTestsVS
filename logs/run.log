@@ -1,38 +1,66 @@
-16:51:40
+10:44:40
 ✅ DONE: [U:1][A:1] of type 'goto' successfully executed
-16:51:40
+10:44:40
 ✅ DONE: [U:2][A:1] of type 'wait' successfully executed
-16:51:40
+10:44:40
 ✅ DONE: [U:3][A:1] of type 'click' successfully executed
-16:51:41
+10:44:41
 ✅ DONE: [U:3][A:2] of type 'click' successfully executed
-16:51:41
+10:44:41
 ✅ DONE: [U:3][A:3] of type 'click' successfully executed
-16:51:41
+10:44:41
 ✅ DONE: [U:3][A:4] of type 'click' successfully executed
-16:51:42
+10:44:41
 ✅ DONE: [U:3][A:5] of type 'click' successfully executed
-16:51:42
+10:44:42
 ✅ DONE: [U:3][A:6] of type 'click' successfully executed
-16:51:42
+10:44:42
 ✅ DONE: [U:4][A:1] of type 'wait' successfully executed
-16:51:42
+10:44:42
 ✅ DONE: [U:4][A:2] of type 'send_keys' successfully executed
-16:51:42
+10:44:42
 ✅ DONE: [U:4][A:3] of type 'wait' successfully executed
-16:51:42
+10:44:42
 ✅ DONE: [U:5][A:VÁRJÁ'] of type 'wait' successfully executed
-16:51:46
+10:44:46
 ✅ DONE: [U:5][A:1] of type 'click' successfully executed
-16:51:47
+10:44:46
 ✅ DONE: [U:5][A:2] of type 'click' successfully executed
-16:51:47
+10:44:46
 ✅ DONE: [U:5][A:3] of type 'send_keys' successfully executed
-16:51:47
-✅ DONE: [U:5][A:4] of type 'send_keys' successfully executed
-16:51:49
-✅ DONE: [U:5][A:5] of type 'click' successfully executed
-16:51:49
-✅ DONE: [U:5][A:6] of type 'click' successfully executed
-16:51:54
-✅ DONE: [U:5][A:7] of type 'click' successfully executed
+10:44:48
+✅ DONE: [U:5][A:100] of type 'back' successfully executed
+10:44:58
+❌ ERROR:
+----------------------------------------------------------------
+
+Traceback (most recent call last):
+  File "C:\Users\balaz\Desktop\Programs\VS\SeTestsVS\core.py", line 618, in RunFirefoxDriver
+    Core.ElementAction(
+  File "C:\Users\balaz\Desktop\Programs\VS\SeTestsVS\core.py", line 1138, in ElementAction
+    result = Core.MatchElement(driver, **action_kwargs)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\balaz\Desktop\Programs\VS\SeTestsVS\core.py", line 1066, in MatchElement
+    element =  driver.find_element(By.XPATH, value)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\balaz\AppData\Local\Programs\Python\Python311\Lib\site-packages\selenium\webdriver\remote\webdriver.py", line 740, in find_element
+    return self.execute(Command.FIND_ELEMENT, {"using": by, "value": value})["value"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\balaz\AppData\Local\Programs\Python\Python311\Lib\site-packages\selenium\webdriver\remote\webdriver.py", line 346, in execute
+    self.error_handler.check_response(response)
+  File "C:\Users\balaz\AppData\Local\Programs\Python\Python311\Lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 245, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.NoSuchElementException: Message: Unable to locate element: //*[@id="jfgsb_max_price"]; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+RemoteError@chrome://remote/content/shared/RemoteError.sys.mjs:8:8
+WebDriverError@chrome://remote/content/shared/webdriver/Errors.sys.mjs:187:5
+NoSuchElementError@chrome://remote/content/shared/webdriver/Errors.sys.mjs:505:5
+dom.find/</<@chrome://remote/content/shared/DOM.sys.mjs:132:16
+
+Stack:
+
+	[0] ORIGIN:	  File "C:\Users\balaz\Desktop\Programs\VS\SeTestsVS\main.py", line 4, in <module>
+	[0] ROOT:     Run(json)	
+
+----------------------------------------------------------------
+

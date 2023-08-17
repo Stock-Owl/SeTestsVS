@@ -23,8 +23,8 @@
         },
         "unhandled_prompt_behavior": "dismiss and notify",
         "keep_browser_open": true,
-        "chrome_arguments": [],
-        "firefox_arguments": []
+        "browser_arguments": [],
+        "service_arguments": []
     },
     "units":
     {
