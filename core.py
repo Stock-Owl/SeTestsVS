@@ -57,10 +57,6 @@ from copy import copy
 # TODO: add request shit for drivers. Seleniumwire!!! Needs to be implemented!  ❌  24
 # TODO: time data collection, bounds etc.                                       ❌  25
 
-# null nem lesz, mert C# for whatever reason, úgyhogy helyette ez van!
-# Not used yet
-# none = ""
-
 class Core:
     default_driver_options_dict_: dict = \
     {
@@ -103,7 +99,6 @@ class Core:
                 firefox.add_argument(option)
 
         return (chrome, firefox)
-
 
     # loads options
     def LoadOptions(options: dict[str]) -> tuple[ChromeOptions, FirefoxOptions]:
@@ -240,12 +235,6 @@ class Core:
         for process in processes:
             process.start()
 
-# külön egy host ami spawnoltatja a processeket a respektív optionökkel
-
-
-# külön egy-egy driver runnner function
-# külön autologger function
-
     def ChromeExec(
         options: ChromeOptions = None,
         units: dict[str] = None,
@@ -257,26 +246,44 @@ class Core:
         log_js_args: dict[str] = None) -> None:
 
         driver = ChromeDriver(options = options)  # , service = service
-
-        Support.ClearAllLogs(parent_log_path) # Átmegy takarítónőbe... minden eltűnik
+        # 
+        # clears the previous log files
+        Support.ClearAllLogs(parent_log_path)
         
-        active_binds: list[str] = []
+        active_bindings: list[str] = []
+        failed_units: list[str] = []
+        
         # deepcode ignore AttributeLoadOnNone: <Keyword arguments only set to None to make them a keyword argument. All parameters will be passed from the host funciton>
         for  uname, unit in units.items():
             try:
-                if uname in active_binds:
+                backup = unit["backup_of"]
+
+                if backup is not None:
+                    # if the backup is target failed, then run as normal
+                    if backup in failed_units:
+                        pass
+                    # if the backup target executed, skip the backup
+                    else:
+                        log_line = f"\'{uname}\' backup skipped because backup target unit sucessfully executed\n"
+                        Support.LogProc(parent_log_path, log_line)
+                        continue
+
+                # elif, because if it's an inactive backup, it doesn't need to check for bindings
+                elif uname in active_bindings:
                     log_line = f"\'{uname}\' skipped because previous unit failed\n"
                     Support.LogProc(parent_log_path, log_line)
-                    continue    
+                    continue
+
                 actions = unit['actions']
-                for index, action in actions.items():
-                    print(action)
+                for aname, action in actions.items():
+                    # print(action)
                     if action["break"]:
                         if terminal_mode:
                             input("press enter to resume")
                         else:
                             pass   # majd ide kell egy intermediate comms file megint mint a JS-nél
                         Support.LogProc(parent_log_path, "Breakpoint")
+
                     match action["type"]:
                         case "goto":
                             url = action["url"]
@@ -289,48 +296,48 @@ class Core:
                             Core.Refresh(driver)
                         case "js_execute":
                             commands = action["commands"]
-                            Core.ExecuteJS(driver, commands, log_JS_args=log_js_args)
+                            Core.ExecuteJS(driver, commands, path=parent_log_path, log_JS_args=log_js_args)
                         case "wait":
-                            time = action["amount"]
-                            Core.Wait(driver = driver, time_ = time)
+                            time = action['amount']
+                            Core.Wait(driver, time)
                         case "wait_for":
                             Core.WaitFor(driver, action)
                         case "click":
                             Core.ElementAction(
-                            driver,
-                            action = 'click',
-                            locator = action['locator'],
-                            value = action['value'],
-                            isSingle = action['single'],
-                            isDisplayed = action['displayed'],
-                            isEnabled = action['enabled'],
-                            isSelected = action['selected'])
+                                driver,
+                                action = 'click',
+                                locator = action['locator'],
+                                value = action['value'],
+                                isSingle = action['single'],
+                                isDisplayed = action['displayed'],
+                                isEnabled = action['enabled'],
+                                isSelected = action['selected'])
                         case "send_keys":
                             Core.ElementAction(
-                            driver,
-                            action = 'send_keys',
-                            locator = action['locator'],
-                            value = action['value'],
-                            keys = action['keys'],
-                            isSingle = action['single'],
-                            isDisplayed = action['displayed'],
-                            isEnabled = action['enabled'],
-                            isSelected = action['selected'])
+                                driver,
+                                action = 'send_keys',
+                                locator = action['locator'],
+                                value = action['value'],
+                                keys = action['keys'],
+                                isSingle = action['single'],
+                                isDisplayed = action['displayed'],
+                                isEnabled = action['enabled'],
+                                isSelected = action['selected'])
                         case "clear":
                             Core.ElementAction(
                                 driver,
-                            action = 'clear',
-                            locator = action['locator'],
-                            value = action['value'],
-                            isSingle = action['single'],
-                            isDisplayed = action['displayed'],
-                            isEnabled = action['enabled'],
-                            isSelected = action['selected'])
+                                action = 'clear',
+                                locator = action['locator'],
+                                value = action['value'],
+                                isSingle = action['single'],
+                                isDisplayed = action['displayed'],
+                                isEnabled = action['enabled'],
+                                isSelected = action['selected'])
                         case _:
                             action_type = action['type']
                             Support.LogProc(parent_log_path, f"Unknown action \'{action_type}\'")
 
-                    log_line = f"[U:{uname}][A:{index}] of type \'{action['type']}\' successfully executed"
+                    log_line = f"[U:{uname}][A:{aname}] of type \'{action['type']}\' successfully executed"
                     Support.LogProc(parent_log_path, log_line)
 
             except:
@@ -339,13 +346,13 @@ class Core:
                     if isinstance(bindings, list):
                         for binding in bindings:
                             if isinstance(binding, str):
-                                active_binds.append(binding)
+                                active_bindings.append(binding)
                             else:
                                 # wrong element type in string list
                                 Support.LogError(parent_log_path, f"Parameters in \'bindings\' must be of type str (string) not {type(binding)}")
 
                     elif isinstance(bindings, str):
-                        active_binds.append(bindings)
+                        active_bindings.append(bindings)
 
                     else:
                         # wrong elmement type for `bindings` (should be string)
@@ -382,6 +389,34 @@ class Core:
 
         else:
             driver.Quit()
+
+        from datetime import date as d
+        today: str = d.today().strftime("%Y-%m-%d")
+        # ltlogs = long term logs
+        path = f"{parent_log_path}/ltlogs/{today}.log"
+
+        # this path doesn't need type checking, because
+        # it must have been created at the start of the runtime for loop
+        # and therefore it must exist
+        current_log_path = f"{parent_log_path}/run.log"            
+        with open(current_log_path, mode='r', encoding='utf-8') as f:
+            current_log: str = f.read()
+
+        # try to append to the log file
+        try:
+            with open(path, mode='r', encoding='utf-8') as f:
+                f.read()
+            with open(path, mode='a', encoding='utf-8') as f:
+                to_write = \
+                f"-------------------------------------\n\n{current_log}\n-------------------------------------\n"
+                f.write(to_write)
+
+        # if the path doesn't exist, create it and log the current date at the top of it
+        except FileNotFoundError:
+            with open(path, mode='w', encoding='utf-8') as f:
+                to_write = \
+                f"DATE: {today}\n-------------------------------------\n\n{current_log}\n-------------------------------------\n"
+                f.write(to_write)
 
         shared_state.value = False
 
@@ -396,17 +431,34 @@ class Core:
         log_js_args: dict[str] = None) -> None:
 
         driver = FirefoxDriver(options = options)  # , service = service
+        # 
+        # clears the previous log files
+        Support.ClearAllLogs(parent_log_path)
+                
+        active_bindings: list[str] = []
+        failed_units: list[str] = []
 
-        Support.ClearAllLogs(parent_log_path) # Átmegy takarítónőbe... minden eltűnik
-        
-        active_binds: list[str] = []
         # deepcode ignore AttributeLoadOnNone: <Keyword arguments only set to None to make them a keyword argument. All parameters will be passed from the host funciton>
         for  uname, unit in units.items():
             try:
-                if uname in active_binds:
+                backup = unit["backup_of"]
+
+                if backup is not None:
+                    # if the backup is target failed, then run as normal
+                    if backup in failed_units:
+                        pass
+                    # if the backup target executed, skip the backup
+                    else:
+                        log_line = f"\'{uname}\' backup skipped because target unit successfully executed\n"
+                        Support.LogProc(parent_log_path, log_line)
+                        continue
+                
+                # elif, becuase if it's an inactive backup, it doesn't need to check for bindings
+                elif uname in active_bindings:
                     log_line = f"\'{uname}\' skipped because previous unit failed\n"
                     Support.LogProc(parent_log_path, log_line)
-                    continue    
+                    continue
+
                 actions = unit['actions']
                 for index, action in actions.items():
                     print(action)
@@ -416,6 +468,7 @@ class Core:
                         else:
                             pass   # majd ide kell egy intermediate comms file megint mint a JS-nél
                         Support.LogProc(parent_log_path, "Breakpoint")
+                    
                     match action["type"]:
                         case "goto":
                             url = action["url"]
@@ -471,20 +524,20 @@ class Core:
 
                     log_line = f"[U:{uname}][A:{index}] of type \'{action['type']}\' successfully executed"
                     Support.LogProc(parent_log_path, log_line)
-
+            
             except:
                 bindings = unit['bindings']
                 if bindings is not None:
                     if isinstance(bindings, list):
                         for binding in bindings:
                             if isinstance(binding, str):
-                                active_binds.append(binding)
+                                active_bindings.append(binding)
                             else:
                                 # wrong element type in string list
                                 Support.LogError(parent_log_path, f"Parameters in \'bindings\' must be of type str (string) not {type(binding)}")
 
                     elif isinstance(bindings, str):
-                        active_binds.append(bindings)
+                        active_bindings.append(bindings)
 
                     else:
                         # wrong elmement type for `bindings` (should be string)
@@ -521,6 +574,34 @@ class Core:
 
         else:
             driver.Quit()
+
+        from datetime import date as d
+        today: str = d.today().strftime("%Y-%m-%d")
+        # ltlogs = long term logs
+        path = f"{parent_log_path}/ltlogs/{today}.log"
+
+        # this path doesn't need type checking, because
+        # it must have been created at the start of the runtime for loop
+        # and therefore it must exist
+        current_log_path = f"{parent_log_path}/run.log"            
+        with open(current_log_path, mode='r', encoding='utf-8') as f:
+            current_log: str = f.read()
+
+        # try to append to the log file
+        try:
+            with open(path, mode='r', encoding='utf-8') as f:
+                f.read()
+            with open(path, mode='a', encoding='utf-8') as f:
+                to_write = \
+                f"-------------------------------------\n\n{current_log}\n-------------------------------------\n"
+                f.write(to_write)
+
+        # if the path doesn't exist, create it and log the current date at the top of it
+        except FileNotFoundError:
+            with open(path, mode='w', encoding='utf-8') as f:
+                to_write = \
+                f"DATE: {today}\n-------------------------------------\n\n{current_log}\n-------------------------------------\n"
+                f.write(to_write)
 
         shared_state.value = False
 
@@ -554,7 +635,7 @@ class Core:
         try:
             assert Support.exists(path)
         except:
-            with open(path, mode='w', enocoding='utf-8') as f:
+            with open(path, mode='w', encoding='utf-8') as f:
                 f.write("")
 
         processed: list[str] = []
@@ -649,45 +730,6 @@ class Core:
 
         return logs
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     def DefaultFirefoxOptions() -> FirefoxOptions:
         from copy import copy
         defaults = copy(Core.default_driver_options_dict_)
@@ -702,191 +744,6 @@ class Core:
 
         return options       
     
-    def RunFirefoxDriver(path: str | None = None, json_string: str | None = None) -> None:
-        # loads json file or loads the string and instanciates the actions par and the 
-        loaded_dict: dict
-        if type(json_string) == type(path):
-            log_line: str = ("You either give a path to the json file or parse the json string raw, bitch.\nNOT both! Which one am I supposed to use, you expired coupon?!")
-            Support.LogError("./logs", log_line)
-            return None
-        elif path is None:
-            loaded_dict = loads(json_string)
-        else:
-            try:
-                with open(path, 'r', encoding='utf-8') as f:
-                    loaded_dict = loads(f.read())
-            except FileNotFoundError:
-                log_line: str = "Invalid path, file not found"
-                Support.LogError("./logs", log_line)
-                return None     
-                       
-        driver: FirefoxDriver
-        driver_options_ =  loaded_dict["driver_options"]
-        global_options = loaded_dict["options"]
-
-        #print(loaded_dict)
-        units: dict = loaded_dict["units"]                
-        LogJSArgs = global_options["log_JS"]
-        parent_log_path = global_options["parent_log_path"]
-        terminal_mode = global_options["terminal_mode"]
-
-        # create the chrome driver with arguments
-        if driver_options_ != Core.default_driver_options_dict_:
-            # creates the firefox service since for firefox that's a reqirement
-            opts = FirefoxOptions()
-            
-            """
-            3 types of page load startegies are available:
-            * normal
-            * eager
-            * none
-            Throws a ValueError if an unsupported page load startegy type is given.
-            """
-            opts.page_load_strategy = driver_options_["page_load_strategy"]
-            
-            """
-            Accept insecure cert(ification)s is either true or false. Not case sensitive
-            """
-            opts.accept_insecure_certs = driver_options_["accept_insecure_certs"]  # should be a bool
-            
-            """
-            3 types of timeouts are available:
-            * impilicit
-            * pageLoad
-            * script
-            Throws a ValueError if an unsupported timeout type is given.
-            The value of the timeout is the timespan [of the timteout] in MILLISECONDS (ms)
-            """
-            opts.timeouts = {driver_options_["timeout"]["type"]: driver_options_["timeout"]["value"]}
-            
-            """
-            5 types of behaviors are available:
-            * dismiss
-            * accept
-            * dismiss and notify
-            * accept and notify
-            * ignore
-            Throws a ValueError if an unsupported behavior type is given.
-            """
-            opts.unhandled_prompt_behavior = driver_options_["unhandled_prompt_behavior"]
-            
-            for option in driver_options_["browser_arguments"]:
-                opts.add_argument(option)
-
-        elif driver_options_ == Core.default_driver_options_dict_:
-            opts = Core.DefaultFirefoxOptions()
-
-        else:
-            Support.LogError(parent_log_path, "Some shit got fucked up. But I have no clue what exactly.")
-
-        # service = FirefoxService()
-        driver = FirefoxDriver(options = opts)  # , service = service
-
-        Support.ClearAllLogs(parent_log_path) # Átmegy takarítónőbe... minden eltűnik
-        
-        active_binds: list[str] = []
-        for  uname, unit in units.items():
-            try:
-                if uname in active_binds:
-                    log_line = f"\'{uname}\' skipped because previous unit failed\n"
-                    Support.LogProc(parent_log_path, log_line)
-                    continue    
-                actions = unit['actions']
-                for index, action in actions.items():
-                    print(action)
-                    if action["break"]:
-                        if terminal_mode:
-                            input("press enter to resume")
-                        else:
-                            pass   # majd ide kell egy intermediate comms file megint mint a JS-nél
-                        Support.LogProc(parent_log_path, "Breakpoint")
-                    match action["type"]:
-                        case "goto":
-                            url = action["url"]
-                            Core.Goto(driver, url)
-                        case "back":
-                            Core.Back(driver)
-                        case "forward":
-                            Core.Forward(driver)
-                        case "refresh":
-                            Core.Refresh(driver)
-                        case "js_execute":
-                            commands = action["commands"]
-                            Core.ExecuteJS(driver, commands, log_JS_args=LogJSArgs)
-                        case "wait":
-                            time = action["amount"]
-                            Core.Wait(driver = driver, time_ = time)
-                        case "wait_for":
-                            Core.WaitFor(driver, action)
-                        case "click":
-                            Core.ElementAction(
-                            driver,
-                            action = 'click',
-                            locator = action['locator'],
-                            value = action['value'],
-                            isSingle = action['single'],
-                            isDisplayed = action['displayed'],
-                            isEnabled = action['enabled'],
-                            isSelected = action['selected'])
-                        case "send_keys":
-                            Core.ElementAction(
-                            driver,
-                            action = 'send_keys',
-                            locator = action['locator'],
-                            value = action['value'],
-                            keys = action['keys'],
-                            isSingle = action['single'],
-                            isDisplayed = action['displayed'],
-                            isEnabled = action['enabled'],
-                            isSelected = action['selected'])
-                        case "clear":
-                            Core.ElementAction(
-                                driver,
-                            action = 'clear',
-                            locator = action['locator'],
-                            value = action['value'],
-                            isSingle = action['single'],
-                            isDisplayed = action['displayed'],
-                            isEnabled = action['enabled'],
-                            isSelected = action['selected'])
-                        case _:
-                            action_type = action['type']
-                            Support.LogProc(parent_log_path, f"Unknown action \'{action_type}\'")                                
-                    log_line = f"[U:{uname}][A:{index}] of type \'{action['type']}\' successfully executed"
-                    Support.LogProc(parent_log_path, log_line)
-            except:
-                bindings = unit['bindings']
-                if bindings is not None:
-                    if isinstance(bindings, list):
-                        for binding in bindings:
-                            if isinstance(binding, str):
-                                active_binds.append(binding)
-                            else:
-                                # wrong element type in string list
-                                Support.LogError(parent_log_path, f"Parameters in \'bindings\' must be of type str (string) not {type(binding)}")
-                    elif isinstance(bindings, str):
-                        active_binds.append(bindings)
-                    else:
-                        # wrong elmement type for `bindings` (should be string)
-                        Support.LogError(parent_log_path, f"Parameter \'bindings\' must be of type str (string) not {type(bindings)}")
-
-                Support.LogError(parent_log_path, "❌ ERROR:\n----------------------------------------------------------------\n")
-                Support.LogError(parent_log_path, f"{format_exc()}Stack:\n", time_disabled=True)
-
-                stack = format_stack()
-                # -1 to exclude this expression from stack
-                for x in range(len(stack)-1):
-                    stack_parts = stack[x].split('\n')
-                    origin = stack_parts[0]
-                    root = stack_parts[1]
-                    Support.LogError(parent_log_path, f"\t[{x}] ORIGIN:\t{origin}\n\t[{x}] ROOT: {root}\t\n", time_disabled=True)
-                Support.LogError(parent_log_path, "----------------------------------------------------------------\n", time_disabled=True)
-                
-        if driver_options_["keep_browser_open"]:
-            pass
-        else:
-            driver.Quit()
-    
     def DefaultChromeOptions() -> ChromeOptions:
         from copy import copy
         defaults = copy(Core.default_driver_options_dict_)
@@ -899,262 +756,6 @@ class Core:
         for option in defaults["browser_arguments"]:
                 options.add_argument(option)
         return options        
-    
-    def RunChromeDriver(path: str | None = None, json_string: str | None = None) -> None:
-        from time import sleep
-        # loads json file or loads the string and instanciates the actions par and the 
-        loaded_dict: dict
-        if type(json_string) == type(path):
-            log_line: str = "You either give a path to the json file or parse the json string raw, bitch.\nNOT both! Which one am I supposed to use, you expired coupon?!"
-            Support.LogError("./logs", log_line)
-            return None
-        
-        elif path is None:
-            loaded_dict = loads(json_string)
-
-        else:
-            try:
-                with open(path, 'r', encoding='utf-8') as f:
-                    loaded_dict = loads(f.read())
-
-            except FileNotFoundError:
-                log_line: str = "Invalid path, file not found"
-                Support.LogError("./logs", log_line)
-                return None
-                      
-        driver: ChromeDriver
-        driver_options_ =  loaded_dict["driver_options"]
-        global_options = loaded_dict["options"]
-        # print(loaded_dict)
-
-        units: dict = loaded_dict["units"]
-        LogJSArgs = global_options["log_JS"]
-        parent_log_path: str = global_options["parent_log_path"]
-        terminal_mode: bool = global_options["terminal_mode"]
-
-        # create the chrome driver with arguments
-        if driver_options_ != Core.default_driver_options_dict_:
-            # service_: dict = driver_options_["service"]                
-            # log_path: str = service_["log_path"]
-            # service_args: list[str] = service_["arguments"]
-            # Not used because the chromedriver is a bitch and crashes for some reason before even creating the driver...
-            # Akkor, a kurva anyját (:
-            # service = ChromeService(service_args = service_args, log_path = log_path)
-            opts = ChromeOptions()
-
-            """
-            3 types of page load startegies are available:
-            * normal
-            * eager
-            * none
-            Throws a ValueError if an unsupported page load startegy type is given.
-            """
-            opts.page_load_strategy = driver_options_["page_load_strategy"]
-
-            """
-            Accept insecure cert(ification)s is either true or false. Not case sensitive
-            """
-            opts.accept_insecure_certs = driver_options_["accept_insecure_certs"]  # should be a bool
-
-            """
-            3 types of timeouts are available:
-            * impilicit
-            * pageLoad
-            * script
-            Throws a ValueError if an unsupported timeout type is given.
-            The value of the timeout is the timespan [of the timteout] in MILLISECONDS (ms)
-            """
-            opts.timeouts = {driver_options_["timeout"]["type"]: driver_options_["timeout"]["value"]}
-
-            """
-            5 types of behaviors are available:
-            * dismiss
-            * accept
-            * dismiss and notify
-            * accept and notify
-            * ignore
-            Throws a ValueError if an unsupported behavior type is given.
-            """
-            opts.unhandled_prompt_behavior = driver_options_["unhandled_prompt_behavior"]
-
-            if driver_options_["keep_browser_open"] != "":
-                opts.add_experimental_option("detach", driver_options_["keep_browser_open"])
-
-            for option in driver_options_["browser_arguments"]:
-                opts.add_argument(option)
-
-        # create the chrome driver (as bare bones as it gets)
-        elif driver_options_ == Core.default_driver_options_dict_:
-            opts = Core.DefaultChromeOptions()
-            # NOT used. see line 308
-            # service = Core.DefaultService()
-
-        else:
-            Support.LogError(parent_log_path, "Some shit got fucked up. But I have no clue what exactly.")
-
-        # service commented out bc chromdriver shits itslef, ig
-        driver = ChromeDriver(options = opts)   # , service = service
-        # 
-        # clears the previous log filed
-        Support.ClearAllLogs(parent_log_path)
-
-        active_bindings: list[str] = []
-        failed_units: list[str] = []
-
-        for uname, unit in units.items():
-            try:
-                backup = unit["backup_of"]
-
-                if backup is not None:
-                    # if the backup is target failed, then run as normal
-                    if backup in failed_units:
-                        pass
-                    # if the backup target executed, skip the backup
-                    else:
-                        log_line = f"\'{uname}\' backup skipped because backup target unit sucessfully executed\n"
-                        Support.LogProc(parent_log_path, log_line)
-                        continue
-
-                # elif, because if it's an inactive backup, it doesn't need to check for bindings
-                elif uname in active_bindings:
-                    log_line = f"\'{uname}\' skipped because previous unit failed\n"
-                    Support.LogProc(parent_log_path, log_line)
-                    continue
-
-                actions = unit['actions']
-                for aname, action in actions.items():
-                    # print(action)
-                    if action["break"]:
-                        if terminal_mode:
-                            input("press enter to resume")
-                        else:
-                            pass   # majd ide kell egy intermediate comms file megint mint a JS-nél
-                        Support.LogProc(parent_log_path, "Breakpoint")
-
-                    match action["type"]:
-                        case "goto":
-                            url = action["url"]
-                            Core.Goto(driver, url)
-                        case "back":
-                            Core.Back(driver)
-                        case "forward":
-                            Core.Forward(driver)
-                        case "refresh":
-                            Core.Refresh(driver)
-                        case "js_execute":
-                            commands = action["commands"]
-                            Core.ExecuteJS(driver, commands, path=parent_log_path, log_JS_args=LogJSArgs)
-                        case "wait":
-                            time = action['amount']
-                            Core.Wait(driver, time)
-                        case "wait_for":
-                            Core.WaitFor(driver, action)
-                            # timeout = action['timeout']
-                            # frequency = action['frequency']
-                            # condition = action['condition']
-                        case "click":
-                            Core.ElementAction(
-                                driver,
-                                action = 'click',
-                                locator = action['locator'],
-                                value = action['value'],
-                                isSingle = action['single'],
-                                isDisplayed = action['displayed'],
-                                isEnabled = action['enabled'],
-                                isSelected = action['selected'])
-                        case "send_keys":
-                            Core.ElementAction(
-                                driver,
-                                action = 'send_keys',
-                                locator = action['locator'],
-                                value = action['value'],
-                                keys = action['keys'],
-                                isSingle = action['single'],
-                                isDisplayed = action['displayed'],
-                                isEnabled = action['enabled'],
-                                isSelected = action['selected'])
-                        case "clear":
-                            Core.ElementAction(
-                                driver,
-                                action = 'clear',
-                                locator = action['locator'],
-                                value = action['value'],
-                                isSingle = action['single'],
-                                isDisplayed = action['displayed'],
-                                isEnabled = action['enabled'],
-                                isSelected = action['selected'])
-                        case _:
-                            action_type = action['type']
-                            Support.LogProc(parent_log_path, f"Unknown action \'{action_type}\'")
-
-                    log_line = f"[U:{uname}][A:{aname}] of type \'{action['type']}\' successfully executed"
-                    Support.LogProc(parent_log_path, log_line)
-
-            except:
-                # so, the unit has failed, and it needs to be added to the failed units to check for backups
-                failed_units.append(uname)
-                bindings = unit['bindings']
-                if bindings is not None:
-                    if isinstance(bindings, list):
-                        for binding in bindings:
-                            if isinstance(binding, str):
-                                active_bindings.append(binding)
-                            else:
-                                # wrong element type in string list
-                                Support.LogError(parent_log_path, f"Parameters in \'bindings\' must be of type str (string) not {type(binding)}")
-
-                    elif isinstance(bindings, str):
-                        active_bindings.append(bindings)
-
-                    else:
-                        # wrong elmement type for `bindings` (should be string)
-                        Support.LogError(parent_log_path, f"Parameter \'bindings\' must be of type str (string) not {type(bindings)}")
-
-                Support.LogAll(parent_log_path, "❌ ERROR:\n----------------------------------------------------------------\n")
-                Support.LogError(parent_log_path, f"{format_exc()}Stack:\n", time_disabled=True)
-                stack = format_stack()
-
-                # -1 to exclude this expression from stack
-                for x in range(len(stack)-1):
-                    stack_parts = stack[x].split('\n')
-                    origin = stack_parts[0]
-                    root = stack_parts[1]
-                    Support.LogError(parent_log_path, f"\t[{x}] ORIGIN:\t{origin}\n\t[{x}] ROOT:{root}\n\n", time_disabled=True)
-                Support.LogAll(parent_log_path, "----------------------------------------------------------------\n", time_disabled=True)
-        
-        #
-        if driver_options_["keep_browser_open"]:
-            pass
-        else:
-            driver.Quit()
-
-        from datetime import date as d
-        today: str = d.today().strftime("%Y-%m-%d")
-        # ltlogs = long term logs
-        path = f"{parent_log_path}/ltlogs/{today}.log"
-
-        # this path doesn't need type checking, because
-        # it must have been created at the start of the runtime for loop
-        # and therefore it must exist
-        current_log_path = f"{parent_log_path}/run.log"            
-        with open(current_log_path, mode='r', encoding='utf-8') as f:
-            current_log: str = f.read()
-
-        # try to append to the log file
-        try:
-            with open(path, mode='r', encoding='utf-8') as f:
-                f.read()
-            with open(path, mode='a', encoding='utf-8') as f:
-                to_write = \
-                f"-------------------------------------\n\n{current_log}\n-------------------------------------\n"
-                f.write(to_write)
-
-        # if the path doesn't exist, create it and log the current date at the top of it
-        except FileNotFoundError:
-            with open(path, mode='w', encoding='utf-8') as f:
-                to_write = \
-                f"DATE: {today}\n-------------------------------------\n\n{current_log}\n-------------------------------------\n"
-                f.write(to_write)
 
     def Goto(driver: ChromeDriver | FirefoxDriver, url: str):
         Core.CheckDriverExists(driver)
