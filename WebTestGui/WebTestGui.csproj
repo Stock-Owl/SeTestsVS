@@ -21,34 +21,34 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Core\Actions\ClearAction.cs">
+    <Compile Update="Core\Units\Actions\ClearAction.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="Core\Actions\WaitForAction.cs">
+    <Compile Update="Core\Units\Actions\WaitForAction.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="Core\Actions\WaitAction.cs">
+    <Compile Update="Core\Units\Actions\WaitAction.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="Core\Actions\ExecuteJsAction.cs">
+    <Compile Update="Core\Units\Actions\ExecuteJsAction.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="Core\Actions\JsCommand\JsCommandEditor.cs">
+    <Compile Update="Core\Units\Actions\JsCommand\JsCommandEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="Core\Actions\RefreshAction.cs">
+    <Compile Update="Core\Units\Actions\RefreshAction.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="Core\Actions\ForwardAction.cs">
+    <Compile Update="Core\Units\Actions\ForwardAction.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="Core\Actions\BackAction.cs">
+    <Compile Update="Core\Units\Actions\BackAction.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="Core\Actions\SendKeysAction.cs">
+    <Compile Update="Core\Units\Actions\SendKeysAction.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="Core\Actions\ClickAction.cs">
+    <Compile Update="Core\Units\Actions\ClickAction.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="Core\DriverOptions\FirefoxArgumentDriverOption.cs">
@@ -82,6 +82,9 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="Core\Options\LogJSOption.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Core\Units\UnitPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="Properties\Resources.Designer.cs">

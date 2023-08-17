@@ -37,8 +37,7 @@
             testStartButton = new Button();
             actionText = new Label();
             actionHeaderPanel = new Panel();
-            label1 = new Label();
-            addActionComboBox = new ComboBox();
+            button1 = new Button();
             optionHeaderPanel = new Panel();
             label3 = new Label();
             addDriverActionComboBox = new ComboBox();
@@ -46,7 +45,7 @@
             addOptionComboBox = new ComboBox();
             optionLabel = new Label();
             optionsPanel = new FlowLayoutPanel();
-            actionsPanel = new FlowLayoutPanel();
+            unitsPanel = new FlowLayoutPanel();
             switchToOptionsButton = new Button();
             switchToJsLogButton = new Button();
             jsConsole = new RichTextBox();
@@ -164,50 +163,35 @@
             actionText.ForeColor = Color.White;
             actionText.Location = new Point(3, 2);
             actionText.Name = "actionText";
-            actionText.Size = new Size(75, 25);
+            actionText.Size = new Size(74, 25);
             actionText.TabIndex = 9;
-            actionText.Text = "Akciók:";
+            actionText.Text = "Unitok:";
             // 
             // actionHeaderPanel
             // 
             actionHeaderPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             actionHeaderPanel.AutoScroll = true;
             actionHeaderPanel.BackColor = Color.FromArgb(40, 40, 45);
-            actionHeaderPanel.Controls.Add(label1);
-            actionHeaderPanel.Controls.Add(addActionComboBox);
+            actionHeaderPanel.Controls.Add(button1);
             actionHeaderPanel.Controls.Add(actionText);
             actionHeaderPanel.Location = new Point(243, 64);
             actionHeaderPanel.Name = "actionHeaderPanel";
             actionHeaderPanel.Size = new Size(383, 34);
             actionHeaderPanel.TabIndex = 9;
             // 
-            // label1
+            // button1
             // 
-            label1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            label1.AutoSize = true;
-            label1.BackColor = Color.FromArgb(40, 40, 43);
-            label1.Font = new Font("Segoe UI Semibold", 11F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
-            label1.ForeColor = Color.LightGray;
-            label1.Location = new Point(212, 4);
-            label1.Name = "label1";
-            label1.Size = new Size(144, 20);
-            label1.TabIndex = 40;
-            label1.Text = "Akció hozzáadása...";
-            // 
-            // addActionComboBox
-            // 
-            addActionComboBox.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            addActionComboBox.BackColor = Color.FromArgb(40, 40, 43);
-            addActionComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-            addActionComboBox.FlatStyle = FlatStyle.Popup;
-            addActionComboBox.Font = new Font("Segoe UI Semibold", 11F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
-            addActionComboBox.ForeColor = Color.Silver;
-            addActionComboBox.FormattingEnabled = true;
-            addActionComboBox.Location = new Point(208, 0);
-            addActionComboBox.Name = "addActionComboBox";
-            addActionComboBox.Size = new Size(175, 28);
-            addActionComboBox.TabIndex = 43;
-            addActionComboBox.SelectedIndexChanged += OnActionComboBoxItemSelect;
+            button1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            button1.BackColor = Color.FromArgb(40, 40, 43);
+            button1.Font = new Font("Segoe UI", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
+            button1.ForeColor = Color.White;
+            button1.Location = new Point(263, 3);
+            button1.Name = "button1";
+            button1.Size = new Size(117, 25);
+            button1.TabIndex = 41;
+            button1.Text = "Unit hozzáadása:";
+            button1.UseVisualStyleBackColor = false;
+            button1.Click += OnAddUnitButtonPressed;
             // 
             // optionHeaderPanel
             // 
@@ -302,15 +286,15 @@
             optionsPanel.Size = new Size(327, 267);
             optionsPanel.TabIndex = 38;
             // 
-            // actionsPanel
+            // unitsPanel
             // 
-            actionsPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            actionsPanel.AutoScroll = true;
-            actionsPanel.BackColor = Color.FromArgb(45, 45, 50);
-            actionsPanel.Location = new Point(243, 95);
-            actionsPanel.Name = "actionsPanel";
-            actionsPanel.Size = new Size(383, 358);
-            actionsPanel.TabIndex = 39;
+            unitsPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            unitsPanel.AutoScroll = true;
+            unitsPanel.BackColor = Color.FromArgb(45, 45, 50);
+            unitsPanel.Location = new Point(243, 95);
+            unitsPanel.Name = "unitsPanel";
+            unitsPanel.Size = new Size(383, 358);
+            unitsPanel.TabIndex = 39;
             // 
             // switchToOptionsButton
             // 
@@ -493,7 +477,7 @@
             Controls.Add(browserLabel);
             Controls.Add(switchToJsLogButton);
             Controls.Add(switchToOptionsButton);
-            Controls.Add(actionsPanel);
+            Controls.Add(unitsPanel);
             Controls.Add(optionsPanel);
             Controls.Add(testStartButton);
             Controls.Add(pictureBox2);
@@ -538,9 +522,7 @@
         private Panel actionHeaderPanel;
         private Panel optionHeaderPanel;
         private FlowLayoutPanel optionsPanel;
-        private FlowLayoutPanel actionsPanel;
-        private ComboBox addActionComboBox;
-        private Label label1;
+        private FlowLayoutPanel unitsPanel;
         private Button switchToOptionsButton;
         private Button switchToJsLogButton;
         private RichTextBox jsConsole;
@@ -559,5 +541,6 @@
         private ComboBox addOptionComboBox;
         private Label label3;
         private ComboBox addDriverActionComboBox;
+        private Button button1;
     }
 }

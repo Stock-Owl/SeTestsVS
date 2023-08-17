@@ -5,7 +5,7 @@ namespace WebTestGui
 {
     public static class TestFormatter
     {
-        public static string SaveDriverManagerToJson(DriverStorage driverManager)
+        public static string SaveDriverManagerToJson(Test driverManager)
         {
             Dictionary<string, object> jsonData = new Dictionary<string, object>();
 
@@ -32,20 +32,20 @@ namespace WebTestGui
                 jsonData["driver_options"] = driverOptionsData;
             }
 
-            // Actions
+            // Units
             {
-                Dictionary<string, object> actionsData = new Dictionary<string, object>();
-                foreach (IAction action in driverManager.m_Actions.m_Actions)
+                Dictionary<string, object> unitsData = new Dictionary<string, object>();
+                foreach (IUnit unit in driverManager.m_Units.m_Units)
                 {
-                    actionsData[action.GetId().ToString()] = action.GetJSONFormatted();
+                    unitsData[unit.m_UnitName] = unit.GetJSONFormatted();
                 }
-                jsonData["actions"] = actionsData;
+                jsonData["units"] = unitsData;
             }
 
             return JsonConvert.SerializeObject(jsonData, Formatting.Indented);
         }
 
-        public static DriverStorage LoadDriverManagerFromJson(string rawJson, DriverStorage driverManager)
+        public static Test LoadDriverManagerFromJson(string rawJson, Test driverManager)
         {
             JObject jsonObject = JObject.Parse(rawJson);
 
@@ -84,19 +84,20 @@ namespace WebTestGui
                 }
             }
 
-            // Actions
+            // Units
             {
-                JToken actionsData = jsonObject["actions"]!;
-                foreach (JToken actionRawData in actionsData.Children())
-                {
-                    JToken actionData = actionRawData.First!;
-                    string actionType = (string)actionRawData.First!.First!;
-
-                    IAction action = Actions.CreateActionByType(actionType);
-                    action.m_ParentForm = driverManager.m_MainForm;
-                    action.SetData(actionData);
-                    driverManager.m_Actions.m_Actions.Add(action);
-                }
+                // JToken unitsData = jsonObject["units"]!;
+                // foreach (JToken unitRawData in unitsData.Children())
+                // {
+                //     JToken unitData = unitRawData.First!.First!;
+                //     string unitName = (string)unitRawData.First!;
+                // 
+                //     IUnit unit = new UnitPanel();
+                //     unit.m_ParentForm = driverManager.m_MainForm;
+                //     unit.m_UnitName = unitName;
+                //     unit.SetData(unitData);
+                //     driverManager.m_Units.m_Units.Add(unit);
+                // }
             }
 
             return driverManager;
