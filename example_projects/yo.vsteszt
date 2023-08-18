@@ -1,0 +1,61 @@
+{
+  "browser": [
+    "firefox"
+  ],
+  "options": {
+    "auto_exit_iframes": true,
+    "log_JS": {
+      "active": true,
+      "refresh_rate": "1000",
+      "retry_timeout": "1000"
+    },
+    "parent_log_path": "",
+    "terminal_mode": false
+  },
+  "driver_options": {
+    "accept_insecure_certs": true,
+    "chrome_arguments": [
+      ""
+    ],
+    "firefox_arguments": [
+      ""
+    ],
+    "keep_browser_open": true,
+    "page_load_strategy": "normal",
+    "timeout": {
+      "type": "pageLoad",
+      "value": "300000"
+    },
+    "unhandled_prompt_behavior": "dismiss and notify"
+  },
+  "units": {
+    "yo 1": {
+      "bindings": "yo 2",
+      "backup_of": null,
+      "actions": {
+        "0": {
+          "type": "goto",
+          "break": false,
+          "url": "https://youtube.com"
+        }
+      }
+    },
+    "yo 2": {
+      "bindings": null,
+      "backup_of": "yo 1",
+      "actions": {
+        "0": {
+          "type": "send_keys",
+          "break": true,
+          "single": false,
+          "displayed": true,
+          "enabled": true,
+          "selected": true,
+          "keys": "Kulcsok:",
+          "locator": "css_selector",
+          "value": "yo/yo"
+        }
+      }
+    }
+  }
+}

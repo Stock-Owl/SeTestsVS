@@ -28,6 +28,7 @@ namespace WebTestGui
             m_TestTab = new TestTab(this);
             Controls.Add(m_TestTab);
             m_TestTab.Location = new Point(236, 0);
+            m_TestTab.AddNewBlankItem();
 
             m_ConsoleManager.Print("{Yellow}[Applikáció] indítása...\n");
             m_ConsoleManager.Print("Verzió: {LightSeaGreen}" + $"[{AppConsts.s_AppVersion}]\n");
@@ -39,46 +40,10 @@ namespace WebTestGui
             m_JsConsoleManager.Print("A teszt ideje alatt minden {Yellow}[JavaScript] {Orange}[log] " +
                 "információ {Cyan}[ide] lesz kiiratva.");
 
-            PopulateComboBoxes();
-        }
-
-        public void PopulateComboBoxes()
-        {
-            object[] optionClasses = TypeHelpers.GetAllSubClassesFromInterface<IOption>();
-            addOptionComboBox.Items.AddRange(optionClasses);
-            object[] driverOptionClasses = TypeHelpers.GetAllSubClassesFromInterface<IDriverOption>();
-            addDriverActionComboBox.Items.AddRange(driverOptionClasses);
-        }
-
-        #region Option panel functions
-
-        private void OnOptionComboBoxItemSelect(object sender, EventArgs e)
-        {
-            string selected = addOptionComboBox.GetItemText(addOptionComboBox.SelectedItem)!;
-            addOptionComboBox.Items.Remove(selected);
-            addOptionComboBox.Text = "";
-
-            Type optionType = TypeHelpers.GetClassFromString(selected);
-            IOption option = (IOption)Activator.CreateInstance(optionType)!;
-            option.m_ParentForm = this;
-
-            m_TestTab.m_SelectedItem.m_Test.m_Options.m_Options.Add(option);
             RefreshOptionsPanel();
         }
 
-        private void OnDriverOptionComboBoxItemSelect(object sender, EventArgs e)
-        {
-            string selected = addDriverActionComboBox.GetItemText(addDriverActionComboBox.SelectedItem)!;
-            addDriverActionComboBox.Items.Remove(selected);
-            addDriverActionComboBox.Text = "";
-
-            Type driverOptionType = TypeHelpers.GetClassFromString(selected);
-            IDriverOption driverOption = (IDriverOption)Activator.CreateInstance(driverOptionType)!;
-            driverOption.m_ParentForm = this;
-
-            m_TestTab.m_SelectedItem.m_Test.m_DriverOptions.m_DriverOptions.Add(driverOption);
-            RefreshOptionsPanel();
-        }
+        #region Option panel function
 
         public void RefreshOptionsPanel()
         {
@@ -282,6 +247,9 @@ namespace WebTestGui
                     currentlyEditedText.Text = test.m_SaveFilePath;
 
                     m_ConsoleManager.Print("\n\n{Orange}[Teszt] {Cyan}[sikeresen] exportálva és mentve az alábbi helyre... {DarkGray}" + $"[-{of.FileName}]\n");
+
+                    m_TestTab.DeleteItem(m_TestTab.m_SelectedItem);
+                    m_TestTab.AddNewItemFromFilePath(of.FileName);
                 }
             }
             else
@@ -334,18 +302,65 @@ namespace WebTestGui
             return null!;
         }
 
-        public void LoadTest()
+        public Test LoadTestFromFile(string filePath)
         {
-            chromeCheckBox.Checked = false;
-            firefoxCheckBox.Checked = false;
+            Test loadedTest = new Test(this);
+
+            string loadedInfo = File.ReadAllText(filePath);
+            loadedTest.m_Options.m_Options.Clear();
+            loadedTest.m_DriverOptions.m_DriverOptions.Clear();
+            loadedTest.m_Units.m_Units.Clear();
+            loadedTest.m_Browsers.Clear();
+            loadedTest = TestFormatter.LoadDriverManagerFromJson(loadedInfo, loadedTest);
+
             if (m_TestTab.m_SelectedItem.m_Test.m_Browsers.Contains("chrome"))
             {
                 chromeCheckBox.Checked = true;
+            }
+            else
+            {
+                chromeCheckBox.Checked = false;
             }
 
             if (m_TestTab.m_SelectedItem.m_Test.m_Browsers.Contains("firefox"))
             {
                 firefoxCheckBox.Checked = true;
+            }
+            else
+            {
+                firefoxCheckBox.Checked = false;
+            }
+
+            RefreshOptionsPanel();
+            RefreshUnitsPanel();
+
+            m_ConsoleManager.Print("\n\n{Orange}[Teszt] {Cyan}[sikeresen] importálva és betöltve az alábbi helyrõl... {DarkGray}" + $"[-{filePath}]\n");
+
+            loadedTest.m_Name = Path.GetFileNameWithoutExtension(filePath);
+            loadedTest.m_SaveFilePath = filePath;
+            currentlyEditedText.Text = loadedTest.m_SaveFilePath;
+            RefreshUnitsPanel();
+            return loadedTest;
+        }
+
+        public void LoadTest()
+        {
+            if (m_TestTab.m_SelectedItem.m_Test.m_Browsers.Contains("chrome"))
+            {
+                chromeCheckBox.Checked = true;
+            }
+            else
+            {
+                chromeCheckBox.Checked = false;
+            }
+
+            if (m_TestTab.m_SelectedItem.m_Test.m_Browsers.Contains("firefox"))
+            {
+                firefoxCheckBox.Checked = true;
+            }
+            else
+            {
+                firefoxCheckBox.Checked = false;
             }
 
             RefreshOptionsPanel();
@@ -354,7 +369,7 @@ namespace WebTestGui
 
         #endregion
 
-        public static bool s_IsChromeChecked = true; // Certain Actions need to know which one is selected
+        public static bool s_IsChromeChecked = true;
 
         TextboxFormatter m_ConsoleManager;
         public void PrintToConsole(string msg) { m_ConsoleManager.Print(msg); }

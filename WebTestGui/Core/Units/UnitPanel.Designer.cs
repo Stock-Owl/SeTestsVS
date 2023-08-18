@@ -246,6 +246,7 @@
             this.unitNameTextField.PlaceholderText = "Az Unit neve...";
             this.unitNameTextField.Size = new System.Drawing.Size(361, 29);
             this.unitNameTextField.TabIndex = 42;
+            this.unitNameTextField.Leave += new System.EventHandler(this.OnUnitNameTextFieldChanged);
             // 
             // collapseActionsButton
             // 

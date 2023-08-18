@@ -5,17 +5,17 @@ namespace WebTestGui
 {
     public static class TestFormatter
     {
-        public static string SaveDriverManagerToJson(Test driverManager)
+        public static string SaveDriverManagerToJson(Test test)
         {
             Dictionary<string, object> jsonData = new Dictionary<string, object>();
 
             // Browser
-            jsonData["browser"] = driverManager.m_Browsers;
+            jsonData["browser"] = test.m_Browsers;
 
             // Options
             {
                 Dictionary<string, object> optionsData = new Dictionary<string, object>();
-                foreach (IOption option in driverManager.m_Options.m_Options)
+                foreach (IOption option in test.m_Options.m_Options)
                 {
                     optionsData[option.m_OptionName] = option.GetData();
                 }
@@ -25,7 +25,7 @@ namespace WebTestGui
             // Driver Options
             {
                 Dictionary<string, object> driverOptionsData = new Dictionary<string, object>();
-                foreach (IDriverOption driverOption in driverManager.m_DriverOptions.m_DriverOptions)
+                foreach (IDriverOption driverOption in test.m_DriverOptions.m_DriverOptions)
                 {
                     driverOptionsData[driverOption.m_DriverOptionName] = driverOption.GetData();
                 }
@@ -35,7 +35,7 @@ namespace WebTestGui
             // Units
             {
                 Dictionary<string, object> unitsData = new Dictionary<string, object>();
-                foreach (IUnit unit in driverManager.m_Units.m_Units)
+                foreach (IUnit unit in test.m_Units.m_Units)
                 {
                     unitsData[unit.m_UnitName] = unit.GetJSONFormatted();
                 }
@@ -45,12 +45,12 @@ namespace WebTestGui
             return JsonConvert.SerializeObject(jsonData, Formatting.Indented);
         }
 
-        public static Test LoadDriverManagerFromJson(string rawJson, Test driverManager)
+        public static Test LoadDriverManagerFromJson(string rawJson, Test test)
         {
             JObject jsonObject = JObject.Parse(rawJson);
 
             // Browser
-            driverManager.m_Browsers = JsonHelper.ConvertJTokenToListString(jsonObject["browser"]!);
+            test.m_Browsers = JsonHelper.ConvertJTokenToListString(jsonObject["browser"]!);
             
             // Options
             {
@@ -62,9 +62,9 @@ namespace WebTestGui
                     JToken value = optionProperty.Value;
 
                     IOption option = Options.CreateOptionByType(key);
-                    option.m_ParentForm = driverManager.m_MainForm;
+                    option.m_ParentForm = test.m_MainForm;
                     option.SetData(value);
-                    driverManager.m_Options.m_Options.Add(option);
+                    test.m_Options.m_Options.Add(option);
                 }
             }
 
@@ -78,9 +78,9 @@ namespace WebTestGui
                     JToken value = driverOptionProperty.Value;
 
                     IDriverOption driverOption = DriverOptions.CreateDriverOptionByType(key);
-                    driverOption.m_ParentForm = driverManager.m_MainForm;
+                    driverOption.m_ParentForm = test.m_MainForm;
                     driverOption.SetData(value);
-                    driverManager.m_DriverOptions.m_DriverOptions.Add(driverOption);
+                    test.m_DriverOptions.m_DriverOptions.Add(driverOption);
                 }
             }
 
@@ -94,21 +94,21 @@ namespace WebTestGui
                     JToken value = unitProperty.Value;
 
                     IUnit unit = new UnitPanel();
-                    unit.m_ParentForm = driverManager.m_MainForm;
+                    unit.m_ParentForm = test.m_MainForm;
                     unit.m_UnitName = key;
                     unit.SetData(value);
-                    driverManager.m_Units.m_Units.Add(unit);
+                    test.m_Units.m_Units.Add(unit);
                 }
 
                 // Must happen after all the Units have loaded, because of the refernces
-                foreach (IUnit unit in driverManager.m_Units.m_Units)
+                foreach (IUnit unit in test.m_Units.m_Units)
                 {
                     unit.SetUnitBindings();
                     unit.SetUnitBackupOf();
                 }
             }
 
-            return driverManager;
+            return test;
         }
     }
 }

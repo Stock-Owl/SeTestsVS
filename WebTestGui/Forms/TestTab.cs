@@ -10,7 +10,6 @@
             Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
 
             m_ParentForm = mainForm;
-            m_SelectedItem = new TestTabItem(this, new Test(m_ParentForm));
         }
 
         public void OnBorderLineDraw(object sender, PaintEventArgs e)
@@ -30,15 +29,35 @@
             tabPanel.Controls.AddRange(m_TestTabItems.ToArray());
         }
 
+        public void AddNewBlankItem()
+        {
+            TestTabItem loadedTestTabItem = new TestTabItem(this, new Test(m_ParentForm));
+            SelectItem(loadedTestTabItem);
+            m_TestTabItems.Add(loadedTestTabItem);
+            RefreshTabItems();
+        }
+
         public void AddNewItem(object sender, EventArgs e)
         {
             Test loadedTest = m_ParentForm.LoadTestFromFile();
             if (loadedTest != null)
             {
                 TestTabItem loadedTestTabItem = new TestTabItem(this, loadedTest);
-                SelectItem(loadedTestTabItem);
                 m_TestTabItems.Add(loadedTestTabItem);
                 RefreshTabItems();
+                SelectItem(loadedTestTabItem);
+            }
+        }
+
+        public void AddNewItemFromFilePath(string filePath)
+        {
+            Test loadedTest = m_ParentForm.LoadTestFromFile(filePath);
+            if (loadedTest != null)
+            {
+                TestTabItem loadedTestTabItem = new TestTabItem(this, loadedTest);
+                m_TestTabItems.Add(loadedTestTabItem);
+                RefreshTabItems();
+                SelectItem(loadedTestTabItem);
             }
         }
 
@@ -51,9 +70,7 @@
             }
             else
             {
-                m_SelectedItem = new TestTabItem(this, new Test(m_ParentForm));
-                m_ParentForm.RefreshOptionsPanel();
-                m_ParentForm.RefreshUnitsPanel();
+                AddNewBlankItem();
             }
             RefreshTabItems();
         }
