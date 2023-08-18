@@ -13,7 +13,6 @@ from selenium.common.exceptions import JavascriptException as SeJSException
 from support import Support
 
 from traceback import format_exc, format_stack
-from json import loads
 
 from multiprocessing import Process, Array, Value
 from ctypes import c_char_p as cstring
@@ -165,7 +164,7 @@ class Core:
         return (chrome, firefox)
 
     # should be preloaded JSON ergo dictionary
-    def RunDrivers(json: dict[str], shared_log_size: int = 16):
+    def CreateDriverProcesses(json: dict[str], shared_log_size: int = 16) -> list[Process]:
         browsers: list[str] = []
         for browser in json['browsers']:
             browsers.append(browser.lower())
@@ -190,7 +189,7 @@ class Core:
             # we will probably never need more than 16 (on log's size is 4, therefore 4 * 16 = 64)
             s_chrome = Array(cstring, shared_log_size * 4)
             s_chrome_state = Value('b', True)
-            parent_log_path = "{}/chrome".format(options["parent_log_path"])
+            parent_log_path = options["parent_log_path"]
 
             chrome_kwargs: dict = \
             {
@@ -199,7 +198,7 @@ class Core:
                 "shared_state": s_chrome_state,
                 "shared_arr": s_chrome,
                 "log_js_args": log_js_args,
-                "parent_log_path": parent_log_path,
+                "parent_log_path": f"{parent_log_path}/chrome",
                 "terminal_mode": terminal_mode,
                 "keep_browser_open": keep_browser_open
             }
@@ -213,7 +212,7 @@ class Core:
             # we will probably never need more than 16 (on log's size is 4, therefore 4 * 16 = 64)
             s_firefox: Array = Array(cstring, shared_log_size * 4)
             s_firefox_state = Value('b', True)
-            parent_log_path = "{}/firefox".format(options["parent_log_path"])
+            parent_log_path = options["parent_log_path"]
 
             firefox_kwargs: dict = \
             {
@@ -222,18 +221,18 @@ class Core:
                 "shared_state": s_firefox_state,
                 "shared_arr": s_firefox,
                 "log_js_args": log_js_args,
-                "parent_log_path": parent_log_path,
+                "parent_log_path": f"{parent_log_path}/firefox",
                 "terminal_mode": terminal_mode,
                 "keep_browser_open": keep_browser_open
             }
             firefox_exec = Process(target=Core.FirefoxExec , kwargs=copy(firefox_kwargs))
-            firefox_logger = Process(target= Core.AutoLogger, kwargs=copy(firefox_kwargs))
+            # neither loggers are used because the geckodriver is a fucking bitch
+            # firefox_logger = Process(target= Core.AutoLogger, kwargs=copy(firefox_kwargs))
 
             processes.append(firefox_exec)
-            processes.append(firefox_logger)
+            # processes.append(firefox_logger)
 
-        for process in processes:
-            process.start()
+        return processes
 
     def ChromeExec(
         options: ChromeOptions = None,
@@ -276,12 +275,27 @@ class Core:
 
                 actions = unit['actions']
                 for aname, action in actions.items():
-                    # print(action)
                     if action["break"]:
                         if terminal_mode:
                             input("press enter to resume")
                         else:
-                            pass   # majd ide kell egy intermediate comms file megint mint a JS-nél
+
+                            try:
+                                with open(f"{parent_log_path}/../file.break", mode='a+', encoding='utf-8') as f:
+                                    f.write(f"{uname}:{aname}\n")
+
+                            except FileExistsError:
+                                with open(f"{parent_log_path}/../file.break", mode='w', encoding='utf-8') as f:
+                                    f.write(f"{uname}:{aname}\n")
+
+                            isempty: bool = False
+                            while not isempty:
+                                with open(f"{parent_log_path}/../file.break", mode='r', encoding='utf-8') as f:
+                                    content: str = f.read()
+                                    if content == '':
+                                        break
+
+                            del isempty
                         Support.LogProc(parent_log_path, "Breakpoint")
 
                     match action["type"]:
@@ -419,6 +433,7 @@ class Core:
                 f.write(to_write)
 
         shared_state.value = False
+        return
 
     def FirefoxExec(
         options: FirefoxOptions = None,
@@ -430,7 +445,7 @@ class Core:
         parent_log_path: str = None,
         log_js_args: dict[str] = None) -> None:
 
-        driver = FirefoxDriver(options = options)  # , service = service
+        driver = FirefoxDriver(options = options, keep_alive=keep_browser_open)  # , service = service
         # 
         # clears the previous log files
         Support.ClearAllLogs(parent_log_path)
@@ -460,13 +475,27 @@ class Core:
                     continue
 
                 actions = unit['actions']
-                for index, action in actions.items():
-                    print(action)
+                for aname, action in actions.items():
                     if action["break"]:
                         if terminal_mode:
                             input("press enter to resume")
                         else:
-                            pass   # majd ide kell egy intermediate comms file megint mint a JS-nél
+                            
+                            try:
+                                with open(f"{parent_log_path}/../file.break", mode='a+', encoding='utf-8') as f:
+                                    f.write(f"{uname}:{aname}\n")
+
+                            except FileExistsError:
+                                with open(f"{parent_log_path}/../file.break", mode='w', encoding='utf-8') as f:
+                                    f.write(f"{uname}:{aname}\n")
+
+                            isempty: bool = False
+                            while not isempty:
+                                with open(f"{parent_log_path}/../file.break", mode='r', encoding='utf-8') as f:
+                                    content: str = f.read()
+                                    if content == '':
+                                        break
+                            
                         Support.LogProc(parent_log_path, "Breakpoint")
                     
                     match action["type"]:
@@ -522,7 +551,7 @@ class Core:
                             action_type = action['type']
                             Support.LogProc(parent_log_path, f"Unknown action \'{action_type}\'")
 
-                    log_line = f"[U:{uname}][A:{index}] of type \'{action['type']}\' successfully executed"
+                    log_line = f"[U:{uname}][A:{aname}] of type \'{action['type']}\' successfully executed"
                     Support.LogProc(parent_log_path, log_line)
             
             except:
@@ -557,17 +586,20 @@ class Core:
                 
             # this is the part that processes the brwoser logs and puts them into the shared array
             # use finally clause
+            
+            # shit is commented out because geckodriver shits itself
+            """
             finally:
-                """
+                
                     * driver.get_log('browser')   WORKS
                     ! driver.get_log('driver') DOESN'T WORK
                     ! driver.get_log('client') DOESN'T WORK
                     ! driver.get_log('server') DOESN'T WORK
-                """
+                
                 browser_logs: list[dict[str]] = driver.get_log('browser')
                 # deepcode ignore NonePass: <Keyword arguments only set to None to make them a keyword argument. All parameters will be passed from the host funciton>
                 Core.SharedLogDumper(logs = browser_logs, target = shared_arr, target_size = len(shared_arr))
-                pass
+            """
 
         if keep_browser_open:
             pass
@@ -604,6 +636,7 @@ class Core:
                 f.write(to_write)
 
         shared_state.value = False
+        return
 
     def AutoLogger(
             shared_arr: Array = None,
@@ -661,7 +694,7 @@ class Core:
                             log_line = \
                             f"{i} ❗ JavaScript:\n{log['source']} — {log['level']}:\n{log['message']}\n\t{log['timestamp']}\n#\n"
                             f.write(log_line)
-                            Support.LogAll(path = parent_log_path, log_line = log_line)
+                            Support.LogAll(parent_log_path, log_line)
                             processed.append(log_line)
                     break
                 sleep(mimir)
@@ -718,6 +751,9 @@ class Core:
         field_index = 0
         log: dict = {}
         for item in root:
+            item_ = str(item).removeprefix('b\'').removesuffix('\'').removeprefix('b\"').removesuffix('\"')
+            if item_ == 'None':
+                continue
             if field_index == 4:
                 if log == empty_log:
                     break
@@ -725,37 +761,10 @@ class Core:
                 field_index = 0
                 log.clear()
             # need to remove the b'' bounds from the item. because when you convert `bytes` to `str` that happens (builtin, I guess) ¯\_(ツ)_/¯
-            log[keys[field_index]] = str(item).removeprefix('b\'').removesuffix('\'').removeprefix('b\"').removesuffix('\"')
+            log[keys[field_index]] = item_
             field_index += 1
 
         return logs
-
-    def DefaultFirefoxOptions() -> FirefoxOptions:
-        from copy import copy
-        defaults = copy(Core.default_driver_options_dict_)
-        options = FirefoxOptions()
-        options.page_load_strategy = defaults["page_load_strategy"]
-        options.accept_insecure_certs = defaults["accept_insecure_certs"]
-        options.timeouts = {defaults["timeout"]["type"]: defaults["timeout"]["value"]}
-        options.unhandled_prompt_behavior = defaults["unhandled_prompt_behavior"]
-        # options.add_experimental_option("detach", defaults["keep_browser_open"])  not present, apparently
-        for option in defaults["browser_arguments"]:
-                options.add_argument(option)
-
-        return options       
-    
-    def DefaultChromeOptions() -> ChromeOptions:
-        from copy import copy
-        defaults = copy(Core.default_driver_options_dict_)
-        options = ChromeOptions()
-        options.page_load_strategy = defaults["page_load_strategy"]
-        options.accept_insecure_certs = defaults["accept_insecure_certs"]
-        options.timeouts = {defaults["timeout"]["type"]: defaults["timeout"]["value"]}
-        options.unhandled_prompt_behavior = defaults["unhandled_prompt_behavior"]
-        options.add_experimental_option("detach", defaults["keep_browser_open"])
-        for option in defaults["browser_arguments"]:
-                options.add_argument(option)
-        return options        
 
     def Goto(driver: ChromeDriver | FirefoxDriver, url: str):
         Core.CheckDriverExists(driver)
@@ -992,7 +1001,7 @@ class Core:
             raise AssertionError("Shit doesn't exist mate")
             
         try:
-            assert isinstance(driver, ChromeDriver)
+            assert isinstance(driver, ChromeDriver | FirefoxDriver)
         except AssertionError:
             if omit_exceptions:
                 print("Invalid fuckin' type mate")
