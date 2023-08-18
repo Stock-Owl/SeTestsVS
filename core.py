@@ -18,8 +18,8 @@ from multiprocessing import Process, Array, Value
 from ctypes import c_char_p as cstring
 from copy import copy
 
-# V.1.0
-#                                                                               20 / 25 + 1
+# V.1.1.0
+#                                                                               22 / 25 + 1
 # TODO: Kitalálni, hogy vannak az argumentumok                                  ✅  1
 # TODO: Megszerelni a random useless conversionöket a JSON-ből                  ✅  2
 # TODO: Relative locators                                                       ❌  NAH FUCK that shit
@@ -50,8 +50,8 @@ from copy import copy
 # TODO: Fix LogJS so that it checks for log arg type and switches               ✅  18
 # TODO: add a final append to tlogs after RunDrvier has exited                  ✅  19
 # TODO: add backups                                                             ✅  20
-# TODO: multiprocessing funny (O = O(n)/2)                                      ❌  21
-# TODO: FIrefoxDriver typecheck in CheckDriverExists so it won't cry abt it     ❌  22
+# TODO: multiprocessing funny (O = O(n)/2)                                      ✅  21
+# TODO: FIrefoxDriver typecheck in CheckDriverExists so it won't cry abt it     ✅  22
 # TODO: add test names to JSON and combined logs                                ❌  23
 # TODO: add request shit for drivers. Seleniumwire!!! Needs to be implemented!  ❌  24
 # TODO: time data collection, bounds etc.                                       ❌  25
