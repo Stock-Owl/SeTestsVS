@@ -128,7 +128,7 @@ class Support:
         try:
             assert Support.exists(path)
         except:
-            with open(path, mode='w', enocdintóg='utf-8') as f:
+            with open(path, mode='w', enocoding='utf-8') as f:
                 f.write("")
 
         processed: list[str] = []
@@ -204,7 +204,7 @@ class Support:
             with open(path, mode='w', encoding='utf-8') as f:
                 f.write("")
 
-        # log_line = f"❌ ERROR: {log_line}\n"
+        log_line = f"{log_line}\n"
         with open(path, mode='a+', encoding='utf-8') as f:
             f.write(log_line)
         Support.LogAll(path_, log_line, time_disabled=time_disabled)

@@ -403,4 +403,7 @@ run.py
 */vsinstaller/*
 wininstaller.cpp
 wininstaller.exe
+side1.py
+side2.py
+
 .vscode/*
