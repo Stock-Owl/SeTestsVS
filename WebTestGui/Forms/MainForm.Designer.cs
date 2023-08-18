@@ -50,8 +50,6 @@
             switchToJsLogButton = new Button();
             jsConsole = new RichTextBox();
             browserLabel = new Label();
-            flowLayoutPanel1 = new FlowLayoutPanel();
-            pictureBox3 = new PictureBox();
             vsLogo = new PictureBox();
             saveTestButton = new Button();
             loadTestButton = new Button();
@@ -63,8 +61,6 @@
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             actionHeaderPanel.SuspendLayout();
             optionHeaderPanel.SuspendLayout();
-            flowLayoutPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
             ((System.ComponentModel.ISupportInitialize)vsLogo).BeginInit();
             flowLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox4).BeginInit();
@@ -87,14 +83,16 @@
             // 
             // chromeCheckBox
             // 
-            chromeCheckBox.Anchor = AnchorStyles.Top;
+            chromeCheckBox.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             chromeCheckBox.AutoSize = true;
-            chromeCheckBox.BackColor = Color.FromArgb(60, 60, 65);
-            chromeCheckBox.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            chromeCheckBox.BackColor = Color.FromArgb(50, 50, 53);
+            chromeCheckBox.Checked = true;
+            chromeCheckBox.CheckState = CheckState.Checked;
+            chromeCheckBox.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
             chromeCheckBox.ForeColor = Color.White;
-            chromeCheckBox.Location = new Point(528, 10);
+            chromeCheckBox.Location = new Point(757, 68);
             chromeCheckBox.Name = "chromeCheckBox";
-            chromeCheckBox.Size = new Size(89, 25);
+            chromeCheckBox.Size = new Size(83, 24);
             chromeCheckBox.TabIndex = 3;
             chromeCheckBox.Text = "Chrome";
             chromeCheckBox.UseVisualStyleBackColor = false;
@@ -102,10 +100,10 @@
             // 
             // pictureBox1
             // 
-            pictureBox1.Anchor = AnchorStyles.Top;
-            pictureBox1.BackColor = Color.FromArgb(60, 60, 65);
+            pictureBox1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            pictureBox1.BackColor = Color.FromArgb(50, 50, 53);
             pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
-            pictureBox1.Location = new Point(616, 10);
+            pictureBox1.Location = new Point(839, 68);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(25, 25);
             pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -115,10 +113,10 @@
             // 
             // pictureBox2
             // 
-            pictureBox2.Anchor = AnchorStyles.Top;
-            pictureBox2.BackColor = Color.FromArgb(60, 60, 65);
+            pictureBox2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            pictureBox2.BackColor = Color.FromArgb(50, 50, 53);
             pictureBox2.Image = (Image)resources.GetObject("pictureBox2.Image");
-            pictureBox2.Location = new Point(753, 10);
+            pictureBox2.Location = new Point(947, 69);
             pictureBox2.Name = "pictureBox2";
             pictureBox2.Size = new Size(25, 25);
             pictureBox2.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -128,14 +126,14 @@
             // 
             // firefoxCheckBox
             // 
-            firefoxCheckBox.Anchor = AnchorStyles.Top;
+            firefoxCheckBox.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             firefoxCheckBox.AutoSize = true;
-            firefoxCheckBox.BackColor = Color.FromArgb(60, 60, 65);
-            firefoxCheckBox.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            firefoxCheckBox.BackColor = Color.FromArgb(50, 50, 53);
+            firefoxCheckBox.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
             firefoxCheckBox.ForeColor = Color.White;
-            firefoxCheckBox.Location = new Point(670, 10);
+            firefoxCheckBox.Location = new Point(875, 68);
             firefoxCheckBox.Name = "firefoxCheckBox";
-            firefoxCheckBox.Size = new Size(76, 25);
+            firefoxCheckBox.Size = new Size(73, 24);
             firefoxCheckBox.TabIndex = 5;
             firefoxCheckBox.Text = "Firefox";
             firefoxCheckBox.UseVisualStyleBackColor = false;
@@ -203,7 +201,7 @@
             optionHeaderPanel.Controls.Add(label2);
             optionHeaderPanel.Controls.Add(addOptionComboBox);
             optionHeaderPanel.Controls.Add(optionLabel);
-            optionHeaderPanel.Location = new Point(645, 95);
+            optionHeaderPanel.Location = new Point(645, 142);
             optionHeaderPanel.Name = "optionHeaderPanel";
             optionHeaderPanel.Size = new Size(327, 46);
             optionHeaderPanel.TabIndex = 37;
@@ -281,9 +279,9 @@
             optionsPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             optionsPanel.AutoScroll = true;
             optionsPanel.BackColor = Color.FromArgb(45, 45, 50);
-            optionsPanel.Location = new Point(645, 140);
+            optionsPanel.Location = new Point(645, 187);
             optionsPanel.Name = "optionsPanel";
-            optionsPanel.Size = new Size(327, 267);
+            optionsPanel.Size = new Size(327, 222);
             optionsPanel.TabIndex = 38;
             // 
             // unitsPanel
@@ -302,7 +300,7 @@
             switchToOptionsButton.BackColor = Color.FromArgb(40, 40, 43);
             switchToOptionsButton.Font = new Font("Segoe UI", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
             switchToOptionsButton.ForeColor = Color.White;
-            switchToOptionsButton.Location = new Point(645, 64);
+            switchToOptionsButton.Location = new Point(645, 111);
             switchToOptionsButton.Name = "switchToOptionsButton";
             switchToOptionsButton.Size = new Size(87, 25);
             switchToOptionsButton.TabIndex = 40;
@@ -316,7 +314,7 @@
             switchToJsLogButton.BackColor = Color.FromArgb(40, 40, 43);
             switchToJsLogButton.Font = new Font("Segoe UI Semibold", 8.25F, FontStyle.Italic, GraphicsUnit.Point);
             switchToJsLogButton.ForeColor = Color.Silver;
-            switchToJsLogButton.Location = new Point(885, 64);
+            switchToJsLogButton.Location = new Point(885, 111);
             switchToJsLogButton.Name = "switchToJsLogButton";
             switchToJsLogButton.Size = new Size(87, 25);
             switchToJsLogButton.TabIndex = 41;
@@ -332,55 +330,33 @@
             jsConsole.Font = new Font("Arial Rounded MT Bold", 9F, FontStyle.Regular, GraphicsUnit.Point);
             jsConsole.ForeColor = Color.LightBlue;
             jsConsole.HideSelection = false;
-            jsConsole.Location = new Point(645, 95);
+            jsConsole.Location = new Point(645, 184);
             jsConsole.Name = "jsConsole";
             jsConsole.ReadOnly = true;
-            jsConsole.Size = new Size(327, 314);
+            jsConsole.Size = new Size(327, 225);
             jsConsole.TabIndex = 44;
             jsConsole.Text = "";
             jsConsole.Visible = false;
             // 
             // browserLabel
             // 
+            browserLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             browserLabel.AutoSize = true;
-            browserLabel.BackColor = Color.FromArgb(60, 60, 65);
+            browserLabel.BackColor = Color.FromArgb(50, 50, 53);
             browserLabel.Font = new Font("Segoe UI Semibold", 14F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
             browserLabel.ForeColor = Color.White;
-            browserLabel.Location = new Point(250, 10);
+            browserLabel.Location = new Point(645, 67);
             browserLabel.Name = "browserLabel";
             browserLabel.Size = new Size(100, 25);
             browserLabel.TabIndex = 45;
             browserLabel.Text = "Böngésző:";
             // 
-            // flowLayoutPanel1
-            // 
-            flowLayoutPanel1.AutoScroll = true;
-            flowLayoutPanel1.BackColor = Color.FromArgb(60, 60, 65);
-            flowLayoutPanel1.Controls.Add(pictureBox3);
-            flowLayoutPanel1.Dock = DockStyle.Top;
-            flowLayoutPanel1.Location = new Point(0, 0);
-            flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(984, 46);
-            flowLayoutPanel1.TabIndex = 46;
-            // 
-            // pictureBox3
-            // 
-            pictureBox3.Anchor = AnchorStyles.Top;
-            pictureBox3.BackColor = Color.FromArgb(60, 60, 65);
-            pictureBox3.Image = (Image)resources.GetObject("pictureBox3.Image");
-            pictureBox3.Location = new Point(3, 3);
-            pictureBox3.Name = "pictureBox3";
-            pictureBox3.Size = new Size(25, 25);
-            pictureBox3.SizeMode = PictureBoxSizeMode.StretchImage;
-            pictureBox3.TabIndex = 7;
-            pictureBox3.TabStop = false;
-            // 
             // vsLogo
             // 
-            vsLogo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            vsLogo.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             vsLogo.BackColor = Color.FromArgb(60, 60, 65);
             vsLogo.Image = (Image)resources.GetObject("vsLogo.Image");
-            vsLogo.Location = new Point(942, 6);
+            vsLogo.Location = new Point(944, 471);
             vsLogo.Name = "vsLogo";
             vsLogo.Size = new Size(35, 35);
             vsLogo.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -391,11 +367,11 @@
             // 
             saveTestButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             saveTestButton.BackColor = Color.FromArgb(45, 45, 48);
-            saveTestButton.Font = new Font("Segoe UI Semibold", 11F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+            saveTestButton.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
             saveTestButton.ForeColor = Color.White;
             saveTestButton.Location = new Point(645, 472);
             saveTestButton.Name = "saveTestButton";
-            saveTestButton.Size = new Size(160, 31);
+            saveTestButton.Size = new Size(117, 31);
             saveTestButton.TabIndex = 48;
             saveTestButton.Text = "Teszt mentése...";
             saveTestButton.UseVisualStyleBackColor = false;
@@ -405,11 +381,11 @@
             // 
             loadTestButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             loadTestButton.BackColor = Color.FromArgb(45, 45, 48);
-            loadTestButton.Font = new Font("Segoe UI Semibold", 11F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+            loadTestButton.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
             loadTestButton.ForeColor = Color.White;
-            loadTestButton.Location = new Point(812, 472);
+            loadTestButton.Location = new Point(802, 472);
             loadTestButton.Name = "loadTestButton";
-            loadTestButton.Size = new Size(160, 31);
+            loadTestButton.Size = new Size(122, 31);
             loadTestButton.TabIndex = 49;
             loadTestButton.Text = "Teszt betöltése...";
             loadTestButton.UseVisualStyleBackColor = false;
@@ -487,7 +463,6 @@
             Controls.Add(console);
             Controls.Add(actionHeaderPanel);
             Controls.Add(jsConsole);
-            Controls.Add(flowLayoutPanel1);
             Controls.Add(currentlyEditedText);
             Controls.Add(flowLayoutPanel2);
             Icon = (Icon)resources.GetObject("$this.Icon");
@@ -501,8 +476,6 @@
             actionHeaderPanel.PerformLayout();
             optionHeaderPanel.ResumeLayout(false);
             optionHeaderPanel.PerformLayout();
-            flowLayoutPanel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)pictureBox3).EndInit();
             ((System.ComponentModel.ISupportInitialize)vsLogo).EndInit();
             flowLayoutPanel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pictureBox4).EndInit();
@@ -528,8 +501,6 @@
         private RichTextBox jsConsole;
         private Label optionLabel;
         private Label browserLabel;
-        private FlowLayoutPanel flowLayoutPanel1;
-        private PictureBox pictureBox3;
         private PictureBox vsLogo;
         private Button saveTestButton;
         private Button loadTestButton;

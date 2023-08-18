@@ -1,6 +1,6 @@
 {
   "browser": [
-    "firefox"
+    "chrome"
   ],
   "options": {
     "parent_log_path": "dwadaw",
@@ -15,50 +15,45 @@
     ]
   },
   "units": {
-    "UNIT 12": {
-      "bindings": "UNIT 12",
-      "backup_of": "UNIT 34",
+    "Heartless": {
+      "bindings": "Heartless",
+      "backup_of": "Power",
       "actions": {
         "0": {
-          "type": "click",
-          "break": false,
-          "single": true,
-          "displayed": false,
-          "enabled": true,
-          "selected": false,
-          "locator": "dadwadawdwa",
-          "value": "wadwad"
-        },
-        "1": {
           "type": "wait",
           "break": true,
           "amount": "10000"
         }
       }
     },
-    "UNIT 22": {
+    "Bound": {
       "bindings": null,
-      "backup_of": "UNIT 22",
+      "backup_of": "Bound",
       "actions": {
         "0": {
+          "type": "refresh",
+          "break": false
+        },
+        "1": {
           "type": "clear",
           "break": false,
           "single": false,
           "displayed": false,
-          "enabled": true,
-          "selected": true,
-          "locator": "dawdawd",
-          "value": "wdadwdaw"
+          "enabled": false,
+          "selected": false,
+          "locator": "xpath",
+          "value": ""
         },
-        "1": {
-          "type": "refresh",
-          "break": false
+        "2": {
+          "type": "wait",
+          "break": true,
+          "amount": "0"
         }
       }
     },
-    "UNIT 34": {
+    "Power": {
       "bindings": null,
-      "backup_of": null,
+      "backup_of": "Power",
       "actions": {
         "0": {
           "type": "clear",
@@ -67,7 +62,7 @@
           "displayed": false,
           "enabled": true,
           "selected": false,
-          "locator": "dwadawd",
+          "locator": "xpath",
           "value": "dwawdwad"
         }
       }

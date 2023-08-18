@@ -78,10 +78,11 @@ namespace WebTestGui
                 actionsPanel.Controls.AddRange(controls);
 
                 int totalHeight = 74;
-
+                int counter = 0;
                 foreach (Control control in actionsPanel.Controls)
                 {
-                    totalHeight += (control.Height);
+                    totalHeight += ((control.Height) + (counter * 2));
+                    counter++;
                 }
 
                 actionsPanel.Height = totalHeight;
@@ -98,6 +99,9 @@ namespace WebTestGui
             {
                 backupOfLabel.Text = m_BackupOf.m_UnitName;
             }
+
+            SetUnitBindings();
+            SetUnitBackupOf();
         }
 
         public void OnBorderLineDraw(object sender, PaintEventArgs e)
@@ -166,14 +170,14 @@ namespace WebTestGui
         {
             if (bindingsLabel.Text != "null")
             {
-                for (int i = 0; i < m_ParentForm.GetTestObject().m_Units.m_Units.Count; i++)
+                for (int i = 0; i < m_ParentForm.GetTest().m_Units.m_Units.Count; i++)
                 {
-                    if (bindingsLabel.Text == m_ParentForm.GetTestObject().m_Units.m_Units[i].m_UnitName)
+                    if (bindingsLabel.Text == m_ParentForm.GetTest().m_Units.m_Units[i].m_UnitName)
                     {
-                        m_Bindings = m_ParentForm.GetTestObject().m_Units.m_Units[i];
+                        m_Bindings = m_ParentForm.GetTest().m_Units.m_Units[i];
                     }
                 }
-                Refresh();
+                //Refresh();
             }
         }
 
@@ -181,14 +185,14 @@ namespace WebTestGui
         {
             if (backupOfLabel.Text != "null")
             {
-                for (int i = 0; i < m_ParentForm.GetTestObject().m_Units.m_Units.Count; i++)
+                for (int i = 0; i < m_ParentForm.GetTest().m_Units.m_Units.Count; i++)
                 {
-                    if (backupOfLabel.Text == m_ParentForm.GetTestObject().m_Units.m_Units[i].m_UnitName)
+                    if (backupOfLabel.Text == m_ParentForm.GetTest().m_Units.m_Units[i].m_UnitName)
                     {
-                        m_BackupOf = m_ParentForm.GetTestObject().m_Units.m_Units[i];
+                        m_BackupOf = m_ParentForm.GetTest().m_Units.m_Units[i];
                     }
                 }
-                Refresh();
+                //Refresh();
             }
         }
 
@@ -211,6 +215,7 @@ namespace WebTestGui
 
             action.SetId(actionsPanel.Controls.Count);
             m_Actions.m_Actions.Add(action);
+            OnExpandActionsButttonClick(sender, e);
             Refresh();
         }
 
@@ -231,10 +236,10 @@ namespace WebTestGui
         private void OnUnitBindingsComboBoxDropDown(object sender, EventArgs e)
         {
             unitBindingsComboBox.Items.Clear();
-            string[] unitNames = new string[m_ParentForm.GetTestObject().m_Units.m_Units.Count];
+            string[] unitNames = new string[m_ParentForm.GetTest().m_Units.m_Units.Count];
             for (int i = 0; i < unitNames.Length; i++)
             {
-                unitNames[i] = m_ParentForm.GetTestObject().m_Units.m_Units[i].m_UnitName;
+                unitNames[i] = m_ParentForm.GetTest().m_Units.m_Units[i].m_UnitName;
             }
 
             unitBindingsComboBox.Items.AddRange(unitNames);
@@ -243,10 +248,10 @@ namespace WebTestGui
         private void OnUnitBackupComboBoxDropDown(object sender, EventArgs e)
         {
             unitBackupComboBox.Items.Clear();
-            string[] unitNames = new string[m_ParentForm.GetTestObject().m_Units.m_Units.Count];
+            string[] unitNames = new string[m_ParentForm.GetTest().m_Units.m_Units.Count];
             for (int i = 0; i < unitNames.Length; i++)
             {
-                unitNames[i] = m_ParentForm.GetTestObject().m_Units.m_Units[i].m_UnitName;
+                unitNames[i] = m_ParentForm.GetTest().m_Units.m_Units[i].m_UnitName;
             }
 
             unitBackupComboBox.Items.AddRange(unitNames);

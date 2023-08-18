@@ -163,6 +163,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(50, 50, 55);
             Controls.Add(mainPanel);
+            MinimumSize = new Size(863, 150);
             Name = "ExecuteJsAction";
             Size = new Size(863, 150);
             ((System.ComponentModel.ISupportInitialize)breakpointOnPicture).EndInit();

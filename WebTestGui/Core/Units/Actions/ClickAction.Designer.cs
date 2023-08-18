@@ -44,13 +44,13 @@
             valueLabel = new Label();
             locatorLabel = new Label();
             valueTextBox = new TextBox();
-            locatorTextBox = new TextBox();
             label8 = new Label();
             selectedCheckBox = new CheckBox();
             label7 = new Label();
             enabledCheckBox = new CheckBox();
             label6 = new Label();
             displayedCheckbox = new CheckBox();
+            locatorTextBox = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)breakpointOnPicture).BeginInit();
             ((System.ComponentModel.ISupportInitialize)breakpointOffPicture).BeginInit();
             ((System.ComponentModel.ISupportInitialize)binImage).BeginInit();
@@ -193,10 +193,10 @@
             // mainPanel
             // 
             mainPanel.BackColor = Color.FromArgb(45, 45, 50);
+            mainPanel.Controls.Add(locatorTextBox);
             mainPanel.Controls.Add(valueLabel);
             mainPanel.Controls.Add(locatorLabel);
             mainPanel.Controls.Add(valueTextBox);
-            mainPanel.Controls.Add(locatorTextBox);
             mainPanel.Controls.Add(label8);
             mainPanel.Controls.Add(selectedCheckBox);
             mainPanel.Controls.Add(label7);
@@ -254,17 +254,6 @@
             valueTextBox.PlaceholderText = "Érték...";
             valueTextBox.Size = new Size(192, 22);
             valueTextBox.TabIndex = 76;
-            // 
-            // locatorTextBox
-            // 
-            locatorTextBox.BackColor = Color.FromArgb(40, 40, 43);
-            locatorTextBox.Font = new Font("Segoe UI", 8F, FontStyle.Italic, GraphicsUnit.Point);
-            locatorTextBox.ForeColor = Color.DarkGray;
-            locatorTextBox.Location = new Point(194, 66);
-            locatorTextBox.Name = "locatorTextBox";
-            locatorTextBox.PlaceholderText = "Keresett lokátor...";
-            locatorTextBox.Size = new Size(192, 22);
-            locatorTextBox.TabIndex = 75;
             // 
             // label8
             // 
@@ -338,6 +327,20 @@
             displayedCheckbox.TabIndex = 65;
             displayedCheckbox.UseVisualStyleBackColor = false;
             // 
+            // locatorTextBox
+            // 
+            locatorTextBox.BackColor = Color.FromArgb(40, 40, 43);
+            locatorTextBox.FlatStyle = FlatStyle.Popup;
+            locatorTextBox.Font = new Font("Segoe UI Semibold", 8F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+            locatorTextBox.ForeColor = Color.DarkGray;
+            locatorTextBox.FormattingEnabled = true;
+            locatorTextBox.Items.AddRange(new object[] { "xpath", "css_selector" });
+            locatorTextBox.Location = new Point(194, 67);
+            locatorTextBox.Name = "locatorTextBox";
+            locatorTextBox.Size = new Size(192, 21);
+            locatorTextBox.TabIndex = 79;
+            locatorTextBox.Text = "xpath";
+            // 
             // ClickAction
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -377,6 +380,6 @@
         protected Label valueLabel;
         protected Label locatorLabel;
         private TextBox valueTextBox;
-        private TextBox locatorTextBox;
+        private ComboBox locatorTextBox;
     }
 }

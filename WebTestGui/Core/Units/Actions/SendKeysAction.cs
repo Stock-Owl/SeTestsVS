@@ -80,6 +80,7 @@ namespace WebTestGui
             clickData["enabled"] = enabledCheckBox.Checked;
             clickData["selected"] = selectedCheckBox.Checked;
 
+            clickData["keys"] = keysLabel.Text;
             clickData["locator"] = locatorTextBox.Text;
             clickData["value"] = valueTextBox.Text;
             return clickData;
@@ -103,6 +104,7 @@ namespace WebTestGui
 
             singleCheckbox.Checked = (bool)data["single"]!;
 
+            keysLabel.Text = (string)data["keys"]!;
             locatorTextBox.Text = (string)data["locator"]!;
             valueTextBox.Text = (string)data["value"]!;
         }

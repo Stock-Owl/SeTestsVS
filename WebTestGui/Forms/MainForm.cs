@@ -3,7 +3,6 @@ namespace WebTestGui
     public partial class MainForm : Form
     {
         /* TODO:
-        - Tabok (egyszerre több teszt szerkeztése egy ablakban)
         - Mindegyik konzol elérhetõ (4 darab, abból csak a napi az, amit el is kell menteni)
         - Gomb ami megnyitja a feladatkezelõben a log mappát
         - Idõzítõ különálló applikáció (tesztek futtatásának idõzítése, és beállítása)
@@ -25,7 +24,10 @@ namespace WebTestGui
 
             m_ConsoleManager = new TextboxFormatter(console);
             m_JsConsoleManager = new TextboxFormatter(jsConsole);
-            m_Test = new Test(this);
+
+            m_TestTab = new TestTab(this);
+            Controls.Add(m_TestTab);
+            m_TestTab.Location = new Point(236, 0);
 
             m_ConsoleManager.Print("{Yellow}[Applikáció] indítása...\n");
             m_ConsoleManager.Print("Verzió: {LightSeaGreen}" + $"[{AppConsts.s_AppVersion}]\n");
@@ -60,7 +62,7 @@ namespace WebTestGui
             IOption option = (IOption)Activator.CreateInstance(optionType)!;
             option.m_ParentForm = this;
 
-            m_Test.m_Options.m_Options.Add(option);
+            m_TestTab.m_SelectedItem.m_Test.m_Options.m_Options.Add(option);
             RefreshOptionsPanel();
         }
 
@@ -74,7 +76,7 @@ namespace WebTestGui
             IDriverOption driverOption = (IDriverOption)Activator.CreateInstance(driverOptionType)!;
             driverOption.m_ParentForm = this;
 
-            m_Test.m_DriverOptions.m_DriverOptions.Add(driverOption);
+            m_TestTab.m_SelectedItem.m_Test.m_DriverOptions.m_DriverOptions.Add(driverOption);
             RefreshOptionsPanel();
         }
 
@@ -82,17 +84,17 @@ namespace WebTestGui
         {
             optionsPanel.Controls.Clear();
 
-            Control[] optionControls = new Control[m_Test.m_Options.m_Options.Count];
+            Control[] optionControls = new Control[m_TestTab.m_SelectedItem.m_Test.m_Options.m_Options.Count];
             for (int i = 0; i < optionControls.Length; i++)
             {
-                optionControls[i] = (Control)m_Test.m_Options.m_Options[i];
+                optionControls[i] = (Control)m_TestTab.m_SelectedItem.m_Test.m_Options.m_Options[i];
             }
             optionsPanel.Controls.AddRange(optionControls);
 
-            Control[] driverOptionControls = new Control[m_Test.m_DriverOptions.m_DriverOptions.Count];
+            Control[] driverOptionControls = new Control[m_TestTab.m_SelectedItem.m_Test.m_DriverOptions.m_DriverOptions.Count];
             for (int i = 0; i < driverOptionControls.Length; i++)
             {
-                driverOptionControls[i] = (Control)m_Test.m_DriverOptions.m_DriverOptions[i];
+                driverOptionControls[i] = (Control)m_TestTab.m_SelectedItem.m_Test.m_DriverOptions.m_DriverOptions[i];
             }
             optionsPanel.Controls.AddRange(driverOptionControls);
         }
@@ -107,21 +109,21 @@ namespace WebTestGui
             unit.m_ParentForm = this;
 
             unit.SetUId(unitsPanel.Controls.Count);
-            m_Test.m_Units.m_Units.Add(unit);
-            unit.m_UnitName = $"UNIT {m_Test.m_Units.m_Units.Count}";
+            m_TestTab.m_SelectedItem.m_Test.m_Units.m_Units.Add(unit);
+            unit.m_UnitName = $"UNIT {m_TestTab.m_SelectedItem.m_Test.m_Units.m_Units.Count}";
             unit.Refresh();
             RefreshUnitsPanel();
         }
 
         public void RefreshUnitsPanel()
         {
-            Control[] controls = new Control[m_Test.m_Units.m_Units.Count];
+            Control[] controls = new Control[m_TestTab.m_SelectedItem.m_Test.m_Units.m_Units.Count];
 
             for (int i = 0; i < controls.Length; i++)
             {
-                m_Test.m_Units.m_Units[i].SetUId(i);
-                m_Test.m_Units.m_Units[i].Refresh();
-                controls[i] = (Control)m_Test.m_Units.m_Units[i];
+                m_TestTab.m_SelectedItem.m_Test.m_Units.m_Units[i].SetUId(i);
+                m_TestTab.m_SelectedItem.m_Test.m_Units.m_Units[i].Refresh();
+                controls[i] = (Control)m_TestTab.m_SelectedItem.m_Test.m_Units.m_Units[i];
             }
 
             unitsPanel.Controls.Clear();
@@ -130,13 +132,13 @@ namespace WebTestGui
 
         public void DeleteUnit(IUnit unit)
         {
-            m_Test.m_Units.m_Units.Remove(unit);
+            m_TestTab.m_SelectedItem.m_Test.m_Units.m_Units.Remove(unit);
             RefreshUnitsPanel();
         }
 
         public void MoveUnit(IUnit unit, int newUId)
         {
-            m_Test.m_Units.MoveUnit(unit, newUId);
+            m_TestTab.m_SelectedItem.m_Test.m_Units.MoveUnit(unit, newUId);
             RefreshUnitsPanel();
         }
 
@@ -150,12 +152,12 @@ namespace WebTestGui
             {
                 chromeCheckBox.Checked = true;
                 chromeCheckBox.Font = new Font(chromeCheckBox.Font, FontStyle.Bold);
-                m_Test.m_Browsers.AddIfNotExists("chrome");
+                m_TestTab.m_SelectedItem.m_Test.m_Browsers.AddIfNotExists("chrome");
             }
             else
             {
                 chromeCheckBox.Font = new Font(chromeCheckBox.Font, FontStyle.Regular);
-                m_Test.m_Browsers.Remove("chrome");
+                m_TestTab.m_SelectedItem.m_Test.m_Browsers.Remove("chrome");
 
                 if (!firefoxCheckBox.Checked)
                 {
@@ -170,12 +172,12 @@ namespace WebTestGui
             {
                 firefoxCheckBox.Checked = true;
                 firefoxCheckBox.Font = new Font(firefoxCheckBox.Font, FontStyle.Bold);
-                m_Test.m_Browsers.AddIfNotExists("firefox");
+                m_TestTab.m_SelectedItem.m_Test.m_Browsers.AddIfNotExists("firefox");
             }
             else
             {
                 firefoxCheckBox.Font = new Font(chromeCheckBox.Font, FontStyle.Regular);
-                m_Test.m_Browsers.Remove("firefox");
+                m_TestTab.m_SelectedItem.m_Test.m_Browsers.Remove("firefox");
 
                 if (!chromeCheckBox.Checked)
                 {
@@ -243,70 +245,77 @@ namespace WebTestGui
             OnSwitchToJsLogButtonPressed(sender, e);
             m_ConsoleManager.Print("\nExportált {Magenta}[JSON] fájl:\n\n");
 
-            string JSONString = GetTestJSON();
+            string JSONString = GetTestJSON(GetTest());
             console.AppendText(JSONString + "\n");
         }
 
         private void OnSaveTestButtonPressed(object sender, EventArgs e)
         {
-            SaveTest();
+            SaveTest(GetTest());
         }
 
         private void OnLoadTestButtonPressed(object sender, EventArgs e)
         {
-            LoadTest();
+            m_TestTab.AddNewItem(sender, e);
         }
 
-        private string GetTestJSON()
+        private string GetTestJSON(Test test)
         {
-            string JSON = TestFormatter.SaveDriverManagerToJson(m_Test);
+            string JSON = TestFormatter.SaveDriverManagerToJson(test);
             return JSON;
         }
 
-        private void SaveTest()
+        private void SaveTest(Test test)
         {
-            if (!AppConsts.s_IsEditingAlreadyExistingTest)
+            if (string.IsNullOrEmpty(test.m_SaveFilePath))
             {
                 SaveFileDialog of = new SaveFileDialog();
                 of.Title = "Teszt mentése...";
                 of.Filter = $"Teszt fájl|*{AppConsts.s_AppDefaultFileExtension}|Any File|*.*";
                 if (of.ShowDialog() == DialogResult.OK)
                 {
-                    string savedInfo = GetTestJSON();
+                    string savedInfo = GetTestJSON(GetTest());
                     File.WriteAllText(of.FileName, savedInfo);
+
+                    test.m_SaveFilePath = of.FileName;
+                    test.m_Name = Path.GetFileNameWithoutExtension(of.FileName);
+                    currentlyEditedText.Text = test.m_SaveFilePath;
+
                     m_ConsoleManager.Print("\n\n{Orange}[Teszt] {Cyan}[sikeresen] exportálva és mentve az alábbi helyre... {DarkGray}" + $"[-{of.FileName}]\n");
                 }
             }
             else
             {
-                string savedInfo = GetTestJSON();
-                File.WriteAllText(AppConsts.s_LoadedTestFilepath!, savedInfo);
-                m_ConsoleManager.Print("\n\n{Orange}[Teszt] {Cyan}[sikeresen] exportálva és mentve az alábbi helyre... {DarkGray}" + $"[-{AppConsts.s_LoadedTestFilepath}]\n");
+                string savedInfo = GetTestJSON(GetTest());
+                File.WriteAllText(test.m_SaveFilePath, savedInfo);
+                m_ConsoleManager.Print("\n\n{Orange}[Teszt] {Cyan}[sikeresen] exportálva és mentve az alábbi helyre... {DarkGray}" + $"[-{test.m_SaveFilePath}]\n");
             }
         }
 
-        private void LoadTest()
+        public Test LoadTestFromFile()
         {
+            Test loadedTest = new Test(this);
+
             OpenFileDialog of = new OpenFileDialog();
             of.Title = "Teszt betöltése...";
             of.Filter = $"Teszt fájl|*{AppConsts.s_AppDefaultFileExtension}|Any File|*.*";
             if (of.ShowDialog() == DialogResult.OK)
             {
                 string loadedInfo = File.ReadAllText(of.FileName);
-                m_Test.m_Options.m_Options.Clear();
-                m_Test.m_DriverOptions.m_DriverOptions.Clear();
-                m_Test.m_Units.m_Units.Clear();
-                m_Test.m_Browsers.Clear();
-                m_Test = TestFormatter.LoadDriverManagerFromJson(loadedInfo, m_Test);
+                loadedTest.m_Options.m_Options.Clear();
+                loadedTest.m_DriverOptions.m_DriverOptions.Clear();
+                loadedTest.m_Units.m_Units.Clear();
+                loadedTest.m_Browsers.Clear();
+                loadedTest = TestFormatter.LoadDriverManagerFromJson(loadedInfo, loadedTest);
 
                 chromeCheckBox.Checked = false;
                 firefoxCheckBox.Checked = false;
-                if (m_Test.m_Browsers.Contains("chrome"))
+                if (loadedTest.m_Browsers.Contains("chrome"))
                 {
                     chromeCheckBox.Checked = true;
                 }
 
-                if (m_Test.m_Browsers.Contains("firefox"))
+                if (loadedTest.m_Browsers.Contains("firefox"))
                 {
                     firefoxCheckBox.Checked = true;
                 }
@@ -316,10 +325,31 @@ namespace WebTestGui
 
                 m_ConsoleManager.Print("\n\n{Orange}[Teszt] {Cyan}[sikeresen] importálva és betöltve az alábbi helyrõl... {DarkGray}" + $"[-{of.FileName}]\n");
 
-                AppConsts.s_IsEditingAlreadyExistingTest = true;
-                AppConsts.s_LoadedTestFilepath = of.FileName;
-                currentlyEditedText.Text = AppConsts.s_LoadedTestFilepath;
+                loadedTest.m_Name = Path.GetFileNameWithoutExtension(of.FileName);
+                loadedTest.m_SaveFilePath = of.FileName;
+                currentlyEditedText.Text = loadedTest.m_SaveFilePath;
+                RefreshUnitsPanel();
+                return loadedTest;
             }
+            return null!;
+        }
+
+        public void LoadTest()
+        {
+            chromeCheckBox.Checked = false;
+            firefoxCheckBox.Checked = false;
+            if (m_TestTab.m_SelectedItem.m_Test.m_Browsers.Contains("chrome"))
+            {
+                chromeCheckBox.Checked = true;
+            }
+
+            if (m_TestTab.m_SelectedItem.m_Test.m_Browsers.Contains("firefox"))
+            {
+                firefoxCheckBox.Checked = true;
+            }
+
+            RefreshOptionsPanel();
+            RefreshUnitsPanel();
         }
 
         #endregion
@@ -332,7 +362,7 @@ namespace WebTestGui
         TextboxFormatter m_JsConsoleManager;
         public void PrintToJsConsole(string msg) { m_JsConsoleManager.Print(msg); }
 
-        Test m_Test;
-        public Test GetTestObject() { return m_Test; }
+        TestTab m_TestTab;
+        public Test GetTest() { return m_TestTab.m_SelectedItem.m_Test; }
     }
 }
