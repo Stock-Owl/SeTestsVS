@@ -17,9 +17,10 @@ from traceback import format_exc, format_stack
 from multiprocessing import Process, Array, Value
 from ctypes import c_char_p as cstring
 from copy import copy
+from os import getpid
 
 # V.1.1.0
-#                                                                               22 / 25 + 1
+#                                                                               23 / 25 + 1
 # TODO: Kitalálni, hogy vannak az argumentumok                                  ✅  1
 # TODO: Megszerelni a random useless conversionöket a JSON-ből                  ✅  2
 # TODO: Relative locators                                                       ❌  NAH FUCK that shit
@@ -52,9 +53,10 @@ from copy import copy
 # TODO: add backups                                                             ✅  20
 # TODO: multiprocessing funny (O = O(n)/2)                                      ✅  21
 # TODO: FIrefoxDriver typecheck in CheckDriverExists so it won't cry abt it     ✅  22
-# TODO: add test names to JSON and combined logs                                ❌  23
+# TODO: add test names to JSON and combined logs                                ✅  23
 # TODO: add request shit for drivers. Seleniumwire!!! Needs to be implemented!  ❌  24
-# TODO: time data collection, bounds etc.                                       ❌  25
+# TODO: time data collection, bounds etc.                                         GUI
+# TODO: breakpoint intermediate                                                 ❌  25
 
 class Core:
     default_driver_options_dict_: dict = \
@@ -183,6 +185,8 @@ class Core:
         log_js_args = options["log_JS"]
         terminal_mode = options["terminal_mode"]
         keep_browser_open = json["driver_options"]["keep_browser_open"]
+        active_logging: bool = log_js_args["active"]
+        testname: str = json["name"]
 
         processes: list[Process] = []
         if "chrome" in browsers:
@@ -195,6 +199,7 @@ class Core:
             {
                 "options": browser_options[0],
                 "units": units,
+                "testname": testname,
                 "shared_state": s_chrome_state,
                 "shared_arr": s_chrome,
                 "log_js_args": log_js_args,
@@ -203,10 +208,12 @@ class Core:
                 "keep_browser_open": keep_browser_open
             }
             chrome_exec = Process(target=Core.ChromeExec, kwargs=copy(chrome_kwargs))
-            chrome_logger = Process(target= Core.AutoLogger, kwargs=copy(chrome_kwargs))
-
             processes.append(chrome_exec)
-            processes.append(chrome_logger)
+
+            if active_logging:
+                chrome_logger = Process(target= Core.AutoLogger, kwargs=copy(chrome_kwargs))
+                processes.append(chrome_logger)
+
 
         if "firefox" in browsers:
             # we will probably never need more than 16 (on log's size is 4, therefore 4 * 16 = 64)
@@ -218,6 +225,7 @@ class Core:
             {
                 "options": browser_options[1],
                 "units": units,
+                "testname": testname,
                 "shared_state": s_firefox_state,
                 "shared_arr": s_firefox,
                 "log_js_args": log_js_args,
@@ -237,12 +245,15 @@ class Core:
     def ChromeExec(
         options: ChromeOptions = None,
         units: dict[str] = None,
+        testname: str = None,
         shared_state: Value = None,
         shared_arr: Array = None,
         terminal_mode: bool = None,
         keep_browser_open: bool = None,
         parent_log_path: str = None,
         log_js_args: dict[str] = None) -> None:
+
+        print("Chrome PID:", getpid())
 
         driver = ChromeDriver(options = options)  # , service = service
         # 
@@ -372,6 +383,9 @@ class Core:
                         # wrong elmement type for `bindings` (should be string)
                         Support.LogError(parent_log_path, f"Parameter \'bindings\' must be of type str (string) not {type(bindings)}")
 
+                failed_units.append(uname)
+                Support.LogError(parent_log_path, f"Unit \"{uname}\"  failed")
+
                 Support.LogError(parent_log_path, "❌ ERROR:\n----------------------------------------------------------------\n")
                 Support.LogError(parent_log_path, f"{format_exc()}Stack:\n", time_disabled=True)
 
@@ -381,7 +395,7 @@ class Core:
                     stack_parts = stack[x].split('\n')
                     origin = stack_parts[0]
                     root = stack_parts[1]
-                    Support.LogError(parent_log_path, f"\t[{x}] ORIGIN:\t{origin}\n\t[{x}] ROOT: {root}\t\n", time_disabled=True)
+                    Support.LogError(parent_log_path, f"\t[{x}] ORIGIN:\t{origin}\n\t[{x}] ROOT: {root}\t", time_disabled=True)
                 Support.LogError(parent_log_path, "----------------------------------------------------------------\n", time_disabled=True)
                 
             # this is the part that processes the brwoser logs and puts them into the shared array
@@ -398,10 +412,7 @@ class Core:
                 Core.SharedLogDumper(logs = browser_logs, target = shared_arr, target_size = len(shared_arr))
                 pass
 
-        if keep_browser_open:
-            pass
-
-        else:
+        if not keep_browser_open:
             driver.Quit()
 
         from datetime import date as d
@@ -422,28 +433,32 @@ class Core:
                 f.read()
             with open(path, mode='a', encoding='utf-8') as f:
                 to_write = \
-                f"-------------------------------------\n\n{current_log}\n-------------------------------------\n"
+                f"-------------------------------------\n\n{testname}\n{current_log}\n-------------------------------------\n"
                 f.write(to_write)
 
         # if the path doesn't exist, create it and log the current date at the top of it
         except FileNotFoundError:
             with open(path, mode='w', encoding='utf-8') as f:
                 to_write = \
-                f"DATE: {today}\n-------------------------------------\n\n{current_log}\n-------------------------------------\n"
+                f"DATE: {today}\n-------------------------------------\n\n{testname}\n{current_log}\n-------------------------------------\n"
                 f.write(to_write)
 
         shared_state.value = False
-        return
+        print("Chrome finished")
 
     def FirefoxExec(
         options: FirefoxOptions = None,
         units: dict[str] = None,
+        testname: str = None,
         shared_state: Value = None,
         shared_arr: Array = None,
         terminal_mode: bool = None,
         keep_browser_open: bool = None,
         parent_log_path: str = None,
         log_js_args: dict[str] = None) -> None:
+
+        print("Firefox PID:", getpid())
+
 
         driver = FirefoxDriver(options = options, keep_alive=keep_browser_open)  # , service = service
         # 
@@ -572,6 +587,9 @@ class Core:
                         # wrong elmement type for `bindings` (should be string)
                         Support.LogError(parent_log_path, f"Parameter \'bindings\' must be of type str (string) not {type(bindings)}")
 
+                failed_units.append(uname)
+                Support.LogError(parent_log_path, f"Unit \"{uname}\"  failed")
+
                 Support.LogError(parent_log_path, "❌ ERROR:\n----------------------------------------------------------------\n")
                 Support.LogError(parent_log_path, f"{format_exc()}Stack:\n", time_disabled=True)
 
@@ -601,10 +619,7 @@ class Core:
                 Core.SharedLogDumper(logs = browser_logs, target = shared_arr, target_size = len(shared_arr))
             """
 
-        if keep_browser_open:
-            pass
-
-        else:
+        if not keep_browser_open:
             driver.Quit()
 
         from datetime import date as d
@@ -625,18 +640,18 @@ class Core:
                 f.read()
             with open(path, mode='a', encoding='utf-8') as f:
                 to_write = \
-                f"-------------------------------------\n\n{current_log}\n-------------------------------------\n"
+                f"-------------------------------------\n\n{testname}\n{current_log}\n-------------------------------------\n"
                 f.write(to_write)
 
         # if the path doesn't exist, create it and log the current date at the top of it
         except FileNotFoundError:
             with open(path, mode='w', encoding='utf-8') as f:
                 to_write = \
-                f"DATE: {today}\n-------------------------------------\n\n{current_log}\n-------------------------------------\n"
+                f"DATE: {today}\n-------------------------------------\n\n{testname}\n{current_log}\n-------------------------------------\n"
                 f.write(to_write)
 
         shared_state.value = False
-        return
+        print("Firefox finished")
 
     def AutoLogger(
             shared_arr: Array = None,
@@ -660,7 +675,9 @@ class Core:
         """
         from time import sleep
 
-        path: str = f"{parent_log_path}/js.log"
+        print("Logger PID:", getpid())
+
+        path: str = f"{parent_log_path}/../js.log"
         mimir: int | float = log_js_args['refresh_rate']    / 1000
         fuckup: int | float = log_js_args['retry_timeout']  / 1000
 
@@ -721,6 +738,8 @@ class Core:
                                 processed.append(log_line)
                         break
                 sleep(mimir)
+        
+        print("Logger finished")
 
     def SharedLogDumper(
         logs: list[dict] = None,

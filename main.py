@@ -1,4 +1,5 @@
 from core import Core
+from os import getpid
 from json import loads
 from multiprocessing import freeze_support, Process
 from time import sleep
@@ -29,4 +30,4 @@ if __name__ == '__main__':
     sleep(2)
     processes[0].start()
     processes[1].start()
-    print("done")
+    print("Host Finished")
