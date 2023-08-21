@@ -236,6 +236,21 @@ namespace WebTestGui
             //}
         }
 
+        public void OnTestStart()
+        {
+            GetTest().m_State = Test.TestState.Run;
+        }
+
+        public void OnTestBreak()
+        {
+            GetTest().m_State = Test.TestState.Break;
+        }
+
+        public void OnTestFinished()
+        {
+            GetTest().m_State = Test.TestState.Finished;
+        }
+
         #endregion
 
         #region Save and load test
@@ -252,7 +267,7 @@ namespace WebTestGui
 
         private string GetTestJSON(Test test)
         {
-            string JSON = TestFormatter.SaveDriverManagerToJson(test);
+            string JSON = TestFormatter.SaveTestToJson(test);
             return JSON;
         }
 
@@ -265,6 +280,7 @@ namespace WebTestGui
                 of.Filter = $"Teszt fájl|*{AppConsts.s_AppDefaultFileExtension}|Any File|*.*";
                 if (of.ShowDialog() == DialogResult.OK)
                 {
+                    GetTest().m_Name = Path.GetFileNameWithoutExtension(of.FileName);
                     string savedInfo = GetTestJSON(GetTest());
                     File.WriteAllText(of.FileName, savedInfo);
 
@@ -296,33 +312,9 @@ namespace WebTestGui
             if (of.ShowDialog() == DialogResult.OK)
             {
                 string loadedInfo = File.ReadAllText(of.FileName);
-                loadedTest.m_Options.m_Options.Clear();
-                loadedTest.m_DriverOptions.m_DriverOptions.Clear();
-                loadedTest.m_Units.m_Units.Clear();
-                loadedTest.m_Browsers.Clear();
-                loadedTest = TestFormatter.LoadDriverManagerFromJson(loadedInfo, loadedTest);
-
-                chromeCheckBox.Checked = false;
-                firefoxCheckBox.Checked = false;
-                if (loadedTest.m_Browsers.Contains("chrome"))
-                {
-                    chromeCheckBox.Checked = true;
-                }
-
-                if (loadedTest.m_Browsers.Contains("firefox"))
-                {
-                    firefoxCheckBox.Checked = true;
-                }
-
-                RefreshOptionsPanel();
-                RefreshUnitsPanel();
-
-                m_RunLogConsole.AddToConsoles("\n\n{Orange}[Teszt] {Cyan}[sikeresen] importálva és betöltve az alábbi helyrõl... {DarkGray}" + $"[-{of.FileName}]\n");
-
-                loadedTest.m_Name = Path.GetFileNameWithoutExtension(of.FileName);
+                loadedTest = TestFormatter.LoadTestFromJson(loadedInfo, loadedTest);
                 loadedTest.m_SaveFilePath = of.FileName;
-                currentlyEditedText.Text = loadedTest.m_SaveFilePath;
-                RefreshUnitsPanel();
+
                 return loadedTest;
             }
             return null!;
@@ -333,43 +325,15 @@ namespace WebTestGui
             Test loadedTest = new Test(this);
 
             string loadedInfo = File.ReadAllText(filePath);
-            loadedTest.m_Options.m_Options.Clear();
-            loadedTest.m_DriverOptions.m_DriverOptions.Clear();
-            loadedTest.m_Units.m_Units.Clear();
-            loadedTest.m_Browsers.Clear();
-            loadedTest = TestFormatter.LoadDriverManagerFromJson(loadedInfo, loadedTest);
-
-            if (m_TestTab.m_SelectedItem.m_Test.m_Browsers.Contains("chrome"))
-            {
-                chromeCheckBox.Checked = true;
-            }
-            else
-            {
-                chromeCheckBox.Checked = false;
-            }
-
-            if (m_TestTab.m_SelectedItem.m_Test.m_Browsers.Contains("firefox"))
-            {
-                firefoxCheckBox.Checked = true;
-            }
-            else
-            {
-                firefoxCheckBox.Checked = false;
-            }
-
-            RefreshOptionsPanel();
-            RefreshUnitsPanel();
-
-            m_RunLogConsole.AddToConsoles("\n\n{Orange}[Teszt] {Cyan}[sikeresen] importálva és betöltve az alábbi helyrõl... {DarkGray}" + $"[-{filePath}]\n");
-
-            loadedTest.m_Name = Path.GetFileNameWithoutExtension(filePath);
+            loadedTest = TestFormatter.LoadTestFromJson(loadedInfo, loadedTest);
             loadedTest.m_SaveFilePath = filePath;
-            currentlyEditedText.Text = loadedTest.m_SaveFilePath;
-            RefreshUnitsPanel();
+
             return loadedTest;
         }
 
-        public void LoadTest()
+        #endregion
+
+        public void RefreshEditor()
         {
             if (m_TestTab.m_SelectedItem.m_Test.m_Browsers.Contains("chrome"))
             {
@@ -393,8 +357,6 @@ namespace WebTestGui
             RefreshOptionsPanel();
             RefreshUnitsPanel();
         }
-
-        #endregion
 
         #region Root log folder Logic
 

@@ -1,4 +1,5 @@
 {
+    "name" : "run",
     "browsers": ["chrome", "firefox"],
     "options":
     {

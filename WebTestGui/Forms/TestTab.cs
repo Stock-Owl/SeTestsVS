@@ -34,6 +34,8 @@
             TestTabItem loadedTestTabItem = new TestTabItem(this, new Test(m_ParentForm));
             SelectItem(loadedTestTabItem);
             m_TestTabItems.Add(loadedTestTabItem);
+            m_SelectedItem.m_Test.PopulateDefaultOptions();
+            m_ParentForm.RefreshEditor();
             RefreshTabItems();
         }
 
@@ -46,6 +48,7 @@
                 m_TestTabItems.Add(loadedTestTabItem);
                 RefreshTabItems();
                 SelectItem(loadedTestTabItem);
+                m_ParentForm.RefreshEditor();
             }
         }
 
@@ -63,6 +66,7 @@
                 m_TestTabItems.Add(loadedTestTabItem);
                 RefreshTabItems();
                 SelectItem(loadedTestTabItem);
+                m_ParentForm.RefreshEditor();
             }
         }
 
@@ -94,7 +98,7 @@
                 }
             }
             m_SelectedItem = selectedItem;
-            m_ParentForm.LoadTest();
+            m_ParentForm.RefreshEditor();
         }
 
         public TestTabItem m_SelectedItem;

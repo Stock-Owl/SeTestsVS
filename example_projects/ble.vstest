@@ -1,4 +1,5 @@
 {
+  "name" : "ble",
   "browser": [
     "firefox"
   ],
@@ -29,31 +30,16 @@
     "unhandled_prompt_behavior": "dismiss and notify"
   },
   "units": {
-    "yo 1": {
-      "bindings": "yo 2",
+    "ble 1": {
+      "bindings": null,
       "backup_of": null,
       "actions": {
         "0": {
-          "type": "goto",
-          "break": false,
-          "url": "https://youtube.com"
-        }
-      }
-    },
-    "yo 2": {
-      "bindings": null,
-      "backup_of": "yo 1",
-      "actions": {
-        "0": {
-          "type": "send_keys",
+          "type": "js_execute",
           "break": true,
-          "single": false,
-          "displayed": true,
-          "enabled": true,
-          "selected": true,
-          "keys": "Kulcsok:",
-          "locator": "css_selector",
-          "value": "yo/yo"
+          "commmands": [
+            "// yo this is js code\nvar message = \"hello im js :)\""
+          ]
         }
       }
     }

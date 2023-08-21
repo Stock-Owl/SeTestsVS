@@ -1,15 +1,16 @@
 {
+  "name" : "test",
   "browser": [
-    "firefox"
+    "chrome"
   ],
   "options": {
-    "auto_exit_iframes": true,
+    "auto_exit_iframes": false,
     "log_JS": {
       "active": true,
       "refresh_rate": "1000",
       "retry_timeout": "1000"
     },
-    "parent_log_path": "C:\\Users\\kmarton\\source\\repos\\SeTestsVS\\example_projects",
+    "parent_log_path": "C:\\dev\\SeTestsVS\\example_projects",
     "terminal_mode": false
   },
   "driver_options": {
@@ -28,5 +29,22 @@
     },
     "unhandled_prompt_behavior": "dismiss and notify"
   },
-  "units": {}
+  "units": {
+    "test 1": {
+      "bindings": null,
+      "backup_of": null,
+      "actions": {
+        "0": {
+          "type": "click",
+          "break": false,
+          "single": true,
+          "displayed": false,
+          "enabled": false,
+          "selected": false,
+          "locator": "xpath",
+          "value": "testpath"
+        }
+      }
+    }
+  }
 }

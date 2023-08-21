@@ -29,97 +29,98 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Console));
-            consoleTextBox = new RichTextBox();
-            pictureBox1 = new PictureBox();
-            pictureBox2 = new PictureBox();
-            chromeButton = new Button();
-            firefoxButton = new Button();
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
-            SuspendLayout();
+            this.consoleTextBox = new System.Windows.Forms.RichTextBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.chromeButton = new System.Windows.Forms.Button();
+            this.firefoxButton = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            this.SuspendLayout();
             // 
             // consoleTextBox
             // 
-            consoleTextBox.AcceptsTab = true;
-            consoleTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            consoleTextBox.BackColor = Color.Black;
-            consoleTextBox.Font = new Font("Arial Rounded MT Bold", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            consoleTextBox.ForeColor = Color.LightBlue;
-            consoleTextBox.HideSelection = false;
-            consoleTextBox.Location = new Point(0, 0);
-            consoleTextBox.Name = "consoleTextBox";
-            consoleTextBox.ReadOnly = true;
-            consoleTextBox.Size = new Size(342, 323);
-            consoleTextBox.TabIndex = 1;
-            consoleTextBox.Text = "";
+            this.consoleTextBox.AcceptsTab = true;
+            this.consoleTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.consoleTextBox.BackColor = System.Drawing.Color.Black;
+            this.consoleTextBox.Font = new System.Drawing.Font("Arial Rounded MT Bold", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.consoleTextBox.ForeColor = System.Drawing.Color.LightBlue;
+            this.consoleTextBox.HideSelection = false;
+            this.consoleTextBox.Location = new System.Drawing.Point(0, 0);
+            this.consoleTextBox.Name = "consoleTextBox";
+            this.consoleTextBox.ReadOnly = true;
+            this.consoleTextBox.Size = new System.Drawing.Size(342, 336);
+            this.consoleTextBox.TabIndex = 1;
+            this.consoleTextBox.Text = "";
             // 
             // pictureBox1
             // 
-            pictureBox1.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            pictureBox1.BackColor = Color.FromArgb(50, 50, 53);
-            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
-            pictureBox1.Location = new Point(12, 329);
-            pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(30, 30);
-            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
-            pictureBox1.TabIndex = 5;
-            pictureBox1.TabStop = false;
+            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.pictureBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(53)))));
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(12, 341);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(20, 20);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 5;
+            this.pictureBox1.TabStop = false;
             // 
             // pictureBox2
             // 
-            pictureBox2.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            pictureBox2.BackColor = Color.FromArgb(50, 50, 53);
-            pictureBox2.Image = (Image)resources.GetObject("pictureBox2.Image");
-            pictureBox2.Location = new Point(300, 329);
-            pictureBox2.Name = "pictureBox2";
-            pictureBox2.Size = new Size(30, 30);
-            pictureBox2.SizeMode = PictureBoxSizeMode.StretchImage;
-            pictureBox2.TabIndex = 7;
-            pictureBox2.TabStop = false;
+            this.pictureBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBox2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(53)))));
+            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
+            this.pictureBox2.Location = new System.Drawing.Point(310, 341);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(20, 20);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox2.TabIndex = 7;
+            this.pictureBox2.TabStop = false;
             // 
             // chromeButton
             // 
-            chromeButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            chromeButton.BackColor = Color.FromArgb(45, 45, 48);
-            chromeButton.Font = new Font("Segoe UI", 9F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
-            chromeButton.ForeColor = Color.White;
-            chromeButton.Location = new Point(12, 364);
-            chromeButton.Name = "chromeButton";
-            chromeButton.Size = new Size(95, 31);
-            chromeButton.TabIndex = 49;
-            chromeButton.Text = "Chrome log...";
-            chromeButton.UseVisualStyleBackColor = false;
-            chromeButton.Click += chromeButton_Click;
+            this.chromeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.chromeButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.chromeButton.Font = new System.Drawing.Font("Segoe UI", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point);
+            this.chromeButton.ForeColor = System.Drawing.Color.White;
+            this.chromeButton.Location = new System.Drawing.Point(12, 363);
+            this.chromeButton.Name = "chromeButton";
+            this.chromeButton.Size = new System.Drawing.Size(95, 31);
+            this.chromeButton.TabIndex = 49;
+            this.chromeButton.Text = "Chrome log...";
+            this.chromeButton.UseVisualStyleBackColor = false;
             // 
             // firefoxButton
             // 
-            firefoxButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            firefoxButton.BackColor = Color.FromArgb(45, 45, 48);
-            firefoxButton.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
-            firefoxButton.ForeColor = Color.White;
-            firefoxButton.Location = new Point(235, 364);
-            firefoxButton.Name = "firefoxButton";
-            firefoxButton.Size = new Size(95, 31);
-            firefoxButton.TabIndex = 50;
-            firefoxButton.Text = "Firefox log...";
-            firefoxButton.UseVisualStyleBackColor = false;
-            firefoxButton.Click += firefoxButton_Click;
+            this.firefoxButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.firefoxButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.firefoxButton.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point);
+            this.firefoxButton.ForeColor = System.Drawing.Color.White;
+            this.firefoxButton.Location = new System.Drawing.Point(235, 363);
+            this.firefoxButton.Name = "firefoxButton";
+            this.firefoxButton.Size = new System.Drawing.Size(95, 31);
+            this.firefoxButton.TabIndex = 50;
+            this.firefoxButton.Text = "Firefox log...";
+            this.firefoxButton.UseVisualStyleBackColor = false;
             // 
             // Console
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.FromArgb(50, 50, 53);
-            Controls.Add(firefoxButton);
-            Controls.Add(chromeButton);
-            Controls.Add(pictureBox2);
-            Controls.Add(pictureBox1);
-            Controls.Add(consoleTextBox);
-            Name = "Console";
-            Size = new Size(342, 403);
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
-            ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
-            ResumeLayout(false);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(53)))));
+            this.Controls.Add(this.firefoxButton);
+            this.Controls.Add(this.chromeButton);
+            this.Controls.Add(this.pictureBox2);
+            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.consoleTextBox);
+            this.Name = "Console";
+            this.Size = new System.Drawing.Size(342, 403);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            this.ResumeLayout(false);
+
         }
 
         #endregion

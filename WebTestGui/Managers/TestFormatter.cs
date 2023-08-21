@@ -5,9 +5,12 @@ namespace WebTestGui
 {
     public static class TestFormatter
     {
-        public static string SaveDriverManagerToJson(Test test)
+        public static string SaveTestToJson(Test test)
         {
             Dictionary<string, object> jsonData = new Dictionary<string, object>();
+
+            // Name
+            jsonData["name"] = test.m_Name;
 
             // Browser
             jsonData["browser"] = test.m_Browsers;
@@ -45,9 +48,12 @@ namespace WebTestGui
             return JsonConvert.SerializeObject(jsonData, Formatting.Indented);
         }
 
-        public static Test LoadDriverManagerFromJson(string rawJson, Test test)
+        public static Test LoadTestFromJson(string rawJson, Test test)
         {
             JObject jsonObject = JObject.Parse(rawJson);
+
+            // Name
+            test.m_Name = (string)jsonObject["name"]!;
 
             // Browser
             test.m_Browsers = JsonHelper.ConvertJTokenToListString(jsonObject["browser"]!);

@@ -1,4 +1,4 @@
-﻿namespace WebTestGui.Core
+﻿namespace WebTestGui
 {
     public class FileWatcher : IDisposable
     {
@@ -14,7 +14,7 @@
             // Inicializáljuk a fájlfigyelőt
             fileSystemWatcher = new FileSystemWatcher
             {
-                Path = Path.GetDirectoryName(filePath),
+                Path = Path.GetDirectoryName(filePath)!,
                 Filter = Path.GetFileName(filePath),
                 EnableRaisingEvents = true
             };
