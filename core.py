@@ -292,18 +292,18 @@ class Core:
                         else:
 
                             try:
-                                with open(f"{parent_log_path}/../file.break", mode='a+', encoding='utf-8') as f:
-                                    f.write(f"{uname}:{aname}\n")
+                                with open(f"{parent_log_path}/../file.brk", mode='a+', encoding='utf-8') as f:
+                                    f.write(f"c:{uname}:{aname}\n")
 
                             except FileExistsError:
-                                with open(f"{parent_log_path}/../file.break", mode='w', encoding='utf-8') as f:
-                                    f.write(f"{uname}:{aname}\n")
+                                with open(f"{parent_log_path}/../file.brk", mode='w', encoding='utf-8') as f:
+                                    f.write(f"c:{uname}:{aname}\n")
 
                             isempty: bool = False
                             while not isempty:
-                                with open(f"{parent_log_path}/../file.break", mode='r', encoding='utf-8') as f:
+                                with open(f"{parent_log_path}/../file.brk", mode='r', encoding='utf-8') as f:
                                     content: str = f.read()
-                                    if content == '':
+                                    if content == '' or 'c' in list(content):
                                         break
 
                             del isempty
@@ -497,18 +497,18 @@ class Core:
                         else:
                             
                             try:
-                                with open(f"{parent_log_path}/../file.break", mode='a+', encoding='utf-8') as f:
-                                    f.write(f"{uname}:{aname}\n")
+                                with open(f"{parent_log_path}/../file.brk", mode='a+', encoding='utf-8') as f:
+                                    f.write(f"f:{uname}:{aname}\n")
 
                             except FileExistsError:
-                                with open(f"{parent_log_path}/../file.break", mode='w', encoding='utf-8') as f:
-                                    f.write(f"{uname}:{aname}\n")
+                                with open(f"{parent_log_path}/../file.brk", mode='w', encoding='utf-8') as f:
+                                    f.write(f"f:{uname}:{aname}\n")
 
                             isempty: bool = False
                             while not isempty:
-                                with open(f"{parent_log_path}/../file.break", mode='r', encoding='utf-8') as f:
+                                with open(f"{parent_log_path}/../file.brk", mode='r', encoding='utf-8') as f:
                                     content: str = f.read()
-                                    if content == '':
+                                    if content == '' or 'c' in list(content):
                                         break
                             
                         Support.LogProc(parent_log_path, "Breakpoint")
