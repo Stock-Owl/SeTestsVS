@@ -6,6 +6,11 @@ namespace WebTestGui
     {
         public static List<string> ConvertJTokenToListString(JToken jToken)
         {
+            if (jToken == null)
+            {
+                return new List<string>();
+            }
+
             List<string> stringList = new List<string>();
 
             if (jToken.Type == JTokenType.Array)

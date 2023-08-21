@@ -1,17 +1,15 @@
+using System.Diagnostics;
+
 namespace WebTestGui
 {
     public partial class MainForm : Form
     {
         /* TODO:
-        - Mindegyik konzol elérhetõ (4 darab, abból csak a napi az, amit el is kell menteni)
-        - Gomb ami megnyitja a feladatkezelõben a log mappát
         - Idõzítõ különálló applikáció (tesztek futtatásának idõzítése, és beállítása)
         - Python backend meghívása és kommunikációs fájlok kezelése
-        
-        - Komplex Action (több Action egymásba pakolása, mint egy sablon)
+        - Sablon új test
         - Opciók sablonok létrehozása, import és exportálása
-        - Unit panel oldalán egy mini-map (overview a unitokról)
-        - Komplex idõmérési
+        - Action idõmérés
         */
 
         public MainForm()
@@ -22,23 +20,33 @@ namespace WebTestGui
             BackColor = Color.FromArgb(255, 50, 50, 53);
             Text = AppConsts.s_AppName + " " + AppConsts.s_AppVersion;
 
-            m_ConsoleManager = new TextboxFormatter(console);
-            m_JsConsoleManager = new TextboxFormatter(jsConsole);
+            m_RunLogConsole = new Console(this);
+            Controls.Add(m_RunLogConsole);
+            m_RunLogConsole.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            m_RunLogConsole.Location = new Point(0, 0);
+            m_RunLogConsole.Size = new Size(240, 520);
+
+            m_JsLogConsole = new Console(this);
+            Controls.Add(m_JsLogConsole);
+            m_JsLogConsole.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
+            m_JsLogConsole.Location = new Point(645, 142);
+            m_JsLogConsole.Size = new Size(327, 267);
+            m_JsLogConsole.Visible = false;
 
             m_TestTab = new TestTab(this);
             Controls.Add(m_TestTab);
             m_TestTab.Location = new Point(236, 0);
             m_TestTab.AddNewBlankItem();
 
-            m_ConsoleManager.Print("{Yellow}[Applikáció] indítása...\n");
-            m_ConsoleManager.Print("Verzió: {LightSeaGreen}" + $"[{AppConsts.s_AppVersion}]\n");
-            m_ConsoleManager.Print("Idõ: {DarkGray}" + $"[-{DateTime.Now}]\n");
-            m_ConsoleManager.Print("{Orange}[Konzol] inicializálása...\n\n");
-            m_ConsoleManager.Print("Az {Yellow}[alkalmazás] {Cyan}[sikeresen] elindult, a {Orange}[konzolok] mûködnek!\n");
+            m_RunLogConsole.AddToConsoles("Applikáció indítása...\n");
+            m_RunLogConsole.AddToConsoles("Verzió: " + $"{AppConsts.s_AppVersion}\n");
+            m_RunLogConsole.AddToConsoles("Idõ: " + $"{DateTime.Now}\n");
+            m_RunLogConsole.AddToConsoles("Konzol inicializálása...\n\n");
+            m_RunLogConsole.AddToConsoles("Az alkalmazás sikeresen elindult, a konzolok mûködnek!\n");
 
-            m_JsConsoleManager.Print("{Yellow}[JavaScript] konzol...\n");
-            m_JsConsoleManager.Print("A teszt ideje alatt minden {Yellow}[JavaScript] {Orange}[log] " +
-                "információ {Cyan}[ide] lesz kiiratva.");
+            m_JsLogConsole.AddToConsoles("JavaScript konzol...\n");
+            m_JsLogConsole.AddToConsoles("A teszt ideje alatt minden JavaScript log " +
+                "információ ide lesz kiiratva.");
 
             RefreshOptionsPanel();
         }
@@ -175,7 +183,7 @@ namespace WebTestGui
             optionsPanel.Visible = true;
             optionLabel.Visible = true;
 
-            jsConsole.Visible = false;
+            m_JsLogConsole.Visible = false;
 
             switchToOptionsButton.ForeColor = Color.White;
             switchToOptionsButton.Font = new Font(switchToOptionsButton.Font, FontStyle.Bold);
@@ -186,7 +194,7 @@ namespace WebTestGui
 
         private void OnSwitchToJsLogButtonPressed(object sender, EventArgs e)
         {
-            jsConsole.Visible = true;
+            m_JsLogConsole.Visible = true;
 
             optionHeaderPanel.Visible = false;
             optionsPanel.Visible = false;
@@ -201,18 +209,36 @@ namespace WebTestGui
 
         #endregion
 
-        #region Manage Tests Buttons and Functions
+        #region TEST RUNTIME
 
-        private void OnStartTestButtonPressed(object sender, EventArgs e)
+        private async void OnStartTestButtonPressed(object sender, EventArgs e)
         {
-            m_ConsoleManager.Print("\n\n{LightSeaGreen}[Teszt] indítása... {DarkGray}" + $"[-{DateTime.Now}]\n");
-            m_JsConsoleManager.Print("\n\n{LightSeaGreen}[Teszt] indítása... {DarkGray}" + $"[-{DateTime.Now}]\n");
+            m_RunLogConsole.AddToConsoles("\n\nTeszt indítása... " + $"{DateTime.Now}\n\n");
+            m_JsLogConsole.AddToConsoles("\n\nTeszt indítása... " + $"{DateTime.Now}\n\n");
             OnSwitchToJsLogButtonPressed(sender, e);
-            m_ConsoleManager.Print("\nExportált {Magenta}[JSON] fájl:\n\n");
 
             string JSONString = GetTestJSON(GetTest());
-            console.AppendText(JSONString + "\n");
+
+            string filePath = GetTest().GetRootLogDirectoryPath() + @"/watch.txt";
+
+            //using (FileWatcher fileWatcher = new FileWatcher(filePath))
+            //{
+            //    fileWatcher.FileChanged += async (content) =>
+            //    {
+            //        m_RunLogConsole.consoleTextBox.Invoke((Action)(() =>
+            //        {
+            //            m_RunLogConsole.consoleTextBox.Text += "\n" + content;
+            //        }));
+            //    };
+            //
+            //    m_RunLogConsole.consoleTextBox.Text += ("File watcher started. Press Enter to exit.");
+            //    await Task.Delay(-1); // Várakozás a program bezárásáig
+            //}
         }
+
+        #endregion
+
+        #region Save and load test
 
         private void OnSaveTestButtonPressed(object sender, EventArgs e)
         {
@@ -246,7 +272,7 @@ namespace WebTestGui
                     test.m_Name = Path.GetFileNameWithoutExtension(of.FileName);
                     currentlyEditedText.Text = test.m_SaveFilePath;
 
-                    m_ConsoleManager.Print("\n\n{Orange}[Teszt] {Cyan}[sikeresen] exportálva és mentve az alábbi helyre... {DarkGray}" + $"[-{of.FileName}]\n");
+                    m_RunLogConsole.AddToConsoles("\n\nTeszt sikeresen exportálva és mentve az alábbi helyre... " + $"{of.FileName}\n");
 
                     m_TestTab.DeleteItem(m_TestTab.m_SelectedItem);
                     m_TestTab.AddNewItemFromFilePath(of.FileName);
@@ -256,7 +282,7 @@ namespace WebTestGui
             {
                 string savedInfo = GetTestJSON(GetTest());
                 File.WriteAllText(test.m_SaveFilePath, savedInfo);
-                m_ConsoleManager.Print("\n\n{Orange}[Teszt] {Cyan}[sikeresen] exportálva és mentve az alábbi helyre... {DarkGray}" + $"[-{test.m_SaveFilePath}]\n");
+                m_RunLogConsole.AddToConsoles("\n\nTeszt sikeresen exportálva és mentve az alábbi helyre... " + $"{test.m_SaveFilePath}\n");
             }
         }
 
@@ -291,7 +317,7 @@ namespace WebTestGui
                 RefreshOptionsPanel();
                 RefreshUnitsPanel();
 
-                m_ConsoleManager.Print("\n\n{Orange}[Teszt] {Cyan}[sikeresen] importálva és betöltve az alábbi helyrõl... {DarkGray}" + $"[-{of.FileName}]\n");
+                m_RunLogConsole.AddToConsoles("\n\n{Orange}[Teszt] {Cyan}[sikeresen] importálva és betöltve az alábbi helyrõl... {DarkGray}" + $"[-{of.FileName}]\n");
 
                 loadedTest.m_Name = Path.GetFileNameWithoutExtension(of.FileName);
                 loadedTest.m_SaveFilePath = of.FileName;
@@ -334,7 +360,7 @@ namespace WebTestGui
             RefreshOptionsPanel();
             RefreshUnitsPanel();
 
-            m_ConsoleManager.Print("\n\n{Orange}[Teszt] {Cyan}[sikeresen] importálva és betöltve az alábbi helyrõl... {DarkGray}" + $"[-{filePath}]\n");
+            m_RunLogConsole.AddToConsoles("\n\n{Orange}[Teszt] {Cyan}[sikeresen] importálva és betöltve az alábbi helyrõl... {DarkGray}" + $"[-{filePath}]\n");
 
             loadedTest.m_Name = Path.GetFileNameWithoutExtension(filePath);
             loadedTest.m_SaveFilePath = filePath;
@@ -363,21 +389,33 @@ namespace WebTestGui
                 firefoxCheckBox.Checked = false;
             }
 
+            currentlyEditedText.Text = m_TestTab.m_SelectedItem.m_Test.m_SaveFilePath;
             RefreshOptionsPanel();
             RefreshUnitsPanel();
         }
 
         #endregion
 
+        #region Root log folder Logic
+
+        private void rootLogDirectoryButton_Click(object sender, EventArgs e)
+        {
+            Process.Start("explorer.exe", GetTest().GetRootLogDirectoryPath());
+        }
+
+        private void pictureBox3_Click(object sender, EventArgs e)
+        {
+            rootLogDirectoryButton_Click(sender, e);
+        }
+
+        #endregion
+
         public static bool s_IsChromeChecked = true;
-
-        TextboxFormatter m_ConsoleManager;
-        public void PrintToConsole(string msg) { m_ConsoleManager.Print(msg); }
-
-        TextboxFormatter m_JsConsoleManager;
-        public void PrintToJsConsole(string msg) { m_JsConsoleManager.Print(msg); }
 
         TestTab m_TestTab;
         public Test GetTest() { return m_TestTab.m_SelectedItem.m_Test; }
+
+        Console m_RunLogConsole;
+        Console m_JsLogConsole;
     }
 }

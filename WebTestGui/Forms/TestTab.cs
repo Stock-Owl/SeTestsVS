@@ -49,6 +49,11 @@
             }
         }
 
+        private void ONAddBlankTestButtonClicked(object sender, EventArgs e)
+        {
+            AddNewBlankItem();
+        }
+
         public void AddNewItemFromFilePath(string filePath)
         {
             Test loadedTest = m_ParentForm.LoadTestFromFile(filePath);

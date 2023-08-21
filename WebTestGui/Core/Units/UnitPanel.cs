@@ -158,7 +158,7 @@ namespace WebTestGui
             {
                 JToken actionData = actionRawData.First!;
                 string actionType = (string)actionRawData.First!.First!;
-            
+
                 IAction action = Actions.CreateActionByType(actionType);
                 action.m_ParentUnit = this;
                 action.SetData(actionData);

@@ -29,267 +29,263 @@
         protected void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UnitPanel));
-            this.idLabel = new System.Windows.Forms.Label();
-            this.binImage = new System.Windows.Forms.PictureBox();
-            this.idTextBox = new System.Windows.Forms.TextBox();
-            this.mainPanel = new System.Windows.Forms.Panel();
-            this.backupOfLabel = new System.Windows.Forms.Label();
-            this.bindingsLabel = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.unitBackupComboBox = new System.Windows.Forms.ComboBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.unitBindingsComboBox = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.addActionComboBox = new System.Windows.Forms.ComboBox();
-            this.actionsPanel = new System.Windows.Forms.FlowLayoutPanel();
-            this.unitNameTextField = new System.Windows.Forms.TextBox();
-            this.collapseActionsButton = new System.Windows.Forms.PictureBox();
-            this.expandActionsButtton = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.binImage)).BeginInit();
-            this.mainPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.collapseActionsButton)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.expandActionsButtton)).BeginInit();
-            this.SuspendLayout();
+            idLabel = new Label();
+            binImage = new PictureBox();
+            idTextBox = new TextBox();
+            mainPanel = new Panel();
+            backupOfLabel = new Label();
+            bindingsLabel = new Label();
+            label2 = new Label();
+            unitBackupComboBox = new ComboBox();
+            label4 = new Label();
+            unitBindingsComboBox = new ComboBox();
+            label1 = new Label();
+            addActionComboBox = new ComboBox();
+            actionsPanel = new FlowLayoutPanel();
+            unitNameTextField = new TextBox();
+            collapseActionsButton = new PictureBox();
+            expandActionsButtton = new PictureBox();
+            ((System.ComponentModel.ISupportInitialize)binImage).BeginInit();
+            mainPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)collapseActionsButton).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)expandActionsButtton).BeginInit();
+            SuspendLayout();
             // 
             // idLabel
             // 
-            this.idLabel.AutoSize = true;
-            this.idLabel.BackColor = System.Drawing.Color.Transparent;
-            this.idLabel.Font = new System.Drawing.Font("Segoe UI Semibold", 13F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.idLabel.ForeColor = System.Drawing.Color.White;
-            this.idLabel.Location = new System.Drawing.Point(913, 6);
-            this.idLabel.Name = "idLabel";
-            this.idLabel.Size = new System.Drawing.Size(47, 25);
-            this.idLabel.TabIndex = 39;
-            this.idLabel.Text = "UID:";
+            idLabel.AutoSize = true;
+            idLabel.BackColor = Color.Transparent;
+            idLabel.Font = new Font("Segoe UI Semibold", 13F, FontStyle.Bold, GraphicsUnit.Point);
+            idLabel.ForeColor = Color.White;
+            idLabel.Location = new Point(913, 6);
+            idLabel.Name = "idLabel";
+            idLabel.Size = new Size(47, 25);
+            idLabel.TabIndex = 39;
+            idLabel.Text = "UID:";
             // 
             // binImage
             // 
-            this.binImage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.binImage.Image = ((System.Drawing.Image)(resources.GetObject("binImage.Image")));
-            this.binImage.Location = new System.Drawing.Point(963, 63);
-            this.binImage.Name = "binImage";
-            this.binImage.Size = new System.Drawing.Size(30, 30);
-            this.binImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.binImage.TabIndex = 37;
-            this.binImage.TabStop = false;
-            this.binImage.Click += new System.EventHandler(this.Delete);
+            binImage.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            binImage.Image = (Image)resources.GetObject("binImage.Image");
+            binImage.Location = new Point(963, 63);
+            binImage.Name = "binImage";
+            binImage.Size = new Size(30, 30);
+            binImage.SizeMode = PictureBoxSizeMode.StretchImage;
+            binImage.TabIndex = 37;
+            binImage.TabStop = false;
+            binImage.Click += Delete;
             // 
             // idTextBox
             // 
-            this.idTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(43)))));
-            this.idTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.idTextBox.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.idTextBox.ForeColor = System.Drawing.Color.Gainsboro;
-            this.idTextBox.Location = new System.Drawing.Point(958, 5);
-            this.idTextBox.Name = "idTextBox";
-            this.idTextBox.Size = new System.Drawing.Size(35, 25);
-            this.idTextBox.TabIndex = 38;
-            this.idTextBox.Text = "0";
-            this.idTextBox.Leave += new System.EventHandler(this.OnUIdTextBoxFocusLeave);
+            idTextBox.BackColor = Color.FromArgb(40, 40, 43);
+            idTextBox.BorderStyle = BorderStyle.FixedSingle;
+            idTextBox.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+            idTextBox.ForeColor = Color.Gainsboro;
+            idTextBox.Location = new Point(958, 5);
+            idTextBox.Name = "idTextBox";
+            idTextBox.Size = new Size(35, 25);
+            idTextBox.TabIndex = 38;
+            idTextBox.Text = "0";
+            idTextBox.Leave += OnUIdTextBoxFocusLeave;
             // 
             // mainPanel
             // 
-            this.mainPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(50)))));
-            this.mainPanel.Controls.Add(this.backupOfLabel);
-            this.mainPanel.Controls.Add(this.bindingsLabel);
-            this.mainPanel.Controls.Add(this.label2);
-            this.mainPanel.Controls.Add(this.unitBackupComboBox);
-            this.mainPanel.Controls.Add(this.label4);
-            this.mainPanel.Controls.Add(this.unitBindingsComboBox);
-            this.mainPanel.Controls.Add(this.label1);
-            this.mainPanel.Controls.Add(this.addActionComboBox);
-            this.mainPanel.Controls.Add(this.actionsPanel);
-            this.mainPanel.Controls.Add(this.unitNameTextField);
-            this.mainPanel.Controls.Add(this.idTextBox);
-            this.mainPanel.Controls.Add(this.binImage);
-            this.mainPanel.Controls.Add(this.idLabel);
-            this.mainPanel.Controls.Add(this.collapseActionsButton);
-            this.mainPanel.Controls.Add(this.expandActionsButtton);
-            this.mainPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mainPanel.Location = new System.Drawing.Point(0, 0);
-            this.mainPanel.Name = "mainPanel";
-            this.mainPanel.Size = new System.Drawing.Size(1000, 97);
-            this.mainPanel.TabIndex = 12;
+            mainPanel.BackColor = Color.FromArgb(45, 45, 50);
+            mainPanel.Controls.Add(backupOfLabel);
+            mainPanel.Controls.Add(bindingsLabel);
+            mainPanel.Controls.Add(label2);
+            mainPanel.Controls.Add(unitBackupComboBox);
+            mainPanel.Controls.Add(label4);
+            mainPanel.Controls.Add(unitBindingsComboBox);
+            mainPanel.Controls.Add(label1);
+            mainPanel.Controls.Add(addActionComboBox);
+            mainPanel.Controls.Add(actionsPanel);
+            mainPanel.Controls.Add(unitNameTextField);
+            mainPanel.Controls.Add(idTextBox);
+            mainPanel.Controls.Add(binImage);
+            mainPanel.Controls.Add(idLabel);
+            mainPanel.Controls.Add(collapseActionsButton);
+            mainPanel.Controls.Add(expandActionsButtton);
+            mainPanel.Dock = DockStyle.Fill;
+            mainPanel.Location = new Point(0, 0);
+            mainPanel.Name = "mainPanel";
+            mainPanel.Size = new Size(1000, 97);
+            mainPanel.TabIndex = 12;
             // 
             // backupOfLabel
             // 
-            this.backupOfLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.backupOfLabel.AutoSize = true;
-            this.backupOfLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(43)))));
-            this.backupOfLabel.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point);
-            this.backupOfLabel.ForeColor = System.Drawing.Color.LightGray;
-            this.backupOfLabel.Location = new System.Drawing.Point(544, 37);
-            this.backupOfLabel.Name = "backupOfLabel";
-            this.backupOfLabel.Size = new System.Drawing.Size(27, 15);
-            this.backupOfLabel.TabIndex = 58;
-            this.backupOfLabel.Text = "null";
+            backupOfLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            backupOfLabel.AutoSize = true;
+            backupOfLabel.BackColor = Color.FromArgb(40, 40, 43);
+            backupOfLabel.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+            backupOfLabel.ForeColor = Color.LightGray;
+            backupOfLabel.Location = new Point(544, 37);
+            backupOfLabel.Name = "backupOfLabel";
+            backupOfLabel.Size = new Size(27, 15);
+            backupOfLabel.TabIndex = 58;
+            backupOfLabel.Text = "null";
             // 
             // bindingsLabel
             // 
-            this.bindingsLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bindingsLabel.AutoSize = true;
-            this.bindingsLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(43)))));
-            this.bindingsLabel.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point);
-            this.bindingsLabel.ForeColor = System.Drawing.Color.LightGray;
-            this.bindingsLabel.Location = new System.Drawing.Point(544, 9);
-            this.bindingsLabel.Name = "bindingsLabel";
-            this.bindingsLabel.Size = new System.Drawing.Size(27, 15);
-            this.bindingsLabel.TabIndex = 57;
-            this.bindingsLabel.Text = "null";
+            bindingsLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            bindingsLabel.AutoSize = true;
+            bindingsLabel.BackColor = Color.FromArgb(40, 40, 43);
+            bindingsLabel.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+            bindingsLabel.ForeColor = Color.LightGray;
+            bindingsLabel.Location = new Point(544, 9);
+            bindingsLabel.Name = "bindingsLabel";
+            bindingsLabel.Size = new Size(27, 15);
+            bindingsLabel.TabIndex = 57;
+            bindingsLabel.Text = "null";
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.BackColor = System.Drawing.Color.Transparent;
-            this.label2.Font = new System.Drawing.Font("Segoe UI Semibold", 11.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point);
-            this.label2.ForeColor = System.Drawing.Color.Gray;
-            this.label2.Location = new System.Drawing.Point(418, 37);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(116, 20);
-            this.label2.TabIndex = 54;
-            this.label2.Text = "Biztonsági Unit:";
+            label2.AutoSize = true;
+            label2.BackColor = Color.Transparent;
+            label2.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+            label2.ForeColor = Color.Gray;
+            label2.Location = new Point(418, 37);
+            label2.Name = "label2";
+            label2.Size = new Size(116, 20);
+            label2.TabIndex = 54;
+            label2.Text = "Biztonsági Unit:";
             // 
             // unitBackupComboBox
             // 
-            this.unitBackupComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.unitBackupComboBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(43)))));
-            this.unitBackupComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.unitBackupComboBox.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.unitBackupComboBox.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point);
-            this.unitBackupComboBox.ForeColor = System.Drawing.Color.Silver;
-            this.unitBackupComboBox.FormattingEnabled = true;
-            this.unitBackupComboBox.Location = new System.Drawing.Point(540, 34);
-            this.unitBackupComboBox.Name = "unitBackupComboBox";
-            this.unitBackupComboBox.Size = new System.Drawing.Size(175, 23);
-            this.unitBackupComboBox.TabIndex = 53;
-            this.unitBackupComboBox.DropDown += new System.EventHandler(this.OnUnitBackupComboBoxDropDown);
-            this.unitBackupComboBox.SelectedIndexChanged += new System.EventHandler(this.OnUnitBackupComboBoxSelectedIndexChanged);
+            unitBackupComboBox.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            unitBackupComboBox.BackColor = Color.FromArgb(40, 40, 43);
+            unitBackupComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            unitBackupComboBox.FlatStyle = FlatStyle.Popup;
+            unitBackupComboBox.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+            unitBackupComboBox.ForeColor = Color.Silver;
+            unitBackupComboBox.FormattingEnabled = true;
+            unitBackupComboBox.Location = new Point(540, 34);
+            unitBackupComboBox.Name = "unitBackupComboBox";
+            unitBackupComboBox.Size = new Size(175, 23);
+            unitBackupComboBox.TabIndex = 53;
+            unitBackupComboBox.DropDown += OnUnitBackupComboBoxDropDown;
+            unitBackupComboBox.SelectedIndexChanged += OnUnitBackupComboBoxSelectedIndexChanged;
             // 
             // label4
             // 
-            this.label4.AutoSize = true;
-            this.label4.BackColor = System.Drawing.Color.Transparent;
-            this.label4.Font = new System.Drawing.Font("Segoe UI Semibold", 11.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point);
-            this.label4.ForeColor = System.Drawing.Color.Gray;
-            this.label4.Location = new System.Drawing.Point(431, 7);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(103, 20);
-            this.label4.TabIndex = 52;
-            this.label4.Text = "Kapcsolt Unit:";
+            label4.AutoSize = true;
+            label4.BackColor = Color.Transparent;
+            label4.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+            label4.ForeColor = Color.Gray;
+            label4.Location = new Point(431, 7);
+            label4.Name = "label4";
+            label4.Size = new Size(103, 20);
+            label4.TabIndex = 52;
+            label4.Text = "Kapcsolt Unit:";
             // 
             // unitBindingsComboBox
             // 
-            this.unitBindingsComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.unitBindingsComboBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(43)))));
-            this.unitBindingsComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.unitBindingsComboBox.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.unitBindingsComboBox.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point);
-            this.unitBindingsComboBox.ForeColor = System.Drawing.Color.Silver;
-            this.unitBindingsComboBox.FormattingEnabled = true;
-            this.unitBindingsComboBox.Location = new System.Drawing.Point(540, 5);
-            this.unitBindingsComboBox.Name = "unitBindingsComboBox";
-            this.unitBindingsComboBox.Size = new System.Drawing.Size(175, 23);
-            this.unitBindingsComboBox.TabIndex = 46;
-            this.unitBindingsComboBox.DropDown += new System.EventHandler(this.OnUnitBindingsComboBoxDropDown);
-            this.unitBindingsComboBox.SelectedIndexChanged += new System.EventHandler(this.OnUnitBindingsComboBoxSelectedIndexChanged);
+            unitBindingsComboBox.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            unitBindingsComboBox.BackColor = Color.FromArgb(40, 40, 43);
+            unitBindingsComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            unitBindingsComboBox.FlatStyle = FlatStyle.Popup;
+            unitBindingsComboBox.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+            unitBindingsComboBox.ForeColor = Color.Silver;
+            unitBindingsComboBox.FormattingEnabled = true;
+            unitBindingsComboBox.Location = new Point(540, 5);
+            unitBindingsComboBox.Name = "unitBindingsComboBox";
+            unitBindingsComboBox.Size = new Size(175, 23);
+            unitBindingsComboBox.TabIndex = 46;
+            unitBindingsComboBox.DropDown += OnUnitBindingsComboBoxDropDown;
+            unitBindingsComboBox.SelectedIndexChanged += OnUnitBindingsComboBoxSelectedIndexChanged;
             // 
             // label1
             // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label1.AutoSize = true;
-            this.label1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(43)))));
-            this.label1.Font = new System.Drawing.Font("Segoe UI Semibold", 11F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point);
-            this.label1.ForeColor = System.Drawing.Color.LightGray;
-            this.label1.Location = new System.Drawing.Point(734, 10);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(144, 20);
-            this.label1.TabIndex = 44;
-            this.label1.Text = "Akció hozzáadása...";
+            label1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            label1.AutoSize = true;
+            label1.BackColor = Color.FromArgb(40, 40, 43);
+            label1.Font = new Font("Segoe UI Semibold", 11F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+            label1.ForeColor = Color.LightGray;
+            label1.Location = new Point(734, 10);
+            label1.Name = "label1";
+            label1.Size = new Size(144, 20);
+            label1.TabIndex = 44;
+            label1.Text = "Akció hozzáadása...";
             // 
             // addActionComboBox
             // 
-            this.addActionComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.addActionComboBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(43)))));
-            this.addActionComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.addActionComboBox.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.addActionComboBox.Font = new System.Drawing.Font("Segoe UI Semibold", 11F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point);
-            this.addActionComboBox.ForeColor = System.Drawing.Color.Silver;
-            this.addActionComboBox.FormattingEnabled = true;
-            this.addActionComboBox.Location = new System.Drawing.Point(730, 6);
-            this.addActionComboBox.Name = "addActionComboBox";
-            this.addActionComboBox.Size = new System.Drawing.Size(175, 28);
-            this.addActionComboBox.TabIndex = 45;
-            this.addActionComboBox.SelectedIndexChanged += new System.EventHandler(this.OnActionComboBoxItemSelect);
+            addActionComboBox.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            addActionComboBox.BackColor = Color.FromArgb(40, 40, 43);
+            addActionComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            addActionComboBox.FlatStyle = FlatStyle.Popup;
+            addActionComboBox.Font = new Font("Segoe UI Semibold", 11F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+            addActionComboBox.ForeColor = Color.Silver;
+            addActionComboBox.FormattingEnabled = true;
+            addActionComboBox.Location = new Point(730, 6);
+            addActionComboBox.Name = "addActionComboBox";
+            addActionComboBox.Size = new Size(175, 28);
+            addActionComboBox.TabIndex = 45;
+            addActionComboBox.SelectedIndexChanged += OnActionComboBoxItemSelect;
             // 
             // actionsPanel
             // 
-            this.actionsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.actionsPanel.AutoScroll = true;
-            this.actionsPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(50)))));
-            this.actionsPanel.Location = new System.Drawing.Point(78, 63);
-            this.actionsPanel.Name = "actionsPanel";
-            this.actionsPanel.Size = new System.Drawing.Size(879, 30);
-            this.actionsPanel.TabIndex = 43;
+            actionsPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            actionsPanel.AutoScroll = true;
+            actionsPanel.BackColor = Color.FromArgb(45, 45, 50);
+            actionsPanel.Location = new Point(78, 63);
+            actionsPanel.Name = "actionsPanel";
+            actionsPanel.Size = new Size(879, 30);
+            actionsPanel.TabIndex = 43;
             // 
             // unitNameTextField
             // 
-            this.unitNameTextField.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.unitNameTextField.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(43)))));
-            this.unitNameTextField.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.unitNameTextField.ForeColor = System.Drawing.Color.White;
-            this.unitNameTextField.Location = new System.Drawing.Point(8, 7);
-            this.unitNameTextField.Name = "unitNameTextField";
-            this.unitNameTextField.PlaceholderText = "Az Unit neve...";
-            this.unitNameTextField.Size = new System.Drawing.Size(361, 29);
-            this.unitNameTextField.TabIndex = 42;
-            this.unitNameTextField.Leave += new System.EventHandler(this.OnUnitNameTextFieldChanged);
+            unitNameTextField.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            unitNameTextField.BackColor = Color.FromArgb(40, 40, 43);
+            unitNameTextField.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            unitNameTextField.ForeColor = Color.White;
+            unitNameTextField.Location = new Point(8, 7);
+            unitNameTextField.Name = "unitNameTextField";
+            unitNameTextField.PlaceholderText = "Az Unit neve...";
+            unitNameTextField.Size = new Size(361, 29);
+            unitNameTextField.TabIndex = 42;
+            unitNameTextField.Leave += OnUnitNameTextFieldChanged;
             // 
             // collapseActionsButton
             // 
-            this.collapseActionsButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.collapseActionsButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(65)))));
-            this.collapseActionsButton.Image = ((System.Drawing.Image)(resources.GetObject("collapseActionsButton.Image")));
-            this.collapseActionsButton.Location = new System.Drawing.Point(8, 43);
-            this.collapseActionsButton.Name = "collapseActionsButton";
-            this.collapseActionsButton.Size = new System.Drawing.Size(50, 50);
-            this.collapseActionsButton.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.collapseActionsButton.TabIndex = 55;
-            this.collapseActionsButton.TabStop = false;
-            this.collapseActionsButton.Click += new System.EventHandler(this.OnCollapseActionsButtonClick);
+            collapseActionsButton.Anchor = AnchorStyles.Top;
+            collapseActionsButton.BackColor = Color.FromArgb(60, 60, 65);
+            collapseActionsButton.Image = (Image)resources.GetObject("collapseActionsButton.Image");
+            collapseActionsButton.Location = new Point(8, 43);
+            collapseActionsButton.Name = "collapseActionsButton";
+            collapseActionsButton.Size = new Size(50, 50);
+            collapseActionsButton.SizeMode = PictureBoxSizeMode.StretchImage;
+            collapseActionsButton.TabIndex = 55;
+            collapseActionsButton.TabStop = false;
+            collapseActionsButton.Click += OnCollapseActionsButtonClick;
             // 
             // expandActionsButtton
             // 
-            this.expandActionsButtton.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.expandActionsButtton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(65)))));
-            this.expandActionsButtton.Image = ((System.Drawing.Image)(resources.GetObject("expandActionsButtton.Image")));
-            this.expandActionsButtton.Location = new System.Drawing.Point(8, 43);
-            this.expandActionsButtton.Name = "expandActionsButtton";
-            this.expandActionsButtton.Size = new System.Drawing.Size(50, 50);
-            this.expandActionsButtton.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.expandActionsButtton.TabIndex = 56;
-            this.expandActionsButtton.TabStop = false;
-            this.expandActionsButtton.Click += new System.EventHandler(this.OnExpandActionsButttonClick);
+            expandActionsButtton.Anchor = AnchorStyles.Top;
+            expandActionsButtton.BackColor = Color.FromArgb(60, 60, 65);
+            expandActionsButtton.Image = (Image)resources.GetObject("expandActionsButtton.Image");
+            expandActionsButtton.Location = new Point(8, 43);
+            expandActionsButtton.Name = "expandActionsButtton";
+            expandActionsButtton.Size = new Size(50, 50);
+            expandActionsButtton.SizeMode = PictureBoxSizeMode.StretchImage;
+            expandActionsButtton.TabIndex = 56;
+            expandActionsButtton.TabStop = false;
+            expandActionsButtton.Click += OnExpandActionsButttonClick;
             // 
             // UnitPanel
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(55)))));
-            this.Controls.Add(this.mainPanel);
-            this.MinimumSize = new System.Drawing.Size(1000, 97);
-            this.Name = "UnitPanel";
-            this.Size = new System.Drawing.Size(1000, 97);
-            ((System.ComponentModel.ISupportInitialize)(this.binImage)).EndInit();
-            this.mainPanel.ResumeLayout(false);
-            this.mainPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.collapseActionsButton)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.expandActionsButtton)).EndInit();
-            this.ResumeLayout(false);
-
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.FromArgb(50, 50, 55);
+            Controls.Add(mainPanel);
+            MinimumSize = new Size(1000, 97);
+            Name = "UnitPanel";
+            Size = new Size(1000, 97);
+            ((System.ComponentModel.ISupportInitialize)binImage).EndInit();
+            mainPanel.ResumeLayout(false);
+            mainPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)collapseActionsButton).EndInit();
+            ((System.ComponentModel.ISupportInitialize)expandActionsButtton).EndInit();
+            ResumeLayout(false);
         }
 
         #endregion

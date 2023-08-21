@@ -28,6 +28,11 @@ namespace WebTestGui
 
         // OPTION SPECIFIC FUNCTIONS AND MEMBERS
 
+        public string GetRootLogPath()
+        {
+            return folderPath.Text;
+        }
+
         private void folderIcon_Click(object sender, EventArgs e)
         {
             using (var folderDialog = new FolderBrowserDialog())

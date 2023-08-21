@@ -80,7 +80,7 @@ namespace WebTestGui
             clickData["enabled"] = enabledCheckBox.Checked;
             clickData["selected"] = selectedCheckBox.Checked;
 
-            clickData["keys"] = keysLabel.Text;
+            clickData["keys"] = keysTextBox.Text;
             clickData["locator"] = locatorTextBox.Text;
             clickData["value"] = valueTextBox.Text;
             return clickData;
@@ -98,13 +98,20 @@ namespace WebTestGui
                 SetBreakpoint(false);
             }
 
-            displayedCheckbox.Checked = (bool)data["displayed"]!;
-            enabledCheckBox.Checked = (bool)data["enabled"]!;
-            selectedCheckBox.Checked = (bool)data["selected"]!;
+            try
+            {
+                displayedCheckbox.Checked = (bool)data["displayed"]!;
+                enabledCheckBox.Checked = (bool)data["enabled"]!;
+                selectedCheckBox.Checked = (bool)data["selected"]!;
+            }
+            catch (Exception ex)
+            {
+                var exception = ex;
+            }
 
             singleCheckbox.Checked = (bool)data["single"]!;
 
-            keysLabel.Text = (string)data["keys"]!;
+            keysTextBox.Text = (string)data["keys"]!;
             locatorTextBox.Text = (string)data["locator"]!;
             valueTextBox.Text = (string)data["value"]!;
         }

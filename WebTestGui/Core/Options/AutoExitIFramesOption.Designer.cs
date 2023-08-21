@@ -42,9 +42,9 @@
             mainLabel.ForeColor = Color.White;
             mainLabel.Location = new Point(3, 2);
             mainLabel.Name = "mainLabel";
-            mainLabel.Size = new Size(177, 25);
+            mainLabel.Size = new Size(174, 25);
             mainLabel.TabIndex = 10;
-            mainLabel.Text = "Auto iFrame kilépés";
+            mainLabel.Text = "Auto iframe kilépés";
             // 
             // mainCheckbox
             // 

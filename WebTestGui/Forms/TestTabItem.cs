@@ -12,12 +12,22 @@
             testNameLabel.Text = test.m_Name;
         }
 
+        public void OnClicked(object sender, EventArgs e)
+        {
+            BackColor = Color.White;
+        }
+
         public void DeleteTabItem(object sender, EventArgs e)
         {
             m_ParentTab.DeleteItem(this);
         }
 
         private void TestTabItem_Click(object sender, EventArgs e)
+        {
+            m_ParentTab.SelectItem(this);
+        }
+
+        private void testNameLabel_Click(object sender, EventArgs e)
         {
             m_ParentTab.SelectItem(this);
         }

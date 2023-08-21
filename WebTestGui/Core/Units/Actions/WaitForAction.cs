@@ -108,9 +108,16 @@ namespace WebTestGui
             timeOutTextBox.Text = (string)data["timeout"]!;
             singleCheckbox.Checked = (bool)data["single"]!;
 
-            displayedCheckbox.Checked = (bool)data["displayed"]!;
-            enabledCheckBox.Checked = (bool)data["enabled"]!;
-            selectedCheckBox.Checked = (bool)data["selected"]!;
+            try
+            {
+                displayedCheckbox.Checked = (bool)data["displayed"]!;
+                enabledCheckBox.Checked = (bool)data["enabled"]!;
+                selectedCheckBox.Checked = (bool)data["selected"]!;
+            }
+            catch (Exception ex)
+            {
+                var exception = ex;
+            }
 
             singleCheckbox.Checked = (bool)data["single"]!;
 

@@ -1,4 +1,5 @@
-﻿using static System.ComponentModel.Design.ObjectSelectorEditor;
+﻿using System.Diagnostics;
+using static System.ComponentModel.Design.ObjectSelectorEditor;
 
 namespace WebTestGui
 {
@@ -32,6 +33,19 @@ namespace WebTestGui
             m_MainForm = mainForm;
         }
 
+        public string GetRootLogDirectoryPath()
+        {
+            foreach (IOption option in m_Options.m_Options)
+            {
+                if (option is ParentLogPathOption)
+                {
+                    ParentLogPathOption parentLogPathOption = (ParentLogPathOption)option;
+                    return parentLogPathOption.GetRootLogPath();
+                }
+            }
+            return "";
+        }
+
         public string m_Name = "Untitled";
         public string m_SaveFilePath;
 
@@ -51,7 +65,8 @@ namespace WebTestGui
             Edit = 1,
             Compile = 2,
             Run = 3,
-            Break = 4
+            Break = 4,
+            Finished = 5
         }
     }
 }

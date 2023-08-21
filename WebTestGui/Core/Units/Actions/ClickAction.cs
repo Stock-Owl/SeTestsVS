@@ -97,10 +97,17 @@ namespace WebTestGui
                 SetBreakpoint(false);
             }
 
-            displayedCheckbox.Checked = (bool)data["displayed"]!;
-            enabledCheckBox.Checked = (bool)data["enabled"]!;
-            selectedCheckBox.Checked = (bool)data["selected"]!;
-
+            try
+            {
+                displayedCheckbox.Checked = (bool)data["displayed"]!;
+                enabledCheckBox.Checked = (bool)data["enabled"]!;
+                selectedCheckBox.Checked = (bool)data["selected"]!;
+            }
+            catch (Exception ex)
+            {
+                var exception = ex;
+            }
+            
             singleCheckbox.Checked = (bool)data["single"]!;
 
             locatorTextBox.Text = (string)data["locator"]!;

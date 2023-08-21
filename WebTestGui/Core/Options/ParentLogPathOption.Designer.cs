@@ -72,6 +72,7 @@
             folderPath.PlaceholderText = "A könyvtár abszolút útvonala...";
             folderPath.Size = new Size(248, 25);
             folderPath.TabIndex = 52;
+            folderPath.Text = "./logs";
             // 
             // hintLabel
             // 

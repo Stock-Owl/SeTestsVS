@@ -46,6 +46,7 @@
             testNameLabel.Size = new Size(58, 13);
             testNameLabel.TabIndex = 51;
             testNameLabel.Text = "testName";
+            testNameLabel.Click += testNameLabel_Click;
             // 
             // pictureBox2
             // 
