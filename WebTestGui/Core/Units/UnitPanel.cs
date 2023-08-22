@@ -15,7 +15,7 @@ namespace WebTestGui
             addActionComboBox.Items.AddRange(actionClasses);
 
             m_Actions = new Actions();
-            OnCollapseActionsButtonClick(null!, null!);
+            OnExpandActionsButttonClick(null!, null!);
         }
 
         // ACTION INTERFACE FUNCTIONS AND MEMBERS
@@ -62,16 +62,16 @@ namespace WebTestGui
 
         public void Refresh()
         {
+            Control[] controls = new Control[m_Actions.m_Actions.Count];
+
+            for (int i = 0; i < controls.Length; i++)
+            {
+                m_Actions.m_Actions[i].SetId(i);
+                controls[i] = (Control)m_Actions.m_Actions[i];
+            }
+
             if (!m_IsCollapsed)
             {
-                Control[] controls = new Control[m_Actions.m_Actions.Count];
-
-                for (int i = 0; i < controls.Length; i++)
-                {
-                    m_Actions.m_Actions[i].SetId(i);
-                    controls[i] = (Control)m_Actions.m_Actions[i];
-                }
-
                 actionsPanel.SuspendLayout();
 
                 actionsPanel.Controls.Clear();
@@ -90,6 +90,7 @@ namespace WebTestGui
 
                 actionsPanel.ResumeLayout();
             }
+
             unitNameTextField.Text = m_UnitName;
             if (m_Bindings != null)
             {

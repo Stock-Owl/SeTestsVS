@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.chromeCheckBox = new System.Windows.Forms.CheckBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -53,6 +54,7 @@
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.rootLogDirectoryButton = new System.Windows.Forms.Button();
             this.testNameLabel = new System.Windows.Forms.Label();
+            this.timer = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.unitHeaderPanel.SuspendLayout();
@@ -374,6 +376,9 @@
             this.testNameLabel.TabIndex = 55;
             this.testNameLabel.Text = "testName";
             // 
+            // timer
+            // 
+            // 
             // MainForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -444,5 +449,6 @@
         private Button rootLogDirectoryButton;
         private Label testNameLabel;
         private PictureBox addUnitButton;
+        private System.Windows.Forms.Timer timer;
     }
 }

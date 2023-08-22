@@ -75,7 +75,7 @@
       "actions": {
         "0": {
           "type": "send_keys",
-          "break": true,
+          "break": false,
           "single": true,
           "displayed": false,
           "enabled": false,
@@ -93,6 +93,11 @@
           "selected": false,
           "locator": "xpath",
           "value": "//*[@id=\"ctl00_ctl30_BTN_keres\"]"
+        },
+        "2": {
+          "type": "goto",
+          "break": false,
+          "url": "https://www.youtube.com/@Zsozeatya"
         }
       }
     }

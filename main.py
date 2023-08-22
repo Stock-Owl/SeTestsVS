@@ -27,7 +27,7 @@ if __name__ == '__main__':
     """
     
     processes[2].start()
-    sleep(1)
+    # sleep(10)
     processes[0].start()
     processes[1].start()
     print("Host Finished")

@@ -7,9 +7,11 @@
 
         public event Func<string, Task> FileChanged;
 
-        public FileWatcher(string filePath)
+        public FileWatcher(string filePath, bool clearLogImmediately = false)
         {
             this.filePath = filePath;
+
+            m_ClearLogImmediately = clearLogImmediately;
 
             // Inicializáljuk a fájlfigyelőt
             fileSystemWatcher = new FileSystemWatcher
@@ -35,7 +37,10 @@
             try
             {
                 string content = await File.ReadAllTextAsync(filePath);
-                await File.WriteAllTextAsync(filePath, string.Empty);
+                if (m_ClearLogImmediately)
+                {
+                    await File.WriteAllTextAsync(filePath, string.Empty);
+                }
                 return content;
             }
             catch (System.Exception ex)
@@ -49,5 +54,7 @@
             // Felszabadítjuk a figyelő erőforrásokat
             fileSystemWatcher.Dispose();
         }
+
+        bool m_ClearLogImmediately;
     }
 }

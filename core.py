@@ -195,8 +195,6 @@ class Core:
         active_logging: bool = log_js_args["active"]
         testname: str = json["name"]
 
-        shared_break = Value('b', True)
-
         processes: list[Process] = []
         if "chrome" in browsers:
             # we will probably never need more than 16 (on log's size is 4, therefore 4 * 16 = 64)
@@ -210,7 +208,6 @@ class Core:
                 "units": units,
                 "testname": testname,
                 "shared_state": s_chrome_state,
-                "shared_break": shared_break,
                 "shared_arr": s_chrome,
                 "log_js_args": log_js_args,
                 "parent_log_path": f"{parent_log_path}/chrome",
@@ -237,7 +234,6 @@ class Core:
                 "units": units,
                 "testname": testname,
                 "shared_state": s_firefox_state,
-                "shared_break": shared_break,
                 "shared_arr": s_firefox,
                 "log_js_args": log_js_args,
                 "parent_log_path": f"{parent_log_path}/firefox",
@@ -258,12 +254,11 @@ class Core:
         units: dict[str] = None,
         testname: str = None,
         shared_state: Value = None,
-        shared_break: Value = None,
         shared_arr: Array = None,
-        terminal_mode: bool = None,
         keep_browser_open: bool = None,
         parent_log_path: str = None,
-        log_js_args: dict[str] = None) -> None:
+        log_js_args: dict[str] = None,
+        **overflow) -> None:
 
         print("Chrome PID:", getpid())
 
@@ -298,46 +293,23 @@ class Core:
                 actions = unit['actions']
                 for aname, action in actions.items():
                     if action["break"]:
-                        if terminal_mode:
+                        try:
+                            with open(f"{parent_log_path}/../file.brk", mode='a+', encoding='utf-8') as f:
+                                f.write(f"c:{uname}:{aname}\n")
 
-                            """
-                            IF the shared value is false, then set it to true while breaking
-                            And wait until (while -> pass) it is false again. then continue
-                            """
-                            if shared_break.value == False:
-                                shared_break.value = True
-                                while True:
-                                    if shared_break.value == False:
-                                        break
+                        except FileNotFoundError:
+                            with open(f"{parent_log_path}/../file.brk", mode='w', encoding='utf-8') as f:
+                                f.write(f"c:{uname}:{aname}\n")
+
+                        isempty: bool = False
+                        while not isempty:
+                            with open(f"{parent_log_path}/../file.brk", mode='r', encoding='utf-8') as f:
+                                content: str = f.read()
+                                if content == '':
+                                    break
+                                else:
                                     pass
 
-                            # ! DO NOT unindent the first """ !!!
-                                """
-                            IF the shared value is true, then wait for
-                            an input from the user then continue
-                            """
-                            elif shared_break.value == True:
-                                print("Press any key to continue...", end='\r')
-                                getch()
-                                shared_break.value = False
-
-                        else:
-                            try:
-                                with open(f"{parent_log_path}/../file.brk", mode='a+', encoding='utf-8') as f:
-                                    f.write(f"c:{uname}:{aname}\n")
-
-                            except FileExistsError:
-                                with open(f"{parent_log_path}/../file.brk", mode='w', encoding='utf-8') as f:
-                                    f.write(f"c:{uname}:{aname}\n")
-
-                            isempty: bool = False
-                            while not isempty:
-                                with open(f"{parent_log_path}/../file.brk", mode='r', encoding='utf-8') as f:
-                                    content: str = f.read()
-                                    if content == '' or 'c' in list(content):
-                                        break
-
-                            del isempty
                         Support.LogProc(parent_log_path, "Breakpoint")
 
                     match action["type"]:
@@ -481,12 +453,11 @@ class Core:
         units: dict[str] = None,
         testname: str = None,
         shared_state: Value = None,
-        shared_break: Value = None,
         shared_arr: Array = None,
-        terminal_mode: bool = None,
         keep_browser_open: bool = None,
         parent_log_path: str = None,
-        log_js_args: dict[str] = None) -> None:
+        log_js_args: dict[str] = None,
+        **overflow) -> None:
 
         print("Firefox PID:", getpid())
 
@@ -522,44 +493,23 @@ class Core:
                 actions = unit['actions']
                 for aname, action in actions.items():
                     if action["break"]:
-                        if terminal_mode:
-                            """
-                            IF the shared value is false, then set it to true while breaking
-                            And wait until (while -> pass) it is false again. then continue
-                            """
-                            if shared_break.value == False:
-                                shared_break.value = True
-                                while True:
-                                    if shared_break.value == False:
-                                        break
+                        try:
+                            with open(f"{parent_log_path}/../file.brk", mode='a+', encoding='utf-8') as f:
+                                f.write(f"c:{uname}:{aname}\n")
+
+                        except FileNotFoundError:
+                            with open(f"{parent_log_path}/../file.brk", mode='w', encoding='utf-8') as f:
+                                f.write(f"c:{uname}:{aname}\n")
+
+                        isempty: bool = False
+                        while not isempty:
+                            with open(f"{parent_log_path}/../file.brk", mode='r', encoding='utf-8') as f:
+                                content: str = f.read()
+                                if content == '':
+                                    break
+                                else:
                                     pass
 
-                            # ! DO NOT unindent the first """ !!!
-                                """
-                            IF the shared value is true, then wait for
-                            an input from the user then continue
-                            """
-                            elif shared_break.value == True:
-                                print("Press any key to continue...", end='\r')
-                                getch()
-                                shared_break.value = False
-                        else:
-                            
-                            try:
-                                with open(f"{parent_log_path}/../file.brk", mode='a+', encoding='utf-8') as f:
-                                    f.write(f"f:{uname}:{aname}\n")
-
-                            except FileExistsError:
-                                with open(f"{parent_log_path}/../file.brk", mode='w', encoding='utf-8') as f:
-                                    f.write(f"f:{uname}:{aname}\n")
-
-                            isempty: bool = False
-                            while not isempty:
-                                with open(f"{parent_log_path}/../file.brk", mode='r', encoding='utf-8') as f:
-                                    content: str = f.read()
-                                    if content == '' or 'c' in list(content):
-                                        break
-                            
                         Support.LogProc(parent_log_path, "Breakpoint")
                     
                     match action["type"]:

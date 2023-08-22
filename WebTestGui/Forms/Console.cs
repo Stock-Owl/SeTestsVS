@@ -54,12 +54,14 @@
 
         public void SetSchemeToRunning()
         {
-            BackColor = Color.FromArgb(255, 60, 50, 50);
+            BackColor = Color.FromArgb(255, 70, 50, 50);
+            consoleTextBox.ForeColor = Color.FromArgb(255, 192, 203);
         }
 
         public void SetSchemeToEdtiting()
         {
             BackColor = Color.FromArgb(255, 50, 50, 53);
+            consoleTextBox.ForeColor = Color.LightBlue;
         }
 
         bool isChrome = true;

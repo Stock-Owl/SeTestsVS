@@ -33,8 +33,13 @@
       "actions": {
         "0": {
           "type": "goto",
-          "break": true,
+          "break": false,
           "url": "https://www.youtube.com"
+        },
+        "1": {
+          "type": "goto",
+          "break": true,
+          "url": "https://www.github.com"
         }
       }
     }

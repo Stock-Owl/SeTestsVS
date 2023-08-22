@@ -1,8 +1,8 @@
 {
-  "name": "test",
+  "name": "ble",
   "browsers": [
-    "chrome",
-    "firefox"
+    "firefox",
+    "chrome"
   ],
   "options": {
     "auto_exit_iframes": true,
@@ -27,7 +27,7 @@
     "unhandled_prompt_behavior": "dismiss and notify"
   },
   "units": {
-    "Go to youtube": {
+    "ble 1": {
       "bindings": null,
       "backup_of": null,
       "actions": {
@@ -35,6 +35,22 @@
           "type": "goto",
           "break": true,
           "url": "https://www.youtube.com"
+        },
+        "1": {
+          "type": "goto",
+          "break": false,
+          "url": "https://www.github.com"
+        }
+      }
+    },
+    "ble 2": {
+      "bindings": null,
+      "backup_of": null,
+      "actions": {
+        "0": {
+          "type": "goto",
+          "break": true,
+          "url": "https://www.instagram.com/"
         }
       }
     }

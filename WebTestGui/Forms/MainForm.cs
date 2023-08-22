@@ -250,6 +250,8 @@ namespace WebTestGui
 
             string jsLogFilePath = Test().GetRootLogDirectoryPath() + @"/js.log";
             StartJSLogFileWatcher(jsLogFilePath);
+
+            File.WriteAllText(Test().GetRootLogDirectoryPath() + @"/file.brk", string.Empty);
             string breakPointFilePath = Test().GetRootLogDirectoryPath() + @"/file.brk";
             StartBreakPointFileWatcher(breakPointFilePath);
 
@@ -261,28 +263,36 @@ namespace WebTestGui
             m_CurrentProcess.Kill();
 
             SetColorSchemeToEdit();
+
             m_RunLogConsole.AddToConsoles("\n ------TESZT LEÁLLÍTVA \n");
 
             _STOP_JS_LOG_REQ = true;
             _STOP_BRK_LOG_REQ = true;
+            File.WriteAllText(Test().GetRootLogDirectoryPath() + @"/file.brk", string.Empty);
 
             Test().m_State = WebTestGui.Test.TestState.Edit;
             testStartButton.Text = "TESZT INDÍTÁSA...";
             m_TestTab.RefreshTabItems();
         }
 
-        public void OnTestBreak()
+        public void OnTestBreak(string content)
         {
             Test().m_State = WebTestGui.Test.TestState.Break;
             m_RunLogConsole.AddToConsoles("\n ------TESZT SZÜNETELTETVE \n");
             testStartButton.Text = "TESZT FOLYTATÁSA...";
+
+            // show breakpoint location
+
             m_TestTab.RefreshTabItems();
         }
 
         public void OnTestContinue()
         {
+            File.WriteAllText(Test().GetRootLogDirectoryPath() + @"/file.brk", string.Empty);
+
             Test().m_State = WebTestGui.Test.TestState.Run;
             testStartButton.Text = "TESZT FUT.../ TESZT LEÁLLÍTÁSA";
+
             m_TestTab.RefreshTabItems();
         }
 
@@ -292,6 +302,7 @@ namespace WebTestGui
 
             _STOP_JS_LOG_REQ = true;
             _STOP_BRK_LOG_REQ = true;
+            File.WriteAllText(Test().GetRootLogDirectoryPath() + @"/file.brk", string.Empty);
 
             m_RunLogConsole.AddToChrome("\n\n" + File.ReadAllText(Test().GetRootLogDirectoryPath() + @"/chrome/run.log"));
             m_RunLogConsole.AddToFirefox("\n\n" + File.ReadAllText(Test().GetRootLogDirectoryPath() + @"/firefox/run.log"));
@@ -317,7 +328,7 @@ namespace WebTestGui
 
         public async void StartJSLogFileWatcher(string logPath)
         {
-            using (FileWatcher fileWatcher = new FileWatcher(logPath))
+            using (FileWatcher fileWatcher = new FileWatcher(logPath, true))
             {
                 fileWatcher.FileChanged += async (content) =>
                 {
@@ -349,6 +360,7 @@ namespace WebTestGui
                     {
                         if (!string.IsNullOrEmpty(content))
                         {
+                            OnTestBreak(content);
                             m_RunLogConsole.AddToConsoles("\nBREAKPOINT HIT:" + content);
                         }
                     }));
@@ -513,8 +525,6 @@ namespace WebTestGui
         public void SetColorSchemeToEdit()
         {
             BackColor = Color.FromArgb(255, 50, 50, 53);
-            unitsPanel.BackColor = Color.FromArgb(255, 45, 45, 50);
-            optionsPanel.BackColor = Color.FromArgb(255, 45, 45, 50);
             flowLayoutPanel2.BackColor = Color.FromArgb(255, 60, 60, 65);
             unitHeaderPanel.BackColor = Color.FromArgb(255, 40, 40, 45);
             optionHeaderPanel.BackColor = Color.FromArgb(255, 40, 40, 45);
@@ -541,27 +551,25 @@ namespace WebTestGui
 
         public void SetColorSchemeToRun()
         {
-            BackColor = Color.FromArgb(255, 60, 50, 50);
-            unitsPanel.BackColor = Color.FromArgb(255, 50, 45, 45);
-            optionsPanel.BackColor = Color.FromArgb(255, 50, 45, 45);
-            flowLayoutPanel2.BackColor = Color.FromArgb(255, 70, 60, 60);
-            unitHeaderPanel.BackColor = Color.FromArgb(255, 50, 40, 40);
-            optionHeaderPanel.BackColor = Color.FromArgb(255, 50, 40, 40);
+            BackColor = Color.FromArgb(255, 70, 50, 50);
+            flowLayoutPanel2.BackColor = Color.FromArgb(255, 80, 60, 60);
+            unitHeaderPanel.BackColor = Color.FromArgb(255, 60, 40, 40);
+            optionHeaderPanel.BackColor = Color.FromArgb(255, 60, 40, 40);
             m_RunLogConsole.SetSchemeToRunning();
             m_JsLogConsole.SetSchemeToRunning();
 
-            testNameLabel.BackColor = Color.FromArgb(255, 60, 50, 50);
-            browserLabel.BackColor = Color.FromArgb(255, 60, 50, 50);
-            chromeCheckBox.BackColor = Color.FromArgb(255, 60, 50, 50);
-            firefoxCheckBox.BackColor = Color.FromArgb(255, 60, 50, 50);
-            pictureBox1.BackColor = Color.FromArgb(255, 60, 50, 50);
-            pictureBox2.BackColor = Color.FromArgb(255, 60, 50, 50);
+            testNameLabel.BackColor = Color.FromArgb(255, 70, 50, 50);
+            browserLabel.BackColor = Color.FromArgb(255, 70, 50, 50);
+            chromeCheckBox.BackColor = Color.FromArgb(255, 70, 50, 50);
+            firefoxCheckBox.BackColor = Color.FromArgb(255, 70, 50, 50);
+            pictureBox1.BackColor = Color.FromArgb(255, 70, 50, 50);
+            pictureBox2.BackColor = Color.FromArgb(255, 70, 50, 50);
 
-            unitLabel.BackColor = Color.FromArgb(255, 50, 40, 40);
-            optionLabel.BackColor = Color.FromArgb(255, 50, 40, 40);
+            unitLabel.BackColor = Color.FromArgb(255, 60, 40, 40);
+            optionLabel.BackColor = Color.FromArgb(255, 60, 40, 40);
 
-            currentlyEditedLabel.BackColor = Color.FromArgb(255, 70, 60, 60);
-            currentlyEditedText.BackColor = Color.FromArgb(255, 70, 60, 60);
+            currentlyEditedLabel.BackColor = Color.FromArgb(255, 80, 60, 60);
+            currentlyEditedText.BackColor = Color.FromArgb(255, 80, 60, 60);
 
             m_TestTab.Enabled = false;
             saveTestButton.Enabled = false;
