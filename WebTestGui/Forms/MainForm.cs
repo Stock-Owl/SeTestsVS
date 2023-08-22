@@ -9,7 +9,6 @@ namespace WebTestGui
         - Sablon új test
         - Opciók sablonok létrehozása, import és exportálása
         - Action idõmérés
-        - Új logó hozzáadása
         */
 
         public MainForm()
@@ -24,18 +23,19 @@ namespace WebTestGui
             Controls.Add(m_RunLogConsole);
             m_RunLogConsole.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             m_RunLogConsole.Location = new Point(0, 0);
-            m_RunLogConsole.Size = new Size(270, 520);
+            m_RunLogConsole.Size = new Size(410, 620);
+            m_RunLogConsole.BringToFront();
 
             m_JsLogConsole = new Console(this);
             Controls.Add(m_JsLogConsole);
             m_JsLogConsole.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
-            m_JsLogConsole.Location = new Point(645, 155);
-            m_JsLogConsole.Size = new Size(327, 267);
+            m_JsLogConsole.Location = new Point(795, 155);
+            m_JsLogConsole.Size = new Size(327, 353);
             m_JsLogConsole.Visible = false;
 
             m_TestTab = new TestTab(this);
             Controls.Add(m_TestTab);
-            m_TestTab.Location = new Point(270, 0);
+            m_TestTab.Location = new Point(410, 0);
             m_TestTab.AddNewBlankItem();
 
             m_RunLogConsole.AddToConsoles("Applikáció indítása...\n");
@@ -218,6 +218,10 @@ namespace WebTestGui
             {
                 OnTestStart();
             }
+            else if (Test().m_State == WebTestGui.Test.TestState.Run)
+            {
+                OnTestAbort();
+            }
             else if (Test().m_State == WebTestGui.Test.TestState.Break)
             {
                 OnTestContinue();
@@ -249,12 +253,28 @@ namespace WebTestGui
             string breakPointFilePath = Test().GetRootLogDirectoryPath() + @"/file.brk";
             StartBreakPointFileWatcher(breakPointFilePath);
 
-            m_RunLogConsole.AddToConsoles("\n TESZT INDITÁSA \n");
+            m_RunLogConsole.AddToConsoles("\n ------TESZT INDITÁSA \n");
+        }
+
+        public void OnTestAbort()
+        {
+            m_CurrentProcess.Kill();
+
+            SetColorSchemeToEdit();
+            m_RunLogConsole.AddToConsoles("\n ------TESZT LEÁLLÍTVA \n");
+
+            _STOP_JS_LOG_REQ = true;
+            _STOP_BRK_LOG_REQ = true;
+
+            Test().m_State = WebTestGui.Test.TestState.Edit;
+            testStartButton.Text = "TESZT INDÍTÁSA...";
+            m_TestTab.RefreshTabItems();
         }
 
         public void OnTestBreak()
         {
             Test().m_State = WebTestGui.Test.TestState.Break;
+            m_RunLogConsole.AddToConsoles("\n ------TESZT SZÜNETELTETVE \n");
             testStartButton.Text = "TESZT FOLYTATÁSA...";
             m_TestTab.RefreshTabItems();
         }
@@ -262,20 +282,21 @@ namespace WebTestGui
         public void OnTestContinue()
         {
             Test().m_State = WebTestGui.Test.TestState.Run;
-            testStartButton.Text = "TESZT FUT";
+            testStartButton.Text = "TESZT FUT.../ TESZT LEÁLLÍTÁSA";
             m_TestTab.RefreshTabItems();
         }
 
         public async Task OnTestFinished()
         {
             SetColorSchemeToEdit();
-            m_RunLogConsole.AddToConsoles("\n TESZT VÉGE");
 
             _STOP_JS_LOG_REQ = true;
             _STOP_BRK_LOG_REQ = true;
 
             m_RunLogConsole.AddToChrome("\n\n" + File.ReadAllText(Test().GetRootLogDirectoryPath() + @"/chrome/run.log"));
             m_RunLogConsole.AddToFirefox("\n\n" + File.ReadAllText(Test().GetRootLogDirectoryPath() + @"/firefox/run.log"));
+
+            m_RunLogConsole.AddToConsoles("\n ------TESZT VÉGE \n");
 
             Test().m_State = WebTestGui.Test.TestState.Edit;
             testStartButton.Text = "TESZT INDÍTÁSA...";
@@ -287,9 +308,9 @@ namespace WebTestGui
             string targetDirectory = targetDir;
             string pythonScript = "main.py";
 
-            Process process = Process.Start("cmd.exe", $"/K cd /D {targetDirectory} && python {pythonScript}");
+            m_CurrentProcess = Process.Start("cmd.exe", $"/K cd /D {targetDirectory} && python {pythonScript}");
 
-            await process.WaitForExitAsync();
+            await m_CurrentProcess.WaitForExitAsync();
 
             await OnTestFinished();
         }
@@ -553,6 +574,8 @@ namespace WebTestGui
 
         TestTab m_TestTab;
         public Test Test() { return m_TestTab.m_SelectedItem.m_Test; }
+
+        Process m_CurrentProcess;
 
         Console m_RunLogConsole;
         Console m_JsLogConsole;

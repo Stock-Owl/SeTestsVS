@@ -1,0 +1,100 @@
+{
+  "name": "valami",
+  "browsers": [
+    "chrome",
+    "firefox"
+  ],
+  "options": {
+    "log_JS": {
+      "active": true,
+      "refresh_rate": 1000,
+      "retry_timeout": 1000
+    },
+    "terminal_mode": true,
+    "auto_exit_iframes": true,
+    "parent_log_path": "C:\\dev\\SeTestsVS\\logs"
+  },
+  "driver_options": {
+    "page_load_strategy": "normal",
+    "accept_insecure_certs": true,
+    "timeout": {
+      "type": "pageLoad",
+      "value": 300000
+    },
+    "unhandled_prompt_behavior": "dismiss and notify",
+    "keep_browser_open": true,
+    "chrome_arguments": [],
+    "firefox_arguments": []
+  },
+  "units": {
+    "1": {
+      "bindings": null,
+      "backup_of": null,
+      "actions": {
+        "0": {
+          "type": "goto",
+          "break": false,
+          "url": "https://bestbyte.hu"
+        },
+        "1": {
+          "type": "click",
+          "break": false,
+          "single": true,
+          "displayed": false,
+          "enabled": false,
+          "selected": false,
+          "locator": "xpath",
+          "value": "//*[@id=\"vscookieAlertOk\"]"
+        },
+        "2": {
+          "type": "send_keys",
+          "break": false,
+          "single": true,
+          "displayed": false,
+          "enabled": false,
+          "selected": false,
+          "keys": "Xiaomi",
+          "locator": "xpath",
+          "value": "//*[@id=\"ctl00_ctl30_EDI_keres\"]"
+        },
+        "3": {
+          "type": "click",
+          "break": false,
+          "single": true,
+          "displayed": false,
+          "enabled": false,
+          "selected": false,
+          "locator": "xpath",
+          "value": "//*[@id=\"ctl00_ctl30_BTN_keres\"]"
+        }
+      }
+    },
+    "2": {
+      "bindings": null,
+      "backup_of": null,
+      "actions": {
+        "0": {
+          "type": "send_keys",
+          "break": true,
+          "single": true,
+          "displayed": false,
+          "enabled": false,
+          "selected": false,
+          "keys": "Samsung",
+          "locator": "xpath",
+          "value": "//*[@id=\"ctl00_ctl30_EDI_keres\"]"
+        },
+        "1": {
+          "type": "click",
+          "break": false,
+          "single": true,
+          "displayed": false,
+          "enabled": false,
+          "selected": false,
+          "locator": "xpath",
+          "value": "//*[@id=\"ctl00_ctl30_BTN_keres\"]"
+        }
+      }
+    }
+  }
+}

@@ -1,8 +1,8 @@
 {
   "name": "test",
   "browsers": [
-    "firefox",
-    "chrome"
+    "chrome",
+    "firefox"
   ],
   "options": {
     "auto_exit_iframes": true,
@@ -11,7 +11,7 @@
       "refresh_rate": 1000,
       "retry_timeout": 1000
     },
-    "parent_log_path": "C:\\Users\\kmarton\\source\\repos\\SeTestsVS\\logs",
+    "parent_log_path": "C:\\dev\\SeTestsVS\\logs",
     "terminal_mode": false
   },
   "driver_options": {
@@ -27,14 +27,14 @@
     "unhandled_prompt_behavior": "dismiss and notify"
   },
   "units": {
-    "UNIT 1": {
+    "Go to youtube": {
       "bindings": null,
       "backup_of": null,
       "actions": {
         "0": {
           "type": "goto",
-          "break": false,
-          "url": "https://github.com/KosMarton/2DEngine"
+          "break": true,
+          "url": "https://www.youtube.com"
         }
       }
     }
