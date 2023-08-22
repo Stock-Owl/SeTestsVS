@@ -9,7 +9,7 @@ class Support:
         paths: list[str] = [
             f"{path_}/run.log",
             f"{path_}/process.log",
-            f"{path_}/js.log",
+            f"{path_}/../js.log",
             f"{path_}/error.log"]
         
         for file in paths:
@@ -29,7 +29,7 @@ class Support:
 
         with open(path, "a", encoding="utf-8") as f:
             if not time_disabled:
-                time_: str = dt.now().time().strftime("%H:%M:%S\n")
+                time_: str = dt.now().time().strftime("/%H:%M:%S:%f/ ")
                 f.write(time_)
             f.write(log_line)
 
