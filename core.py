@@ -18,9 +18,10 @@ from multiprocessing import Process, Array, Value
 from ctypes import c_char_p as cstring
 from copy import copy
 from os import getpid
+from keyboard import read_key as getch
 
 # V.1.1.0
-#                                                                               23 / 25 + 1
+#                                                                               23 / 26 + 1
 # TODO: Kitalálni, hogy vannak az argumentumok                                  ✅  1
 # TODO: Megszerelni a random useless conversionöket a JSON-ből                  ✅  2
 # TODO: Relative locators                                                       ❌  NAH FUCK that shit
@@ -56,7 +57,13 @@ from os import getpid
 # TODO: add test names to JSON and combined logs                                ✅  23
 # TODO: add request shit for drivers. Seleniumwire!!! Needs to be implemented!  ❌  24
 # TODO: time data collection, bounds etc.                                         GUI
-# TODO: breakpoint intermediate                                                 ❌  25
+# TODO: breakpoint intermediate                                                 ✅  25
+# TODO: fix logging requirements according to brwosers                          ❌  26
+
+# Snyk deepcode ignores:
+# file deepcode ignore AttributeLoadOnNone: <Keyword arguments only set to None to make them a keyword argument. All parameters will be passed from the host funciton>
+# file deepcode ignore NonePass: <Keyword arguments only set to None to make them a keyword argument. All parameters will be passed from the host funciton>
+
 
 class Core:
     default_driver_options_dict_: dict = \
@@ -188,12 +195,14 @@ class Core:
         active_logging: bool = log_js_args["active"]
         testname: str = json["name"]
 
+        shared_break = Value('b', True)
+
         processes: list[Process] = []
         if "chrome" in browsers:
             # we will probably never need more than 16 (on log's size is 4, therefore 4 * 16 = 64)
             s_chrome = Array(cstring, shared_log_size * 4)
-            s_chrome_state = Value('b', True)
             parent_log_path = options["parent_log_path"]
+            s_chrome_state = Value('b', True)
 
             chrome_kwargs: dict = \
             {
@@ -201,6 +210,7 @@ class Core:
                 "units": units,
                 "testname": testname,
                 "shared_state": s_chrome_state,
+                "shared_break": shared_break,
                 "shared_arr": s_chrome,
                 "log_js_args": log_js_args,
                 "parent_log_path": f"{parent_log_path}/chrome",
@@ -218,8 +228,8 @@ class Core:
         if "firefox" in browsers:
             # we will probably never need more than 16 (on log's size is 4, therefore 4 * 16 = 64)
             s_firefox: Array = Array(cstring, shared_log_size * 4)
-            s_firefox_state = Value('b', True)
             parent_log_path = options["parent_log_path"]
+            s_firefox_state = Value('b', True)
 
             firefox_kwargs: dict = \
             {
@@ -227,6 +237,7 @@ class Core:
                 "units": units,
                 "testname": testname,
                 "shared_state": s_firefox_state,
+                "shared_break": shared_break,
                 "shared_arr": s_firefox,
                 "log_js_args": log_js_args,
                 "parent_log_path": f"{parent_log_path}/firefox",
@@ -247,6 +258,7 @@ class Core:
         units: dict[str] = None,
         testname: str = None,
         shared_state: Value = None,
+        shared_break: Value = None,
         shared_arr: Array = None,
         terminal_mode: bool = None,
         keep_browser_open: bool = None,
@@ -263,7 +275,6 @@ class Core:
         active_bindings: list[str] = []
         failed_units: list[str] = []
         
-        # deepcode ignore AttributeLoadOnNone: <Keyword arguments only set to None to make them a keyword argument. All parameters will be passed from the host funciton>
         for  uname, unit in units.items():
             try:
                 backup = unit["backup_of"]
@@ -288,9 +299,29 @@ class Core:
                 for aname, action in actions.items():
                     if action["break"]:
                         if terminal_mode:
-                            input("press enter to resume")
-                        else:
 
+                            """
+                            IF the shared value is false, then set it to true while breaking
+                            And wait until (while -> pass) it is false again. then continue
+                            """
+                            if shared_break.value == False:
+                                shared_break.value = True
+                                while True:
+                                    if shared_break.value == False:
+                                        break
+                                    pass
+
+                            # ! DO NOT unindent the first """ !!!
+                                """
+                            IF the shared value is true, then wait for
+                            an input from the user then continue
+                            """
+                            elif shared_break.value == True:
+                                print("Press any key to continue...", end='\r')
+                                getch()
+                                shared_break.value = False
+
+                        else:
                             try:
                                 with open(f"{parent_log_path}/../file.brk", mode='a+', encoding='utf-8') as f:
                                     f.write(f"c:{uname}:{aname}\n")
@@ -402,13 +433,12 @@ class Core:
             # use finally clause
             finally:
                 """
-                    * driver.get_log('browser')   WORKS
-                    ! driver.get_log('driver') DOESN'T WORK
-                    ! driver.get_log('client') DOESN'T WORK
-                    ! driver.get_log('server') DOESN'T WORK
+                    * driver.get_log('browser')     WORKS
+                    ! driver.get_log('driver')      DOESN'T WORK
+                    ! driver.get_log('client')      DOESN'T WORK
+                    ! driver.get_log('server')      DOESN'T WORK
                 """
                 browser_logs: list[dict[str]] = driver.get_log('browser')
-                # deepcode ignore NonePass: <Keyword arguments only set to None to make them a keyword argument. All parameters will be passed from the host funciton>
                 Core.SharedLogDumper(logs = browser_logs, target = shared_arr, target_size = len(shared_arr))
                 pass
 
@@ -451,6 +481,7 @@ class Core:
         units: dict[str] = None,
         testname: str = None,
         shared_state: Value = None,
+        shared_break: Value = None,
         shared_arr: Array = None,
         terminal_mode: bool = None,
         keep_browser_open: bool = None,
@@ -468,7 +499,6 @@ class Core:
         active_bindings: list[str] = []
         failed_units: list[str] = []
 
-        # deepcode ignore AttributeLoadOnNone: <Keyword arguments only set to None to make them a keyword argument. All parameters will be passed from the host funciton>
         for  uname, unit in units.items():
             try:
                 backup = unit["backup_of"]
@@ -493,7 +523,26 @@ class Core:
                 for aname, action in actions.items():
                     if action["break"]:
                         if terminal_mode:
-                            input("press enter to resume")
+                            """
+                            IF the shared value is false, then set it to true while breaking
+                            And wait until (while -> pass) it is false again. then continue
+                            """
+                            if shared_break.value == False:
+                                shared_break.value = True
+                                while True:
+                                    if shared_break.value == False:
+                                        break
+                                    pass
+
+                            # ! DO NOT unindent the first """ !!!
+                                """
+                            IF the shared value is true, then wait for
+                            an input from the user then continue
+                            """
+                            elif shared_break.value == True:
+                                print("Press any key to continue...", end='\r')
+                                getch()
+                                shared_break.value = False
                         else:
                             
                             try:
@@ -615,7 +664,6 @@ class Core:
                     ! driver.get_log('server') DOESN'T WORK
                 
                 browser_logs: list[dict[str]] = driver.get_log('browser')
-                # deepcode ignore NonePass: <Keyword arguments only set to None to make them a keyword argument. All parameters will be passed from the host funciton>
                 Core.SharedLogDumper(logs = browser_logs, target = shared_arr, target_size = len(shared_arr))
             """
 
@@ -688,32 +736,33 @@ class Core:
             with open(path, mode='w', encoding='utf-8') as f:
                 f.write("")
 
-        processed: list[str] = []
+        # processed: list[str] = []
 
         while True:
             # shared vairable needs to be implemented
-            # deepcode ignore AttributeLoadOnNone: <Keyword arguments only set to None to make them a keyword argument. All parameters will be passed from the host funciton>
             if not shared_state.value:
                 break
 
             browser_logs = Core.SharedLogLoader(shared_arr)
+            if browser_logs == list():
+                sleep(mimir)
+                continue
+
             # inner whiles ensures that the autolog will not exit until all the logs are processed
             # it only breaks the inner loops after the logs are processed and it didn't fuck up
             if terminal_mode:
-                while True:
-                    with open(path, mode = 'a+', encoding = 'utf-8') as f:
-                        for i in range(len(browser_logs)):
-                            log = browser_logs[i]
-                            if log in processed:
-                                continue
-                            # The reason it's processed with {i} and printed as such
-                            # is that no identical logs can exist in `processed`
-                            log_line = \
-                            f"{i} ❗ JavaScript:\n{log['source']} — {log['level']}:\n{log['message']}\n\t{log['timestamp']}\n#\n"
-                            f.write(log_line)
-                            Support.LogAll(parent_log_path, log_line)
-                            processed.append(log_line)
-                    break
+                with open(path, mode = 'a+', encoding = 'utf-8') as f:
+                    for i in range(len(browser_logs)):
+                        log = browser_logs[i]
+                        # if log in processed:
+                        #     continue
+                        # The reason it's processed with {i} and printed as such
+                        # is that no identical logs can exist in `processed`
+                        log_line = \
+                        f"{i} ❗ JavaScript:\n{log['source']} — {log['level']}:\n{log['message']}\n\t{log['timestamp']}\n#\n"
+                        f.write(log_line)
+                        Support.LogAll(parent_log_path, log_line)
+                        # processed.append(log_line)
                 sleep(mimir)
 
             else:
@@ -727,15 +776,15 @@ class Core:
                         with open(path, mode = 'a+', encoding = 'utf-8') as f:
                             for i in range(len(browser_logs)):
                                 log = browser_logs[i]
-                                if log in processed:
-                                    continue
+                                # if log in processed:
+                                #     continue
                                 # The reason it's processed with {i} and printed as such
                                 # is that no identical logs can exist in `processed`
                                 log_line = \
                                 f"{i} ❗ JavaScript:\n{log['source']} — {log['level']}:\n{log['message']}\n\t{log['timestamp']}\n#\n"
                                 f.write(log_line)
                                 Support.LogAll(path = parent_log_path, log_line = log_line)
-                                processed.append(log_line)
+                                # processed.append(log_line)
                         break
                 sleep(mimir)
         
