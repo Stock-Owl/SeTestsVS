@@ -19,8 +19,8 @@ namespace WebTestGui
             Dictionary<string, object> data = new Dictionary<string, object>();
 
             data["active"] = mainCheckbox.Checked;
-            data["refresh_rate"] = refreshRateTextBox.Text;
-            data["retry_timeout"] = timeoutTextBox.Text;
+            data["refresh_rate"] = int.Parse(refreshRateTextBox.Text);
+            data["retry_timeout"] = int.Parse(timeoutTextBox.Text);
 
             return data;
         }
@@ -28,8 +28,8 @@ namespace WebTestGui
         public void SetData(JToken jSondata)
         {
             mainCheckbox.Checked = (bool)jSondata["active"]!;
-            refreshRateTextBox.Text = (string)jSondata["refresh_rate"]!;
-            timeoutTextBox.Text = (string)jSondata["retry_timeout"]!;
+            refreshRateTextBox.Text = ((int)jSondata["refresh_rate"]!).ToString();
+            timeoutTextBox.Text = ((int)jSondata["retry_timeout"]!).ToString();
         }
 
         public string m_OptionName { get; set; }

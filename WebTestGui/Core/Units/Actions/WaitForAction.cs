@@ -78,8 +78,8 @@ namespace WebTestGui
             clickData["break"] = m_HaveBreakpoint;
 
             clickData["condition"] = conditionComboBox.Text;
-            clickData["frequency"] = string.IsNullOrEmpty(frequencyTextField.Text) == true ? "0" : frequencyTextField.Text;
-            clickData["timeout"] = string.IsNullOrEmpty(timeOutTextBox.Text) == true ? "0" : timeOutTextBox.Text;
+            clickData["frequency"] = string.IsNullOrEmpty(frequencyTextField.Text) == true ? 0 : int.Parse(frequencyTextField.Text);
+            clickData["timeout"] = string.IsNullOrEmpty(timeOutTextBox.Text) == true ? 0 : int.Parse(timeOutTextBox.Text);
             clickData["single"] = singleCheckbox.Checked;
 
             clickData["displayed"] = displayedCheckbox.Checked;
@@ -104,8 +104,8 @@ namespace WebTestGui
             }
 
             conditionComboBox.Text = (string)data["condition"]!;
-            frequencyTextField.Text = (string)data["frequency"]!;
-            timeOutTextBox.Text = (string)data["timeout"]!;
+            frequencyTextField.Text = ((int)data["frequency"]!).ToString();
+            timeOutTextBox.Text = ((int)data["timeout"]!).ToString();
             singleCheckbox.Checked = (bool)data["single"]!;
 
             try

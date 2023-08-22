@@ -78,7 +78,7 @@ namespace WebTestGui
             gotoData["type"] = m_ActionType;
             gotoData["break"] = m_HaveBreakpoint;
 
-            gotoData["amount"] = string.IsNullOrEmpty(amountTextField.Text) == true ? "0" : amountTextField.Text;
+            gotoData["amount"] = string.IsNullOrEmpty(amountTextField.Text) == true ? 0 : int.Parse(amountTextField.Text);
             return gotoData;
         }
 
@@ -95,7 +95,7 @@ namespace WebTestGui
             }
             Refresh(true);
 
-            amountTextField.Text = (string)data["amount"]!;
+            amountTextField.Text = ((int)data["amount"]!).ToString()!;
         }
 
         public string m_ActionType { get { return "wait"; } }

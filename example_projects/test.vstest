@@ -1,48 +1,40 @@
 {
-  "name" : "test",
-  "browser": [
+  "name": "test",
+  "browsers": [
+    "firefox",
     "chrome"
   ],
   "options": {
-    "auto_exit_iframes": false,
+    "auto_exit_iframes": true,
     "log_JS": {
       "active": true,
-      "refresh_rate": "1000",
-      "retry_timeout": "1000"
+      "refresh_rate": 1000,
+      "retry_timeout": 1000
     },
-    "parent_log_path": "C:\\dev\\SeTestsVS\\example_projects",
+    "parent_log_path": "C:\\Users\\kmarton\\source\\repos\\SeTestsVS\\logs",
     "terminal_mode": false
   },
   "driver_options": {
     "accept_insecure_certs": true,
-    "chrome_arguments": [
-      ""
-    ],
-    "firefox_arguments": [
-      ""
-    ],
+    "chrome_arguments": [],
+    "firefox_arguments": [],
     "keep_browser_open": true,
     "page_load_strategy": "normal",
     "timeout": {
       "type": "pageLoad",
-      "value": "300000"
+      "value": 300000
     },
     "unhandled_prompt_behavior": "dismiss and notify"
   },
   "units": {
-    "test 1": {
+    "UNIT 1": {
       "bindings": null,
       "backup_of": null,
       "actions": {
         "0": {
-          "type": "click",
+          "type": "goto",
           "break": false,
-          "single": true,
-          "displayed": false,
-          "enabled": false,
-          "selected": false,
-          "locator": "xpath",
-          "value": "testpath"
+          "url": "https://github.com/KosMarton/2DEngine"
         }
       }
     }

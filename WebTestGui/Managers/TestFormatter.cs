@@ -12,8 +12,8 @@ namespace WebTestGui
             // Name
             jsonData["name"] = test.m_Name;
 
-            // Browser
-            jsonData["browser"] = test.m_Browsers;
+            // Browsers
+            jsonData["browsers"] = test.m_Browsers;
 
             // Options
             {
@@ -55,8 +55,8 @@ namespace WebTestGui
             // Name
             test.m_Name = (string)jsonObject["name"]!;
 
-            // Browser
-            test.m_Browsers = JsonHelper.ConvertJTokenToListString(jsonObject["browser"]!);
+            // Browsers
+            test.m_Browsers = JsonHelper.ConvertJTokenToListString(jsonObject["browsers"]!);
             
             // Options
             {

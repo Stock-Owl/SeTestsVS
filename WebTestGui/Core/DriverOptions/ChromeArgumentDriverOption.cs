@@ -15,7 +15,10 @@ namespace WebTestGui
 
         public object GetData()
         {
-            return paramTextBox.Text.Split(" ");
+            if (!string.IsNullOrEmpty(paramTextBox.Text))
+                return paramTextBox.Text.Split(" ");
+            else
+                return new string[0];
         }
 
         public void SetData(JToken jSondata)

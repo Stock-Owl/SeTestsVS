@@ -1,31 +1,28 @@
 {
   "name": "ble",
-  "browser": [
-    "firefox"
+  "browsers": [
+    "firefox",
+    "chrome"
   ],
   "options": {
     "auto_exit_iframes": true,
     "log_JS": {
       "active": true,
-      "refresh_rate": "1000",
-      "retry_timeout": "1000"
+      "refresh_rate": 1000,
+      "retry_timeout": 1000
     },
-    "parent_log_path": "C:\\Users\\kmarton\\source\\repos\\SeTestsVS\\LOGS",
+    "parent_log_path": "C:\\Users\\kmarton\\source\\repos\\SeTestsVS\\logs",
     "terminal_mode": false
   },
   "driver_options": {
     "accept_insecure_certs": true,
-    "chrome_arguments": [
-      ""
-    ],
-    "firefox_arguments": [
-      ""
-    ],
+    "chrome_arguments": [],
+    "firefox_arguments": [],
     "keep_browser_open": true,
     "page_load_strategy": "normal",
     "timeout": {
       "type": "pageLoad",
-      "value": "300000"
+      "value": 300000
     },
     "unhandled_prompt_behavior": "dismiss and notify"
   },
@@ -35,11 +32,25 @@
       "backup_of": null,
       "actions": {
         "0": {
-          "type": "js_execute",
+          "type": "goto",
           "break": true,
-          "commmands": [
-            "// yo this is js code\nvar message = \"hello im js :)\""
-          ]
+          "url": "https://www.youtube.com"
+        },
+        "1": {
+          "type": "goto",
+          "break": false,
+          "url": "https://www.github.com"
+        }
+      }
+    },
+    "ble 2": {
+      "bindings": null,
+      "backup_of": null,
+      "actions": {
+        "0": {
+          "type": "goto",
+          "break": true,
+          "url": "https://www.instagram.com/"
         }
       }
     }

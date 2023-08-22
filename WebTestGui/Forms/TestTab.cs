@@ -73,6 +73,13 @@
 
         public void DeleteItem(TestTabItem item)
         {
+            if (item == m_SelectedItem)
+            {
+                if (m_SelectedItem.m_Test.m_State != Test.TestState.Edit)
+                {
+                    return;
+                }
+            }
             m_TestTabItems.Remove(item);
             if (m_TestTabItems.Count != 0)
             {
@@ -87,19 +94,22 @@
 
         public void SelectItem(TestTabItem selectedItem)
         {
-            foreach (TestTabItem item in m_TestTabItems)
+            if (selectedItem.m_Test.m_State == Test.TestState.Edit)
             {
-                if (item == selectedItem)
+                foreach (TestTabItem item in m_TestTabItems)
                 {
-                    item.SelectItem();
+                    if (item == selectedItem)
+                    {
+                        item.SelectItem();
+                    }
+                    else
+                    {
+                        item.DeselectItem();
+                    }
                 }
-                else
-                {
-                    item.DeselectItem();
-                }
+                m_SelectedItem = selectedItem;
+                m_ParentForm.RefreshEditor();
             }
-            m_SelectedItem = selectedItem;
-            m_ParentForm.RefreshEditor();
         }
 
         public TestTabItem m_SelectedItem;

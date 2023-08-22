@@ -89,6 +89,7 @@
             chromeButton.TabIndex = 49;
             chromeButton.Text = "Chrome log...";
             chromeButton.UseVisualStyleBackColor = false;
+            chromeButton.Click += chromeButton_Click;
             // 
             // firefoxButton
             // 
@@ -102,6 +103,7 @@
             firefoxButton.TabIndex = 50;
             firefoxButton.Text = "Firefox log...";
             firefoxButton.UseVisualStyleBackColor = false;
+            firefoxButton.Click += firefoxButton_Click;
             // 
             // Console
             // 

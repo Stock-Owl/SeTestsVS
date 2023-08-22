@@ -18,7 +18,7 @@ namespace WebTestGui
             Dictionary<string, object> data = new Dictionary<string, object>();
 
             data["type"] = mainComboBox.Text;
-            data["value"] = timeoutTextBox.Text;
+            data["value"] = int.Parse(timeoutTextBox.Text);
 
             return data;
         }
@@ -26,7 +26,7 @@ namespace WebTestGui
         public void SetData(JToken jSondata)
         {
             mainComboBox.Text = (string)jSondata["type"]!;
-            timeoutTextBox.Text = (string)jSondata["value"]!;
+            timeoutTextBox.Text = ((int)jSondata["value"]!).ToString();
         }
 
         private void mainComboBox_SelectedIndexChanged(object sender, EventArgs e)

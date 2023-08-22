@@ -18526,7 +18526,7 @@
         EEIIIYQQQgghhBBCCCGEEEIIIYQQQgghN56Njf8fRGgXJZeRuO4AAAAASUVORK5CYII=
 </value>
   </data>
-  <data name="addBlankIcon.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="addUnitButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAYAAAD0eNT6AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
         DAAACwwBP0AiyAAACKhJREFUeF7t1+Fpo0cUhlHXocLcgVADLsC9uYOtYrtIdEFhksEsLCignecceP+P

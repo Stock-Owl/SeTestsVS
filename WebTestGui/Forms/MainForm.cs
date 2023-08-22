@@ -6,10 +6,10 @@ namespace WebTestGui
     {
         /* TODO:
         - Idõzítõ különálló applikáció (tesztek futtatásának idõzítése, és beállítása)
-        - Python backend meghívása és kommunikációs fájlok kezelése
         - Sablon új test
         - Opciók sablonok létrehozása, import és exportálása
         - Action idõmérés
+        - Új logó hozzáadása
         */
 
         public MainForm()
@@ -24,7 +24,7 @@ namespace WebTestGui
             Controls.Add(m_RunLogConsole);
             m_RunLogConsole.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             m_RunLogConsole.Location = new Point(0, 0);
-            m_RunLogConsole.Size = new Size(240, 520);
+            m_RunLogConsole.Size = new Size(270, 520);
 
             m_JsLogConsole = new Console(this);
             Controls.Add(m_JsLogConsole);
@@ -35,14 +35,12 @@ namespace WebTestGui
 
             m_TestTab = new TestTab(this);
             Controls.Add(m_TestTab);
-            m_TestTab.Location = new Point(236, 0);
+            m_TestTab.Location = new Point(270, 0);
             m_TestTab.AddNewBlankItem();
 
             m_RunLogConsole.AddToConsoles("Applikáció indítása...\n");
             m_RunLogConsole.AddToConsoles("Verzió: " + $"{AppConsts.s_AppVersion}\n");
             m_RunLogConsole.AddToConsoles("Idõ: " + $"{DateTime.Now}\n");
-            m_RunLogConsole.AddToConsoles("Konzol inicializálása...\n\n");
-            m_RunLogConsole.AddToConsoles("Az alkalmazás sikeresen elindult, a konzolok mûködnek!\n");
 
             m_JsLogConsole.AddToConsoles("JavaScript konzol...\n");
             m_JsLogConsole.AddToConsoles("A teszt ideje alatt minden JavaScript log " +
@@ -229,20 +227,29 @@ namespace WebTestGui
         public async void OnTestStart()
         {
             string JSONString = GetTestJSON(Test());
-            // JSONString kiiratása a run.json fájlba
+
+            string temp = Application.ExecutablePath;
+            string[] temparray = temp.Split(@"WebTestGui");
+
+            File.WriteAllText(temparray[0] + "run.json", JSONString);
 
             SetColorSchemeToRun();
+
+            StartPython(temparray[0]);
 
             Test().m_State = WebTestGui.Test.TestState.Run;
             testStartButton.Text = "TESZT FUT";
             m_TestTab.RefreshTabItems();
+
+            _STOP_JS_LOG_REQ = false;
+            _STOP_BRK_LOG_REQ = false;
 
             string jsLogFilePath = Test().GetRootLogDirectoryPath() + @"/js.log";
             StartJSLogFileWatcher(jsLogFilePath);
             string breakPointFilePath = Test().GetRootLogDirectoryPath() + @"/file.brk";
             StartBreakPointFileWatcher(breakPointFilePath);
 
-            m_RunLogConsole.AddToConsoles("\n\n TESZT INDITÁSA");
+            m_RunLogConsole.AddToConsoles("\n TESZT INDITÁSA \n");
         }
 
         public void OnTestBreak()
@@ -259,17 +266,32 @@ namespace WebTestGui
             m_TestTab.RefreshTabItems();
         }
 
-        public void OnTestFinished()
+        public async Task OnTestFinished()
         {
             SetColorSchemeToEdit();
-            m_RunLogConsole.AddToConsoles("\n\n TESZT VÉGE");
+            m_RunLogConsole.AddToConsoles("\n TESZT VÉGE");
 
             _STOP_JS_LOG_REQ = true;
             _STOP_BRK_LOG_REQ = true;
 
+            m_RunLogConsole.AddToChrome("\n\n" + File.ReadAllText(Test().GetRootLogDirectoryPath() + @"/chrome/run.log"));
+            m_RunLogConsole.AddToFirefox("\n\n" + File.ReadAllText(Test().GetRootLogDirectoryPath() + @"/firefox/run.log"));
+
             Test().m_State = WebTestGui.Test.TestState.Edit;
             testStartButton.Text = "TESZT INDÍTÁSA...";
             m_TestTab.RefreshTabItems();
+        }
+
+        public async Task StartPython(string targetDir)
+        {
+            string targetDirectory = targetDir;
+            string pythonScript = "main.py";
+
+            Process process = Process.Start("cmd.exe", $"/K cd /D {targetDirectory} && python {pythonScript}");
+
+            await process.WaitForExitAsync();
+
+            await OnTestFinished();
         }
 
         public async void StartJSLogFileWatcher(string logPath)
@@ -280,20 +302,18 @@ namespace WebTestGui
                 {
                     m_RunLogConsole.consoleTextBox.Invoke((Action)(() =>
                     {
-                        m_RunLogConsole.AddToConsoles("\n" + content);
+                        m_JsLogConsole.AddToConsoles("\n" + content + "\n");
                     }));
 
                     if (_STOP_JS_LOG_REQ)
                     {
-                        // Ha a leállítás kérték, akkor kilépünk az async lambda-ból
                         return;
                     }
                 };
 
-                m_RunLogConsole.consoleTextBox.Text += ("File watcher started. Press Enter to exit.");
                 while (!_STOP_JS_LOG_REQ)
                 {
-                    await Task.Delay(100); // Ideiglenes várakozás, lehet finomhangolni
+                    await Task.Delay(100);
                 }
             }
         }
@@ -306,20 +326,21 @@ namespace WebTestGui
                 {
                     m_RunLogConsole.consoleTextBox.Invoke((Action)(() =>
                     {
-                        m_RunLogConsole.AddToConsoles("\nBREAKPOINT HIT:" + content);
+                        if (!string.IsNullOrEmpty(content))
+                        {
+                            m_RunLogConsole.AddToConsoles("\nBREAKPOINT HIT:" + content);
+                        }
                     }));
 
                     if (_STOP_BRK_LOG_REQ)
                     {
-                        // Ha a leállítás kérték, akkor kilépünk az async lambda-ból
                         return;
                     }
                 };
 
-                m_RunLogConsole.consoleTextBox.Text += ("File watcher started. Press Enter to exit.");
                 while (!_STOP_BRK_LOG_REQ)
                 {
-                    await Task.Delay(100); // Ideiglenes várakozás, lehet finomhangolni
+                    await Task.Delay(100);
                 }
             }
         }
@@ -361,9 +382,6 @@ namespace WebTestGui
                     test.m_Name = Path.GetFileNameWithoutExtension(of.FileName);
                     currentlyEditedText.Text = test.m_SaveFilePath;
 
-                    m_RunLogConsole.AddToConsoles("\n\nTeszt sikeresen exportálva és mentve az alábbi helyre... " + $"{of.FileName}\n");
-
-                    m_TestTab.DeleteItem(m_TestTab.m_SelectedItem);
                     m_TestTab.AddNewItemFromFilePath(of.FileName);
                 }
             }
@@ -371,7 +389,6 @@ namespace WebTestGui
             {
                 string savedInfo = GetTestJSON(Test());
                 File.WriteAllText(test.m_SaveFilePath, savedInfo);
-                m_RunLogConsole.AddToConsoles("\n\nTeszt sikeresen exportálva és mentve az alábbi helyre... " + $"{test.m_SaveFilePath}\n");
             }
         }
 
@@ -405,6 +422,8 @@ namespace WebTestGui
         }
 
         #endregion
+
+        #region Editor Refresh method
 
         public void RefreshEditor()
         {
@@ -452,6 +471,8 @@ namespace WebTestGui
             RefreshUnitsPanel();
         }
 
+        #endregion
+
         #region Root log folder Logic
 
         private void rootLogDirectoryButton_Click(object sender, EventArgs e)
@@ -491,6 +512,10 @@ namespace WebTestGui
 
             currentlyEditedLabel.BackColor = Color.FromArgb(255, 60, 60, 65);
             currentlyEditedText.BackColor = Color.FromArgb(255, 60, 60, 65);
+
+            m_TestTab.Enabled = true;
+            saveTestButton.Enabled = true;
+            loadTestButton.Enabled = true;
         }
 
         public void SetColorSchemeToRun()
@@ -516,6 +541,10 @@ namespace WebTestGui
 
             currentlyEditedLabel.BackColor = Color.FromArgb(255, 70, 60, 60);
             currentlyEditedText.BackColor = Color.FromArgb(255, 70, 60, 60);
+
+            m_TestTab.Enabled = false;
+            saveTestButton.Enabled = false;
+            loadTestButton.Enabled = false;
         }
 
         #endregion
