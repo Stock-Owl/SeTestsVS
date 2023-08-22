@@ -1,0 +1,106 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <PackageOutputPath>bin\$(OutputPath)</PackageOutputPath>
+    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+    <BaseOutputPath>bin</BaseOutputPath>
+    <ApplicationIcon>AppIcon.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="AppIcon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="SharpDX.Direct2D1" Version="4.2.0" />
+    <PackageReference Include="SharpDX.DXGI" Version="4.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Core\Units\Actions\ClearAction.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Core\Units\Actions\WaitForAction.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Core\Units\Actions\WaitAction.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Core\Units\Actions\ExecuteJsAction.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Core\Units\Actions\JsCommand\JsCommandEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Core\Units\Actions\RefreshAction.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Core\Units\Actions\ForwardAction.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Core\Units\Actions\BackAction.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Core\Units\Actions\SendKeysAction.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Core\Units\Actions\ClickAction.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Core\DriverOptions\FirefoxArgumentDriverOption.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Core\DriverOptions\KeepBrowserOpenDriverOption.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Core\DriverOptions\AcceptInsecureCertsDriverOption.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Core\DriverOptions\ChromeArgumentDriverOption.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Core\DriverOptions\UnhandledPromptBehaviourDriverOption.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Core\DriverOptions\TimeoutDriverOption.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Core\DriverOptions\PageLoadStrategyDriverOption.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Core\Options\AutoExitIFramesOption.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Core\Options\ParentLogPathOption.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Core\Options\TerminalModeOption.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Core\Options\LogJSOption.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Core\Units\UnitPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>
