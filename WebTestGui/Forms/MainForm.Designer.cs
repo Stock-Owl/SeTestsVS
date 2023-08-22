@@ -34,9 +34,9 @@
             pictureBox2 = new PictureBox();
             firefoxCheckBox = new CheckBox();
             testStartButton = new Button();
-            actionText = new Label();
-            actionHeaderPanel = new Panel();
-            button1 = new Button();
+            unitLabel = new Label();
+            unitHeaderPanel = new Panel();
+            addBlankIcon = new PictureBox();
             optionHeaderPanel = new Panel();
             optionLabel = new Label();
             optionsPanel = new FlowLayoutPanel();
@@ -52,9 +52,11 @@
             currentlyEditedText = new Label();
             pictureBox3 = new PictureBox();
             rootLogDirectoryButton = new Button();
+            testNameLabel = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
-            actionHeaderPanel.SuspendLayout();
+            unitHeaderPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)addBlankIcon).BeginInit();
             optionHeaderPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)vsLogo).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
@@ -69,7 +71,7 @@
             chromeCheckBox.CheckState = CheckState.Checked;
             chromeCheckBox.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
             chromeCheckBox.ForeColor = Color.White;
-            chromeCheckBox.Location = new Point(757, 73);
+            chromeCheckBox.Location = new Point(757, 82);
             chromeCheckBox.Name = "chromeCheckBox";
             chromeCheckBox.Size = new Size(83, 24);
             chromeCheckBox.TabIndex = 3;
@@ -82,7 +84,7 @@
             pictureBox1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             pictureBox1.BackColor = Color.FromArgb(50, 50, 53);
             pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
-            pictureBox1.Location = new Point(839, 73);
+            pictureBox1.Location = new Point(839, 82);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(25, 25);
             pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -94,7 +96,7 @@
             pictureBox2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             pictureBox2.BackColor = Color.FromArgb(50, 50, 53);
             pictureBox2.Image = (Image)resources.GetObject("pictureBox2.Image");
-            pictureBox2.Location = new Point(947, 72);
+            pictureBox2.Location = new Point(947, 81);
             pictureBox2.Name = "pictureBox2";
             pictureBox2.Size = new Size(25, 25);
             pictureBox2.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -108,7 +110,7 @@
             firefoxCheckBox.BackColor = Color.FromArgb(50, 50, 53);
             firefoxCheckBox.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
             firefoxCheckBox.ForeColor = Color.White;
-            firefoxCheckBox.Location = new Point(875, 73);
+            firefoxCheckBox.Location = new Point(875, 82);
             firefoxCheckBox.Name = "firefoxCheckBox";
             firefoxCheckBox.Size = new Size(73, 24);
             firefoxCheckBox.TabIndex = 5;
@@ -120,74 +122,71 @@
             // 
             testStartButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             testStartButton.BackColor = Color.FromArgb(45, 45, 48);
-            testStartButton.Font = new Font("Segoe UI Semibold", 14F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+            testStartButton.Font = new Font("Segoe UI Semibold", 15F, FontStyle.Bold, GraphicsUnit.Point);
             testStartButton.ForeColor = Color.White;
             testStartButton.Location = new Point(645, 413);
             testStartButton.Name = "testStartButton";
             testStartButton.Size = new Size(327, 40);
             testStartButton.TabIndex = 7;
-            testStartButton.Text = "Tesztelés...";
+            testStartButton.Text = "TESZT INDITÁSA...";
             testStartButton.UseVisualStyleBackColor = false;
             testStartButton.Click += OnStartTestButtonPressed;
             // 
-            // actionText
+            // unitLabel
             // 
-            actionText.AutoSize = true;
-            actionText.BackColor = Color.FromArgb(40, 40, 43);
-            actionText.Font = new Font("Segoe UI Semibold", 14F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
-            actionText.ForeColor = Color.White;
-            actionText.Location = new Point(3, 2);
-            actionText.Name = "actionText";
-            actionText.Size = new Size(74, 25);
-            actionText.TabIndex = 9;
-            actionText.Text = "Unitok:";
+            unitLabel.AutoSize = true;
+            unitLabel.BackColor = Color.FromArgb(40, 40, 43);
+            unitLabel.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+            unitLabel.ForeColor = Color.White;
+            unitLabel.Location = new Point(3, 4);
+            unitLabel.Name = "unitLabel";
+            unitLabel.Size = new Size(54, 19);
+            unitLabel.TabIndex = 9;
+            unitLabel.Text = "Unitok:";
             // 
-            // actionHeaderPanel
+            // unitHeaderPanel
             // 
-            actionHeaderPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            actionHeaderPanel.AutoScroll = true;
-            actionHeaderPanel.BackColor = Color.FromArgb(40, 40, 45);
-            actionHeaderPanel.Controls.Add(button1);
-            actionHeaderPanel.Controls.Add(actionText);
-            actionHeaderPanel.Location = new Point(243, 64);
-            actionHeaderPanel.Name = "actionHeaderPanel";
-            actionHeaderPanel.Size = new Size(383, 34);
-            actionHeaderPanel.TabIndex = 9;
+            unitHeaderPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            unitHeaderPanel.BackColor = Color.FromArgb(40, 40, 45);
+            unitHeaderPanel.Controls.Add(addBlankIcon);
+            unitHeaderPanel.Controls.Add(unitLabel);
+            unitHeaderPanel.Location = new Point(243, 77);
+            unitHeaderPanel.Name = "unitHeaderPanel";
+            unitHeaderPanel.Size = new Size(383, 29);
+            unitHeaderPanel.TabIndex = 9;
             // 
-            // button1
+            // addBlankIcon
             // 
-            button1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            button1.BackColor = Color.FromArgb(40, 40, 43);
-            button1.Font = new Font("Segoe UI", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
-            button1.ForeColor = Color.White;
-            button1.Location = new Point(263, 3);
-            button1.Name = "button1";
-            button1.Size = new Size(117, 25);
-            button1.TabIndex = 41;
-            button1.Text = "Unit hozzáadása:";
-            button1.UseVisualStyleBackColor = false;
-            button1.Click += OnAddUnitButtonPressed;
+            addBlankIcon.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            addBlankIcon.BackColor = Color.FromArgb(50, 50, 53);
+            addBlankIcon.Image = (Image)resources.GetObject("addBlankIcon.Image");
+            addBlankIcon.Location = new Point(359, 3);
+            addBlankIcon.Name = "addBlankIcon";
+            addBlankIcon.Size = new Size(20, 20);
+            addBlankIcon.SizeMode = PictureBoxSizeMode.StretchImage;
+            addBlankIcon.TabIndex = 57;
+            addBlankIcon.TabStop = false;
+            addBlankIcon.Click += OnAddUnitButtonPressed;
             // 
             // optionHeaderPanel
             // 
             optionHeaderPanel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            optionHeaderPanel.AutoScroll = true;
             optionHeaderPanel.BackColor = Color.FromArgb(40, 40, 45);
             optionHeaderPanel.Controls.Add(optionLabel);
-            optionHeaderPanel.Location = new Point(645, 142);
+            optionHeaderPanel.Location = new Point(645, 155);
             optionHeaderPanel.Name = "optionHeaderPanel";
-            optionHeaderPanel.Size = new Size(327, 36);
+            optionHeaderPanel.Size = new Size(327, 23);
             optionHeaderPanel.TabIndex = 37;
             // 
             // optionLabel
             // 
             optionLabel.AutoSize = true;
             optionLabel.BackColor = Color.FromArgb(40, 40, 43);
-            optionLabel.Font = new Font("Segoe UI Semibold", 14F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+            optionLabel.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
             optionLabel.ForeColor = Color.White;
-            optionLabel.Location = new Point(3, 5);
+            optionLabel.Location = new Point(3, 2);
             optionLabel.Name = "optionLabel";
-            optionLabel.Size = new Size(77, 25);
+            optionLabel.Size = new Size(56, 19);
             optionLabel.TabIndex = 45;
             optionLabel.Text = "Opciók:";
             // 
@@ -196,9 +195,9 @@
             optionsPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             optionsPanel.AutoScroll = true;
             optionsPanel.BackColor = Color.FromArgb(45, 45, 50);
-            optionsPanel.Location = new Point(645, 175);
+            optionsPanel.Location = new Point(645, 178);
             optionsPanel.Name = "optionsPanel";
-            optionsPanel.Size = new Size(327, 234);
+            optionsPanel.Size = new Size(327, 230);
             optionsPanel.TabIndex = 38;
             // 
             // unitsPanel
@@ -206,9 +205,9 @@
             unitsPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             unitsPanel.AutoScroll = true;
             unitsPanel.BackColor = Color.FromArgb(45, 45, 50);
-            unitsPanel.Location = new Point(243, 95);
+            unitsPanel.Location = new Point(243, 103);
             unitsPanel.Name = "unitsPanel";
-            unitsPanel.Size = new Size(383, 358);
+            unitsPanel.Size = new Size(383, 350);
             unitsPanel.TabIndex = 39;
             // 
             // switchToOptionsButton
@@ -217,7 +216,7 @@
             switchToOptionsButton.BackColor = Color.FromArgb(40, 40, 43);
             switchToOptionsButton.Font = new Font("Segoe UI", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
             switchToOptionsButton.ForeColor = Color.White;
-            switchToOptionsButton.Location = new Point(645, 111);
+            switchToOptionsButton.Location = new Point(644, 120);
             switchToOptionsButton.Name = "switchToOptionsButton";
             switchToOptionsButton.Size = new Size(87, 25);
             switchToOptionsButton.TabIndex = 40;
@@ -231,7 +230,7 @@
             switchToJsLogButton.BackColor = Color.FromArgb(40, 40, 43);
             switchToJsLogButton.Font = new Font("Segoe UI Semibold", 8.25F, FontStyle.Italic, GraphicsUnit.Point);
             switchToJsLogButton.ForeColor = Color.Silver;
-            switchToJsLogButton.Location = new Point(885, 111);
+            switchToJsLogButton.Location = new Point(885, 120);
             switchToJsLogButton.Name = "switchToJsLogButton";
             switchToJsLogButton.Size = new Size(87, 25);
             switchToJsLogButton.TabIndex = 41;
@@ -244,11 +243,11 @@
             browserLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             browserLabel.AutoSize = true;
             browserLabel.BackColor = Color.FromArgb(50, 50, 53);
-            browserLabel.Font = new Font("Segoe UI Semibold", 14F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+            browserLabel.Font = new Font("Segoe UI Semibold", 14F, FontStyle.Bold, GraphicsUnit.Point);
             browserLabel.ForeColor = Color.White;
-            browserLabel.Location = new Point(645, 72);
+            browserLabel.Location = new Point(645, 81);
             browserLabel.Name = "browserLabel";
-            browserLabel.Size = new Size(100, 25);
+            browserLabel.Size = new Size(99, 25);
             browserLabel.TabIndex = 45;
             browserLabel.Text = "Böngésző:";
             // 
@@ -268,7 +267,7 @@
             // 
             saveTestButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             saveTestButton.BackColor = Color.FromArgb(45, 45, 48);
-            saveTestButton.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+            saveTestButton.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold, GraphicsUnit.Point);
             saveTestButton.ForeColor = Color.White;
             saveTestButton.Location = new Point(645, 472);
             saveTestButton.Name = "saveTestButton";
@@ -282,7 +281,7 @@
             // 
             loadTestButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             loadTestButton.BackColor = Color.FromArgb(45, 45, 48);
-            loadTestButton.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+            loadTestButton.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold, GraphicsUnit.Point);
             loadTestButton.ForeColor = Color.White;
             loadTestButton.Location = new Point(802, 472);
             loadTestButton.Name = "loadTestButton";
@@ -297,7 +296,7 @@
             currentlyEditedLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             currentlyEditedLabel.AutoSize = true;
             currentlyEditedLabel.BackColor = Color.FromArgb(60, 60, 65);
-            currentlyEditedLabel.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+            currentlyEditedLabel.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold, GraphicsUnit.Point);
             currentlyEditedLabel.ForeColor = Color.White;
             currentlyEditedLabel.Location = new Point(244, 468);
             currentlyEditedLabel.Name = "currentlyEditedLabel";
@@ -307,6 +306,7 @@
             // 
             // flowLayoutPanel2
             // 
+            flowLayoutPanel2.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             flowLayoutPanel2.AutoScroll = true;
             flowLayoutPanel2.BackColor = Color.FromArgb(60, 60, 65);
             flowLayoutPanel2.Location = new Point(243, 465);
@@ -344,21 +344,34 @@
             // 
             rootLogDirectoryButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             rootLogDirectoryButton.BackColor = Color.FromArgb(45, 45, 48);
-            rootLogDirectoryButton.Font = new Font("Segoe UI Semibold", 8F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+            rootLogDirectoryButton.Font = new Font("Segoe UI Semibold", 8F, FontStyle.Bold, GraphicsUnit.Point);
             rootLogDirectoryButton.ForeColor = Color.White;
-            rootLogDirectoryButton.Location = new Point(473, 472);
+            rootLogDirectoryButton.Location = new Point(470, 472);
             rootLogDirectoryButton.Name = "rootLogDirectoryButton";
-            rootLogDirectoryButton.Size = new Size(117, 31);
+            rootLogDirectoryButton.Size = new Size(120, 31);
             rootLogDirectoryButton.TabIndex = 54;
             rootLogDirectoryButton.Text = "Gyökér log mappa...";
             rootLogDirectoryButton.UseVisualStyleBackColor = false;
             rootLogDirectoryButton.Click += rootLogDirectoryButton_Click;
+            // 
+            // testNameLabel
+            // 
+            testNameLabel.AutoSize = true;
+            testNameLabel.BackColor = Color.FromArgb(50, 50, 53);
+            testNameLabel.Font = new Font("Segoe UI Semibold", 20F, FontStyle.Bold, GraphicsUnit.Point);
+            testNameLabel.ForeColor = Color.White;
+            testNameLabel.Location = new Point(240, 36);
+            testNameLabel.Name = "testNameLabel";
+            testNameLabel.Size = new Size(136, 37);
+            testNameLabel.TabIndex = 55;
+            testNameLabel.Text = "testName";
             // 
             // MainForm
             // 
             AutoScaleMode = AutoScaleMode.None;
             BackColor = Color.FromArgb(50, 50, 53);
             ClientSize = new Size(984, 511);
+            Controls.Add(testNameLabel);
             Controls.Add(rootLogDirectoryButton);
             Controls.Add(pictureBox3);
             Controls.Add(optionHeaderPanel);
@@ -376,7 +389,7 @@
             Controls.Add(firefoxCheckBox);
             Controls.Add(pictureBox1);
             Controls.Add(chromeCheckBox);
-            Controls.Add(actionHeaderPanel);
+            Controls.Add(unitHeaderPanel);
             Controls.Add(currentlyEditedText);
             Controls.Add(flowLayoutPanel2);
             Icon = (Icon)resources.GetObject("$this.Icon");
@@ -386,8 +399,9 @@
             Text = "VS WebTeszt";
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
-            actionHeaderPanel.ResumeLayout(false);
-            actionHeaderPanel.PerformLayout();
+            unitHeaderPanel.ResumeLayout(false);
+            unitHeaderPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)addBlankIcon).EndInit();
             optionHeaderPanel.ResumeLayout(false);
             optionHeaderPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)vsLogo).EndInit();
@@ -402,8 +416,8 @@
         private PictureBox pictureBox2;
         private CheckBox firefoxCheckBox;
         private Button testStartButton;
-        private Label actionText;
-        private Panel actionHeaderPanel;
+        private Label unitLabel;
+        private Panel unitHeaderPanel;
         private Panel optionHeaderPanel;
         private FlowLayoutPanel optionsPanel;
         private FlowLayoutPanel unitsPanel;
@@ -417,8 +431,9 @@
         private Label currentlyEditedLabel;
         private FlowLayoutPanel flowLayoutPanel2;
         private Label currentlyEditedText;
-        private Button button1;
         private PictureBox pictureBox3;
         private Button rootLogDirectoryButton;
+        private Label testNameLabel;
+        private PictureBox addBlankIcon;
     }
 }

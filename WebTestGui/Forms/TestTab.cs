@@ -25,6 +25,7 @@
 
         public void RefreshTabItems()
         {
+            SelectItem(m_SelectedItem);
             tabPanel.Controls.Clear();
             tabPanel.Controls.AddRange(m_TestTabItems.ToArray());
         }

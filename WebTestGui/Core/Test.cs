@@ -59,16 +59,13 @@
 
         public MainForm m_MainForm;
 
-        public TestState m_State;
+        public TestState m_State = TestState.Edit;
 
         public enum TestState
         {
-            Load = 0,
-            Edit = 1,
-            Compile = 2,
-            Run = 3,
-            Break = 4,
-            Finished = 5
+            Edit = 0,
+            Run = 1,
+            Break = 2,
         }
     }
 }

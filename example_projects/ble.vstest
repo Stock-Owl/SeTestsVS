@@ -1,5 +1,5 @@
 {
-  "name" : "ble",
+  "name": "ble",
   "browser": [
     "firefox"
   ],
@@ -10,7 +10,7 @@
       "refresh_rate": "1000",
       "retry_timeout": "1000"
     },
-    "parent_log_path": "",
+    "parent_log_path": "C:\\Users\\kmarton\\source\\repos\\SeTestsVS\\LOGS",
     "terminal_mode": false
   },
   "driver_options": {

@@ -170,11 +170,11 @@ namespace WebTestGui
         {
             if (bindingsLabel.Text != "null")
             {
-                for (int i = 0; i < m_ParentForm.GetTest().m_Units.m_Units.Count; i++)
+                for (int i = 0; i < m_ParentForm.Test().m_Units.m_Units.Count; i++)
                 {
-                    if (bindingsLabel.Text == m_ParentForm.GetTest().m_Units.m_Units[i].m_UnitName)
+                    if (bindingsLabel.Text == m_ParentForm.Test().m_Units.m_Units[i].m_UnitName)
                     {
-                        m_Bindings = m_ParentForm.GetTest().m_Units.m_Units[i];
+                        m_Bindings = m_ParentForm.Test().m_Units.m_Units[i];
                     }
                 }
                 //Refresh();
@@ -185,11 +185,11 @@ namespace WebTestGui
         {
             if (backupOfLabel.Text != "null")
             {
-                for (int i = 0; i < m_ParentForm.GetTest().m_Units.m_Units.Count; i++)
+                for (int i = 0; i < m_ParentForm.Test().m_Units.m_Units.Count; i++)
                 {
-                    if (backupOfLabel.Text == m_ParentForm.GetTest().m_Units.m_Units[i].m_UnitName)
+                    if (backupOfLabel.Text == m_ParentForm.Test().m_Units.m_Units[i].m_UnitName)
                     {
-                        m_BackupOf = m_ParentForm.GetTest().m_Units.m_Units[i];
+                        m_BackupOf = m_ParentForm.Test().m_Units.m_Units[i];
                     }
                 }
                 //Refresh();
@@ -236,10 +236,10 @@ namespace WebTestGui
         private void OnUnitBindingsComboBoxDropDown(object sender, EventArgs e)
         {
             unitBindingsComboBox.Items.Clear();
-            string[] unitNames = new string[m_ParentForm.GetTest().m_Units.m_Units.Count];
+            string[] unitNames = new string[m_ParentForm.Test().m_Units.m_Units.Count];
             for (int i = 0; i < unitNames.Length; i++)
             {
-                unitNames[i] = m_ParentForm.GetTest().m_Units.m_Units[i].m_UnitName;
+                unitNames[i] = m_ParentForm.Test().m_Units.m_Units[i].m_UnitName;
             }
 
             unitBindingsComboBox.Items.AddRange(unitNames);
@@ -248,10 +248,10 @@ namespace WebTestGui
         private void OnUnitBackupComboBoxDropDown(object sender, EventArgs e)
         {
             unitBackupComboBox.Items.Clear();
-            string[] unitNames = new string[m_ParentForm.GetTest().m_Units.m_Units.Count];
+            string[] unitNames = new string[m_ParentForm.Test().m_Units.m_Units.Count];
             for (int i = 0; i < unitNames.Length; i++)
             {
-                unitNames[i] = m_ParentForm.GetTest().m_Units.m_Units[i].m_UnitName;
+                unitNames[i] = m_ParentForm.Test().m_Units.m_Units[i].m_UnitName;
             }
 
             unitBackupComboBox.Items.AddRange(unitNames);
@@ -287,7 +287,7 @@ namespace WebTestGui
         private void OnUnitNameTextFieldChanged(object sender, EventArgs e)
         {
             m_UnitName = unitNameTextField.Text;
-            m_ParentForm.RefreshUnitsPanel();
+            m_ParentForm.RefreshEditor();
         }
 
         private void OnUIdTextBoxFocusLeave(object sender, EventArgs e)

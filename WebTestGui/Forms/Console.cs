@@ -52,6 +52,16 @@
             isChrome = false;
         }
 
+        public void SetSchemeToRunning()
+        {
+            BackColor = Color.FromArgb(255, 60, 50, 50);
+        }
+
+        public void SetSchemeToEdtiting()
+        {
+            BackColor = Color.FromArgb(255, 50, 50, 53);
+        }
+
         bool isChrome = true;
 
         string m_ChromeLogString;
