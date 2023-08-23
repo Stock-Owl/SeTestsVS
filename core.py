@@ -448,7 +448,7 @@ class Core:
         shared_state.value = False
         print("Chrome finished")
 
-    def FirefoxExec(
+    def FirefoxExec(                    
         options: FirefoxOptions = None,
         units: dict[str] = None,
         testname: str = None,
