@@ -18,10 +18,9 @@ from multiprocessing import Process, Array, Value
 from ctypes import c_char_p as cstring
 from copy import copy
 from os import getpid
-from keyboard import read_key as getch
 
 # V.1.1.0
-#                                                                               23 / 26 + 1
+#                                                                               24 / 27 + 1
 # TODO: Kitalálni, hogy vannak az argumentumok                                  ✅  1
 # TODO: Megszerelni a random useless conversionöket a JSON-ből                  ✅  2
 # TODO: Relative locators                                                       ❌  NAH FUCK that shit
@@ -58,7 +57,8 @@ from keyboard import read_key as getch
 # TODO: add request shit for drivers. Seleniumwire!!! Needs to be implemented!  ❌  24
 # TODO: time data collection, bounds etc.                                         GUI
 # TODO: breakpoint intermediate                                                 ✅  25
-# TODO: fix logging requirements according to brwosers                          ❌  26
+# TODO: installer update                                                        ❌  26
+# TODO: refactoring                                                             ❌  27
 
 # Snyk deepcode ignores:
 # file deepcode ignore AttributeLoadOnNone: <Keyword arguments only set to None to make them a keyword argument. All parameters will be passed from the host funciton>
@@ -415,7 +415,7 @@ class Core:
                 pass
 
         if not keep_browser_open:
-            driver.Quit()
+            driver.quit()
 
         from datetime import date as d
         today: str = d.today().strftime("%Y-%m-%d")
@@ -618,7 +618,7 @@ class Core:
             """
 
         if not keep_browser_open:
-            driver.Quit()
+            driver.quit()
 
         from datetime import date as d
         today: str = d.today().strftime("%Y-%m-%d")
