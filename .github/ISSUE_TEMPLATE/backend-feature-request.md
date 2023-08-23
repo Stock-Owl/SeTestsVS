@@ -1,9 +1,9 @@
 ---
-name: Frontend (GUI) feature request
-about: Suggest an idea for the GUI app
-title: "[FRONTEND FEATURE]"
-labels: feature request, frontend
-assignees: KosMarton
+name: Backend feature request
+about: Suggest an idea for a functionalty in the program
+title: "[BACKEND FEATURE]"
+labels: backend, feature request
+assignees: Stock-Owl
 
 ---
 

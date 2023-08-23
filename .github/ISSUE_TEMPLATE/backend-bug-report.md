@@ -2,7 +2,7 @@
 name: Backend bug report
 about: There's a problem with the program's execution
 title: "[BACKEND BUG]"
-labels: backend bug
+labels: backend, bug
 assignees: Stock-Owl
 
 ---

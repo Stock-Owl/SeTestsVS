@@ -2,7 +2,7 @@
 name: Frontend bug report
 about: Something is wrong with the GUI
 title: ''
-labels: frontend bug
+labels: bug, frontend
 assignees: KosMarton
 
 ---
