@@ -66,7 +66,7 @@
             mainCheckbox.CheckState = CheckState.Checked;
             mainCheckbox.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point);
             mainCheckbox.ForeColor = Color.Silver;
-            mainCheckbox.Location = new Point(167, 67);
+            mainCheckbox.Location = new Point(181, 66);
             mainCheckbox.Name = "mainCheckbox";
             mainCheckbox.Size = new Size(57, 23);
             mainCheckbox.TabIndex = 52;
@@ -83,7 +83,7 @@
             subLabel.Name = "subLabel";
             subLabel.Size = new Size(200, 35);
             subLabel.TabIndex = 53;
-            subLabel.Text = "Sikeres teszt esetén a megnyitott\r\nböngész(ők) bezárása:";
+            subLabel.Text = "Sikeres teszt esetén a megnyitott\r\nböngész(ők) megtartása:";
             // 
             // KeepBrowserOpenDriverOption
             // 

@@ -99,6 +99,7 @@ namespace WebTestGui
             unit.m_UnitName = $"UNIT {Test().m_Units.m_Units.Count}";
             unit.Refresh();
             RefreshUnitsPanel();
+            unitsPanel.ScrollControlIntoView((Control)unit);
         }
 
         public void DeleteUnit(IUnit unit)
@@ -281,7 +282,7 @@ namespace WebTestGui
             m_RunLogConsole.AddToConsoles("\n ------TESZT SZÜNETELTETVE \n");
             testStartButton.Text = "TESZT FOLYTATÁSA...";
 
-            // show breakpoint location
+            // show breakpoint location (:c:ble 1:1)
 
             m_TestTab.RefreshTabItems();
         }
@@ -319,7 +320,7 @@ namespace WebTestGui
             string targetDirectory = targetDir;
             string pythonScript = "main.py";
 
-            m_CurrentProcess = Process.Start("cmd.exe", $"/K cd /D {targetDirectory} && python {pythonScript}");
+            m_CurrentProcess = Process.Start("cmd.exe", $"/K cd /D {targetDirectory} && python {pythonScript} && exit");
 
             await m_CurrentProcess.WaitForExitAsync();
 
