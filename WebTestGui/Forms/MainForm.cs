@@ -9,6 +9,7 @@ namespace WebTestGui
         - Sablon új test
         - Opciók sablonok létrehozása, import és exportálása
         - Action idõmérés
+        - Log fájlok elõkészítése, ha nem léteznek még (FileWatcher miatt)
         */
 
         public MainForm()
@@ -232,6 +233,8 @@ namespace WebTestGui
         public async void OnTestStart()
         {
             string JSONString = GetTestJSON(Test());
+            DateTime currentTime = DateTime.Now;
+            m_TestStartTime = currentTime.ToString("HH:mm:ss:ffffff");
 
             string temp = Application.ExecutablePath;
             string[] temparray = temp.Split(@"WebTestGui");
@@ -300,7 +303,7 @@ namespace WebTestGui
             m_TestTab.RefreshTabItems();
         }
 
-        public async Task OnTestFinished()
+        public void OnTestFinished()
         {
             SetColorSchemeToEdit();
 
@@ -317,8 +320,6 @@ namespace WebTestGui
             m_RunLogConsole.AddToConsoles("\n ------TESZT VÉGE \n");
 
             LoadRunTimesToActions(chromeRunLog, firefoxRunLog);
-            
-            m_RunLogConsole.AddToConsoles("\n AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA \n");
 
             foreach (IUnit unit in Test().m_Units.m_Units)
             {
@@ -331,31 +332,33 @@ namespace WebTestGui
             RefreshUnitsPanel();
         }
 
+        #region Extract time information from logs methods
+
         void LoadRunTimesToActions(string chromeRunLog, string firefoxRunLog)
         {
             string[] chromeRunLogs = chromeRunLog.Split('\n');
             string[] firefoxRunLogs = firefoxRunLog.Split('\n');
 
-            long chromePrevTime = 0;
-            long firefoxPrevTime = 0;
+            long chromePrevTime = TimeToMicroseconds(m_TestStartTime);
+            long firefoxPrevTime = TimeToMicroseconds(m_TestStartTime);
             for (int i = 0; i < Math.Max(chromeRunLogs.Length, firefoxRunLogs.Length); i++)
             {
                 string tempChromeRunLog;
                 string tempFirefoxRunLog;
-                try
+                if (i < chromeRunLogs.Length)
                 {
                     tempChromeRunLog = chromeRunLogs[i];
                 }
-                catch (System.Exception ex)
+                else
                 {
                     tempChromeRunLog = "";
                 }
 
-                try
+                if (i < firefoxRunLogs.Length)
                 {
                     tempFirefoxRunLog = firefoxRunLogs[i];
                 }
-                catch (System.Exception ex)
+                else
                 {
                     tempFirefoxRunLog = "";
                 }
@@ -380,7 +383,7 @@ namespace WebTestGui
                         if (unit.m_UnitName == tempRunLog.chromeUnitName)
                         {
                             unit.m_Actions.m_Actions[
-                                int.Parse(tempRunLog.chromeActionName)].SetChromeRunTime(tempRunLog.chromeTimeDelta);
+                                int.Parse(tempRunLog.chromeActionName)].SetChromeRunTime(tempRunLog.chromeTimeDelta / 1000);
                         }
                     }
                 }
@@ -392,14 +395,12 @@ namespace WebTestGui
                         if (unit.m_UnitName == tempRunLog.firefoxUnitName)
                         {
                             unit.m_Actions.m_Actions[
-                                int.Parse(tempRunLog.firefoxActionName)].SetFirefoxRunTime(tempRunLog.firefoxTimeDelta);
+                                int.Parse(tempRunLog.firefoxActionName)].SetFirefoxRunTime(tempRunLog.firefoxTimeDelta / 1000);
                         }
                     }
                 }
             }
         }
-
-        #region Extract time information from logs methods
 
         class RunLog
         {
@@ -418,14 +419,21 @@ namespace WebTestGui
 
         long TimeToMicroseconds(string timeStr)
         {
-            string[] parts = timeStr.Split(':');
-            int hours = int.Parse(parts[0]);
-            int minutes = int.Parse(parts[1]);
-            int seconds = int.Parse(parts[2]);
-            int microseconds = int.Parse(parts[3]);
+            try
+            {
+                string[] parts = timeStr.Split(':');
+                int hours = int.Parse(parts[0]);
+                int minutes = int.Parse(parts[1]);
+                int seconds = int.Parse(parts[2]);
+                int microseconds = int.Parse(parts[3]);
 
-            long totalMicros = hours * 3600L * 1000000L + minutes * 60L * 1000000L + seconds * 1000000L + microseconds;
-            return totalMicros;
+                long totalMicros = hours * 3600L * 1000000L + minutes * 60L * 1000000L + seconds * 1000000L + microseconds;
+                return totalMicros;
+            }
+            catch(Exception e)
+            {
+                return 0;
+            }
         }
 
         RunLog GetRunTimeFromRunLog(string chromeLog, string firefoxLog)
@@ -514,7 +522,7 @@ namespace WebTestGui
 
             await m_CurrentProcess.WaitForExitAsync();
 
-            await OnTestFinished();
+            OnTestFinished();
         }
 
         public async void StartJSLogFileWatcher(string logPath)
@@ -775,6 +783,8 @@ namespace WebTestGui
         public Test Test() { return m_TestTab.m_SelectedItem.m_Test; }
 
         Process m_CurrentProcess;
+
+        string m_TestStartTime;
 
         Console m_RunLogConsole;
         Console m_JsLogConsole;
