@@ -399,13 +399,7 @@ FodyWeavers.xsd
 
 test.py
 run.py
-# logs/firefox/*.log
-# logs/firefox/ltlogs/*.log
-# logs/chrome/*.log
-# logs/chrome/ltlogs/*.log
-# logs/*.log
-# logs/*.brk
-*/*.log
+*.log
 */vsinstaller/*
 wininstaller.cpp
 wininstaller.exe
