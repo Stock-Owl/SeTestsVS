@@ -1,5 +1,5 @@
 {
-  "name": "ble",
+  "name": "test",
   "browsers": [
     "chrome",
     "firefox"
@@ -11,23 +11,23 @@
       "refresh_rate": 1000,
       "retry_timeout": 1000
     },
-    "parent_log_path": "C:\\Users\\kmarton\\source\\repos\\SeTestsVS\\logs",
+    "parent_log_path": "C:\\dev\\SeTestsVS\\logs",
     "terminal_mode": false
   },
   "driver_options": {
     "accept_insecure_certs": true,
     "chrome_arguments": [],
     "firefox_arguments": [],
-    "keep_browser_open": false,
+    "keep_browser_open": true,
     "page_load_strategy": "normal",
     "timeout": {
-      "type": "script",
-      "value": 30000
+      "type": "pageLoad",
+      "value": 300000
     },
     "unhandled_prompt_behavior": "dismiss and notify"
   },
   "units": {
-    "ble 1": {
+    "Go to youtube": {
       "bindings": null,
       "backup_of": null,
       "actions": {
@@ -38,19 +38,8 @@
         },
         "1": {
           "type": "goto",
-          "break": false,
+          "break": true,
           "url": "https://www.github.com"
-        }
-      }
-    },
-    "ble 2": {
-      "bindings": null,
-      "backup_of": null,
-      "actions": {
-        "0": {
-          "type": "goto",
-          "break": false,
-          "url": "https://www.instagram.com/"
         }
       }
     }

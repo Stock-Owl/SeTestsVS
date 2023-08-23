@@ -282,7 +282,7 @@ namespace WebTestGui
             m_RunLogConsole.AddToConsoles("\n ------TESZT SZÜNETELTETVE \n");
             testStartButton.Text = "TESZT FOLYTATÁSA...";
 
-            // show breakpoint location (:c:ble 1:1)
+            // show breakpoint location (c:ble 1:1)
 
             m_TestTab.RefreshTabItems();
         }
