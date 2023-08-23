@@ -38,6 +38,8 @@
             idTextBox = new TextBox();
             actionTypeLabel = new Label();
             mainPanel = new Panel();
+            testRunTimeText = new Label();
+            testRunTimeLabel = new Label();
             ((System.ComponentModel.ISupportInitialize)breakpointOnPicture).BeginInit();
             ((System.ComponentModel.ISupportInitialize)breakpointOffPicture).BeginInit();
             ((System.ComponentModel.ISupportInitialize)binImage).BeginInit();
@@ -143,6 +145,8 @@
             // mainPanel
             // 
             mainPanel.BackColor = Color.FromArgb(45, 45, 50);
+            mainPanel.Controls.Add(testRunTimeText);
+            mainPanel.Controls.Add(testRunTimeLabel);
             mainPanel.Controls.Add(actionTypeLabel);
             mainPanel.Controls.Add(idTextBox);
             mainPanel.Controls.Add(binImage);
@@ -156,6 +160,32 @@
             mainPanel.Name = "mainPanel";
             mainPanel.Size = new Size(863, 150);
             mainPanel.TabIndex = 12;
+            // 
+            // testRunTimeText
+            // 
+            testRunTimeText.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            testRunTimeText.AutoSize = true;
+            testRunTimeText.BackColor = Color.Transparent;
+            testRunTimeText.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
+            testRunTimeText.ForeColor = Color.DimGray;
+            testRunTimeText.Location = new Point(310, 132);
+            testRunTimeText.Name = "testRunTimeText";
+            testRunTimeText.Size = new Size(31, 15);
+            testRunTimeText.TabIndex = 79;
+            testRunTimeText.Text = "0 ms";
+            // 
+            // testRunTimeLabel
+            // 
+            testRunTimeLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            testRunTimeLabel.AutoSize = true;
+            testRunTimeLabel.BackColor = Color.Transparent;
+            testRunTimeLabel.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
+            testRunTimeLabel.ForeColor = Color.Gray;
+            testRunTimeLabel.Location = new Point(153, 132);
+            testRunTimeLabel.Name = "testRunTimeLabel";
+            testRunTimeLabel.Size = new Size(157, 15);
+            testRunTimeLabel.TabIndex = 78;
+            testRunTimeLabel.Text = "Előző tesztelésen futási ideje:";
             // 
             // ExecuteJsAction
             // 
@@ -185,5 +215,7 @@
         private TextBox idTextBox;
         protected Label actionTypeLabel;
         private Panel mainPanel;
+        protected Label testRunTimeText;
+        protected Label testRunTimeLabel;
     }
 }

@@ -267,13 +267,7 @@ namespace WebTestGui
 
             m_RunLogConsole.AddToConsoles("\n ------TESZT LEÁLLÍTVA \n");
 
-            _STOP_JS_LOG_REQ = true;
-            _STOP_BRK_LOG_REQ = true;
-            File.WriteAllText(Test().GetRootLogDirectoryPath() + @"/file.brk", string.Empty);
-
-            Test().m_State = WebTestGui.Test.TestState.Edit;
-            testStartButton.Text = "TESZT INDÍTÁSA...";
-            m_TestTab.RefreshTabItems();
+            OnTestFinished();
         }
 
         public void OnTestBreak(string content)
@@ -282,7 +276,16 @@ namespace WebTestGui
             m_RunLogConsole.AddToConsoles("\n ------TESZT SZÜNETELTETVE \n");
             testStartButton.Text = "TESZT FOLYTATÁSA...";
 
-            // show breakpoint location (c:ble 1:1)
+            string[] contentParts = content.Split(':'); // (c:ble 1:1)
+
+            foreach (IUnit unit in Test().m_Units.m_Units)
+            {
+                if (unit.m_UnitName == contentParts[1])
+                {
+                    unitsPanel.ScrollControlIntoView((Control)unit);
+                    unit.OnBreakpointHit(int.Parse(contentParts[2]));
+                }
+            }
 
             m_TestTab.RefreshTabItems();
         }
@@ -305,15 +308,202 @@ namespace WebTestGui
             _STOP_BRK_LOG_REQ = true;
             File.WriteAllText(Test().GetRootLogDirectoryPath() + @"/file.brk", string.Empty);
 
-            m_RunLogConsole.AddToChrome("\n\n" + File.ReadAllText(Test().GetRootLogDirectoryPath() + @"/chrome/run.log"));
-            m_RunLogConsole.AddToFirefox("\n\n" + File.ReadAllText(Test().GetRootLogDirectoryPath() + @"/firefox/run.log"));
+            string chromeRunLog = File.ReadAllText(Test().GetRootLogDirectoryPath() + @"/chrome/run.log");
+            string firefoxRunLog = File.ReadAllText(Test().GetRootLogDirectoryPath() + @"/firefox/run.log");
+
+            m_RunLogConsole.AddToChrome("\n\n" + chromeRunLog);
+            m_RunLogConsole.AddToFirefox("\n\n" + firefoxRunLog);
 
             m_RunLogConsole.AddToConsoles("\n ------TESZT VÉGE \n");
+
+            LoadRunTimesToActions(chromeRunLog, firefoxRunLog);
+            
+            m_RunLogConsole.AddToConsoles("\n AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA \n");
+
+            foreach (IUnit unit in Test().m_Units.m_Units)
+            {
+                unit.SetRunTime();
+            }
 
             Test().m_State = WebTestGui.Test.TestState.Edit;
             testStartButton.Text = "TESZT INDÍTÁSA...";
             m_TestTab.RefreshTabItems();
+            RefreshUnitsPanel();
         }
+
+        void LoadRunTimesToActions(string chromeRunLog, string firefoxRunLog)
+        {
+            string[] chromeRunLogs = chromeRunLog.Split('\n');
+            string[] firefoxRunLogs = firefoxRunLog.Split('\n');
+
+            long chromePrevTime = 0;
+            long firefoxPrevTime = 0;
+            for (int i = 0; i < Math.Max(chromeRunLogs.Length, firefoxRunLogs.Length); i++)
+            {
+                string tempChromeRunLog;
+                string tempFirefoxRunLog;
+                try
+                {
+                    tempChromeRunLog = chromeRunLogs[i];
+                }
+                catch (System.Exception ex)
+                {
+                    tempChromeRunLog = "";
+                }
+
+                try
+                {
+                    tempFirefoxRunLog = firefoxRunLogs[i];
+                }
+                catch (System.Exception ex)
+                {
+                    tempFirefoxRunLog = "";
+                }
+
+                RunLog tempRunLog = GetRunTimeFromRunLog(tempChromeRunLog, tempFirefoxRunLog);
+
+                long chromeTimeToMicro = TimeToMicroseconds(tempRunLog.chromeTime);
+                long firefoxTimeToMicro = TimeToMicroseconds(tempRunLog.firefoxTime);
+
+                if (chromePrevTime != 0)
+                    tempRunLog.chromeTimeDelta = Math.Abs(chromeTimeToMicro - chromePrevTime);
+                chromePrevTime = chromeTimeToMicro;
+
+                if (firefoxPrevTime != 0)
+                    tempRunLog.firefoxTimeDelta = Math.Abs(firefoxTimeToMicro - firefoxPrevTime);
+                firefoxPrevTime = firefoxTimeToMicro;
+
+                if (tempRunLog.chromeUnitName != "" && tempRunLog.chromeActionName != "")
+                {
+                    foreach (IUnit unit in Test().m_Units.m_Units)
+                    {
+                        if (unit.m_UnitName == tempRunLog.chromeUnitName)
+                        {
+                            unit.m_Actions.m_Actions[
+                                int.Parse(tempRunLog.chromeActionName)].SetChromeRunTime(tempRunLog.chromeTimeDelta);
+                        }
+                    }
+                }
+
+                if (tempRunLog.firefoxUnitName != "" && tempRunLog.firefoxActionName != "")
+                {
+                    foreach (IUnit unit in Test().m_Units.m_Units)
+                    {
+                        if (unit.m_UnitName == tempRunLog.firefoxUnitName)
+                        {
+                            unit.m_Actions.m_Actions[
+                                int.Parse(tempRunLog.firefoxActionName)].SetFirefoxRunTime(tempRunLog.firefoxTimeDelta);
+                        }
+                    }
+                }
+            }
+        }
+
+        #region Extract time information from logs methods
+
+        class RunLog
+        {
+            public string chromeTime = "";
+            public long chromeTimeDelta = 0;
+
+            public string chromeUnitName = "";
+            public string chromeActionName = "";
+
+            public string firefoxTime = "";
+            public long firefoxTimeDelta = 0;
+
+            public string firefoxUnitName = "";
+            public string firefoxActionName = "";
+        }
+
+        long TimeToMicroseconds(string timeStr)
+        {
+            string[] parts = timeStr.Split(':');
+            int hours = int.Parse(parts[0]);
+            int minutes = int.Parse(parts[1]);
+            int seconds = int.Parse(parts[2]);
+            int microseconds = int.Parse(parts[3]);
+
+            long totalMicros = hours * 3600L * 1000000L + minutes * 60L * 1000000L + seconds * 1000000L + microseconds;
+            return totalMicros;
+        }
+
+        RunLog GetRunTimeFromRunLog(string chromeLog, string firefoxLog)
+        {
+            RunLog runLog = new RunLog();
+
+            {
+                int firstSlashIndex = chromeLog.IndexOf('/');
+                int secondSlashIndex = chromeLog.IndexOf('/', firstSlashIndex + 1);
+
+                if (firstSlashIndex != -1 && secondSlashIndex != -1)
+                {
+                    string extractedText = chromeLog.Substring(firstSlashIndex + 1, secondSlashIndex - firstSlashIndex - 1);
+                    runLog.chromeTime = extractedText;
+                }
+                else
+                {
+                    runLog.chromeTime = "";
+                }
+
+                int firstOpenBracketIndex = chromeLog.IndexOf('[');
+                int firstCloseBracketIndex = chromeLog.IndexOf(']');
+                int secondOpenBracketIndex = chromeLog.IndexOf('[', firstCloseBracketIndex + 1);
+                int secondCloseBracketIndex = chromeLog.IndexOf(']', secondOpenBracketIndex + 1);
+
+                if (firstOpenBracketIndex != -1 && firstCloseBracketIndex != -1 && secondOpenBracketIndex != -1 && secondCloseBracketIndex != -1)
+                {
+                    string firstExtractedText = chromeLog.Substring(firstOpenBracketIndex + 1, firstCloseBracketIndex - firstOpenBracketIndex - 1);
+                    string secondExtractedText = chromeLog.Substring(secondOpenBracketIndex + 1, secondCloseBracketIndex - secondOpenBracketIndex - 1);
+
+                    runLog.chromeUnitName = firstExtractedText.Split(':')[1];
+                    runLog.chromeActionName = secondExtractedText.Split(':')[1];
+                }
+                else
+                {
+                    runLog.chromeUnitName = "";
+                    runLog.chromeActionName = "";
+                }
+            }
+
+            {
+                int firstSlashIndex = firefoxLog.IndexOf('/');
+                int secondSlashIndex = firefoxLog.IndexOf('/', firstSlashIndex + 1);
+
+                if (firstSlashIndex != -1 && secondSlashIndex != -1)
+                {
+                    string extractedText = firefoxLog.Substring(firstSlashIndex + 1, secondSlashIndex - firstSlashIndex - 1);
+                    runLog.firefoxTime = extractedText;
+                }
+                else
+                {
+                    runLog.firefoxTime = "";
+                }
+
+                int firstOpenBracketIndex = firefoxLog.IndexOf('[');
+                int firstCloseBracketIndex = firefoxLog.IndexOf(']');
+                int secondOpenBracketIndex = firefoxLog.IndexOf('[', firstCloseBracketIndex + 1);
+                int secondCloseBracketIndex = firefoxLog.IndexOf(']', secondOpenBracketIndex + 1);
+
+                if (firstOpenBracketIndex != -1 && firstCloseBracketIndex != -1 && secondOpenBracketIndex != -1 && secondCloseBracketIndex != -1)
+                {
+                    string firstExtractedText = firefoxLog.Substring(firstOpenBracketIndex + 1, firstCloseBracketIndex - firstOpenBracketIndex - 1);
+                    string secondExtractedText = firefoxLog.Substring(secondOpenBracketIndex + 1, secondCloseBracketIndex - secondOpenBracketIndex - 1);
+
+                    runLog.firefoxUnitName = firstExtractedText.Split(':')[1];
+                    runLog.firefoxActionName = secondExtractedText.Split(':')[1];
+                }
+                else
+                {
+                    runLog.firefoxUnitName = "";
+                    runLog.firefoxActionName = "";
+                }
+            }
+
+            return runLog;
+        }
+
+        #endregion
 
         public async Task StartPython(string targetDir)
         {

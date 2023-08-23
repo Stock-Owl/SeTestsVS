@@ -33,6 +33,8 @@
             binImage = new PictureBox();
             idTextBox = new TextBox();
             mainPanel = new Panel();
+            testRunTimeText = new Label();
+            testRunTimeLabel = new Label();
             backupOfLabel = new Label();
             bindingsLabel = new Label();
             label2 = new Label();
@@ -91,6 +93,8 @@
             // mainPanel
             // 
             mainPanel.BackColor = Color.FromArgb(45, 45, 50);
+            mainPanel.Controls.Add(testRunTimeText);
+            mainPanel.Controls.Add(testRunTimeLabel);
             mainPanel.Controls.Add(backupOfLabel);
             mainPanel.Controls.Add(bindingsLabel);
             mainPanel.Controls.Add(label2);
@@ -111,6 +115,30 @@
             mainPanel.Name = "mainPanel";
             mainPanel.Size = new Size(1000, 97);
             mainPanel.TabIndex = 12;
+            // 
+            // testRunTimeText
+            // 
+            testRunTimeText.AutoSize = true;
+            testRunTimeText.BackColor = Color.Transparent;
+            testRunTimeText.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
+            testRunTimeText.ForeColor = Color.DimGray;
+            testRunTimeText.Location = new Point(235, 41);
+            testRunTimeText.Name = "testRunTimeText";
+            testRunTimeText.Size = new Size(31, 15);
+            testRunTimeText.TabIndex = 60;
+            testRunTimeText.Text = "0 ms";
+            // 
+            // testRunTimeLabel
+            // 
+            testRunTimeLabel.AutoSize = true;
+            testRunTimeLabel.BackColor = Color.Transparent;
+            testRunTimeLabel.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
+            testRunTimeLabel.ForeColor = Color.Gray;
+            testRunTimeLabel.Location = new Point(78, 41);
+            testRunTimeLabel.Name = "testRunTimeLabel";
+            testRunTimeLabel.Size = new Size(157, 15);
+            testRunTimeLabel.TabIndex = 59;
+            testRunTimeLabel.Text = "Előző tesztelésen futási ideje:";
             // 
             // backupOfLabel
             // 
@@ -305,5 +333,7 @@
         private PictureBox expandActionsButtton;
         private Label bindingsLabel;
         private Label backupOfLabel;
+        protected Label testRunTimeLabel;
+        protected Label testRunTimeText;
     }
 }

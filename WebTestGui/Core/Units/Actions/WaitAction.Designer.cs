@@ -40,6 +40,8 @@
             breakpointOffPicture = new PictureBox();
             breakpointOnPicture = new PictureBox();
             label2 = new Label();
+            testRunTimeText = new Label();
+            testRunTimeLabel = new Label();
             mainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)binImage).BeginInit();
             ((System.ComponentModel.ISupportInitialize)breakpointOffPicture).BeginInit();
@@ -61,6 +63,8 @@
             // mainPanel
             // 
             mainPanel.BackColor = Color.FromArgb(45, 45, 50);
+            mainPanel.Controls.Add(testRunTimeText);
+            mainPanel.Controls.Add(testRunTimeLabel);
             mainPanel.Controls.Add(amountTextField);
             mainPanel.Controls.Add(actionTypeLabel);
             mainPanel.Controls.Add(idTextBox);
@@ -183,6 +187,32 @@
             label2.TabIndex = 44;
             label2.Text = "Várakozási idő (ms):";
             // 
+            // testRunTimeText
+            // 
+            testRunTimeText.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            testRunTimeText.AutoSize = true;
+            testRunTimeText.BackColor = Color.Transparent;
+            testRunTimeText.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
+            testRunTimeText.ForeColor = Color.DimGray;
+            testRunTimeText.Location = new Point(386, 107);
+            testRunTimeText.Name = "testRunTimeText";
+            testRunTimeText.Size = new Size(31, 15);
+            testRunTimeText.TabIndex = 79;
+            testRunTimeText.Text = "0 ms";
+            // 
+            // testRunTimeLabel
+            // 
+            testRunTimeLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            testRunTimeLabel.AutoSize = true;
+            testRunTimeLabel.BackColor = Color.Transparent;
+            testRunTimeLabel.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
+            testRunTimeLabel.ForeColor = Color.Gray;
+            testRunTimeLabel.Location = new Point(229, 107);
+            testRunTimeLabel.Name = "testRunTimeLabel";
+            testRunTimeLabel.Size = new Size(157, 15);
+            testRunTimeLabel.TabIndex = 78;
+            testRunTimeLabel.Text = "Előző tesztelésen futási ideje:";
+            // 
             // WaitAction
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -212,5 +242,7 @@
         protected Label actionTypeLabel;
         private TextBox amountTextField;
         protected Label label2;
+        protected Label testRunTimeText;
+        protected Label testRunTimeLabel;
     }
 }

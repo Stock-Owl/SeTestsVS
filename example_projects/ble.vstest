@@ -53,6 +53,43 @@
           "url": "https://www.instagram.com/"
         }
       }
+    },
+    "ble 3": {
+      "bindings": null,
+      "backup_of": null,
+      "actions": {
+        "0": {
+          "type": "goto",
+          "break": false,
+          "url": "https://www.youtube.com"
+        },
+        "1": {
+          "type": "goto",
+          "break": false,
+          "url": "https://www.github.com"
+        },
+        "2": {
+          "type": "goto",
+          "break": false,
+          "url": "https://www.instagram.com/"
+        }
+      }
+    },
+    "ble 4": {
+      "bindings": null,
+      "backup_of": null,
+      "actions": {
+        "0": {
+          "type": "goto",
+          "break": true,
+          "url": "https://www.youtube.com"
+        },
+        "1": {
+          "type": "goto",
+          "break": false,
+          "url": "https://www.github.com"
+        }
+      }
     }
   }
 }

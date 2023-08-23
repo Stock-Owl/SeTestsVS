@@ -66,6 +66,13 @@ namespace WebTestGui
 
         public void Refresh(bool needWholePanelRefresh);
 
+        public void OnBreakpointHit();
+        public void OnBreakpointLeave();
+
+        public void SetChromeRunTime(long chromeRunTimeInMicroseconds);
+        public void SetFirefoxRunTime(long firefoxRunTimeInMicroseconds);
+        public Tuple<int, int> GetRunTime();
+
         public void OnBorderLineDraw(object sender, PaintEventArgs e);
 
         public Dictionary<string, object> GetJSONFormatted();

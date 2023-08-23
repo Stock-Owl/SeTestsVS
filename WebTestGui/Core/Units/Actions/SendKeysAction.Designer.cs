@@ -41,6 +41,9 @@
             singleLabel = new Label();
             label2 = new Label();
             mainPanel = new Panel();
+            keysLabel = new Label();
+            keysTextBox = new TextBox();
+            locatorTextBox = new ComboBox();
             valueLabel = new Label();
             locatorLabel = new Label();
             valueTextBox = new TextBox();
@@ -50,9 +53,8 @@
             enabledCheckBox = new CheckBox();
             label6 = new Label();
             displayedCheckbox = new CheckBox();
-            locatorTextBox = new ComboBox();
-            keysLabel = new Label();
-            keysTextBox = new TextBox();
+            testRunTimeText = new Label();
+            testRunTimeLabel = new Label();
             ((System.ComponentModel.ISupportInitialize)breakpointOnPicture).BeginInit();
             ((System.ComponentModel.ISupportInitialize)breakpointOffPicture).BeginInit();
             ((System.ComponentModel.ISupportInitialize)binImage).BeginInit();
@@ -195,6 +197,8 @@
             // mainPanel
             // 
             mainPanel.BackColor = Color.FromArgb(45, 45, 50);
+            mainPanel.Controls.Add(testRunTimeText);
+            mainPanel.Controls.Add(testRunTimeLabel);
             mainPanel.Controls.Add(keysLabel);
             mainPanel.Controls.Add(keysTextBox);
             mainPanel.Controls.Add(locatorTextBox);
@@ -224,13 +228,50 @@
             mainPanel.Size = new Size(863, 141);
             mainPanel.TabIndex = 12;
             // 
+            // keysLabel
+            // 
+            keysLabel.AutoSize = true;
+            keysLabel.BackColor = Color.Transparent;
+            keysLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            keysLabel.ForeColor = Color.White;
+            keysLabel.Location = new Point(159, 37);
+            keysLabel.Name = "keysLabel";
+            keysLabel.Size = new Size(66, 21);
+            keysLabel.TabIndex = 85;
+            keysLabel.Text = "Kulcsok:";
+            // 
+            // keysTextBox
+            // 
+            keysTextBox.BackColor = Color.FromArgb(40, 40, 43);
+            keysTextBox.Font = new Font("Segoe UI", 8F, FontStyle.Italic, GraphicsUnit.Point);
+            keysTextBox.ForeColor = Color.DarkGray;
+            keysTextBox.Location = new Point(231, 37);
+            keysTextBox.Name = "keysTextBox";
+            keysTextBox.PlaceholderText = "Kulcsok...";
+            keysTextBox.Size = new Size(308, 22);
+            keysTextBox.TabIndex = 84;
+            // 
+            // locatorTextBox
+            // 
+            locatorTextBox.BackColor = Color.FromArgb(40, 40, 43);
+            locatorTextBox.FlatStyle = FlatStyle.Popup;
+            locatorTextBox.Font = new Font("Segoe UI Semibold", 8F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+            locatorTextBox.ForeColor = Color.DarkGray;
+            locatorTextBox.FormattingEnabled = true;
+            locatorTextBox.Items.AddRange(new object[] { "xpath", "css_selector" });
+            locatorTextBox.Location = new Point(201, 65);
+            locatorTextBox.Name = "locatorTextBox";
+            locatorTextBox.Size = new Size(192, 21);
+            locatorTextBox.TabIndex = 83;
+            locatorTextBox.Text = "xpath";
+            // 
             // valueLabel
             // 
             valueLabel.AutoSize = true;
             valueLabel.BackColor = Color.Transparent;
             valueLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             valueLabel.ForeColor = Color.White;
-            valueLabel.Location = new Point(129, 107);
+            valueLabel.Location = new Point(129, 92);
             valueLabel.Name = "valueLabel";
             valueLabel.Size = new Size(48, 21);
             valueLabel.TabIndex = 82;
@@ -242,7 +283,7 @@
             locatorLabel.BackColor = Color.Transparent;
             locatorLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             locatorLabel.ForeColor = Color.White;
-            locatorLabel.Location = new Point(129, 80);
+            locatorLabel.Location = new Point(129, 65);
             locatorLabel.Name = "locatorLabel";
             locatorLabel.Size = new Size(66, 21);
             locatorLabel.TabIndex = 81;
@@ -253,7 +294,7 @@
             valueTextBox.BackColor = Color.FromArgb(40, 40, 43);
             valueTextBox.Font = new Font("Segoe UI", 8F, FontStyle.Italic, GraphicsUnit.Point);
             valueTextBox.ForeColor = Color.DarkGray;
-            valueTextBox.Location = new Point(201, 107);
+            valueTextBox.Location = new Point(201, 92);
             valueTextBox.Name = "valueTextBox";
             valueTextBox.PlaceholderText = "Érték...";
             valueTextBox.Size = new Size(192, 22);
@@ -331,42 +372,31 @@
             displayedCheckbox.TabIndex = 65;
             displayedCheckbox.UseVisualStyleBackColor = false;
             // 
-            // locatorTextBox
+            // testRunTimeText
             // 
-            locatorTextBox.BackColor = Color.FromArgb(40, 40, 43);
-            locatorTextBox.FlatStyle = FlatStyle.Popup;
-            locatorTextBox.Font = new Font("Segoe UI Semibold", 8F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
-            locatorTextBox.ForeColor = Color.DarkGray;
-            locatorTextBox.FormattingEnabled = true;
-            locatorTextBox.Items.AddRange(new object[] { "xpath", "css_selector" });
-            locatorTextBox.Location = new Point(201, 80);
-            locatorTextBox.Name = "locatorTextBox";
-            locatorTextBox.Size = new Size(192, 21);
-            locatorTextBox.TabIndex = 83;
-            locatorTextBox.Text = "xpath";
+            testRunTimeText.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            testRunTimeText.AutoSize = true;
+            testRunTimeText.BackColor = Color.Transparent;
+            testRunTimeText.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
+            testRunTimeText.ForeColor = Color.DimGray;
+            testRunTimeText.Location = new Point(388, 123);
+            testRunTimeText.Name = "testRunTimeText";
+            testRunTimeText.Size = new Size(31, 15);
+            testRunTimeText.TabIndex = 87;
+            testRunTimeText.Text = "0 ms";
             // 
-            // keysLabel
+            // testRunTimeLabel
             // 
-            keysLabel.AutoSize = true;
-            keysLabel.BackColor = Color.Transparent;
-            keysLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            keysLabel.ForeColor = Color.White;
-            keysLabel.Location = new Point(159, 52);
-            keysLabel.Name = "keysLabel";
-            keysLabel.Size = new Size(66, 21);
-            keysLabel.TabIndex = 85;
-            keysLabel.Text = "Kulcsok:";
-            // 
-            // keysTextBox
-            // 
-            keysTextBox.BackColor = Color.FromArgb(40, 40, 43);
-            keysTextBox.Font = new Font("Segoe UI", 8F, FontStyle.Italic, GraphicsUnit.Point);
-            keysTextBox.ForeColor = Color.DarkGray;
-            keysTextBox.Location = new Point(231, 52);
-            keysTextBox.Name = "keysTextBox";
-            keysTextBox.PlaceholderText = "Kulcsok...";
-            keysTextBox.Size = new Size(308, 22);
-            keysTextBox.TabIndex = 84;
+            testRunTimeLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            testRunTimeLabel.AutoSize = true;
+            testRunTimeLabel.BackColor = Color.Transparent;
+            testRunTimeLabel.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
+            testRunTimeLabel.ForeColor = Color.Gray;
+            testRunTimeLabel.Location = new Point(231, 123);
+            testRunTimeLabel.Name = "testRunTimeLabel";
+            testRunTimeLabel.Size = new Size(157, 15);
+            testRunTimeLabel.TabIndex = 86;
+            testRunTimeLabel.Text = "Előző tesztelésen futási ideje:";
             // 
             // SendKeysAction
             // 
@@ -410,5 +440,7 @@
         private ComboBox locatorTextBox;
         protected Label keysLabel;
         private TextBox keysTextBox;
+        protected Label testRunTimeText;
+        protected Label testRunTimeLabel;
     }
 }

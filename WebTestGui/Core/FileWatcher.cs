@@ -37,15 +37,11 @@
             try
             {
                 string content = await File.ReadAllTextAsync(filePath);
-                if (content.Split('\n').Length > 2)
+                if (m_ClearLogImmediately)
                 {
-                    if (m_ClearLogImmediately)
-                    {
-                        await File.WriteAllTextAsync(filePath, string.Empty);
-                    }
-                    return content;
+                    await File.WriteAllTextAsync(filePath, string.Empty);
                 }
-                return "";
+                return content;
             }
             catch (System.Exception ex)
             {

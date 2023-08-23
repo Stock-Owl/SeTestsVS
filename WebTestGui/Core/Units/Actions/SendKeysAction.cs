@@ -56,6 +56,40 @@ namespace WebTestGui
         {
         }
 
+        public void OnBreakpointHit()
+        {
+            mainPanel.BackColor = Color.FromArgb(255, 129, 27, 40);
+        }
+        public void OnBreakpointLeave()
+        {
+            mainPanel.BackColor = Color.FromArgb(255, 45, 45, 50);
+        }
+
+        long m_ChromeRunTimeInMicroseconds = 0;
+        long m_FirefoxRunTimeInMicroseconds = 0;
+
+        public void SetChromeRunTime(long chromeRunTimeInMicroseconds)
+        {
+            m_ChromeRunTimeInMicroseconds = chromeRunTimeInMicroseconds;
+
+            testRunTimeText.Text =
+                m_ChromeRunTimeInMicroseconds.ToString() + " / " + m_FirefoxRunTimeInMicroseconds.ToString() + " ms";
+
+        }
+        public void SetFirefoxRunTime(long firefoxRunTimeInMicroseconds)
+        {
+            m_FirefoxRunTimeInMicroseconds = firefoxRunTimeInMicroseconds;
+
+            testRunTimeText.Text =
+                m_ChromeRunTimeInMicroseconds.ToString() + " / " + m_FirefoxRunTimeInMicroseconds.ToString() + " ms";
+
+        }
+        public Tuple<int, int> GetRunTime()
+        {
+            return new Tuple<int, int>(
+                int.Parse(testRunTimeText.Text.Split(" ")[0]), int.Parse(testRunTimeText.Text.Split(" ")[2]));
+        }
+
         public void OnBorderLineDraw(object sender, PaintEventArgs e)
         {
             base.OnPaint(e);

@@ -41,6 +41,7 @@
             singleLabel = new Label();
             label2 = new Label();
             mainPanel = new Panel();
+            locatorTextBox = new ComboBox();
             valueLabel = new Label();
             locatorLabel = new Label();
             valueTextBox = new TextBox();
@@ -50,7 +51,8 @@
             enabledCheckBox = new CheckBox();
             label6 = new Label();
             displayedCheckbox = new CheckBox();
-            locatorTextBox = new ComboBox();
+            testRunTimeText = new Label();
+            testRunTimeLabel = new Label();
             ((System.ComponentModel.ISupportInitialize)breakpointOnPicture).BeginInit();
             ((System.ComponentModel.ISupportInitialize)breakpointOffPicture).BeginInit();
             ((System.ComponentModel.ISupportInitialize)binImage).BeginInit();
@@ -193,6 +195,8 @@
             // mainPanel
             // 
             mainPanel.BackColor = Color.FromArgb(45, 45, 50);
+            mainPanel.Controls.Add(testRunTimeText);
+            mainPanel.Controls.Add(testRunTimeLabel);
             mainPanel.Controls.Add(locatorTextBox);
             mainPanel.Controls.Add(valueLabel);
             mainPanel.Controls.Add(locatorLabel);
@@ -220,13 +224,27 @@
             mainPanel.Size = new Size(863, 146);
             mainPanel.TabIndex = 12;
             // 
+            // locatorTextBox
+            // 
+            locatorTextBox.BackColor = Color.FromArgb(40, 40, 43);
+            locatorTextBox.FlatStyle = FlatStyle.Popup;
+            locatorTextBox.Font = new Font("Segoe UI Semibold", 8F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+            locatorTextBox.ForeColor = Color.DarkGray;
+            locatorTextBox.FormattingEnabled = true;
+            locatorTextBox.Items.AddRange(new object[] { "xpath", "css_selector" });
+            locatorTextBox.Location = new Point(194, 47);
+            locatorTextBox.Name = "locatorTextBox";
+            locatorTextBox.Size = new Size(192, 21);
+            locatorTextBox.TabIndex = 79;
+            locatorTextBox.Text = "xpath";
+            // 
             // valueLabel
             // 
             valueLabel.AutoSize = true;
             valueLabel.BackColor = Color.Transparent;
             valueLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             valueLabel.ForeColor = Color.White;
-            valueLabel.Location = new Point(122, 94);
+            valueLabel.Location = new Point(122, 74);
             valueLabel.Name = "valueLabel";
             valueLabel.Size = new Size(48, 21);
             valueLabel.TabIndex = 78;
@@ -238,7 +256,7 @@
             locatorLabel.BackColor = Color.Transparent;
             locatorLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             locatorLabel.ForeColor = Color.White;
-            locatorLabel.Location = new Point(122, 67);
+            locatorLabel.Location = new Point(122, 47);
             locatorLabel.Name = "locatorLabel";
             locatorLabel.Size = new Size(66, 21);
             locatorLabel.TabIndex = 77;
@@ -249,7 +267,7 @@
             valueTextBox.BackColor = Color.FromArgb(40, 40, 43);
             valueTextBox.Font = new Font("Segoe UI", 8F, FontStyle.Italic, GraphicsUnit.Point);
             valueTextBox.ForeColor = Color.DarkGray;
-            valueTextBox.Location = new Point(194, 94);
+            valueTextBox.Location = new Point(194, 74);
             valueTextBox.Name = "valueTextBox";
             valueTextBox.PlaceholderText = "Érték...";
             valueTextBox.Size = new Size(192, 22);
@@ -327,19 +345,31 @@
             displayedCheckbox.TabIndex = 65;
             displayedCheckbox.UseVisualStyleBackColor = false;
             // 
-            // locatorTextBox
+            // testRunTimeText
             // 
-            locatorTextBox.BackColor = Color.FromArgb(40, 40, 43);
-            locatorTextBox.FlatStyle = FlatStyle.Popup;
-            locatorTextBox.Font = new Font("Segoe UI Semibold", 8F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
-            locatorTextBox.ForeColor = Color.DarkGray;
-            locatorTextBox.FormattingEnabled = true;
-            locatorTextBox.Items.AddRange(new object[] { "xpath", "css_selector" });
-            locatorTextBox.Location = new Point(194, 67);
-            locatorTextBox.Name = "locatorTextBox";
-            locatorTextBox.Size = new Size(192, 21);
-            locatorTextBox.TabIndex = 79;
-            locatorTextBox.Text = "xpath";
+            testRunTimeText.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            testRunTimeText.AutoSize = true;
+            testRunTimeText.BackColor = Color.Transparent;
+            testRunTimeText.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
+            testRunTimeText.ForeColor = Color.DimGray;
+            testRunTimeText.Location = new Point(312, 126);
+            testRunTimeText.Name = "testRunTimeText";
+            testRunTimeText.Size = new Size(31, 15);
+            testRunTimeText.TabIndex = 81;
+            testRunTimeText.Text = "0 ms";
+            // 
+            // testRunTimeLabel
+            // 
+            testRunTimeLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            testRunTimeLabel.AutoSize = true;
+            testRunTimeLabel.BackColor = Color.Transparent;
+            testRunTimeLabel.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
+            testRunTimeLabel.ForeColor = Color.Gray;
+            testRunTimeLabel.Location = new Point(155, 126);
+            testRunTimeLabel.Name = "testRunTimeLabel";
+            testRunTimeLabel.Size = new Size(157, 15);
+            testRunTimeLabel.TabIndex = 80;
+            testRunTimeLabel.Text = "Előző tesztelésen futási ideje:";
             // 
             // ClickAction
             // 
@@ -381,5 +411,7 @@
         protected Label locatorLabel;
         private TextBox valueTextBox;
         private ComboBox locatorTextBox;
+        protected Label testRunTimeText;
+        protected Label testRunTimeLabel;
     }
 }

@@ -49,6 +49,11 @@ namespace WebTestGui
 
         public void Refresh();
 
+        public void OnBreakpointHit(int actionIndex);
+        public void OnBreakpointLeave();
+
+        public void SetRunTime();
+
         public void OnBorderLineDraw(object sender, PaintEventArgs e);
 
         public Dictionary<string, object> GetJSONFormatted();

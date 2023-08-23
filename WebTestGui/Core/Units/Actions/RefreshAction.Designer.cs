@@ -38,6 +38,8 @@
             idLabel = new Label();
             breakpointOffPicture = new PictureBox();
             breakpointOnPicture = new PictureBox();
+            testRunTimeText = new Label();
+            testRunTimeLabel = new Label();
             mainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)binImage).BeginInit();
             ((System.ComponentModel.ISupportInitialize)breakpointOffPicture).BeginInit();
@@ -59,6 +61,8 @@
             // mainPanel
             // 
             mainPanel.BackColor = Color.FromArgb(45, 45, 50);
+            mainPanel.Controls.Add(testRunTimeText);
+            mainPanel.Controls.Add(testRunTimeLabel);
             mainPanel.Controls.Add(actionTypeLabel);
             mainPanel.Controls.Add(idTextBox);
             mainPanel.Controls.Add(binImage);
@@ -155,6 +159,32 @@
             breakpointOnPicture.TabStop = false;
             breakpointOnPicture.Click += breakpointOnPicture_Click;
             // 
+            // testRunTimeText
+            // 
+            testRunTimeText.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            testRunTimeText.AutoSize = true;
+            testRunTimeText.BackColor = Color.Transparent;
+            testRunTimeText.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
+            testRunTimeText.ForeColor = Color.DimGray;
+            testRunTimeText.Location = new Point(334, 39);
+            testRunTimeText.Name = "testRunTimeText";
+            testRunTimeText.Size = new Size(31, 15);
+            testRunTimeText.TabIndex = 79;
+            testRunTimeText.Text = "0 ms";
+            // 
+            // testRunTimeLabel
+            // 
+            testRunTimeLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            testRunTimeLabel.AutoSize = true;
+            testRunTimeLabel.BackColor = Color.Transparent;
+            testRunTimeLabel.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
+            testRunTimeLabel.ForeColor = Color.Gray;
+            testRunTimeLabel.Location = new Point(177, 39);
+            testRunTimeLabel.Name = "testRunTimeLabel";
+            testRunTimeLabel.Size = new Size(157, 15);
+            testRunTimeLabel.TabIndex = 78;
+            testRunTimeLabel.Text = "Előző tesztelésen futási ideje:";
+            // 
             // RefreshAction
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -182,5 +212,7 @@
         private PictureBox breakpointOnPicture;
         private PictureBox breakpointOffPicture;
         protected Label actionTypeLabel;
+        protected Label testRunTimeText;
+        protected Label testRunTimeLabel;
     }
 }

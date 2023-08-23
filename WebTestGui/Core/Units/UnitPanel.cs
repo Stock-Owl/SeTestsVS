@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using Python.Runtime;
 
 namespace WebTestGui
 {
@@ -103,6 +104,41 @@ namespace WebTestGui
 
             SetUnitBindings();
             SetUnitBackupOf();
+        }
+
+        public void OnBreakpointHit(int actionIndex)
+        {
+            OnExpandActionsButttonClick(null!, null!);
+
+            mainPanel.BackColor = Color.FromArgb(255, 129, 27, 40);
+            actionsPanel.BackColor = Color.FromArgb(255, 109, 27, 40);
+
+            m_Actions.m_Actions[actionIndex].OnBreakpointHit();
+        }
+
+        public void OnBreakpointLeave()
+        {
+            BackColor = Color.FromArgb(255, 45, 45, 50);
+            actionsPanel.BackColor = Color.FromArgb(255, 45, 45, 50);
+
+            foreach (IAction action in m_Actions.m_Actions)
+            {
+                action.OnBreakpointLeave();
+            }
+        }
+
+        public void SetRunTime()
+        {
+            // Must call only after the actions times set
+            int chromeSum = 0;
+            int firefoxSum = 0;
+            foreach (IAction action in m_Actions.m_Actions)
+            {
+                Tuple<int, int> sum = action.GetRunTime();
+                chromeSum += sum.Item1;
+                firefoxSum += sum.Item2;
+            }
+            testRunTimeText.Text = (chromeSum.ToString() + " / " + firefoxSum.ToString() + " ms");
         }
 
         public void OnBorderLineDraw(object sender, PaintEventArgs e)
