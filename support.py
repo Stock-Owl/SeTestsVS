@@ -33,6 +33,36 @@ class Support:
                 f.write(time_)
             f.write(log_line)
 
+    def LogProc(path_: str, log_line: str, time_disabled: bool = False) -> None:
+        
+        path = f"{path_}/process.log"
+
+        try:
+            assert Support.exists(path)
+        except:
+            with open(path, mode='w', encoding='utf-8') as f:
+                f.write("")
+        
+        log_line = f"✅ DONE: {log_line}\n"
+        with open(path, mode='a+', encoding='utf-8') as f:
+            f.write(log_line)
+        Support.LogAll(path_, log_line, time_disabled=time_disabled)
+
+    def LogError(path_: str, log_line: str,  time_disabled: bool = False) -> None:
+
+        path = f"{path_}/error.log"
+
+        try:
+            assert Support.exists(path)
+        except:
+            with open(path, mode='w', encoding='utf-8') as f:
+                f.write("")
+
+        log_line = f"{log_line}\n"
+        with open(path, mode='a+', encoding='utf-8') as f:
+            f.write(log_line)
+        Support.LogAll(path_, log_line, time_disabled=time_disabled)
+
     def LogJS(
             path_: str,
             retry_timeout: int,
@@ -79,32 +109,52 @@ class Support:
                         break
                     else: raise ValueError("LogJS takes either a string or a selenium.common.exceptions.JavascriptException as an argument")
         
-    def LogProc(path_: str, log_line: str, time_disabled: bool = False) -> None:
+    def LogBrowserJSLog(
+            driver: ChromeDriver,
+            log_js_retry_timeout: int = None,
+            parent_log_path: str = None,
+            **overflow) -> None:    #overflow not used
         
-        path = f"{path_}/process.log"
+        """
+        Appends the current JavaScript Console Logs to the end of the file.
+        In return, we should get an empty file.
+        An empty file means that the other process has used the console logs,
+        and finished all tasks with the file. AKA the file is safe to write in.
+
+        Args:
+            * (bool) active: wether the Logging process is active or not. (does it write to the output file?)
+            * (str) path: path to the log file
+            * (int) refresh_rate: the amout of time (in ms) the program waits before trying to update the logs
+            * (int) retry_timeout: the amout of time (in ms) the program waits before trying to write the logs (if the file was still in use)
+        """
+        from time import sleep
+
+        path: str = f"{parent_log_path}/../js.log"
+        fuckup: int | float = log_js_retry_timeout  / 1000
 
         try:
             assert Support.exists(path)
         except:
             with open(path, mode='w', encoding='utf-8') as f:
                 f.write("")
+
+        browser_logs: list[dict[str, str | int]] = driver.get_log('browser')
+
+        while True:
+            with open(path, mode = 'r+', encoding = 'utf-8') as f:
+                contents = f.read()
+            if contents != '':
+                sleep(fuckup)
+                continue
+            with open(path, mode = 'a+', encoding = 'utf-8') as f:
+                for i in range(len(browser_logs)):
+                    log = browser_logs[i]
+                    # The reason it's processed with {i} and printed as such
+                    # is that no identical logs can exist in `processed`
+                    log_line = \
+                    f"{i} ❗ JavaScript:\n{log['source']} — {log['level']}:\n{log['message']}\n\t{log['timestamp']}\n#\n"
+                    f.write(log_line)
+                    Support.LogAll(path = parent_log_path, log_line = log_line)
+            break
         
-        log_line = f"✅ DONE: {log_line}\n"
-        with open(path, mode='a+', encoding='utf-8') as f:
-            f.write(log_line)
-        Support.LogAll(path_, log_line, time_disabled=time_disabled)
-
-    def LogError(path_: str, log_line: str,  time_disabled: bool = False) -> None:
-
-        path = f"{path_}/error.log"
-
-        try:
-            assert Support.exists(path)
-        except:
-            with open(path, mode='w', encoding='utf-8') as f:
-                f.write("")
-
-        log_line = f"{log_line}\n"
-        with open(path, mode='a+', encoding='utf-8') as f:
-            f.write(log_line)
-        Support.LogAll(path_, log_line, time_disabled=time_disabled)
+        print("Logger finished")
