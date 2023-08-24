@@ -1,20 +1,14 @@
 from selenium.webdriver.chrome.webdriver import WebDriver as ChromeDriver
 from selenium.webdriver.chrome.options import Options as ChromeOptions
-# from selenium.webdriver.chrome.service import Service as ChromeService
-from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.firefox.webdriver import WebDriver as FirefoxDriver
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
-# from selenium.webdriver.firefox.service import Service as FirefoxService
-from selenium.webdriver.remote.webelement import WebElement
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions
-from selenium.common.exceptions import JavascriptException as SeJSException
 
 from support import Support
+from actions import Actions
 
 from traceback import format_exc, format_stack
 
-from multiprocessing import Process, Array, Value
+from multiprocessing import Process, Value
 from ctypes import c_char_p as cstring
 from copy import copy
 from os import getpid
@@ -173,7 +167,7 @@ class Core:
         return (chrome, firefox)
 
     # should be preloaded JSON ergo dictionary
-    def CreateDriverProcesses(json: dict[str], shared_log_size: int = 16) -> list[Process]:
+    def CreateDriverProcesses(json: dict[str]) -> list[Process]:
         browsers: list[str] = []
         for browser in json['browsers']:
             browsers.append(browser.lower())
@@ -188,64 +182,30 @@ class Core:
 
         units = json["units"]
         options: dict = json["options"]
-        parent_log_path = options["parent_log_path"]
-        log_js_args = options["log_JS"]
+        parent_log_path = options["parent_log_path"],
+        log_js_retry_timeout = options["log_JS_retry_timeout"],
         terminal_mode = options["terminal_mode"]
         keep_browser_open = json["driver_options"]["keep_browser_open"]
-        active_logging: bool = log_js_args["active"]
         testname: str = json["name"]
 
         processes: list[Process] = []
-        if "chrome" in browsers:
-            # we will probably never need more than 16 (on log's size is 4, therefore 4 * 16 = 64)
-            s_chrome = Array(cstring, shared_log_size * 4)
-            parent_log_path = options["parent_log_path"]
-            s_chrome_state = Value('b', True)
+        parent_log_path = options["parent_log_path"]
 
-            chrome_kwargs: dict = \
-            {
-                "options": browser_options[0],
-                "units": units,
-                "testname": testname,
-                "shared_state": s_chrome_state,
-                "shared_arr": s_chrome,
-                "log_js_args": log_js_args,
-                "parent_log_path": f"{parent_log_path}/chrome",
-                "terminal_mode": terminal_mode,
-                "keep_browser_open": keep_browser_open
-            }
-            chrome_exec = Process(target=Core.ChromeExec, kwargs=copy(chrome_kwargs))
-            processes.append(chrome_exec)
+        kwargs: dict = \
+        {
+            "options": browser_options[0],
+            "units": units,
+            "testname": testname,
+            "log_js_retry_timeout": log_js_retry_timeout,
+            "terminal_mode": terminal_mode,
+            "keep_browser_open": keep_browser_open
+        }
 
-            if active_logging:
-                chrome_logger = Process(target= Core.AutoLogger, kwargs=copy(chrome_kwargs))
-                processes.append(chrome_logger)
+        chrome_exec = Process(target=Core.ChromeExec, kwargs=copy(kwargs, parent_log_path=f"{parent_log_path}/chrome"))
+        processes.append(chrome_exec)
 
-
-        if "firefox" in browsers:
-            # we will probably never need more than 16 (on log's size is 4, therefore 4 * 16 = 64)
-            s_firefox: Array = Array(cstring, shared_log_size * 4)
-            parent_log_path = options["parent_log_path"]
-            s_firefox_state = Value('b', True)
-
-            firefox_kwargs: dict = \
-            {
-                "options": browser_options[1],
-                "units": units,
-                "testname": testname,
-                "shared_state": s_firefox_state,
-                "shared_arr": s_firefox,
-                "log_js_args": log_js_args,
-                "parent_log_path": f"{parent_log_path}/firefox",
-                "terminal_mode": terminal_mode,
-                "keep_browser_open": keep_browser_open
-            }
-            firefox_exec = Process(target=Core.FirefoxExec , kwargs=copy(firefox_kwargs))
-            # neither loggers are used because the geckodriver is a fucking bitch
-            # firefox_logger = Process(target= Core.AutoLogger, kwargs=copy(firefox_kwargs))
-
-            processes.append(firefox_exec)
-            # processes.append(firefox_logger)
+        firefox_exec = Process(target=Core.FirefoxExec , kwargs=copy(kwargs, parent_log_path=f"{parent_log_path}/firefox"))
+        processes.append(firefox_exec)
 
         return processes
 
@@ -253,11 +213,9 @@ class Core:
         options: ChromeOptions = None,
         units: dict[str] = None,
         testname: str = None,
-        shared_state: Value = None,
-        shared_arr: Array = None,
         keep_browser_open: bool = None,
         parent_log_path: str = None,
-        log_js_args: dict[str] = None,
+        log_js_retry_timeout: int = None,
         **overflow) -> None:
 
         print("Chrome PID:", getpid())
@@ -315,23 +273,23 @@ class Core:
                     match action["type"]:
                         case "goto":
                             url = action["url"]
-                            Core.Goto(driver, url)
+                            Actions.Goto(driver, url)
                         case "back":
-                            Core.Back(driver)
+                            Actions.Back(driver)
                         case "forward":
-                            Core.Forward(driver)
+                            Actions.Forward(driver)
                         case "refresh":
-                            Core.Refresh(driver)
+                            Actions.Refresh(driver)
                         case "js_execute":
                             commands = action["commands"]
-                            Core.ExecuteJS(driver, commands, path=parent_log_path, log_JS_args=log_js_args)
+                            Actions.ExecuteJS(driver, commands, path=parent_log_path, retry_timeout=log_js_retry_timeout)
                         case "wait":
                             time = action['amount']
-                            Core.Wait(driver, time)
+                            Actions.Wait(driver, time)
                         case "wait_for":
-                            Core.WaitFor(driver, action)
+                            Actions.WaitFor(driver, action)
                         case "click":
-                            Core.ElementAction(
+                            Actions.ElementAction(
                                 driver,
                                 action = 'click',
                                 locator = action['locator'],
@@ -341,7 +299,7 @@ class Core:
                                 isEnabled = action['enabled'],
                                 isSelected = action['selected'])
                         case "send_keys":
-                            Core.ElementAction(
+                            Actions.ElementAction(
                                 driver,
                                 action = 'send_keys',
                                 locator = action['locator'],
@@ -352,7 +310,7 @@ class Core:
                                 isEnabled = action['enabled'],
                                 isSelected = action['selected'])
                         case "clear":
-                            Core.ElementAction(
+                            Actions.ElementAction(
                                 driver,
                                 action = 'clear',
                                 locator = action['locator'],
@@ -400,19 +358,6 @@ class Core:
                     root = stack_parts[1]
                     Support.LogError(parent_log_path, f"\t[{x}] ORIGIN:\t{origin}\n\t[{x}] ROOT: {root}\t", time_disabled=True)
                 Support.LogError(parent_log_path, "----------------------------------------------------------------\n", time_disabled=True)
-                
-            # this is the part that processes the brwoser logs and puts them into the shared array
-            # use finally clause
-            finally:
-                """
-                    * driver.get_log('browser')     WORKS
-                    ! driver.get_log('driver')      DOESN'T WORK
-                    ! driver.get_log('client')      DOESN'T WORK
-                    ! driver.get_log('server')      DOESN'T WORK
-                """
-                browser_logs: list[dict[str]] = driver.get_log('browser')
-                Core.SharedLogDumper(logs = browser_logs, target = shared_arr, target_size = len(shared_arr))
-                pass
 
         if not keep_browser_open:
             driver.quit()
@@ -445,18 +390,15 @@ class Core:
                 f"DATE: {today}\n-------------------------------------\n\n{testname}\n{current_log}\n-------------------------------------\n"
                 f.write(to_write)
 
-        shared_state.value = False
         print("Chrome finished")
 
     def FirefoxExec(                    
         options: FirefoxOptions = None,
         units: dict[str] = None,
         testname: str = None,
-        shared_state: Value = None,
-        shared_arr: Array = None,
         keep_browser_open: bool = None,
         parent_log_path: str = None,
-        log_js_args: dict[str] = None,
+        log_js_retry_timeout: int = None,
         **overflow) -> None:
 
         print("Firefox PID:", getpid())
@@ -495,11 +437,11 @@ class Core:
                     if action["break"]:
                         try:
                             with open(f"{parent_log_path}/../file.brk", mode='a+', encoding='utf-8') as f:
-                                f.write(f"c:{uname}:{aname}\n")
+                                f.write(f"f:{uname}:{aname}\n")
 
                         except FileNotFoundError:
                             with open(f"{parent_log_path}/../file.brk", mode='w', encoding='utf-8') as f:
-                                f.write(f"c:{uname}:{aname}\n")
+                                f.write(f"f:{uname}:{aname}\n")
 
                         isempty: bool = False
                         while not isempty:
@@ -515,23 +457,23 @@ class Core:
                     match action["type"]:
                         case "goto":
                             url = action["url"]
-                            Core.Goto(driver, url)
+                            Actions.Goto(driver, url)
                         case "back":
-                            Core.Back(driver)
+                            Actions.Back(driver)
                         case "forward":
-                            Core.Forward(driver)
+                            Actions.Forward(driver)
                         case "refresh":
-                            Core.Refresh(driver)
+                            Actions.Refresh(driver)
                         case "js_execute":
                             commands = action["commands"]
-                            Core.ExecuteJS(driver, commands, log_JS_args=log_js_args)
+                            Actions.ExecuteJS(driver, commands, retry_timeout=log_js_retry_timeout)
                         case "wait":
                             time = action["amount"]
-                            Core.Wait(driver = driver, time_ = time)
+                            Actions.Wait(driver = driver, time_ = time)
                         case "wait_for":
-                            Core.WaitFor(driver, action)
+                            Actions.WaitFor(driver, action)
                         case "click":
-                            Core.ElementAction(
+                            Actions.ElementAction(
                             driver,
                             action = 'click',
                             locator = action['locator'],
@@ -541,7 +483,7 @@ class Core:
                             isEnabled = action['enabled'],
                             isSelected = action['selected'])
                         case "send_keys":
-                            Core.ElementAction(
+                            Actions.ElementAction(
                             driver,
                             action = 'send_keys',
                             locator = action['locator'],
@@ -552,7 +494,7 @@ class Core:
                             isEnabled = action['enabled'],
                             isSelected = action['selected'])
                         case "clear":
-                            Core.ElementAction(
+                            Actions.ElementAction(
                                 driver,
                             action = 'clear',
                             locator = action['locator'],
@@ -648,13 +590,11 @@ class Core:
                 f"DATE: {today}\n-------------------------------------\n\n{testname}\n{current_log}\n-------------------------------------\n"
                 f.write(to_write)
 
-        shared_state.value = False
         print("Firefox finished")
 
-    def AutoLogger(
-            shared_arr: Array = None,
-            shared_state: Value = None,
-            log_js_args: dict[str] = None,
+    def Logger(
+            driver: ChromeDriver,
+            log_js_retry_timeout: int = None,
             parent_log_path: str = None,
             terminal_mode: bool = None,
             **overflow) -> None:    #overflow not used
@@ -673,359 +613,32 @@ class Core:
         """
         from time import sleep
 
-        print("Logger PID:", getpid())
-
         path: str = f"{parent_log_path}/../js.log"
-        mimir: int | float = log_js_args['refresh_rate']    / 1000
-        fuckup: int | float = log_js_args['retry_timeout']  / 1000
+        fuckup: int | float = log_js_retry_timeout  / 1000
 
-        assert log_js_args['active'], "auto JavaScript logging is off"
         try:
             assert Support.exists(path)
         except:
             with open(path, mode='w', encoding='utf-8') as f:
                 f.write("")
 
-        # processed: list[str] = []
+        browser_logs: list[dict[str, str | int]] = driver.get_log('browser')
 
         while True:
-            # shared vairable needs to be implemented
-            if not shared_state.value:
-                break
-
-            browser_logs = Core.SharedLogLoader(shared_arr)
-            if browser_logs == list():
-                sleep(mimir)
+            with open(path, mode = 'r+', encoding = 'utf-8') as f:
+                contents = f.read()
+            if contents != '':
+                sleep(fuckup)
                 continue
-
-            # inner whiles ensures that the autolog will not exit until all the logs are processed
-            # it only breaks the inner loops after the logs are processed and it didn't fuck up
-            if terminal_mode:
-                with open(path, mode = 'a+', encoding = 'utf-8') as f:
-                    for i in range(len(browser_logs)):
-                        log = browser_logs[i]
-                        # if log in processed:
-                        #     continue
-                        # The reason it's processed with {i} and printed as such
-                        # is that no identical logs can exist in `processed`
-                        log_line = \
-                        f"{i} ❗ JavaScript:\n{log['source']} — {log['level']}:\n{log['message']}\n\t{log['timestamp']}\n#\n"
-                        f.write(log_line)
-                        Support.LogAll(parent_log_path, log_line)
-                        # processed.append(log_line)
-                sleep(mimir)
-
-            else:
-                while True:
-                    with open(path, mode = 'r+', encoding = 'utf-8') as f:
-                        contents = f.read()
-                    if contents != '':
-                        sleep(fuckup)
-                        continue
-                    else:
-                        with open(path, mode = 'a+', encoding = 'utf-8') as f:
-                            for i in range(len(browser_logs)):
-                                log = browser_logs[i]
-                                # if log in processed:
-                                #     continue
-                                # The reason it's processed with {i} and printed as such
-                                # is that no identical logs can exist in `processed`
-                                log_line = \
-                                f"{i} ❗ JavaScript:\n{log['source']} — {log['level']}:\n{log['message']}\n\t{log['timestamp']}\n#\n"
-                                f.write(log_line)
-                                Support.LogAll(path = parent_log_path, log_line = log_line)
-                                # processed.append(log_line)
-                        break
-                sleep(mimir)
+            with open(path, mode = 'a+', encoding = 'utf-8') as f:
+                for i in range(len(browser_logs)):
+                    log = browser_logs[i]
+                    # The reason it's processed with {i} and printed as such
+                    # is that no identical logs can exist in `processed`
+                    log_line = \
+                    f"{i} ❗ JavaScript:\n{log['source']} — {log['level']}:\n{log['message']}\n\t{log['timestamp']}\n#\n"
+                    f.write(log_line)
+                    Support.LogAll(path = parent_log_path, log_line = log_line)
+            break
         
         print("Logger finished")
-
-    def SharedLogDumper(
-        logs: list[dict] = None,
-        target: Array = None,
-        target_size: int = None) -> None: 
-
-        # each log is a dictionary with 4 K-VPs inside
-        target_values: list[str] = []
-
-        # only process 
-        for log in logs:
-            for value in log.values():
-                target_values.append(bytes(str(value), 'utf-8'))
-
-        if len(target_values) < target_size:
-            for i in range(target_size - len(target_values)):
-                target_values.append(bytes("", 'utf-8'))
-
-        target[:] = target_values
-
-    def SharedLogLoader(root: Array = None) -> list[dict[str]]:
-
-        logs: list = []
-        keys: tuple = ("level", "message", "source", "timestamp")
-        # used only to detect / eleminate empty logs
-        empty_log: dict = {"level": '', "message": '', "source": '', "timestamp": ''}
-
-        field_index = 0
-        log: dict = {}
-        for item in root:
-            item_ = str(item).removeprefix('b\'').removesuffix('\'').removeprefix('b\"').removesuffix('\"')
-            if item_ == 'None':
-                continue
-            if field_index == 4:
-                if log == empty_log:
-                    break
-                logs.append(copy(log))
-                field_index = 0
-                log.clear()
-            # need to remove the b'' bounds from the item. because when you convert `bytes` to `str` that happens (builtin, I guess) ¯\_(ツ)_/¯
-            log[keys[field_index]] = item_
-            field_index += 1
-
-        return logs
-
-    def Goto(driver: ChromeDriver | FirefoxDriver, url: str):
-        Core.CheckDriverExists(driver)
-        driver.get(url)
-
-    def Back(driver: ChromeDriver | FirefoxDriver):
-        Core.CheckDriverExists(driver)
-        driver.back()
-
-    def Forward(driver: ChromeDriver | FirefoxDriver):
-        Core.CheckDriverExists(driver)
-        driver.forward()
-
-    def Refresh(driver: ChromeDriver | FirefoxDriver):
-        Core.CheckDriverExists(driver)
-        driver.refresh()
-
-    def Wait(driver: ChromeDriver | FirefoxDriver, time_: int):
-        Core.CheckDriverExists(driver)
-        time = float(time_ / 1000)
-        driver.implicitly_wait(time)
-
-    def WaitFor(driver: ChromeDriver | FirefoxDriver, kwargs: dict):
-        # title match       ✅
-        # title contains    ✅
-        # url match         ✅
-        # url contains      ✅
-        # alert present     ✅
-        # element present   ✅
-        # element visible   ✅
-        # 
-        timeout = kwargs['timeout']
-        frequency = kwargs['frequency']
-        if timeout is None:
-            timeout = 1000
-        if frequency is None:
-            wait = WebDriverWait(driver, timeout=timeout)
-        else:
-            wait = WebDriverWait(driver, timeout=timeout, poll_frequency=frequency)
-
-        raw_condition: str = kwargs['condition']
-        condition = raw_condition
-        condition_container: function = expected_conditions.all_of
-
-        if raw_condition[0] == '!':
-            condition = raw_condition.removeprefix('!')
-            condition_container: function = expected_conditions.none_of
-
-        match condition:
-            case 'element_exists':
-                locator_: str = kwargs['locator']
-                value_: str = kwargs['value']
-                internal_locator: tuple[str, str] = (locator_, value_)
-                expected = expected_conditions.presence_of_element_located(internal_locator)
-                wait.until(condition_container(expected))
-
-            case 'element_visible':
-                locator_: str = kwargs['locator']
-                value_: str = kwargs['value']
-                element = Core.matchElement(driver, locator = locator_, value = value_)
-                expected = expected_conditions.visibility_of(element)
-                wait.unitl(expected)
-
-            case 'alert_present':
-                expected = expected_conditions.alert_is_present()
-                wait.until(condition_container(expected))
-
-            case 'title_matches':
-                expected = expected_conditions.title_is(kwargs['title'])
-                wait.until(expected)
-
-            case 'title_contains':
-                expected = expected_conditions.title_contains(kwargs['title_sub'])
-                wait.until(expected)
-
-            case 'url_matches':
-                expected = expected_conditions.url_matches(kwargs['url'])
-                wait.until(expected)
-
-            case 'url_contains':
-                expected = expected_conditions.url_contains(kwargs['url_sub'])
-                wait.until(expected)
-
-            case _:
-                raise ValueError(f"\'{condition}\' is not a valid condition to await")
-
-    def ExecuteJS(
-        driver: ChromeDriver | FirefoxDriver,
-        commands: list[str],
-        terminal_mode: bool = False,
-        path_ = "./logs",
-        log_JS_args: dict[str, str | list | int | bool | None] = dict( active=True, refresh_rate=1000, retry_timeout=1000)
-        ) -> None:
-
-        Core.CheckDriverExists(driver)
-        for i in range(len(commands)):
-            try:
-                command = commands[i]
-                driver.execute_script(command)
-            except SeJSException as e:
-                # print(f"Error: the command {command} was incorrect")
-                Support.LogJS(path_, log_JS_args, e, index=0, terminal_mode=terminal_mode)
-
-    # PART FUNCS
-    def MatchElement(
-            driver: ChromeDriver | FirefoxDriver,
-            **action_kwargs) -> WebElement:
-                   
-        locator = action_kwargs["locator"]
-        value = action_kwargs["value"]
-
-        if locator is None:
-            # practically impossible, but just in case
-            raise ValueError("Locator must be a string, not None")
-        if value is None:
-            # practically impossible, but just in case
-            raise ValueError("Locator must be a string, not None")
-        
-        match locator:
-            case "css_selector":
-                element =  driver.find_element(By.CSS_SELECTOR, value)
-            case "xpath":
-                element =  driver.find_element(By.XPATH, value)
-            case _:
-                raise ValueError(f"Invalid locator {locator}")
-            
-        isDisplayed = action_kwargs["isDisplayed"]
-        if isDisplayed is not None:
-            # Checks for for the condition, if it isn't it throws an error. Kinda weird syntax but it wokrs
-            assert isDisplayed == element.is_displayed(), f"Element is{' 'if isDisplayed is False else 'not '}displayed"
-
-        isSelected = action_kwargs["isSelected"]
-        if isSelected is not None:
-            # Checks for for the condition, if it isn't it throws an error. Kinda weird syntax but it wokrs
-            assert isSelected == element.is_selected(), f"Element is{' 'if isDisplayed is False else ' not '}selected"
-
-        isEnabled = action_kwargs["isEnabled"]
-        if isEnabled is not None:
-            # Checks for for the condition, if it isn't it throws an error. Kinda weird syntax but it wokrs
-            assert isEnabled == element.is_enabled(), f"Element is{' 'if isDisplayed is False else ' not '}enabled" 
-
-        return element
-    
-    def MatchElements(
-            driver: ChromeDriver | FirefoxDriver,
-            **action_kwargs) -> list[WebElement]:
-        
-        locator = action_kwargs["locator"]
-        value = action_kwargs["value"]
-
-        if locator is None:
-            # practically impossible, but just in case
-            raise ValueError("Locator must be a string, not None")
-        
-        if value is None:
-            # practically impossible, but just in case
-            raise ValueError("Locator must be a string, not None")
-        
-        match locator:
-            case "css_selector":
-                elements = driver.find_elements(By.CSS_SELECTOR, value)
-            case "xpath":
-                elements = driver.find_elements(By.XPATH, value)
-            case _:
-                raise ValueError(f"Invalid locator {locator}")  
-                  
-        for element in elements:
-            isDisplayed = action_kwargs["isDisplayed"]
-            if isDisplayed is not None:
-                # Checks for for the condition, if it isn't it throws an error. Kinda weird syntax but it wokrs
-                for element in elements:
-                    assert isDisplayed == element.is_displayed(), f"Element is{' 'if isDisplayed is False else 'not '}displayed"
-
-            isSelected = action_kwargs["isSelected"]
-            if isSelected is not None:
-                # Checks for for the condition, if it isn't it throws an error. Kinda weird syntax but it wokrs
-                for element in elements:
-                    assert isSelected == element.is_selected(), f"Element is{' 'if isDisplayed is False else ' not '}selected"
-
-            isEnabled = action_kwargs["isEnabled"]
-            if isEnabled is not None:
-                # Checks for for the condition, if it isn't it throws an error. Kinda weird syntax but it wokrs
-                for element in elements:
-                    assert isEnabled == element.is_enabled(), f"Element is{' 'if isDisplayed is False else ' not '}enabled"
-
-        return elements
-      
-    def ElementAction(
-            driver: ChromeDriver | FirefoxDriver,
-            **action_kwargs) -> WebElement | list[WebElement]:
-        
-        result: WebElement | list[WebElement]
-        isSingle = action_kwargs["isSingle"]
-        if isSingle:
-            result = Core.MatchElement(driver, **action_kwargs)                
-            action = action_kwargs["action"]
-            match action:
-                case "click":
-                    result.click()
-                case "send_keys":
-                    keys = action_kwargs["keys"]
-                    result.send_keys(keys)
-                case "clear":
-                    result.clear()
-                case _:
-                    raise ValueError("Invalid action type") 
-                                   
-            driver.switch_to.parent_frame()     #if there was an iframe, this goes back to the top of the frame
-
-        elif isSingle == False:
-            results = Core.MatchElements(driver, **action_kwargs)
-            for result in results:                    
-                action = action_kwargs["action"]
-                match action:
-                    case "click":
-                        result.click()
-                    case "send_keys":
-                        keys = action_kwargs["keys"]
-                        result.send_keys(keys)
-                    case "clear":
-                        result.clear()
-                    case _:
-                        raise ValueError("Invalid action type")
-                                          
-            driver.switch_to.parent_frame()     #if there was an iframe, this goes back to the top of the frame 
-
-    def CheckDriverExists(driver: object, omit_exceptions: bool = True) -> None | bool | Exception:
-        try:
-            assert driver
-        except AssertionError:
-            if omit_exceptions:
-                print("Shit doesn't exist mate")
-                return False
-            raise AssertionError("Shit doesn't exist mate")
-            
-        try:
-            assert isinstance(driver, ChromeDriver | FirefoxDriver)
-        except AssertionError:
-            if omit_exceptions:
-                print("Invalid fuckin' type mate")
-                return False
-            raise AssertionError("Invalid fuckin' type mate")
-        if omit_exceptions:            
-            return True
-        return None
-                    

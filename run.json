@@ -1,17 +1,13 @@
 {
   "name": "ble",
   "browsers": [
-    "firefox",
-    "chrome"
+    "chrome",
+    "firefox"
   ],
   "options": {
     "auto_exit_iframes": true,
-    "log_JS": {
-      "active": true,
-      "refresh_rate": 1000,
-      "retry_timeout": 1000
-    },
-    "parent_log_path": "C:\\dev\\SeTestsVS\\logs",
+    "log_JS_retry_timeout": 1000,
+    "parent_log_path": "./logs",
     "terminal_mode": false
   },
   "driver_options": {
@@ -27,30 +23,67 @@
     "unhandled_prompt_behavior": "dismiss and notify"
   },
   "units": {
-    "ble 1": {
+    "1": {
       "bindings": null,
       "backup_of": null,
       "actions": {
         "0": {
           "type": "goto",
-          "break": true,
-          "url": "https://www.youtube.com"
+          "break": false,
+          "url": "https://youtube.com"
         },
         "1": {
           "type": "goto",
           "break": false,
-          "url": "https://www.github.com"
+          "url": "https://github.com"
         }
       }
     },
-    "ble 2": {
+    "KÖCSÖG": {
+      "bindings": null,
+      "backup_of": null,
+      "actions": {
+        "0": {
+          "type": "goto",
+          "break": false,
+          "url": "https://wikipedia.org/"
+        }
+      }
+    },
+    "FASZ": {
+      "bindings": null,
+      "backup_of": null,
+      "actions": {
+        "0": {
+          "type": "goto",
+          "break": false,
+          "url": "https://tesco.com"
+        },
+        "1": {
+          "type": "goto",
+          "break": false,
+          "url": "https://github.com"
+        },
+        "2": {
+          "type": "goto",
+          "break": false,
+          "url": "https://instagram.com/"
+        }
+      }
+    },
+    "4": {
       "bindings": null,
       "backup_of": null,
       "actions": {
         "0": {
           "type": "goto",
           "break": true,
-          "url": "https://www.instagram.com/"
+          "url": "https://youtube.com"
+        },
+        "1": {
+          "type": "goto",
+          "break": false,
+          "url": "https://github.com"
         }
       }
     }
