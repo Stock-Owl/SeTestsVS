@@ -26,8 +26,6 @@ if __name__ == '__main__':
         print("Browsers parameter can not be empty")
     """
     
-    # processes[2].start()
-    # sleep(10)
     processes[0].start()
     processes[1].start()
     print("Host Finished")

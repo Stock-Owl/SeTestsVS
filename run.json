@@ -6,19 +6,15 @@
   ],
   "options": {
     "auto_exit_iframes": true,
-    "log_JS": {
-      "active": true,
-      "refresh_rate": 1000,
-      "retry_timeout": 1000
-    },
-    "parent_log_path": "C:\\Users\\kmarton\\source\\repos\\SeTestsVS\\logs",
+    "log_JS_retry_timeout": 1000,
+    "parent_log_path": "./logs",
     "terminal_mode": false
   },
   "driver_options": {
     "accept_insecure_certs": true,
     "chrome_arguments": [],
     "firefox_arguments": [],
-    "keep_browser_open": false,
+    "keep_browser_open": true,
     "page_load_strategy": "normal",
     "timeout": {
       "type": "pageLoad",
@@ -27,67 +23,67 @@
     "unhandled_prompt_behavior": "dismiss and notify"
   },
   "units": {
-    "ble 1": {
+    "1": {
       "bindings": null,
       "backup_of": null,
       "actions": {
         "0": {
           "type": "goto",
           "break": false,
-          "url": "https://www.youtube.com"
+          "url": "https://youtube.com"
         },
         "1": {
           "type": "goto",
           "break": false,
-          "url": "https://www.github.com"
+          "url": "https://github.com"
         }
       }
     },
-    "ble 2": {
+    "KÖCSÖG": {
       "bindings": null,
       "backup_of": null,
       "actions": {
         "0": {
           "type": "goto",
           "break": false,
-          "url": "https://www.instagram.com/"
+          "url": "https://wikipedia.org/"
         }
       }
     },
-    "ble 3": {
+    "FASZ": {
       "bindings": null,
       "backup_of": null,
       "actions": {
         "0": {
           "type": "goto",
           "break": false,
-          "url": "https://www.youtube.com"
+          "url": "https://tesco.com"
         },
         "1": {
           "type": "goto",
-          "break": true,
-          "url": "https://www.github.com"
+          "break": false,
+          "url": "https://github.com"
         },
         "2": {
           "type": "goto",
           "break": false,
-          "url": "https://www.instagram.com/"
+          "url": "https://instagram.com/"
         }
       }
     },
-    "ble 4": {
+    "4": {
       "bindings": null,
       "backup_of": null,
       "actions": {
         "0": {
           "type": "goto",
-          "break": false,
-          "url": "https://www.youtube.com"
+          "break": true,
+          "url": "https://youtube.com"
         },
         "1": {
           "type": "goto",
           "break": false,
-          "url": "https://www.github.com"
+          "url": "https://github.com"
         }
       }
     }
