@@ -1,15 +1,17 @@
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace WebTestGui
 {
     public partial class MainForm : Form
     {
         /* TODO:
-        - Idõzítõ különálló applikáció (tesztek futtatásának idõzítése, és beállítása)
-        - Sablon új test
-        - Opciók sablonok létrehozása, import és exportálása
-        - Action idõmérés
-        - Log fájlok elõkészítése, ha nem léteznek még (FileWatcher miatt)
+            - Sablon új test
+            - Opciók sablonok létrehozása, import és exportálása
+            - Log fájlok elõkészítése, ha nem léteznek még (FileWatcher miatt)
+            - Idõzítõ app integrálása
+            - Unit keresés (név alapján)
+            - Teszt lefutása után leírni az egész teszt lefutási idejét (Chrome/Firefox)
         */
 
         public MainForm()
@@ -232,6 +234,34 @@ namespace WebTestGui
 
         public async void OnTestStart()
         {
+            // Does parent log path exist
+            if (!Path.Exists(Test().GetRootLogDirectoryPath()))
+            {
+                string message = "A jelenleg megadott 'Gyökér logolási könyvtár' útvonala nem létezik!";
+                string title = "Indítási probléma...";
+                MessageBox.Show(message, title);
+                return;
+            }
+            // Both browsers selected
+            if (!chromeCheckBox.Checked || !firefoxCheckBox.Checked)
+            {
+                string message = "Jelenleg a Tesztelés csak mindkét böngészõvel történhet egyszerre!";
+                string title = "Indítási probléma...";
+                MessageBox.Show(message, title);
+                return;
+            }
+            // Unit Panel empty
+            if (Test().m_Units.m_Units.Count == 0)
+            {
+                string message = "Üres tesztet nem lehet futtatni!";
+                string title = "Indítási probléma...";
+                MessageBox.Show(message, title);
+                return;
+            }
+
+            Test().m_State = WebTestGui.Test.TestState.Run;
+            testStartButton.Text = "TESZT FUT";
+
             string JSONString = GetTestJSON(Test());
             DateTime currentTime = DateTime.Now;
             m_TestStartTime = currentTime.ToString("HH:mm:ss:ffffff");
@@ -245,30 +275,30 @@ namespace WebTestGui
 
             StartPython(temparray[0]);
 
-            Test().m_State = WebTestGui.Test.TestState.Run;
-            testStartButton.Text = "TESZT FUT";
             m_TestTab.RefreshTabItems();
 
-            _STOP_JS_LOG_REQ = false;
-            _STOP_BRK_LOG_REQ = false;
+            File.WriteAllText(Test().GetRootLogDirectoryPath() + @"/chrome/run.log", string.Empty);
+            File.WriteAllText(Test().GetRootLogDirectoryPath() + @"/firefox/run.log", string.Empty);
 
-            string jsLogFilePath = Test().GetRootLogDirectoryPath() + @"/js.log";
-            StartJSLogFileWatcher(jsLogFilePath);
+            // string jsLogFilePath = Test().GetRootLogDirectoryPath() + @"/js.log";
+            // StartJSLogFileWatcher(jsLogFilePath);
 
             File.WriteAllText(Test().GetRootLogDirectoryPath() + @"/file.brk", string.Empty);
             string breakPointFilePath = Test().GetRootLogDirectoryPath() + @"/file.brk";
             StartBreakPointFileWatcher(breakPointFilePath);
+
+            _STOP_JS_LOG_REQ = false;
+            _STOP_BRK_LOG_REQ = false;
 
             m_RunLogConsole.AddToConsoles("\n ------TESZT INDITÁSA \n");
         }
 
         public void OnTestAbort()
         {
+            m_RunLogConsole.AddToConsoles("\n ------TESZT LEÁLLÍTVA \n");
             m_CurrentProcess.Kill();
 
             SetColorSchemeToEdit();
-
-            m_RunLogConsole.AddToConsoles("\n ------TESZT LEÁLLÍTVA \n");
 
             OnTestFinished();
         }
@@ -279,7 +309,7 @@ namespace WebTestGui
             m_RunLogConsole.AddToConsoles("\n ------TESZT SZÜNETELTETVE \n");
             testStartButton.Text = "TESZT FOLYTATÁSA...";
 
-            string[] contentParts = content.Split(':'); // (c:ble 1:1)
+            string[] contentParts = content.Split('\n')[0].Split(':'); // (c:ble 1:1)
 
             foreach (IUnit unit in Test().m_Units.m_Units)
             {
@@ -290,21 +320,42 @@ namespace WebTestGui
                 }
             }
 
+            string chromeRunLog = File.ReadAllText(Test().GetRootLogDirectoryPath() + @"/chrome/run.log");
+            string firefoxRunLog = File.ReadAllText(Test().GetRootLogDirectoryPath() + @"/firefox/run.log");
+
+            LoadRunTimesToActions(chromeRunLog, firefoxRunLog);
+            LoadRunTimesToUnits();
+
+            breakpointIcon.Visible = true;
+
             m_TestTab.RefreshTabItems();
+
+            IntPtr mainFormHandle = Handle;
+            User32Interop.SetForegroundWindow(mainFormHandle);
         }
 
-        public void OnTestContinue()
+        public void OnTestContinue() // Should be called only after a breakpoint hit
         {
-            File.WriteAllText(Test().GetRootLogDirectoryPath() + @"/file.brk", string.Empty);
-
             Test().m_State = WebTestGui.Test.TestState.Run;
             testStartButton.Text = "TESZT FUT.../ TESZT LEÁLLÍTÁSA";
+
+            File.WriteAllText(Test().GetRootLogDirectoryPath() + @"/file.brk", string.Empty);
+
+            foreach (IUnit unit in Test().m_Units.m_Units)
+            {
+                unit.OnBreakpointLeave();
+            }
+            RefreshUnitsPanel();
+
+            breakpointIcon.Visible = true;
 
             m_TestTab.RefreshTabItems();
         }
 
         public void OnTestFinished()
         {
+            Test().m_State = WebTestGui.Test.TestState.Edit;
+            testStartButton.Text = "TESZT INDÍTÁSA...";
             SetColorSchemeToEdit();
 
             _STOP_JS_LOG_REQ = true;
@@ -313,21 +364,17 @@ namespace WebTestGui
 
             string chromeRunLog = File.ReadAllText(Test().GetRootLogDirectoryPath() + @"/chrome/run.log");
             string firefoxRunLog = File.ReadAllText(Test().GetRootLogDirectoryPath() + @"/firefox/run.log");
-
             m_RunLogConsole.AddToChrome("\n\n" + chromeRunLog);
             m_RunLogConsole.AddToFirefox("\n\n" + firefoxRunLog);
+
+            string JsLog = File.ReadAllText(Test().GetRootLogDirectoryPath() + @"/js.log");
+            m_JsLogConsole.AddToConsoles("\n\n" + JsLog);
 
             m_RunLogConsole.AddToConsoles("\n ------TESZT VÉGE \n");
 
             LoadRunTimesToActions(chromeRunLog, firefoxRunLog);
+            LoadRunTimesToUnits();
 
-            foreach (IUnit unit in Test().m_Units.m_Units)
-            {
-                unit.SetRunTime();
-            }
-
-            Test().m_State = WebTestGui.Test.TestState.Edit;
-            testStartButton.Text = "TESZT INDÍTÁSA...";
             m_TestTab.RefreshTabItems();
             RefreshUnitsPanel();
         }
@@ -402,19 +449,12 @@ namespace WebTestGui
             }
         }
 
-        class RunLog
+        void LoadRunTimesToUnits()
         {
-            public string chromeTime = "";
-            public long chromeTimeDelta = 0;
-
-            public string chromeUnitName = "";
-            public string chromeActionName = "";
-
-            public string firefoxTime = "";
-            public long firefoxTimeDelta = 0;
-
-            public string firefoxUnitName = "";
-            public string firefoxActionName = "";
+            foreach (IUnit unit in Test().m_Units.m_Units)
+            {
+                unit.SetRunTime();
+            }
         }
 
         long TimeToMicroseconds(string timeStr)
@@ -430,12 +470,25 @@ namespace WebTestGui
                 long totalMicros = hours * 3600L * 1000000L + minutes * 60L * 1000000L + seconds * 1000000L + microseconds;
                 return totalMicros;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return 0;
             }
         }
+        class RunLog
+        {
+            public string chromeTime = "";
+            public long chromeTimeDelta = 0;
 
+            public string chromeUnitName = "";
+            public string chromeActionName = "";
+
+            public string firefoxTime = "";
+            public long firefoxTimeDelta = 0;
+
+            public string firefoxUnitName = "";
+            public string firefoxActionName = "";
+        }
         RunLog GetRunTimeFromRunLog(string chromeLog, string firefoxLog)
         {
             RunLog runLog = new RunLog();
@@ -559,8 +612,25 @@ namespace WebTestGui
                     {
                         if (!string.IsNullOrEmpty(content))
                         {
-                            OnTestBreak(content);
-                            m_RunLogConsole.AddToConsoles("\nBREAKPOINT HIT:" + content);
+                            if (content.Split('\n').Length >= 2)
+                            {
+                                if (content.Split('\n')[0].Split(':')[0] == "c")
+                                {
+                                    if (content.Split('\n')[1].Split(':')[0] == "f")
+                                    {
+                                        OnTestBreak(content);
+                                        m_RunLogConsole.AddToConsoles("\nBREAKPOINT HIT:" + content.Split('\n')[0]);
+                                    }
+                                }
+                                if (content.Split('\n')[0].Split(':')[0] == "f")
+                                {
+                                    if (content.Split('\n')[1].Split(':')[0] == "c")
+                                    {
+                                        OnTestBreak(content);
+                                        m_RunLogConsole.AddToConsoles("\nBREAKPOINT HIT:" + content.Split('\n')[0]);
+                                    }
+                                }
+                            }
                         }
                     }));
 
@@ -743,7 +813,6 @@ namespace WebTestGui
             currentlyEditedLabel.BackColor = Color.FromArgb(255, 60, 60, 65);
             currentlyEditedText.BackColor = Color.FromArgb(255, 60, 60, 65);
 
-            m_TestTab.Enabled = true;
             saveTestButton.Enabled = true;
             loadTestButton.Enabled = true;
         }
@@ -770,7 +839,6 @@ namespace WebTestGui
             currentlyEditedLabel.BackColor = Color.FromArgb(255, 80, 60, 60);
             currentlyEditedText.BackColor = Color.FromArgb(255, 80, 60, 60);
 
-            m_TestTab.Enabled = false;
             saveTestButton.Enabled = false;
             loadTestButton.Enabled = false;
         }
@@ -788,5 +856,18 @@ namespace WebTestGui
 
         Console m_RunLogConsole;
         Console m_JsLogConsole;
+    }
+
+    public static class User32Interop
+    {
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool SetForegroundWindow(IntPtr hWnd);
+
+        [DllImport("user32.dll")]
+        public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+        public const int SW_MINIMIZE = 6;
+        public const int SW_SHOWMINNOACTIVE = 7;
     }
 }

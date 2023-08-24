@@ -41,6 +41,8 @@
             singleLabel = new Label();
             label2 = new Label();
             mainPanel = new Panel();
+            testRunTimeText = new Label();
+            testRunTimeLabel = new Label();
             keysLabel = new Label();
             keysTextBox = new TextBox();
             locatorTextBox = new ComboBox();
@@ -53,8 +55,6 @@
             enabledCheckBox = new CheckBox();
             label6 = new Label();
             displayedCheckbox = new CheckBox();
-            testRunTimeText = new Label();
-            testRunTimeLabel = new Label();
             ((System.ComponentModel.ISupportInitialize)breakpointOnPicture).BeginInit();
             ((System.ComponentModel.ISupportInitialize)breakpointOffPicture).BeginInit();
             ((System.ComponentModel.ISupportInitialize)binImage).BeginInit();
@@ -228,6 +228,32 @@
             mainPanel.Size = new Size(863, 141);
             mainPanel.TabIndex = 12;
             // 
+            // testRunTimeText
+            // 
+            testRunTimeText.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            testRunTimeText.AutoSize = true;
+            testRunTimeText.BackColor = Color.Transparent;
+            testRunTimeText.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
+            testRunTimeText.ForeColor = Color.DimGray;
+            testRunTimeText.Location = new Point(388, 123);
+            testRunTimeText.Name = "testRunTimeText";
+            testRunTimeText.Size = new Size(48, 15);
+            testRunTimeText.TabIndex = 87;
+            testRunTimeText.Text = "0 / 0 ms";
+            // 
+            // testRunTimeLabel
+            // 
+            testRunTimeLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            testRunTimeLabel.AutoSize = true;
+            testRunTimeLabel.BackColor = Color.Transparent;
+            testRunTimeLabel.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
+            testRunTimeLabel.ForeColor = Color.Gray;
+            testRunTimeLabel.Location = new Point(231, 123);
+            testRunTimeLabel.Name = "testRunTimeLabel";
+            testRunTimeLabel.Size = new Size(157, 15);
+            testRunTimeLabel.TabIndex = 86;
+            testRunTimeLabel.Text = "Előző tesztelésen futási ideje:";
+            // 
             // keysLabel
             // 
             keysLabel.AutoSize = true;
@@ -371,32 +397,6 @@
             displayedCheckbox.Size = new Size(15, 14);
             displayedCheckbox.TabIndex = 65;
             displayedCheckbox.UseVisualStyleBackColor = false;
-            // 
-            // testRunTimeText
-            // 
-            testRunTimeText.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            testRunTimeText.AutoSize = true;
-            testRunTimeText.BackColor = Color.Transparent;
-            testRunTimeText.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
-            testRunTimeText.ForeColor = Color.DimGray;
-            testRunTimeText.Location = new Point(388, 123);
-            testRunTimeText.Name = "testRunTimeText";
-            testRunTimeText.Size = new Size(31, 15);
-            testRunTimeText.TabIndex = 87;
-            testRunTimeText.Text = "0 ms";
-            // 
-            // testRunTimeLabel
-            // 
-            testRunTimeLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            testRunTimeLabel.AutoSize = true;
-            testRunTimeLabel.BackColor = Color.Transparent;
-            testRunTimeLabel.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
-            testRunTimeLabel.ForeColor = Color.Gray;
-            testRunTimeLabel.Location = new Point(231, 123);
-            testRunTimeLabel.Name = "testRunTimeLabel";
-            testRunTimeLabel.Size = new Size(157, 15);
-            testRunTimeLabel.TabIndex = 86;
-            testRunTimeLabel.Text = "Előző tesztelésen futási ideje:";
             // 
             // SendKeysAction
             // 

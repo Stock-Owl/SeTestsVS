@@ -31,6 +31,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ForwardAction));
             mainLabel = new Label();
             mainPanel = new Panel();
+            testRunTimeText = new Label();
+            testRunTimeLabel = new Label();
             actionTypeLabel = new Label();
             idTextBox = new TextBox();
             binImage = new PictureBox();
@@ -38,8 +40,6 @@
             idLabel = new Label();
             breakpointOffPicture = new PictureBox();
             breakpointOnPicture = new PictureBox();
-            testRunTimeText = new Label();
-            testRunTimeLabel = new Label();
             mainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)binImage).BeginInit();
             ((System.ComponentModel.ISupportInitialize)breakpointOffPicture).BeginInit();
@@ -76,6 +76,32 @@
             mainPanel.Name = "mainPanel";
             mainPanel.Size = new Size(863, 58);
             mainPanel.TabIndex = 12;
+            // 
+            // testRunTimeText
+            // 
+            testRunTimeText.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            testRunTimeText.AutoSize = true;
+            testRunTimeText.BackColor = Color.Transparent;
+            testRunTimeText.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
+            testRunTimeText.ForeColor = Color.DimGray;
+            testRunTimeText.Location = new Point(312, 39);
+            testRunTimeText.Name = "testRunTimeText";
+            testRunTimeText.Size = new Size(48, 15);
+            testRunTimeText.TabIndex = 79;
+            testRunTimeText.Text = "0 / 0 ms";
+            // 
+            // testRunTimeLabel
+            // 
+            testRunTimeLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            testRunTimeLabel.AutoSize = true;
+            testRunTimeLabel.BackColor = Color.Transparent;
+            testRunTimeLabel.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
+            testRunTimeLabel.ForeColor = Color.Gray;
+            testRunTimeLabel.Location = new Point(155, 39);
+            testRunTimeLabel.Name = "testRunTimeLabel";
+            testRunTimeLabel.Size = new Size(157, 15);
+            testRunTimeLabel.TabIndex = 78;
+            testRunTimeLabel.Text = "Előző tesztelésen futási ideje:";
             // 
             // actionTypeLabel
             // 
@@ -158,32 +184,6 @@
             breakpointOnPicture.TabIndex = 40;
             breakpointOnPicture.TabStop = false;
             breakpointOnPicture.Click += breakpointOnPicture_Click;
-            // 
-            // testRunTimeText
-            // 
-            testRunTimeText.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            testRunTimeText.AutoSize = true;
-            testRunTimeText.BackColor = Color.Transparent;
-            testRunTimeText.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
-            testRunTimeText.ForeColor = Color.DimGray;
-            testRunTimeText.Location = new Point(312, 39);
-            testRunTimeText.Name = "testRunTimeText";
-            testRunTimeText.Size = new Size(31, 15);
-            testRunTimeText.TabIndex = 79;
-            testRunTimeText.Text = "0 ms";
-            // 
-            // testRunTimeLabel
-            // 
-            testRunTimeLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            testRunTimeLabel.AutoSize = true;
-            testRunTimeLabel.BackColor = Color.Transparent;
-            testRunTimeLabel.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
-            testRunTimeLabel.ForeColor = Color.Gray;
-            testRunTimeLabel.Location = new Point(155, 39);
-            testRunTimeLabel.Name = "testRunTimeLabel";
-            testRunTimeLabel.Size = new Size(157, 15);
-            testRunTimeLabel.TabIndex = 78;
-            testRunTimeLabel.Text = "Előző tesztelésen futási ideje:";
             // 
             // ForwardAction
             // 

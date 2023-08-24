@@ -31,14 +31,18 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TestTabItem));
             testNameLabel = new Label();
             pictureBox2 = new PictureBox();
+            breakpointOnIcon = new PictureBox();
+            breakpointOffIcon = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)breakpointOnIcon).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)breakpointOffIcon).BeginInit();
             SuspendLayout();
             // 
             // testNameLabel
             // 
             testNameLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             testNameLabel.AutoSize = true;
-            testNameLabel.BackColor = Color.FromArgb(60, 60, 65);
+            testNameLabel.BackColor = Color.FromArgb(50, 50, 55);
             testNameLabel.Font = new Font("Segoe UI", 8.25F, FontStyle.Bold | FontStyle.Italic | FontStyle.Underline, GraphicsUnit.Point);
             testNameLabel.ForeColor = Color.White;
             testNameLabel.Location = new Point(0, 8);
@@ -51,7 +55,7 @@
             // pictureBox2
             // 
             pictureBox2.Anchor = AnchorStyles.Top;
-            pictureBox2.BackColor = Color.FromArgb(50, 50, 53);
+            pictureBox2.BackColor = Color.FromArgb(50, 50, 55);
             pictureBox2.Image = (Image)resources.GetObject("pictureBox2.Image");
             pictureBox2.Location = new Point(92, 3);
             pictureBox2.Name = "pictureBox2";
@@ -61,17 +65,44 @@
             pictureBox2.TabStop = false;
             pictureBox2.Click += DeleteTabItem;
             // 
+            // breakpointOnIcon
+            // 
+            breakpointOnIcon.Image = (Image)resources.GetObject("breakpointOnIcon.Image");
+            breakpointOnIcon.Location = new Point(64, 6);
+            breakpointOnIcon.Name = "breakpointOnIcon";
+            breakpointOnIcon.Size = new Size(18, 18);
+            breakpointOnIcon.SizeMode = PictureBoxSizeMode.StretchImage;
+            breakpointOnIcon.TabIndex = 57;
+            breakpointOnIcon.TabStop = false;
+            breakpointOnIcon.Visible = false;
+            // 
+            // breakpointOffIcon
+            // 
+            breakpointOffIcon.Image = (Image)resources.GetObject("breakpointOffIcon.Image");
+            breakpointOffIcon.Location = new Point(64, 6);
+            breakpointOffIcon.Name = "breakpointOffIcon";
+            breakpointOffIcon.Size = new Size(18, 18);
+            breakpointOffIcon.SizeMode = PictureBoxSizeMode.StretchImage;
+            breakpointOffIcon.TabIndex = 58;
+            breakpointOffIcon.TabStop = false;
+            breakpointOffIcon.Visible = false;
+            breakpointOffIcon.Click += breakpointOffIcon_Click;
+            // 
             // TestTabItem
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.FromArgb(60, 60, 65);
+            BackColor = Color.FromArgb(50, 50, 55);
+            Controls.Add(breakpointOffIcon);
+            Controls.Add(breakpointOnIcon);
             Controls.Add(pictureBox2);
             Controls.Add(testNameLabel);
             Name = "TestTabItem";
             Size = new Size(120, 30);
             Click += TestTabItem_Click;
             ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
+            ((System.ComponentModel.ISupportInitialize)breakpointOnIcon).EndInit();
+            ((System.ComponentModel.ISupportInitialize)breakpointOffIcon).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -80,5 +111,7 @@
 
         private Label testNameLabel;
         private PictureBox pictureBox2;
+        private PictureBox breakpointOnIcon;
+        private PictureBox breakpointOffIcon;
     }
 }

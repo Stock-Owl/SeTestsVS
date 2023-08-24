@@ -11,7 +11,7 @@
       "refresh_rate": 1000,
       "retry_timeout": 1000
     },
-    "parent_log_path": "C:\\dev\\SeTestsVS\\logs",
+    "parent_log_path": "C:\\Users\\kmarton\\source\\repos\\SeTestsVS\\logs",
     "terminal_mode": false
   },
   "driver_options": {
@@ -65,7 +65,7 @@
         },
         "1": {
           "type": "goto",
-          "break": false,
+          "break": true,
           "url": "https://www.github.com"
         },
         "2": {

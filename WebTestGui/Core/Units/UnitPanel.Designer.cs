@@ -33,6 +33,8 @@
             binImage = new PictureBox();
             idTextBox = new TextBox();
             mainPanel = new Panel();
+            resetBackupOfButton = new PictureBox();
+            resetBindingButton = new PictureBox();
             testRunTimeText = new Label();
             testRunTimeLabel = new Label();
             backupOfLabel = new Label();
@@ -49,6 +51,8 @@
             expandActionsButtton = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)binImage).BeginInit();
             mainPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)resetBackupOfButton).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)resetBindingButton).BeginInit();
             ((System.ComponentModel.ISupportInitialize)collapseActionsButton).BeginInit();
             ((System.ComponentModel.ISupportInitialize)expandActionsButtton).BeginInit();
             SuspendLayout();
@@ -93,6 +97,8 @@
             // mainPanel
             // 
             mainPanel.BackColor = Color.FromArgb(45, 45, 50);
+            mainPanel.Controls.Add(resetBackupOfButton);
+            mainPanel.Controls.Add(resetBindingButton);
             mainPanel.Controls.Add(testRunTimeText);
             mainPanel.Controls.Add(testRunTimeLabel);
             mainPanel.Controls.Add(backupOfLabel);
@@ -116,6 +122,30 @@
             mainPanel.Size = new Size(1000, 97);
             mainPanel.TabIndex = 12;
             // 
+            // resetBackupOfButton
+            // 
+            resetBackupOfButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            resetBackupOfButton.Image = (Image)resources.GetObject("resetBackupOfButton.Image");
+            resetBackupOfButton.Location = new Point(696, 35);
+            resetBackupOfButton.Name = "resetBackupOfButton";
+            resetBackupOfButton.Size = new Size(20, 20);
+            resetBackupOfButton.SizeMode = PictureBoxSizeMode.StretchImage;
+            resetBackupOfButton.TabIndex = 62;
+            resetBackupOfButton.TabStop = false;
+            resetBackupOfButton.Click += resetBackupOfButton_Click;
+            // 
+            // resetBindingButton
+            // 
+            resetBindingButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            resetBindingButton.Image = (Image)resources.GetObject("resetBindingButton.Image");
+            resetBindingButton.Location = new Point(696, 7);
+            resetBindingButton.Name = "resetBindingButton";
+            resetBindingButton.Size = new Size(20, 20);
+            resetBindingButton.SizeMode = PictureBoxSizeMode.StretchImage;
+            resetBindingButton.TabIndex = 61;
+            resetBindingButton.TabStop = false;
+            resetBindingButton.Click += resetBindingButton_Click;
+            // 
             // testRunTimeText
             // 
             testRunTimeText.AutoSize = true;
@@ -124,9 +154,9 @@
             testRunTimeText.ForeColor = Color.DimGray;
             testRunTimeText.Location = new Point(235, 41);
             testRunTimeText.Name = "testRunTimeText";
-            testRunTimeText.Size = new Size(31, 15);
+            testRunTimeText.Size = new Size(48, 15);
             testRunTimeText.TabIndex = 60;
-            testRunTimeText.Text = "0 ms";
+            testRunTimeText.Text = "0 / 0 ms";
             // 
             // testRunTimeLabel
             // 
@@ -147,7 +177,7 @@
             backupOfLabel.BackColor = Color.FromArgb(40, 40, 43);
             backupOfLabel.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
             backupOfLabel.ForeColor = Color.LightGray;
-            backupOfLabel.Location = new Point(544, 37);
+            backupOfLabel.Location = new Point(519, 37);
             backupOfLabel.Name = "backupOfLabel";
             backupOfLabel.Size = new Size(27, 15);
             backupOfLabel.TabIndex = 58;
@@ -160,7 +190,7 @@
             bindingsLabel.BackColor = Color.FromArgb(40, 40, 43);
             bindingsLabel.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
             bindingsLabel.ForeColor = Color.LightGray;
-            bindingsLabel.Location = new Point(544, 9);
+            bindingsLabel.Location = new Point(519, 9);
             bindingsLabel.Name = "bindingsLabel";
             bindingsLabel.Size = new Size(27, 15);
             bindingsLabel.TabIndex = 57;
@@ -172,7 +202,7 @@
             label2.BackColor = Color.Transparent;
             label2.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
             label2.ForeColor = Color.Gray;
-            label2.Location = new Point(418, 37);
+            label2.Location = new Point(393, 37);
             label2.Name = "label2";
             label2.Size = new Size(116, 20);
             label2.TabIndex = 54;
@@ -187,7 +217,7 @@
             unitBackupComboBox.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
             unitBackupComboBox.ForeColor = Color.Silver;
             unitBackupComboBox.FormattingEnabled = true;
-            unitBackupComboBox.Location = new Point(540, 34);
+            unitBackupComboBox.Location = new Point(515, 34);
             unitBackupComboBox.Name = "unitBackupComboBox";
             unitBackupComboBox.Size = new Size(175, 23);
             unitBackupComboBox.TabIndex = 53;
@@ -200,7 +230,7 @@
             label4.BackColor = Color.Transparent;
             label4.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
             label4.ForeColor = Color.Gray;
-            label4.Location = new Point(431, 7);
+            label4.Location = new Point(406, 7);
             label4.Name = "label4";
             label4.Size = new Size(103, 20);
             label4.TabIndex = 52;
@@ -215,7 +245,7 @@
             unitBindingsComboBox.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
             unitBindingsComboBox.ForeColor = Color.Silver;
             unitBindingsComboBox.FormattingEnabled = true;
-            unitBindingsComboBox.Location = new Point(540, 5);
+            unitBindingsComboBox.Location = new Point(515, 5);
             unitBindingsComboBox.Name = "unitBindingsComboBox";
             unitBindingsComboBox.Size = new Size(175, 23);
             unitBindingsComboBox.TabIndex = 46;
@@ -311,6 +341,8 @@
             ((System.ComponentModel.ISupportInitialize)binImage).EndInit();
             mainPanel.ResumeLayout(false);
             mainPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)resetBackupOfButton).EndInit();
+            ((System.ComponentModel.ISupportInitialize)resetBindingButton).EndInit();
             ((System.ComponentModel.ISupportInitialize)collapseActionsButton).EndInit();
             ((System.ComponentModel.ISupportInitialize)expandActionsButtton).EndInit();
             ResumeLayout(false);
@@ -335,5 +367,7 @@
         private Label backupOfLabel;
         protected Label testRunTimeLabel;
         protected Label testRunTimeText;
+        private PictureBox resetBindingButton;
+        private PictureBox resetBackupOfButton;
     }
 }

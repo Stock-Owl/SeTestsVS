@@ -217,9 +217,9 @@ class Core:
             chrome_exec = Process(target=Core.ChromeExec, kwargs=copy(chrome_kwargs))
             processes.append(chrome_exec)
 
-            if active_logging:
-                chrome_logger = Process(target= Core.AutoLogger, kwargs=copy(chrome_kwargs))
-                processes.append(chrome_logger)
+            #if active_logging:
+            #    chrome_logger = Process(target= Core.AutoLogger, kwargs=copy(chrome_kwargs))
+            #    processes.append(chrome_logger)
 
 
         if "firefox" in browsers:
@@ -403,16 +403,16 @@ class Core:
                 
             # this is the part that processes the brwoser logs and puts them into the shared array
             # use finally clause
-            finally:
-                """
-                    * driver.get_log('browser')     WORKS
-                    ! driver.get_log('driver')      DOESN'T WORK
-                    ! driver.get_log('client')      DOESN'T WORK
-                    ! driver.get_log('server')      DOESN'T WORK
-                """
-                browser_logs: list[dict[str]] = driver.get_log('browser')
-                Core.SharedLogDumper(logs = browser_logs, target = shared_arr, target_size = len(shared_arr))
-                pass
+            #finally:
+            #    """
+            #        * driver.get_log('browser')     WORKS
+            #        ! driver.get_log('driver')      DOESN'T WORK
+            #        ! driver.get_log('client')      DOESN'T WORK
+            #        ! driver.get_log('server')      DOESN'T WORK
+            #    """
+            #    browser_logs: list[dict[str]] = driver.get_log('browser')
+            #    Core.SharedLogDumper(logs = browser_logs, target = shared_arr, target_size = len(shared_arr))
+            #    pass
 
         if not keep_browser_open:
             driver.quit()
@@ -495,11 +495,11 @@ class Core:
                     if action["break"]:
                         try:
                             with open(f"{parent_log_path}/../file.brk", mode='a+', encoding='utf-8') as f:
-                                f.write(f"c:{uname}:{aname}\n")
+                                f.write(f"f:{uname}:{aname}\n")
 
                         except FileNotFoundError:
                             with open(f"{parent_log_path}/../file.brk", mode='w', encoding='utf-8') as f:
-                                f.write(f"c:{uname}:{aname}\n")
+                                f.write(f"f:{uname}:{aname}\n")
 
                         isempty: bool = False
                         while not isempty:

@@ -170,9 +170,9 @@
             testRunTimeText.ForeColor = Color.DimGray;
             testRunTimeText.Location = new Point(310, 132);
             testRunTimeText.Name = "testRunTimeText";
-            testRunTimeText.Size = new Size(31, 15);
+            testRunTimeText.Size = new Size(48, 15);
             testRunTimeText.TabIndex = 79;
-            testRunTimeText.Text = "0 ms";
+            testRunTimeText.Text = "0 / 0 ms";
             // 
             // testRunTimeLabel
             // 

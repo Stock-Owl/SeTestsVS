@@ -11,14 +11,14 @@
       "refresh_rate": 1000,
       "retry_timeout": 1000
     },
-    "parent_log_path": "C:\\dev\\SeTestsVS\\logs",
+    "parent_log_path": "C:\\Users\\kmarton\\source\\repos\\SeTestsVS\\logs",
     "terminal_mode": false
   },
   "driver_options": {
     "accept_insecure_certs": true,
     "chrome_arguments": [],
     "firefox_arguments": [],
-    "keep_browser_open": true,
+    "keep_browser_open": false,
     "page_load_strategy": "normal",
     "timeout": {
       "type": "pageLoad",
@@ -38,7 +38,7 @@
         },
         "1": {
           "type": "goto",
-          "break": false,
+          "break": true,
           "url": "https://www.github.com"
         }
       }

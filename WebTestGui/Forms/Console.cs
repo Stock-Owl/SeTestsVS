@@ -56,12 +56,35 @@
         {
             BackColor = Color.FromArgb(255, 70, 50, 50);
             consoleTextBox.ForeColor = Color.FromArgb(255, 192, 203);
+
+            chromeButton.BackColor = Color.FromArgb(255, 70, 50, 50);
+            firefoxButton.BackColor = Color.FromArgb(255, 70, 50, 50);
+
+            chromeButton.BackColor = Color.FromArgb(255, 70, 50, 50);
+            firefoxButton.BackColor = Color.FromArgb(255, 70, 50, 50);
+
+            clearButton.BackColor = Color.FromArgb(255, 70, 50, 50);
         }
 
         public void SetSchemeToEdtiting()
         {
             BackColor = Color.FromArgb(255, 50, 50, 53);
             consoleTextBox.ForeColor = Color.LightBlue;
+
+            chromeButton.BackColor = Color.FromArgb(255, 50, 50, 53);
+            firefoxButton.BackColor = Color.FromArgb(255, 50, 50, 53);
+
+            chromeButton.BackColor = Color.FromArgb(255, 50, 50, 53);
+            firefoxButton.BackColor = Color.FromArgb(255, 50, 50, 53);
+
+            clearButton.BackColor = Color.FromArgb(255, 50, 50, 53);
+        }
+
+        private void clearButton_Click(object sender, EventArgs e)
+        {
+            m_ChromeLogString = string.Empty;
+            m_FirefoxLogString = string.Empty;
+            consoleTextBox.Clear();
         }
 
         bool isChrome = true;

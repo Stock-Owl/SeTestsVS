@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json.Linq;
-using Python.Runtime;
 
 namespace WebTestGui
 {
@@ -118,13 +117,14 @@ namespace WebTestGui
 
         public void OnBreakpointLeave()
         {
-            BackColor = Color.FromArgb(255, 45, 45, 50);
+            mainPanel.BackColor = Color.FromArgb(255, 45, 45, 50);
             actionsPanel.BackColor = Color.FromArgb(255, 45, 45, 50);
 
             foreach (IAction action in m_Actions.m_Actions)
             {
                 action.OnBreakpointLeave();
             }
+            Refresh();
         }
 
         public void SetRunTime()
@@ -139,6 +139,14 @@ namespace WebTestGui
                 firefoxSum += sum.Item2;
             }
             testRunTimeText.Text = (chromeSum.ToString() + " / " + firefoxSum.ToString() + " ms");
+            if (m_ParentForm.Test().m_State == Test.TestState.Break)
+            {
+                testRunTimeText.ForeColor = Color.Firebrick;
+            }
+            else if (m_ParentForm.Test().m_State == Test.TestState.Edit)
+            {
+                testRunTimeText.ForeColor = Color.DimGray;
+            }
         }
 
         public void OnBorderLineDraw(object sender, PaintEventArgs e)
@@ -337,6 +345,18 @@ namespace WebTestGui
         }
 
         public bool m_IsCollapsed = false;
+
+        private void resetBindingButton_Click(object sender, EventArgs e)
+        {
+            m_Bindings = null!;
+            bindingsLabel.Text = "null";
+        }
+
+        private void resetBackupOfButton_Click(object sender, EventArgs e)
+        {
+            m_BackupOf = null!;
+            backupOfLabel.Text = "null";
+        }
     }
 }
 
