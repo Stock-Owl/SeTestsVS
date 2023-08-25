@@ -177,30 +177,44 @@ class Core:
             browser_options: tuple[ChromeOptions, FirefoxOptions] = Core.DefaultOptions()
 
         units = json["units"]
-        options: dict = json["options"]
-        parent_log_path = options["parent_log_path"],
-        log_js_retry_timeout = options["log_JS_retry_timeout"],
-        terminal_mode = options["terminal_mode"]
-        keep_browser_open = json["driver_options"]["keep_browser_open"]
+        options: dict[str] = json["options"]
+        parent_log_path: str = options["parent_log_path"]
+        log_js_retry_timeout: int = options["log_JS_retry_timeout"]
+        terminal_mode: bool = options["terminal_mode"]
+        keep_browser_open: bool = json["driver_options"]["keep_browser_open"]
         testname: str = json["name"]
 
         processes: list[Process] = []
         parent_log_path = options["parent_log_path"]
 
-        kwargs: dict = \
+        chrome_kwargs: dict = \
         {
             "options": browser_options[0],
             "units": units,
             "testname": testname,
             "log_js_retry_timeout": log_js_retry_timeout,
             "terminal_mode": terminal_mode,
-            "keep_browser_open": keep_browser_open
+            "keep_browser_open": keep_browser_open,
+            "browser": "chrome",
+            "parent_log_path": f"{parent_log_path}/chrome"
         }
 
-        chrome_exec = Process(target=Core.DriverExec, kwargs=copy(kwargs, browser="chrome", parent_log_path=f"{parent_log_path}/chrome"))
+        chrome_exec = Process(target=Core.DriverExec, kwargs=chrome_kwargs)
         processes.append(chrome_exec)
 
-        firefox_exec = Process(target=Core.DriverExec , kwargs=copy(kwargs, browser="firefox", parent_log_path=f"{parent_log_path}/firefox"))
+        firefox_kwargs: dict = \
+        {
+            "options": browser_options[1],
+            "units": units,
+            "testname": testname,
+            "log_js_retry_timeout": log_js_retry_timeout,
+            "terminal_mode": terminal_mode,
+            "keep_browser_open": keep_browser_open,
+            "browser": "firefox",
+            "parent_log_path": f"{parent_log_path}/firefox"
+        }
+
+        firefox_exec = Process(target=Core.DriverExec , kwargs=firefox_kwargs)
         processes.append(firefox_exec)
 
         return processes
@@ -229,7 +243,7 @@ class Core:
             
         else:
             print(f"Unknown browser {browser}")
-            Support.LogError(f"Unknown browser {browser}")
+            Support.LogError(parent_log_path, f"Unknown browser {browser}")
             return None
 
         # clears the previous log files
@@ -261,18 +275,22 @@ class Core:
                 actions = unit['actions']
                 for aname, action in actions.items():
                     if action["break"]:
-                        if logging_active:
-                            Support.LogBrowserJSLog()
-
                         try:
+                            # if logging_active:
+                            #     print("logging active")
+                            #     Support.LogBrowserJSLog(driver, parent_log_path, log_js_retry_timeout)
+                                
+                            print("breakwrite")
                             with open(f"{parent_log_path}/../file.brk", mode='a+', encoding='utf-8') as f:
                                 f.write(f"{browser_break_char}:{uname}:{aname}\n")
 
                         except FileNotFoundError:
+                            print("breakcreate")
                             with open(f"{parent_log_path}/../file.brk", mode='w', encoding='utf-8') as f:
                                 f.write(f"{browser_break_char}:{uname}:{aname}\n")
 
                         isempty: bool = False
+                        print("breakwait")
                         while not isempty:
                             with open(f"{parent_log_path}/../file.brk", mode='r', encoding='utf-8') as f:
                                 content: str = f.read()
@@ -373,7 +391,7 @@ class Core:
                 Support.LogError(parent_log_path, "----------------------------------------------------------------\n", time_disabled=True)
 
         if logging_active:
-            Support.LogBrowserJSLog()
+            Support.LogBrowserJSLog(driver, parent_log_path, log_js_retry_timeout)
 
         if not keep_browser_open:
             driver.quit()
@@ -406,4 +424,4 @@ class Core:
                 f"DATE: {today}\n-------------------------------------\n\n{testname}\n{current_log}\n-------------------------------------\n"
                 f.write(to_write)
 
-        print("Chrome finished")
+        print(f"Driver ({browser}) finished")

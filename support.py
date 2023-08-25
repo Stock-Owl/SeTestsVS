@@ -111,8 +111,9 @@ class Support:
         
     def LogBrowserJSLog(
             driver: ChromeDriver,
-            log_js_retry_timeout: int = None,
-            parent_log_path: str = None,
+            parent_log_path: str,
+            log_js_retry_timeout: int,
+            time_disabled: bool = False,
             **overflow) -> None:    #overflow not used
         
         """
@@ -130,7 +131,7 @@ class Support:
         from time import sleep
 
         path: str = f"{parent_log_path}/../js.log"
-        fuckup: int | float = log_js_retry_timeout  / 1000
+        fuckup: int | float = log_js_retry_timeout / 1000
 
         try:
             assert Support.exists(path)
@@ -141,11 +142,13 @@ class Support:
         browser_logs: list[dict[str, str | int]] = driver.get_log('browser')
 
         while True:
+            print("logger waiting")
             with open(path, mode = 'r+', encoding = 'utf-8') as f:
                 contents = f.read()
             if contents != '':
                 sleep(fuckup)
                 continue
+
             with open(path, mode = 'a+', encoding = 'utf-8') as f:
                 for i in range(len(browser_logs)):
                     log = browser_logs[i]
@@ -154,7 +157,7 @@ class Support:
                     log_line = \
                     f"{i} ❗ JavaScript:\n{log['source']} — {log['level']}:\n{log['message']}\n\t{log['timestamp']}\n#\n"
                     f.write(log_line)
-                    Support.LogAll(path = parent_log_path, log_line = log_line)
+                    Support.LogAll(parent_log_path, log_line, time_disabled=time_disabled)
             break
         
         print("Logger finished")
