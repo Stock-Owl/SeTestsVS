@@ -1,5 +1,5 @@
 {
-  "name": "ble",
+  "name": "fastrun",
   "browsers": [
     "chrome",
     "firefox"
@@ -7,14 +7,14 @@
   "options": {
     "auto_exit_iframes": true,
     "log_JS_retry_timeout": 1000,
-    "parent_log_path": "./logs",
+    "parent_log_path": "C:\\Users\\kmarton\\source\\repos\\SeTestsVS\\logs",
     "terminal_mode": false
   },
   "driver_options": {
     "accept_insecure_certs": true,
     "chrome_arguments": [],
     "firefox_arguments": [],
-    "keep_browser_open": true,
+    "keep_browser_open": false,
     "page_load_strategy": "normal",
     "timeout": {
       "type": "pageLoad",
@@ -23,67 +23,24 @@
     "unhandled_prompt_behavior": "dismiss and notify"
   },
   "units": {
-    "1": {
+    "UNIT 1": {
       "bindings": null,
       "backup_of": null,
       "actions": {
         "0": {
           "type": "goto",
           "break": false,
-          "url": "https://youtube.com"
+          "url": "https://www.youtube.com/"
         },
         "1": {
           "type": "goto",
-          "break": false,
-          "url": "https://github.com"
-        }
-      }
-    },
-    "KÖCSÖG": {
-      "bindings": null,
-      "backup_of": null,
-      "actions": {
-        "0": {
-          "type": "goto",
-          "break": false,
-          "url": "https://wikipedia.org/"
-        }
-      }
-    },
-    "FASZ": {
-      "bindings": null,
-      "backup_of": null,
-      "actions": {
-        "0": {
-          "type": "goto",
-          "break": false,
-          "url": "https://tesco.com"
-        },
-        "1": {
-          "type": "goto",
-          "break": false,
-          "url": "https://github.com"
+          "break": true,
+          "url": "https://github.com/"
         },
         "2": {
           "type": "goto",
           "break": false,
-          "url": "https://instagram.com/"
-        }
-      }
-    },
-    "4": {
-      "bindings": null,
-      "backup_of": null,
-      "actions": {
-        "0": {
-          "type": "goto",
-          "break": true,
-          "url": "https://youtube.com"
-        },
-        "1": {
-          "type": "goto",
-          "break": false,
-          "url": "https://github.com"
+          "url": "https://www.instagram.com/"
         }
       }
     }

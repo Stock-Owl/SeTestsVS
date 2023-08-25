@@ -81,7 +81,7 @@
     <Compile Update="Core\Options\TerminalModeOption.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="Core\Options\LogJSOption.cs">
+    <Compile Update="Core\Options\LogJSRetryTimeoutOption.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="Core\Units\UnitPanel.cs">

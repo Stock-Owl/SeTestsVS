@@ -1,16 +1,12 @@
 {
-  "name": "test",
+  "name": "fastrun",
   "browsers": [
     "chrome",
     "firefox"
   ],
   "options": {
     "auto_exit_iframes": true,
-    "log_JS": {
-      "active": true,
-      "refresh_rate": 1000,
-      "retry_timeout": 1000
-    },
+    "log_JS_retry_timeout": 1000,
     "parent_log_path": "C:\\Users\\kmarton\\source\\repos\\SeTestsVS\\logs",
     "terminal_mode": false
   },
@@ -27,19 +23,24 @@
     "unhandled_prompt_behavior": "dismiss and notify"
   },
   "units": {
-    "Go to youtube": {
+    "UNIT 1": {
       "bindings": null,
       "backup_of": null,
       "actions": {
         "0": {
           "type": "goto",
           "break": false,
-          "url": "https://www.youtube.com"
+          "url": "https://www.youtube.com/"
         },
         "1": {
           "type": "goto",
           "break": true,
-          "url": "https://www.github.com"
+          "url": "https://github.com/"
+        },
+        "2": {
+          "type": "goto",
+          "break": false,
+          "url": "https://www.instagram.com/"
         }
       }
     }

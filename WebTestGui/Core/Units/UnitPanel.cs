@@ -149,6 +149,12 @@ namespace WebTestGui
             }
         }
 
+        public Tuple<int, int> GetRunTime()
+        {
+            return new Tuple<int, int>(
+                int.Parse(testRunTimeText.Text.Split(" ")[0]), int.Parse(testRunTimeText.Text.Split(" ")[2]));
+        }
+
         public void OnBorderLineDraw(object sender, PaintEventArgs e)
         {
             base.OnPaint(e);

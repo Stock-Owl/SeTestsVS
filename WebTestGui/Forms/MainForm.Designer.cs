@@ -36,6 +36,8 @@
             testStartButton = new Button();
             unitLabel = new Label();
             unitHeaderPanel = new Panel();
+            gotoUnitLabel = new Label();
+            gotoUnitComboBox = new ComboBox();
             addUnitButton = new PictureBox();
             optionHeaderPanel = new Panel();
             optionLabel = new Label();
@@ -54,6 +56,7 @@
             rootLogDirectoryButton = new Button();
             testNameLabel = new Label();
             breakpointIcon = new PictureBox();
+            testRunTimeText = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             unitHeaderPanel.SuspendLayout();
@@ -73,9 +76,9 @@
             chromeCheckBox.CheckState = CheckState.Checked;
             chromeCheckBox.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
             chromeCheckBox.ForeColor = Color.White;
-            chromeCheckBox.Location = new Point(907, 82);
+            chromeCheckBox.Location = new Point(886, 82);
             chromeCheckBox.Name = "chromeCheckBox";
-            chromeCheckBox.Size = new Size(83, 24);
+            chromeCheckBox.Size = new Size(104, 29);
             chromeCheckBox.TabIndex = 3;
             chromeCheckBox.Text = "Chrome";
             chromeCheckBox.UseVisualStyleBackColor = false;
@@ -114,9 +117,9 @@
             firefoxCheckBox.CheckState = CheckState.Checked;
             firefoxCheckBox.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
             firefoxCheckBox.ForeColor = Color.White;
-            firefoxCheckBox.Location = new Point(1025, 82);
+            firefoxCheckBox.Location = new Point(1007, 82);
             firefoxCheckBox.Name = "firefoxCheckBox";
-            firefoxCheckBox.Size = new Size(73, 24);
+            firefoxCheckBox.Size = new Size(91, 29);
             firefoxCheckBox.TabIndex = 5;
             firefoxCheckBox.Text = "Firefox";
             firefoxCheckBox.UseVisualStyleBackColor = false;
@@ -144,7 +147,7 @@
             unitLabel.ForeColor = Color.White;
             unitLabel.Location = new Point(3, 3);
             unitLabel.Name = "unitLabel";
-            unitLabel.Size = new Size(54, 19);
+            unitLabel.Size = new Size(65, 23);
             unitLabel.TabIndex = 9;
             unitLabel.Text = "Unitok:";
             // 
@@ -152,12 +155,43 @@
             // 
             unitHeaderPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             unitHeaderPanel.BackColor = Color.FromArgb(40, 40, 45);
+            unitHeaderPanel.Controls.Add(gotoUnitLabel);
+            unitHeaderPanel.Controls.Add(gotoUnitComboBox);
             unitHeaderPanel.Controls.Add(addUnitButton);
             unitHeaderPanel.Controls.Add(unitLabel);
             unitHeaderPanel.Location = new Point(412, 77);
             unitHeaderPanel.Name = "unitHeaderPanel";
             unitHeaderPanel.Size = new Size(364, 30);
             unitHeaderPanel.TabIndex = 9;
+            // 
+            // gotoUnitLabel
+            // 
+            gotoUnitLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            gotoUnitLabel.AutoSize = true;
+            gotoUnitLabel.BackColor = Color.Transparent;
+            gotoUnitLabel.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
+            gotoUnitLabel.ForeColor = Color.DarkGray;
+            gotoUnitLabel.Location = new Point(123, 6);
+            gotoUnitLabel.Name = "gotoUnitLabel";
+            gotoUnitLabel.Size = new Size(95, 20);
+            gotoUnitLabel.TabIndex = 63;
+            gotoUnitLabel.Text = "Unit keresése:";
+            // 
+            // gotoUnitComboBox
+            // 
+            gotoUnitComboBox.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            gotoUnitComboBox.BackColor = Color.FromArgb(40, 40, 43);
+            gotoUnitComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            gotoUnitComboBox.FlatStyle = FlatStyle.Popup;
+            gotoUnitComboBox.Font = new Font("Segoe UI Semibold", 8F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+            gotoUnitComboBox.ForeColor = Color.Silver;
+            gotoUnitComboBox.FormattingEnabled = true;
+            gotoUnitComboBox.Location = new Point(208, 3);
+            gotoUnitComboBox.Name = "gotoUnitComboBox";
+            gotoUnitComboBox.Size = new Size(126, 25);
+            gotoUnitComboBox.TabIndex = 62;
+            gotoUnitComboBox.DropDown += gotoUnitComboBox_DropDown;
+            gotoUnitComboBox.SelectedIndexChanged += gotoUnitComboBox_SelectedIndexChanged;
             // 
             // addUnitButton
             // 
@@ -190,7 +224,7 @@
             optionLabel.ForeColor = Color.White;
             optionLabel.Location = new Point(3, 2);
             optionLabel.Name = "optionLabel";
-            optionLabel.Size = new Size(56, 19);
+            optionLabel.Size = new Size(68, 23);
             optionLabel.TabIndex = 45;
             optionLabel.Text = "Opciók:";
             // 
@@ -251,7 +285,7 @@
             browserLabel.ForeColor = Color.White;
             browserLabel.Location = new Point(795, 81);
             browserLabel.Name = "browserLabel";
-            browserLabel.Size = new Size(99, 25);
+            browserLabel.Size = new Size(125, 32);
             browserLabel.TabIndex = 45;
             browserLabel.Text = "Böngésző:";
             // 
@@ -304,7 +338,7 @@
             currentlyEditedLabel.ForeColor = Color.White;
             currentlyEditedLabel.Location = new Point(416, 568);
             currentlyEditedLabel.Name = "currentlyEditedLabel";
-            currentlyEditedLabel.Size = new Size(169, 19);
+            currentlyEditedLabel.Size = new Size(205, 23);
             currentlyEditedLabel.TabIndex = 50;
             currentlyEditedLabel.Text = "Jelenleg szerkeztett teszt:";
             // 
@@ -327,7 +361,7 @@
             currentlyEditedText.ForeColor = Color.DarkGray;
             currentlyEditedText.Location = new Point(416, 587);
             currentlyEditedText.Name = "currentlyEditedText";
-            currentlyEditedText.Size = new Size(38, 12);
+            currentlyEditedText.Size = new Size(48, 15);
             currentlyEditedText.TabIndex = 52;
             currentlyEditedText.Text = "filepath";
             // 
@@ -366,7 +400,7 @@
             testNameLabel.ForeColor = Color.White;
             testNameLabel.Location = new Point(408, 37);
             testNameLabel.Name = "testNameLabel";
-            testNameLabel.Size = new Size(136, 37);
+            testNameLabel.Size = new Size(169, 46);
             testNameLabel.TabIndex = 55;
             testNameLabel.Text = "testName";
             // 
@@ -381,11 +415,24 @@
             breakpointIcon.TabStop = false;
             breakpointIcon.Visible = false;
             // 
+            // testRunTimeText
+            // 
+            testRunTimeText.AutoSize = true;
+            testRunTimeText.BackColor = Color.Transparent;
+            testRunTimeText.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
+            testRunTimeText.ForeColor = Color.DarkGray;
+            testRunTimeText.Location = new Point(544, 52);
+            testRunTimeText.Name = "testRunTimeText";
+            testRunTimeText.Size = new Size(271, 20);
+            testRunTimeText.TabIndex = 61;
+            testRunTimeText.Text = "Előző tesztelés teljes futási ideje: 0 / 0 ms";
+            // 
             // MainForm
             // 
             AutoScaleMode = AutoScaleMode.None;
             BackColor = Color.FromArgb(50, 50, 53);
             ClientSize = new Size(1134, 611);
+            Controls.Add(testRunTimeText);
             Controls.Add(breakpointIcon);
             Controls.Add(rootLogDirectoryButton);
             Controls.Add(pictureBox3);
@@ -453,5 +500,8 @@
         private Label testNameLabel;
         private PictureBox addUnitButton;
         private PictureBox breakpointIcon;
+        protected Label testRunTimeText;
+        private ComboBox gotoUnitComboBox;
+        protected Label gotoUnitLabel;
     }
 }
