@@ -276,21 +276,21 @@ class Core:
                 for aname, action in actions.items():
                     if action["break"]:
                         try:
-                            # if logging_active:
-                            #     print("logging active")
-                            #     Support.LogBrowserJSLog(driver, parent_log_path, log_js_retry_timeout)
+                            if logging_active:
+                                print("logging active")
+                                Support.LogBrowserJSLog(driver, parent_log_path, log_js_retry_timeout)
                                 
-                            print("breakwrite")
+                            print(f"breakpoint writing U{uname}\tA:{aname}")
                             with open(f"{parent_log_path}/../file.brk", mode='a+', encoding='utf-8') as f:
                                 f.write(f"{browser_break_char}:{uname}:{aname}\n")
 
                         except FileNotFoundError:
-                            print("breakcreate")
+                            print(f"breakpoint creating file U{uname}\tA:{aname}")
                             with open(f"{parent_log_path}/../file.brk", mode='w', encoding='utf-8') as f:
                                 f.write(f"{browser_break_char}:{uname}:{aname}\n")
 
                         isempty: bool = False
-                        print("breakwait")
+                        print(f"breakpoint waiting U{uname}\tA:{aname}")
                         while not isempty:
                             with open(f"{parent_log_path}/../file.brk", mode='r', encoding='utf-8') as f:
                                 content: str = f.read()
@@ -298,6 +298,8 @@ class Core:
                                     break
                                 else:
                                     pass
+
+                        print(f"breakpoint finished U{uname}\tA:{aname}")
 
                         Support.LogProc(parent_log_path, "Breakpoint")
 

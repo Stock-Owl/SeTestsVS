@@ -160,4 +160,4 @@ class Support:
                     Support.LogAll(parent_log_path, log_line, time_disabled=time_disabled)
             break
         
-        print("Logger finished")
+        print("logger finished")
