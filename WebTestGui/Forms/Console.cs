@@ -57,8 +57,8 @@
             BackColor = Color.FromArgb(255, 70, 50, 50);
             consoleTextBox.ForeColor = Color.FromArgb(255, 192, 203);
 
-            chromeButton.BackColor = Color.FromArgb(255, 70, 50, 50);
-            firefoxButton.BackColor = Color.FromArgb(255, 70, 50, 50);
+            pictureBox1.BackColor = Color.FromArgb(255, 70, 50, 50);
+            pictureBox2.BackColor = Color.FromArgb(255, 70, 50, 50);
 
             chromeButton.BackColor = Color.FromArgb(255, 70, 50, 50);
             firefoxButton.BackColor = Color.FromArgb(255, 70, 50, 50);
@@ -71,8 +71,8 @@
             BackColor = Color.FromArgb(255, 50, 50, 53);
             consoleTextBox.ForeColor = Color.LightBlue;
 
-            chromeButton.BackColor = Color.FromArgb(255, 50, 50, 53);
-            firefoxButton.BackColor = Color.FromArgb(255, 50, 50, 53);
+            pictureBox1.BackColor = Color.FromArgb(255, 50, 50, 53);
+            pictureBox2.BackColor = Color.FromArgb(255, 50, 50, 53);
 
             chromeButton.BackColor = Color.FromArgb(255, 50, 50, 53);
             firefoxButton.BackColor = Color.FromArgb(255, 50, 50, 53);

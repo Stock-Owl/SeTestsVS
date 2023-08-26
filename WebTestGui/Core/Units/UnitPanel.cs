@@ -44,14 +44,26 @@ namespace WebTestGui
 
         public void Delete(object sender, EventArgs e)
         {
-            m_ParentForm.DeleteUnit(this);
-            Refresh();
+            DialogResult result = MessageBox.Show($"Biztosan törölni szeretné ezt a Unitot?\n ('{m_UnitName}' visszafordíthatatlanul elveszik...)",
+                "Törlés megerősítése", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (result == DialogResult.Yes)
+            {
+                m_ParentForm.DeleteUnit(this);
+                Refresh();
+            }
         }
 
         public void DeleteAction(IAction action)
         {
-            m_Actions.m_Actions.Remove(action);
-            Refresh();
+            DialogResult result = MessageBox.Show($"Biztosan törölni szeretné ezt a '{action.m_ActionType}' típusú Actiont?",
+                "Törlés megerősítése", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (result == DialogResult.Yes)
+            {
+                m_Actions.m_Actions.Remove(action);
+                OnExpandActionsButttonClick(null!, null!);
+            }
         }
 
         public void MoveAction(IAction action, int newId)

@@ -80,6 +80,7 @@
                     return;
                 }
             }
+            item.m_Test.m_MainForm.OnSaveTestButtonPressed(null!, null!);
             m_TestTabItems.Remove(item);
             if (m_TestTabItems.Count != 0)
             {
@@ -94,7 +95,7 @@
 
         public void SelectItem(TestTabItem selectedItem)
         {
-            if (selectedItem.m_Test.m_State == Test.TestState.Edit)
+            if (!m_TestRunning)
             {
                 foreach (TestTabItem item in m_TestTabItems)
                 {
@@ -115,5 +116,7 @@
         public TestTabItem m_SelectedItem;
         public List<TestTabItem> m_TestTabItems = new List<TestTabItem>();
         public MainForm m_ParentForm;
+
+        public bool m_TestRunning = false;
     }
 }
