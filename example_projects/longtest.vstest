@@ -1,5 +1,5 @@
 {
-  "name": "run",
+  "name": "longtest",
   "browsers": [
     "chrome",
     "firefox"

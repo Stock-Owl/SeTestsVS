@@ -7,6 +7,7 @@ namespace WebTestGui
     {
         /* TODO:
             - Idõzítõ app integrálása
+            - RAW szerkeztõ (a teszt JSON szövegû összeállítása)
         */
 
         public MainForm()
@@ -70,12 +71,27 @@ namespace WebTestGui
 
         private void exportOptionTemplate_Click(object sender, EventArgs e)
         {
-
+            SaveFileDialog of = new SaveFileDialog();
+            of.Title = "Teszt opciók mentése...";
+            of.Filter = $"Teszt opciók fájl|*{AppConsts.s_AppDefaultFileExtension + "options"}|Any File|*.*";
+            if (of.ShowDialog() == DialogResult.OK)
+            {
+                string savedInfo = TestFormatter.SaveOptionsFromTest(Test());
+                File.WriteAllText(of.FileName, savedInfo);
+            }
         }
 
         private void importOptionTemplate_Click(object sender, EventArgs e)
         {
-
+            OpenFileDialog of = new OpenFileDialog();
+            of.Title = "Teszt opciók betöltése...";
+            of.Filter = $"Teszt opciók fájl|*{AppConsts.s_AppDefaultFileExtension + "options"}|Any File|*.*";
+            if (of.ShowDialog() == DialogResult.OK)
+            {
+                string loadedInfo = File.ReadAllText(of.FileName);
+                TestFormatter.LoadOptionsToTest(loadedInfo, Test());
+                RefreshOptionsPanel();
+            }
         }
 
         #endregion
@@ -947,7 +963,6 @@ namespace WebTestGui
         }
 
         #endregion
-
 
         public static bool s_IsChromeChecked = true;
 

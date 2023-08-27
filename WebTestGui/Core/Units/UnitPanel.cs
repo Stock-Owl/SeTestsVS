@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using System;
 
 namespace WebTestGui
 {
@@ -350,7 +351,7 @@ namespace WebTestGui
         private void OnUnitNameTextFieldChanged(object sender, EventArgs e)
         {
             m_UnitName = unitNameTextField.Text;
-            m_ParentForm.RefreshEditor();
+            m_ParentForm.RefreshEditor();   
         }
 
         private void OnUIdTextBoxFocusLeave(object sender, EventArgs e)
