@@ -24,6 +24,9 @@ class Actions:
         Actions.CheckDriverExists(driver)
         driver.refresh()
 
+    def SwitchBack(driver: ChromeDriver | FirefoxDriver):
+        driver.switch_to.parent_frame()
+
     def Wait(driver: ChromeDriver | FirefoxDriver, time_: int):
         Actions.CheckDriverExists(driver)
         time = float(time_ / 1000)
@@ -196,7 +199,7 @@ class Actions:
       
     def ElementAction(
             driver: ChromeDriver | FirefoxDriver,
-            **action_kwargs) -> WebElement | list[WebElement]:
+            **action_kwargs) -> None:
         
         result: WebElement | list[WebElement]
         isSingle = action_kwargs["isSingle"]
@@ -211,11 +214,11 @@ class Actions:
                     result.send_keys(keys)
                 case "clear":
                     result.clear()
+                case "switch_to":
+                    driver.switch_to.frame(result)
                 case _:
                     raise ValueError("Invalid action type") 
                                    
-            driver.switch_to.parent_frame()     #if there was an iframe, this goes back to the top of the frame
-
         elif isSingle == False:
             results = Actions.MatchElements(driver, **action_kwargs)
             for result in results:                    
@@ -230,7 +233,8 @@ class Actions:
                         result.clear()
                     case _:
                         raise ValueError("Invalid action type")
-                                          
+
+        if action_kwargs["auto_exit_iframes"]:                                  
             driver.switch_to.parent_frame()     #if there was an iframe, this goes back to the top of the frame 
 
     def CheckDriverExists(driver: object, omit_exceptions: bool = True) -> None | bool | Exception:

@@ -14,7 +14,7 @@ from copy import copy
 from os import getpid
 
 # V.1.1.0
-#                                                                               24 / 27 + 1
+#                                                                               25 / 27 + 1
 # TODO: Kitalálni, hogy vannak az argumentumok                                  ✅  1
 # TODO: Megszerelni a random useless conversionöket a JSON-ből                  ✅  2
 # TODO: Relative locators                                                       ❌  NAH FUCK that shit
@@ -52,7 +52,7 @@ from os import getpid
 # TODO: time data collection, bounds etc.                                         GUI
 # TODO: breakpoint intermediate                                                 ✅  25
 # TODO: installer update                                                        ❌  26
-# TODO: refactoring                                                             ❌  27
+# TODO: refactoring                                                             ✅  27
 
 # Snyk deepcode ignores:
 # file deepcode ignore AttributeLoadOnNone: <Keyword arguments only set to None to make them a keyword argument. All parameters will be passed from the host funciton>
@@ -321,6 +321,19 @@ class Core:
                             Actions.Wait(driver, time)
                         case "wait_for":
                             Actions.WaitFor(driver, action)
+                        case "switch_back":
+                            Actions.SwitchBack(driver)
+                        case "switch_to":
+                            Actions.ElementAction(
+                                driver,
+                                action = 'switch_to',
+                                locator = action['locator'],
+                                value = action['value'],
+                                isSingle = True,
+                                isDisplayed = None,
+                                isEnabled = None,
+                                isSelected = None
+                                )
                         case "click":
                             Actions.ElementAction(
                                 driver,
