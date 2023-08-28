@@ -1,0 +1,47 @@
+{
+  "name": "test",
+  "browsers": [
+    "chrome",
+    "firefox"
+  ],
+  "options": {
+    "auto_exit_iframes": true,
+    "log_JS": {
+      "active": true,
+      "refresh_rate": 1000,
+      "retry_timeout": 1000
+    },
+    "parent_log_path": "C:\\Users\\kmarton\\source\\repos\\SeTestsVS\\logs",
+    "terminal_mode": false
+  },
+  "driver_options": {
+    "accept_insecure_certs": true,
+    "chrome_arguments": [],
+    "firefox_arguments": [],
+    "keep_browser_open": false,
+    "page_load_strategy": "normal",
+    "timeout": {
+      "type": "pageLoad",
+      "value": 300000
+    },
+    "unhandled_prompt_behavior": "dismiss and notify"
+  },
+  "units": {
+    "Go to youtube": {
+      "bindings": null,
+      "backup_of": null,
+      "actions": {
+        "0": {
+          "type": "goto",
+          "break": false,
+          "url": "https://www.youtube.com"
+        },
+        "1": {
+          "type": "goto",
+          "break": true,
+          "url": "https://www.github.com"
+        }
+      }
+    }
+  }
+}
