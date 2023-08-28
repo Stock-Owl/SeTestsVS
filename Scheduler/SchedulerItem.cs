@@ -9,6 +9,16 @@
             m_Parent = parent;
         }
 
+        public void OnTestStart()
+        {
+
+        }
+
+        public void OnTestEnd(bool successful)
+        {
+
+        }
+
         private void pictureBox3_Click(object sender, EventArgs e)
         {
             OpenFileDialog of = new OpenFileDialog();

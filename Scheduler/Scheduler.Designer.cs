@@ -36,9 +36,15 @@
             addUnitButton = new PictureBox();
             unitLabel = new Label();
             unitHeaderPanel = new Panel();
+            testStartButton = new Button();
+            folderIcon = new PictureBox();
+            searchForFolderButton = new Button();
+            hintLabel = new Label();
+            folderPath = new TextBox();
             ((System.ComponentModel.ISupportInitialize)vsLogo).BeginInit();
             ((System.ComponentModel.ISupportInitialize)addUnitButton).BeginInit();
             unitHeaderPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)folderIcon).BeginInit();
             SuspendLayout();
             // 
             // mainLabel
@@ -62,7 +68,7 @@
             schedulerPanel.Location = new Point(4, 91);
             schedulerPanel.Margin = new Padding(4, 3, 4, 3);
             schedulerPanel.Name = "schedulerPanel";
-            schedulerPanel.Size = new Size(556, 380);
+            schedulerPanel.Size = new Size(556, 275);
             schedulerPanel.TabIndex = 54;
             // 
             // testRunTimeText
@@ -130,12 +136,83 @@
             unitHeaderPanel.Size = new Size(556, 30);
             unitHeaderPanel.TabIndex = 64;
             // 
+            // testStartButton
+            // 
+            testStartButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            testStartButton.BackColor = Color.FromArgb(45, 45, 48);
+            testStartButton.Font = new Font("Segoe UI Semibold", 15F, FontStyle.Bold, GraphicsUnit.Point);
+            testStartButton.ForeColor = Color.White;
+            testStartButton.Location = new Point(4, 372);
+            testStartButton.Name = "testStartButton";
+            testStartButton.Size = new Size(327, 40);
+            testStartButton.TabIndex = 65;
+            testStartButton.Text = "TESZTELÉS INDITÁSA...";
+            testStartButton.UseVisualStyleBackColor = false;
+            testStartButton.Click += testStartButton_Click;
+            // 
+            // folderIcon
+            // 
+            folderIcon.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            folderIcon.Image = (Image)resources.GetObject("folderIcon.Image");
+            folderIcon.Location = new Point(9, 469);
+            folderIcon.Name = "folderIcon";
+            folderIcon.Size = new Size(25, 25);
+            folderIcon.SizeMode = PictureBoxSizeMode.StretchImage;
+            folderIcon.TabIndex = 69;
+            folderIcon.TabStop = false;
+            folderIcon.Click += folderIcon_Click;
+            // 
+            // searchForFolderButton
+            // 
+            searchForFolderButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            searchForFolderButton.BackColor = Color.FromArgb(40, 40, 43);
+            searchForFolderButton.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            searchForFolderButton.ForeColor = Color.White;
+            searchForFolderButton.Location = new Point(39, 469);
+            searchForFolderButton.Name = "searchForFolderButton";
+            searchForFolderButton.Size = new Size(87, 25);
+            searchForFolderButton.TabIndex = 68;
+            searchForFolderButton.Text = "Kiválasztás...";
+            searchForFolderButton.UseVisualStyleBackColor = false;
+            searchForFolderButton.Click += searchForFolderButton_Click;
+            // 
+            // hintLabel
+            // 
+            hintLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            hintLabel.AutoSize = true;
+            hintLabel.BackColor = Color.Transparent;
+            hintLabel.Font = new Font("Segoe UI Semibold", 11F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+            hintLabel.ForeColor = Color.Silver;
+            hintLabel.Location = new Point(4, 415);
+            hintLabel.Name = "hintLabel";
+            hintLabel.Size = new Size(180, 20);
+            hintLabel.TabIndex = 67;
+            hintLabel.Text = "Gyökér log mappa helye:";
+            // 
+            // folderPath
+            // 
+            folderPath.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            folderPath.BackColor = Color.FromArgb(40, 40, 43);
+            folderPath.Font = new Font("Segoe UI", 10F, FontStyle.Italic, GraphicsUnit.Point);
+            folderPath.ForeColor = Color.DarkGray;
+            folderPath.Location = new Point(8, 438);
+            folderPath.Name = "folderPath";
+            folderPath.PlaceholderText = "A könyvtár abszolút útvonala...";
+            folderPath.Size = new Size(248, 25);
+            folderPath.TabIndex = 66;
+            folderPath.Text = "./logs";
+            // 
             // Scheduler
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(50, 50, 53);
             ClientSize = new Size(562, 511);
+            Controls.Add(folderIcon);
+            Controls.Add(searchForFolderButton);
+            Controls.Add(hintLabel);
+            Controls.Add(folderPath);
+            Controls.Add(testStartButton);
             Controls.Add(unitHeaderPanel);
             Controls.Add(vsLogo);
             Controls.Add(testRunTimeText);
@@ -150,6 +227,7 @@
             ((System.ComponentModel.ISupportInitialize)addUnitButton).EndInit();
             unitHeaderPanel.ResumeLayout(false);
             unitHeaderPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)folderIcon).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -163,5 +241,10 @@
         private PictureBox addUnitButton;
         private Label unitLabel;
         private Panel unitHeaderPanel;
+        private Button testStartButton;
+        private PictureBox folderIcon;
+        private Button searchForFolderButton;
+        private Label hintLabel;
+        private TextBox folderPath;
     }
 }
