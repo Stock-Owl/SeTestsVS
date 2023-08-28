@@ -105,7 +105,7 @@
         public string m_TestName;
         public string m_TestPath;
 
-        string m_TestRawJson;
+        public string m_TestRawJson;
     }
 }
 
