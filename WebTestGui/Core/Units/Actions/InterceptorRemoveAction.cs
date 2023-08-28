@@ -123,9 +123,7 @@ namespace WebTestGui
             clickData["type"] = m_ActionType;
             clickData["break"] = m_HaveBreakpoint;
 
-            clickData["inter_type"] = typeTextBox.Text;
-            clickData["key"] = keyTextBox.Text;
-            clickData["value"] = valueTextBox.Text;
+            clickData["name"] = valueTextBox.Text;
 
             return clickData;
         }
@@ -142,10 +140,7 @@ namespace WebTestGui
                 SetBreakpoint(false);
             }
 
-            typeTextBox.Text = (string)data["inter_type"]!;
-
-            keyTextBox.Text = (string)data["key"]!;
-            valueLabel.Text = (string)data["value"]!;
+            valueTextBox.Text = (string)data["name"]!;
         }
 
         public string m_ActionType { get { return "interceptor_remove"; } }

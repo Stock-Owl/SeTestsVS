@@ -42,10 +42,6 @@
             valueTextBox = new TextBox();
             testRunTimeText = new Label();
             testRunTimeLabel = new Label();
-            typeTextBox = new ComboBox();
-            valueLabel = new Label();
-            locatorLabel = new Label();
-            keyTextBox = new TextBox();
             ((System.ComponentModel.ISupportInitialize)breakpointOnPicture).BeginInit();
             ((System.ComponentModel.ISupportInitialize)breakpointOffPicture).BeginInit();
             ((System.ComponentModel.ISupportInitialize)binImage).BeginInit();
@@ -108,13 +104,13 @@
             label1.Name = "label1";
             label1.Size = new Size(194, 15);
             label1.TabIndex = 36;
-            label1.Text = "eltávolítja a megadott interszeptort.";
+            label1.Text = "Eltávolítja a megadott interszeptort.";
             // 
             // binImage
             // 
             binImage.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             binImage.Image = (Image)resources.GetObject("binImage.Image");
-            binImage.Location = new Point(818, 143);
+            binImage.Location = new Point(818, 74);
             binImage.Name = "binImage";
             binImage.Size = new Size(35, 35);
             binImage.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -142,7 +138,7 @@
             actionTypeLabel.BackColor = Color.Transparent;
             actionTypeLabel.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
             actionTypeLabel.ForeColor = Color.Gray;
-            actionTypeLabel.Location = new Point(0, 166);
+            actionTypeLabel.Location = new Point(0, 97);
             actionTypeLabel.Name = "actionTypeLabel";
             actionTypeLabel.Size = new Size(64, 15);
             actionTypeLabel.TabIndex = 43;
@@ -155,10 +151,6 @@
             mainPanel.Controls.Add(valueTextBox);
             mainPanel.Controls.Add(testRunTimeText);
             mainPanel.Controls.Add(testRunTimeLabel);
-            mainPanel.Controls.Add(typeTextBox);
-            mainPanel.Controls.Add(valueLabel);
-            mainPanel.Controls.Add(locatorLabel);
-            mainPanel.Controls.Add(keyTextBox);
             mainPanel.Controls.Add(actionTypeLabel);
             mainPanel.Controls.Add(idTextBox);
             mainPanel.Controls.Add(binImage);
@@ -170,7 +162,7 @@
             mainPanel.Dock = DockStyle.Fill;
             mainPanel.Location = new Point(0, 0);
             mainPanel.Name = "mainPanel";
-            mainPanel.Size = new Size(863, 181);
+            mainPanel.Size = new Size(863, 112);
             mainPanel.TabIndex = 12;
             // 
             // label2
@@ -179,20 +171,20 @@
             label2.BackColor = Color.Transparent;
             label2.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             label2.ForeColor = Color.White;
-            label2.Location = new Point(194, 103);
+            label2.Location = new Point(167, 50);
             label2.Name = "label2";
-            label2.Size = new Size(48, 21);
+            label2.Size = new Size(41, 21);
             label2.TabIndex = 83;
-            label2.Text = "Érték:";
+            label2.Text = "Név:";
             // 
             // valueTextBox
             // 
             valueTextBox.BackColor = Color.FromArgb(40, 40, 43);
             valueTextBox.Font = new Font("Segoe UI", 8F, FontStyle.Italic, GraphicsUnit.Point);
             valueTextBox.ForeColor = Color.DarkGray;
-            valueTextBox.Location = new Point(266, 103);
+            valueTextBox.Location = new Point(214, 50);
             valueTextBox.Name = "valueTextBox";
-            valueTextBox.PlaceholderText = "Érték...";
+            valueTextBox.PlaceholderText = "Interszeptor neve:";
             valueTextBox.Size = new Size(350, 22);
             valueTextBox.TabIndex = 82;
             // 
@@ -203,7 +195,7 @@
             testRunTimeText.BackColor = Color.Transparent;
             testRunTimeText.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
             testRunTimeText.ForeColor = Color.DimGray;
-            testRunTimeText.Location = new Point(470, 163);
+            testRunTimeText.Location = new Point(470, 94);
             testRunTimeText.Name = "testRunTimeText";
             testRunTimeText.Size = new Size(48, 15);
             testRunTimeText.TabIndex = 81;
@@ -216,60 +208,11 @@
             testRunTimeLabel.BackColor = Color.Transparent;
             testRunTimeLabel.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
             testRunTimeLabel.ForeColor = Color.Gray;
-            testRunTimeLabel.Location = new Point(313, 163);
+            testRunTimeLabel.Location = new Point(313, 94);
             testRunTimeLabel.Name = "testRunTimeLabel";
             testRunTimeLabel.Size = new Size(157, 15);
             testRunTimeLabel.TabIndex = 80;
             testRunTimeLabel.Text = "Előző tesztelésen futási ideje:";
-            // 
-            // typeTextBox
-            // 
-            typeTextBox.BackColor = Color.FromArgb(40, 40, 43);
-            typeTextBox.FlatStyle = FlatStyle.Popup;
-            typeTextBox.Font = new Font("Segoe UI Semibold", 8F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
-            typeTextBox.ForeColor = Color.DarkGray;
-            typeTextBox.FormattingEnabled = true;
-            typeTextBox.Items.AddRange(new object[] { "header" });
-            typeTextBox.Location = new Point(232, 49);
-            typeTextBox.Name = "typeTextBox";
-            typeTextBox.Size = new Size(384, 21);
-            typeTextBox.TabIndex = 79;
-            typeTextBox.Text = "header";
-            // 
-            // valueLabel
-            // 
-            valueLabel.AutoSize = true;
-            valueLabel.BackColor = Color.Transparent;
-            valueLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            valueLabel.ForeColor = Color.White;
-            valueLabel.Location = new Point(194, 75);
-            valueLabel.Name = "valueLabel";
-            valueLabel.Size = new Size(49, 21);
-            valueLabel.TabIndex = 78;
-            valueLabel.Text = "Kulcs:";
-            // 
-            // locatorLabel
-            // 
-            locatorLabel.AutoSize = true;
-            locatorLabel.BackColor = Color.Transparent;
-            locatorLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            locatorLabel.ForeColor = Color.White;
-            locatorLabel.Location = new Point(160, 49);
-            locatorLabel.Name = "locatorLabel";
-            locatorLabel.Size = new Size(58, 21);
-            locatorLabel.TabIndex = 77;
-            locatorLabel.Text = "Típusa:";
-            // 
-            // keyTextBox
-            // 
-            keyTextBox.BackColor = Color.FromArgb(40, 40, 43);
-            keyTextBox.Font = new Font("Segoe UI", 8F, FontStyle.Italic, GraphicsUnit.Point);
-            keyTextBox.ForeColor = Color.DarkGray;
-            keyTextBox.Location = new Point(266, 75);
-            keyTextBox.Name = "keyTextBox";
-            keyTextBox.PlaceholderText = "Kulcs...";
-            keyTextBox.Size = new Size(350, 22);
-            keyTextBox.TabIndex = 76;
             // 
             // InterceptorRemoveAction
             // 
@@ -278,7 +221,7 @@
             BackColor = Color.FromArgb(50, 50, 55);
             Controls.Add(mainPanel);
             Name = "InterceptorRemoveAction";
-            Size = new Size(863, 181);
+            Size = new Size(863, 112);
             ((System.ComponentModel.ISupportInitialize)breakpointOnPicture).EndInit();
             ((System.ComponentModel.ISupportInitialize)breakpointOffPicture).EndInit();
             ((System.ComponentModel.ISupportInitialize)binImage).EndInit();
@@ -298,10 +241,6 @@
         private TextBox idTextBox;
         protected Label actionTypeLabel;
         private Panel mainPanel;
-        protected Label valueLabel;
-        protected Label locatorLabel;
-        private TextBox keyTextBox;
-        private ComboBox typeTextBox;
         protected Label testRunTimeText;
         protected Label testRunTimeLabel;
         protected Label label2;

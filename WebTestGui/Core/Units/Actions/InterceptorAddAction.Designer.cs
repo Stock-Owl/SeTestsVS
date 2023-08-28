@@ -46,6 +46,8 @@
             valueLabel = new Label();
             locatorLabel = new Label();
             keyTextBox = new TextBox();
+            label3 = new Label();
+            textBox1 = new TextBox();
             ((System.ComponentModel.ISupportInitialize)breakpointOnPicture).BeginInit();
             ((System.ComponentModel.ISupportInitialize)breakpointOffPicture).BeginInit();
             ((System.ComponentModel.ISupportInitialize)binImage).BeginInit();
@@ -151,6 +153,8 @@
             // mainPanel
             // 
             mainPanel.BackColor = Color.FromArgb(45, 45, 50);
+            mainPanel.Controls.Add(label3);
+            mainPanel.Controls.Add(textBox1);
             mainPanel.Controls.Add(label2);
             mainPanel.Controls.Add(valueTextBox);
             mainPanel.Controls.Add(testRunTimeText);
@@ -179,7 +183,7 @@
             label2.BackColor = Color.Transparent;
             label2.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             label2.ForeColor = Color.White;
-            label2.Location = new Point(194, 103);
+            label2.Location = new Point(209, 127);
             label2.Name = "label2";
             label2.Size = new Size(48, 21);
             label2.TabIndex = 83;
@@ -190,7 +194,7 @@
             valueTextBox.BackColor = Color.FromArgb(40, 40, 43);
             valueTextBox.Font = new Font("Segoe UI", 8F, FontStyle.Italic, GraphicsUnit.Point);
             valueTextBox.ForeColor = Color.DarkGray;
-            valueTextBox.Location = new Point(266, 103);
+            valueTextBox.Location = new Point(281, 127);
             valueTextBox.Name = "valueTextBox";
             valueTextBox.PlaceholderText = "Érték...";
             valueTextBox.Size = new Size(350, 22);
@@ -230,7 +234,7 @@
             typeTextBox.ForeColor = Color.DarkGray;
             typeTextBox.FormattingEnabled = true;
             typeTextBox.Items.AddRange(new object[] { "header" });
-            typeTextBox.Location = new Point(232, 49);
+            typeTextBox.Location = new Point(247, 73);
             typeTextBox.Name = "typeTextBox";
             typeTextBox.Size = new Size(384, 21);
             typeTextBox.TabIndex = 79;
@@ -242,7 +246,7 @@
             valueLabel.BackColor = Color.Transparent;
             valueLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             valueLabel.ForeColor = Color.White;
-            valueLabel.Location = new Point(194, 75);
+            valueLabel.Location = new Point(209, 99);
             valueLabel.Name = "valueLabel";
             valueLabel.Size = new Size(49, 21);
             valueLabel.TabIndex = 78;
@@ -254,7 +258,7 @@
             locatorLabel.BackColor = Color.Transparent;
             locatorLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             locatorLabel.ForeColor = Color.White;
-            locatorLabel.Location = new Point(160, 49);
+            locatorLabel.Location = new Point(175, 73);
             locatorLabel.Name = "locatorLabel";
             locatorLabel.Size = new Size(58, 21);
             locatorLabel.TabIndex = 77;
@@ -265,11 +269,34 @@
             keyTextBox.BackColor = Color.FromArgb(40, 40, 43);
             keyTextBox.Font = new Font("Segoe UI", 8F, FontStyle.Italic, GraphicsUnit.Point);
             keyTextBox.ForeColor = Color.DarkGray;
-            keyTextBox.Location = new Point(266, 75);
+            keyTextBox.Location = new Point(281, 99);
             keyTextBox.Name = "keyTextBox";
             keyTextBox.PlaceholderText = "Kulcs...";
             keyTextBox.Size = new Size(350, 22);
             keyTextBox.TabIndex = 76;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.BackColor = Color.Transparent;
+            label3.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            label3.ForeColor = Color.White;
+            label3.Location = new Point(192, 46);
+            label3.Name = "label3";
+            label3.Size = new Size(41, 21);
+            label3.TabIndex = 85;
+            label3.Text = "Név:";
+            // 
+            // textBox1
+            // 
+            textBox1.BackColor = Color.FromArgb(40, 40, 43);
+            textBox1.Font = new Font("Segoe UI", 8F, FontStyle.Italic, GraphicsUnit.Point);
+            textBox1.ForeColor = Color.DarkGray;
+            textBox1.Location = new Point(247, 45);
+            textBox1.Name = "textBox1";
+            textBox1.PlaceholderText = "Interszeptor neve:";
+            textBox1.Size = new Size(384, 22);
+            textBox1.TabIndex = 84;
             // 
             // InterceptorAddAction
             // 
@@ -306,5 +333,7 @@
         protected Label testRunTimeLabel;
         protected Label label2;
         private TextBox valueTextBox;
+        protected Label label3;
+        private TextBox textBox1;
     }
 }
