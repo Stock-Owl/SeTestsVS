@@ -399,9 +399,12 @@ FodyWeavers.xsd
 
 test.py
 run.py
-/*logs*/
+*.log
 */vsinstaller/*
 wininstaller.cpp
 wininstaller.exe
+side1.py
+side2.py
+todelete.c
 
 .vscode/*
