@@ -27,63 +27,24 @@
       "bindings": null,
       "backup_of": null,
       "actions": {
-        "0": {
-          "type": "goto",
+        "2":
+        {
+          "type": "interceptor_add",
           "break": false,
-          "url": "https://youtube.com"
+          "name": "test",
+          "request_section": "header",
+          "key": "Authorization",
+          "value": "Basic encode(foo:bar)"
         },
-        "1": {
-          "type": "goto",
-          "break": false,
-          "url": "https://github.com"
-        }
-      }
-    },
-    "KÖCSÖG": {
-      "bindings": null,
-      "backup_of": null,
-      "actions": {
-        "0": {
-          "type": "goto",
-          "break": false,
-          "url": "https://wikipedia.org/"
-        }
-      }
-    },
-    "FASZ": {
-      "bindings": null,
-      "backup_of": null,
-      "actions": {
-        "0": {
-          "type": "goto",
-          "break": false,
-          "url": "https://tesco.com"
+        "1":
+        {
+          "type": "interceptor_on",
+          "break": false
         },
-        "1": {
+        "3": {
           "type": "goto",
           "break": false,
-          "url": "https://github.com"
-        },
-        "2": {
-          "type": "goto",
-          "break": false,
-          "url": "https://instagram.com/"
-        }
-      }
-    },
-    "4": {
-      "bindings": null,
-      "backup_of": null,
-      "actions": {
-        "0": {
-          "type": "goto",
-          "break": true,
-          "url": "https://youtube.com"
-        },
-        "1": {
-          "type": "goto",
-          "break": false,
-          "url": "https://github.com"
+          "url": "http://httpbin.org/basic-auth/foo/bar"
         }
       }
     }

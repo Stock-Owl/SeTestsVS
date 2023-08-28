@@ -1,11 +1,12 @@
-from selenium.webdriver.chrome.webdriver import WebDriver as ChromeDriver
-from selenium.webdriver.firefox.webdriver import WebDriver as FirefoxDriver
+from seleniumwire.webdriver import Chrome as ChromeDriver       # selenium-wire because that supports the HTTP request interception
+from seleniumwire.webdriver import Firefox as FirefoxDriver     # selenium-wire because that supports the HTTP request interception
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.common.exceptions import JavascriptException as SeJSException
 from support import Support
+from interceptor import Interceptor
 
 class Actions:
     def Goto(driver: ChromeDriver | FirefoxDriver, url: str):
@@ -23,6 +24,12 @@ class Actions:
     def Refresh(driver: ChromeDriver | FirefoxDriver):
         Actions.CheckDriverExists(driver)
         driver.refresh()
+
+    def InterceptorAdd(interceptor: Interceptor, name_: str, type_: str, key_: str, value_: str):
+        interceptor.Add(name_, type_, key_, value_)
+
+    def InterceptorRemove(interceptor: Interceptor, name_: str):
+        interceptor.Remove(name_)
 
     def SwitchBack(driver: ChromeDriver | FirefoxDriver):
         driver.switch_to.parent_frame()
