@@ -9,6 +9,9 @@ namespace WebTestGui
         {
             Dictionary<string, object> jsonData = new Dictionary<string, object>();
 
+            // Interceptor check
+            jsonData["interceptor"] = test.HaveInterceptorActions();
+            
             // Name
             jsonData["name"] = test.m_Name;
 

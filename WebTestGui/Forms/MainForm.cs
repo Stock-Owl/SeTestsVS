@@ -324,6 +324,8 @@ namespace WebTestGui
             DateTime currentTime = DateTime.Now;
             m_TestStartTime = currentTime.ToString("HH:mm:ss:ffffff");
 
+            // Getting python directory
+            // TODO: MOST LIKELY WILL CHANGE ON PRODUCTION BUILD
             string temp = Application.ExecutablePath;
             string[] temparray = temp.Split(@"WebTestGui");
 
@@ -331,7 +333,15 @@ namespace WebTestGui
 
             SetColorSchemeToRun();
 
-            StartPython(temparray[0]);
+            if (!Test().HaveInterceptorActions())
+            {
+                StartPython(temparray[0], "main.py");
+            }
+            else
+            {
+                // Call interceptor python file instead
+                StartPython(temparray[0], "main.py");
+            }
 
             m_TestTab.m_TestRunning = true;
 
@@ -360,7 +370,10 @@ namespace WebTestGui
             StartJsLogFileWatcher(jsLogFilePath);
             OnSwitchToJsLogButtonPressed(null!, null!);
 
-            m_RunLogConsole.AddToConsoles("\n ------TESZT INDITÁSA \n");
+            if (!Test().HaveInterceptorActions())
+                m_RunLogConsole.AddToConsoles("\n ------TESZT INDITÁSA \n");
+            else
+                m_RunLogConsole.AddToConsoles("\n ------INTERCEPTOROS TESZT INDITÁSA \n");
         }
 
         public void OnTestAbort()
@@ -657,10 +670,10 @@ namespace WebTestGui
 
         #endregion
 
-        public async Task StartPython(string targetDir)
+        public async Task StartPython(string targetDir, string pythonScriptName)
         {
             string targetDirectory = targetDir;
-            string pythonScript = "main.py";
+            string pythonScript = pythonScriptName;
 
             m_CurrentProcess = Process.Start("cmd.exe", $"/K cd /D {targetDirectory} && python {pythonScript} && exit");
 

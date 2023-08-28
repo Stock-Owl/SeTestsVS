@@ -1,4 +1,5 @@
 {
+  "interceptor": false,
   "name": "fastrun",
   "browsers": [
     "chrome",
@@ -6,8 +7,8 @@
   ],
   "options": {
     "auto_exit_iframes": true,
-    "log_JS_retry_timeout": 1000,
-    "parent_log_path": "C:\\dev\\SeTestsVS\\logs",
+    "log_JS_retry_timeout": 2000,
+    "parent_log_path": "C:\\Users\\kmarton\\source\\repos\\SeTestsVS\\logs",
     "terminal_mode": false
   },
   "driver_options": {
