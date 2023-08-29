@@ -9,17 +9,16 @@ class Interceptor:
 
     def Intercept(self, request) -> None:
         for intercept_dict in self.to_intercept:
-            print(intercept_dict)
             for intercept in intercept_dict.values():
-                print(intercept)
                 type_ = intercept["type"].lower()
                 key_: str = intercept["key"]
                 value_: str = intercept["value"]
                 to_encode: list[str] = findall("encode\([^\(]*\)", value_)
 
                 for item in to_encode:
-                    value_ = value_.replace(item, Interceptor.Encode(item))
-                print(value_)
+                    item_content: str = item.removeprefix("encode(").removesuffix(")")
+                    value_ = value_.replace(item, Interceptor.Encode(item_content))
+                print(f"{key_} {value_}")   
                 match type_:
                     case "header":
                         request.headers[key_] = value_
@@ -43,4 +42,4 @@ class Interceptor:
                 self.to_intercept.remove(intercept)
 
     def Encode(string: str) -> str:
-         return base64.encodebytes('my_username:my_password'.encode()).decode().strip()
+        return base64.encodebytes(string.encode()).decode().strip()

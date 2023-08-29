@@ -1,11 +1,9 @@
-from seleniumwire.webdriver import Chrome as ChromeDriver       # selenium-wire because that supports the HTTP request interception
-# from seleniumwire.webdriver import ChromeOptions as ChromeOptions
-from seleniumwire.webdriver import Firefox as FirefoxDriver     # selenium-wire because that supports the HTTP request interception 
-# from seleniumwire.webdriver import FirefoxOptions as FirefoxOptions
+from selenium.webdriver.chrome.webdriver import WebDriver as ChromeDriver
+from selenium.webdriver.firefox.webdriver import WebDriver as FirefoxDriver
+from seleniumwire.webdriver import Firefox as WireFirefoxDriver     # selenium-wire because that supports the HTTP request interception 
+from seleniumwire.webdriver import Chrome as WireChromeDriver       # selenium-wire because that supports the HTTP request interception
 
-# from selenium.webdriver.chrome.webdriver import WebDriver as ChromeDriver
 from selenium.webdriver.chrome.options import Options as ChromeOptions
-# from selenium.webdriver.firefox.webdriver import WebDriver as FirefoxDriver
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
 
 from support import Support
@@ -185,8 +183,8 @@ class Core:
         options: dict[str] = json["options"]
         parent_log_path: str = options["parent_log_path"]
         log_js_retry_timeout: int = options["log_JS_retry_timeout"]
-        terminal_mode: bool = options["terminal_mode"]
         keep_browser_open: bool = json["driver_options"]["keep_browser_open"]
+        interceptor: bool = json["interceptor"]
         testname: str = json["name"]
 
         processes: list[Process] = []
@@ -197,8 +195,8 @@ class Core:
             "options": browser_options[0],
             "units": units,
             "testname": testname,
+            "interceptor_active": interceptor,
             "log_js_retry_timeout": log_js_retry_timeout,
-            "terminal_mode": terminal_mode,
             "keep_browser_open": keep_browser_open,
             "browser": "chrome",
             "parent_log_path": f"{parent_log_path}/chrome"
@@ -212,8 +210,8 @@ class Core:
             "options": browser_options[1],
             "units": units,
             "testname": testname,
+            "interceptor_active": interceptor,
             "log_js_retry_timeout": log_js_retry_timeout,
-            "terminal_mode": terminal_mode,
             "keep_browser_open": keep_browser_open,
             "browser": "firefox",
             "parent_log_path": f"{parent_log_path}/firefox"
@@ -229,6 +227,7 @@ class Core:
         options: ChromeOptions | FirefoxOptions = None,
         units: dict[str] = None,
         testname: str = None,
+        interceptor_active: bool = None,
         keep_browser_open: bool = None,
         parent_log_path: str = None,
         log_js_retry_timeout: int = None,
@@ -250,8 +249,8 @@ class Core:
             print(f"Unknown browser {browser}")
             Support.LogError(parent_log_path, f"Unknown browser {browser}")
             return None
-
-        interceptor = Interceptor()
+        if interceptor_active:
+            interceptor = Interceptor()
 
         # clears the previous log files
         Support.ClearAllLogs(parent_log_path)
@@ -321,22 +320,26 @@ class Core:
                         case "refresh":
                             Actions.Refresh(driver)
                         case "interceptor_on":
-                            driver.request_interceptor = interceptor.Intercept
+                            if interceptor_active:
+                                driver.request_interceptor = interceptor.Intercept
                         case "interceptor_off":
-                            driver.request_interceptor = None
+                            if interceptor_active:
+                                driver.request_interceptor = None
                         case "interceptor_add":
-                            name_: str = action["name"]
-                            type_: str = action["request_section"]
-                            key_: str = action["key"]
-                            value_: str = action["value"]
-                            interceptor.Add(
-                                name_,
-                                type_,
-                                key_,
-                                value_)
+                            if interceptor_active:
+                                name_: str = action["name"]
+                                type_: str = action["request_section"]
+                                key_: str = action["key"]
+                                value_: str = action["value"]
+                                interceptor.Add(
+                                    name_,
+                                    type_,
+                                    key_,
+                                    value_)
                         case "interceptor_remove":
-                            name_: str = action["name"]
-                            interceptor.Remove(name_)
+                            if interceptor_active:
+                                name_: str = action["name"]
+                                interceptor.Remove(name_)
                         case "js_execute":
                             commands = action["commands"]
                             Actions.ExecuteJS(driver, commands, path=parent_log_path, retry_timeout=log_js_retry_timeout)

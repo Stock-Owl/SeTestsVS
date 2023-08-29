@@ -1,20 +1,20 @@
 {
-  "name": "ble",
+  "interceptor": true,
+  "name": "fastrun",
   "browsers": [
     "chrome",
     "firefox"
   ],
   "options": {
     "auto_exit_iframes": true,
-    "log_JS_retry_timeout": 1000,
-    "parent_log_path": "./logs",
-    "terminal_mode": false
+    "log_JS_retry_timeout": 2000,
+    "parent_log_path": "./logs"
   },
   "driver_options": {
     "accept_insecure_certs": true,
     "chrome_arguments": [],
     "firefox_arguments": [],
-    "keep_browser_open": true,
+    "keep_browser_open": false,
     "page_load_strategy": "normal",
     "timeout": {
       "type": "pageLoad",
@@ -23,28 +23,31 @@
     "unhandled_prompt_behavior": "dismiss and notify"
   },
   "units": {
-    "1": {
+    "GyorsUnit": {
       "bindings": null,
       "backup_of": null,
       "actions": {
-        "2":
-        {
+        "0": {
+          "type": "goto",
+          "break": false,
+          "url": "https://www.youtube.com/"
+        },
+        "1": {
+          "type": "goto",
+          "break": true,
+          "url": "https://github.com/"
+        },
+        "2": {
           "type": "interceptor_add",
           "break": false,
-          "name": "test",
-          "request_section": "header",
-          "key": "Authorization",
-          "value": "Basic encode(foo:bar)"
-        },
-        "1":
-        {
-          "type": "interceptor_on",
-          "break": false
+          "inter_type": "header",
+          "key": "",
+          "value": ""
         },
         "3": {
           "type": "goto",
           "break": false,
-          "url": "http://httpbin.org/basic-auth/foo/bar"
+          "url": "https://www.instagram.com/"
         }
       }
     }
