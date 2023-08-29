@@ -16,7 +16,7 @@ from multiprocessing import Process
 from copy import copy
 from os import getpid
 
-# V.1.1.0
+# V.1.2.0
 #                                                                               25 / 27 + 1
 # TODO: Kitalálni, hogy vannak az argumentumok                                  ✅  1
 # TODO: Megszerelni a random useless conversionöket a JSON-ből                  ✅  2
