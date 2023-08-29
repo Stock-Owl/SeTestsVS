@@ -1,7 +1,6 @@
 {
   "interceptor": false,
   "name": "fastrun",
-
   "browsers": [
     "chrome",
     "firefox"
@@ -9,7 +8,6 @@
   "options": {
     "auto_exit_iframes": true,
     "log_JS_retry_timeout": 2000,
-
     "parent_log_path": "./logs"
   },
   "driver_options": {
@@ -153,30 +151,16 @@
           "url": "https://github.com"
         },
         "2": {
-          "type": "goto",
+          "type": "interceptor_add",
           "break": false,
-          "url": "https://instagram.com/"
-        }
-      }
-    },
-    "Tizedik Unit": {
-      "bindings": null,
-      "backup_of": null,
-      "actions": {
-        "0": {
-          "type": "goto",
-          "break": false,
-          "url": "https://tesco.com"
+          "inter_type": "header",
+          "key": "",
+          "value": ""
         },
-        "1": {
+        "3": {
           "type": "goto",
           "break": false,
-          "url": "https://github.com"
-        },
-        "2": {
-          "type": "goto",
-          "break": false,
-          "url": "https://instagram.com/"
+          "url": "https://www.instagram.com/"
         }
       }
     }

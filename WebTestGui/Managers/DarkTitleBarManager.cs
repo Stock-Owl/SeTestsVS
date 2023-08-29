@@ -2,7 +2,7 @@
 
 namespace WebTestGui
 {
-    internal class DarkTitleBarManager
+    public class DarkTitleBarManager
     {
         [DllImport("dwmapi.dll")]
         private static extern int DwmSetWindowAttribute(nint hwnd, int attr, ref int attrValue, int attrSize);
@@ -10,7 +10,7 @@ namespace WebTestGui
         private const int DWMWA_USE_IMMERSIVE_DARK_MODE_BEFORE_20H1 = 19;
         private const int DWMWA_USE_IMMERSIVE_DARK_MODE = 20;
 
-        internal static bool UseImmersiveDarkMode(nint handle, bool enabled)
+        public static bool UseImmersiveDarkMode(nint handle, bool enabled)
         {
             if (IsWindows10OrGreater(17763))
             {

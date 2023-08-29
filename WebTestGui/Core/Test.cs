@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Accessibility;
+using System;
 
 namespace WebTestGui
 {
@@ -62,6 +63,23 @@ namespace WebTestGui
             sampleUnit.m_Actions.m_Actions.Add(sampleGotoAction);
 
             m_Units.m_Units.Add(sampleUnit);
+        }
+
+        public bool HaveInterceptorActions()
+        {
+            bool haveInterceptorActions = false;
+            foreach (IUnit unit in m_Units.m_Units)
+            {
+                foreach (IAction action in unit.m_Actions.m_Actions)
+                {
+                    if (action is InterceptorAddAction || action is InterceptorRemoveAction ||
+                        action is InterceptorOnAction || action is InterceptorOffAction)
+                    {
+                        haveInterceptorActions = true;
+                    }
+                }
+            }
+            return haveInterceptorActions;
         }
 
         public string m_SaveFilePath;
