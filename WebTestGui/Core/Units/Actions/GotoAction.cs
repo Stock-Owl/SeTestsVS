@@ -154,6 +154,11 @@ namespace WebTestGui
 
         // ACTION SPECIFIC FUNCTIONS AND MEMBERS
 
+        public void SetGotoUrl(string gotoUrl)
+        {
+            urlTextField.Text = gotoUrl;
+        }
+
         private void webSearchButton_Click(object sender, EventArgs e)
         {
             string executable = MainForm.s_IsChromeChecked ? BrowserHelper.GetChromeExecutablePath() : BrowserHelper.GetFirefoxExecutablePath();

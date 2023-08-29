@@ -1,4 +1,6 @@
-﻿namespace WebTestGui
+﻿using System;
+
+namespace WebTestGui
 {
     public class Test
     {
@@ -46,6 +48,20 @@
                 driverOptionClasses[i] = driverOption;
             }
             m_DriverOptions.m_DriverOptions.AddRange(driverOptionClasses);
+
+            UnitPanel sampleUnit = new UnitPanel();
+            sampleUnit.m_ParentForm = m_MainForm;
+            sampleUnit.SetUId(m_Units.m_Units.Count);
+            sampleUnit.m_UnitName = $"Példa Unit";
+            sampleUnit.Refresh();
+
+            GotoAction sampleGotoAction = new GotoAction();
+            sampleGotoAction.m_ParentUnit = sampleUnit;
+            sampleGotoAction.SetId(sampleUnit.m_Actions.m_Actions.Count);
+            sampleGotoAction.SetGotoUrl("https://www.visionsoft.hu/");
+            sampleUnit.m_Actions.m_Actions.Add(sampleGotoAction);
+
+            m_Units.m_Units.Add(sampleUnit);
         }
 
         public string m_SaveFilePath;

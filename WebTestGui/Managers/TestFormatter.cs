@@ -116,5 +116,71 @@ namespace WebTestGui
 
             return test;
         }
+
+        public static string SaveOptionsFromTest(Test test)
+        {
+            Dictionary<string, object> jsonData = new Dictionary<string, object>();
+
+            // Options
+            {
+                Dictionary<string, object> optionsData = new Dictionary<string, object>();
+                foreach (IOption option in test.m_Options.m_Options)
+                {
+                    optionsData[option.m_OptionName] = option.GetData();
+                }
+                jsonData["options"] = optionsData;
+            }
+
+            // Driver Options
+            {
+                Dictionary<string, object> driverOptionsData = new Dictionary<string, object>();
+                foreach (IDriverOption driverOption in test.m_DriverOptions.m_DriverOptions)
+                {
+                    driverOptionsData[driverOption.m_DriverOptionName] = driverOption.GetData();
+                }
+                jsonData["driver_options"] = driverOptionsData;
+            }
+
+            return JsonConvert.SerializeObject(jsonData, Formatting.Indented);
+        }
+
+        public static void LoadOptionsToTest(string rawOptionsJson, Test test)
+        {
+            test.m_Options.m_Options.Clear();
+            test.m_DriverOptions.m_DriverOptions.Clear();
+            JObject jsonObject = JObject.Parse(rawOptionsJson);
+
+            // Options
+            {
+                JToken optionsData = jsonObject["options"]!;
+                JObject optionObject = JObject.Parse(optionsData.ToString());
+                foreach (JProperty optionProperty in optionObject.Properties())
+                {
+                    string key = optionProperty.Name;
+                    JToken value = optionProperty.Value;
+
+                    IOption option = Options.CreateOptionByType(key);
+                    option.m_ParentForm = test.m_MainForm;
+                    option.SetData(value);
+                    test.m_Options.m_Options.Add(option);
+                }
+            }
+
+            // Driver Options
+            {
+                JToken driverOptionsData = jsonObject["driver_options"]!;
+                JObject driverOptionObject = JObject.Parse(driverOptionsData.ToString());
+                foreach (JProperty driverOptionProperty in driverOptionObject.Properties())
+                {
+                    string key = driverOptionProperty.Name;
+                    JToken value = driverOptionProperty.Value;
+
+                    IDriverOption driverOption = DriverOptions.CreateDriverOptionByType(key);
+                    driverOption.m_ParentForm = test.m_MainForm;
+                    driverOption.SetData(value);
+                    test.m_DriverOptions.m_DriverOptions.Add(driverOption);
+                }
+            }
+        }
     }
 }

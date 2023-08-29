@@ -1,103 +1,89 @@
 {
-  "name": "valami",
+  "name": "run",
   "browsers": [
     "chrome",
     "firefox"
   ],
   "options": {
-    "log_JS": {
-      "active": true,
-      "refresh_rate": 1000,
-      "retry_timeout": 1000
-    },
-    "terminal_mode": true,
     "auto_exit_iframes": true,
-    "parent_log_path": "C:\\dev\\SeTestsVS\\logs"
+    "log_JS_retry_timeout": 2000,
+    "parent_log_path": "C:\\dev\\SeTestsVS\\logs",
+    "terminal_mode": false
   },
   "driver_options": {
-    "page_load_strategy": "normal",
     "accept_insecure_certs": true,
+    "chrome_arguments": [],
+    "firefox_arguments": [],
+    "keep_browser_open": false,
+    "page_load_strategy": "normal",
     "timeout": {
       "type": "pageLoad",
       "value": 300000
     },
-    "unhandled_prompt_behavior": "dismiss and notify",
-    "keep_browser_open": true,
-    "chrome_arguments": [],
-    "firefox_arguments": []
+    "unhandled_prompt_behavior": "dismiss and notify"
   },
   "units": {
-    "1": {
+    "Első Unit": {
       "bindings": null,
       "backup_of": null,
       "actions": {
         "0": {
           "type": "goto",
           "break": false,
-          "url": "https://bestbyte.hu"
+          "url": "https://youtube.com"
         },
         "1": {
-          "type": "click",
+          "type": "goto",
           "break": false,
-          "single": true,
-          "displayed": false,
-          "enabled": false,
-          "selected": false,
-          "locator": "xpath",
-          "value": "//*[@id=\"vscookieAlertOk\"]"
-        },
-        "2": {
-          "type": "send_keys",
-          "break": false,
-          "single": true,
-          "displayed": false,
-          "enabled": false,
-          "selected": false,
-          "keys": "Xiaomi",
-          "locator": "xpath",
-          "value": "//*[@id=\"ctl00_ctl30_EDI_keres\"]"
-        },
-        "3": {
-          "type": "click",
-          "break": false,
-          "single": true,
-          "displayed": false,
-          "enabled": false,
-          "selected": false,
-          "locator": "xpath",
-          "value": "//*[@id=\"ctl00_ctl30_BTN_keres\"]"
+          "url": "https://github.com"
         }
       }
     },
-    "2": {
+    "Második Unit": {
       "bindings": null,
       "backup_of": null,
       "actions": {
         "0": {
-          "type": "send_keys",
+          "type": "goto",
+          "break": true,
+          "url": "https://wikipedia.org/"
+        }
+      }
+    },
+    "Harmadik Unit": {
+      "bindings": null,
+      "backup_of": null,
+      "actions": {
+        "0": {
+          "type": "goto",
           "break": false,
-          "single": true,
-          "displayed": false,
-          "enabled": false,
-          "selected": false,
-          "keys": "Samsung",
-          "locator": "xpath",
-          "value": "//*[@id=\"ctl00_ctl30_EDI_keres\"]"
+          "url": "https://tesco.com"
         },
         "1": {
-          "type": "click",
+          "type": "goto",
           "break": false,
-          "single": true,
-          "displayed": false,
-          "enabled": false,
-          "selected": false,
-          "locator": "xpath",
-          "value": "//*[@id=\"ctl00_ctl30_BTN_keres\"]"
+          "url": "https://github.com"
         },
         "2": {
           "type": "goto",
           "break": false,
-          "url": "https://www.youtube.com/@Zsozeatya"
+          "url": "https://instagram.com/"
+        }
+      }
+    },
+    "Negyedik Unit": {
+      "bindings": null,
+      "backup_of": null,
+      "actions": {
+        "0": {
+          "type": "goto",
+          "break": true,
+          "url": "https://youtube.com"
+        },
+        "1": {
+          "type": "goto",
+          "break": false,
+          "url": "https://github.com"
         }
       }
     }

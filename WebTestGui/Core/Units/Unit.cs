@@ -54,6 +54,8 @@ namespace WebTestGui
 
         public void SetRunTime();
 
+        public Tuple<int, int> GetRunTime();
+
         public void OnBorderLineDraw(object sender, PaintEventArgs e);
 
         public Dictionary<string, object> GetJSONFormatted();

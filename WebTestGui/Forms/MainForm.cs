@@ -6,12 +6,8 @@ namespace WebTestGui
     public partial class MainForm : Form
     {
         /* TODO:
-            - Sablon új test
-            - Opciók sablonok létrehozása, import és exportálása
-            - Log fájlok elõkészítése, ha nem léteznek még (FileWatcher miatt)
             - Idõzítõ app integrálása
-            - Unit keresés (név alapján)
-            - Teszt lefutása után leírni az egész teszt lefutási idejét (Chrome/Firefox)
+            - RAW szerkeztõ (a teszt JSON szövegû összeállítása)
         */
 
         public MainForm()
@@ -32,7 +28,7 @@ namespace WebTestGui
             m_JsLogConsole = new Console(this);
             Controls.Add(m_JsLogConsole);
             m_JsLogConsole.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
-            m_JsLogConsole.Location = new Point(795, 155);
+            m_JsLogConsole.Location = new Point(795, 136);
             m_JsLogConsole.Size = new Size(327, 353);
             m_JsLogConsole.Visible = false;
 
@@ -47,7 +43,7 @@ namespace WebTestGui
 
             m_JsLogConsole.AddToConsoles("JavaScript konzol...\n");
             m_JsLogConsole.AddToConsoles("A teszt ideje alatt minden JavaScript log " +
-                "információ ide lesz kiiratva.");
+                "információ ide lesz kiiratva.\n");
 
             RefreshOptionsPanel();
         }
@@ -71,6 +67,31 @@ namespace WebTestGui
                 driverOptionControls[i] = (Control)Test().m_DriverOptions.m_DriverOptions[i];
             }
             optionsPanel.Controls.AddRange(driverOptionControls);
+        }
+
+        private void exportOptionTemplate_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog of = new SaveFileDialog();
+            of.Title = "Teszt opciók mentése...";
+            of.Filter = $"Teszt opciók fájl|*{AppConsts.s_AppDefaultFileExtension + "options"}|Any File|*.*";
+            if (of.ShowDialog() == DialogResult.OK)
+            {
+                string savedInfo = TestFormatter.SaveOptionsFromTest(Test());
+                File.WriteAllText(of.FileName, savedInfo);
+            }
+        }
+
+        private void importOptionTemplate_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog of = new OpenFileDialog();
+            of.Title = "Teszt opciók betöltése...";
+            of.Filter = $"Teszt opciók fájl|*{AppConsts.s_AppDefaultFileExtension + "options"}|Any File|*.*";
+            if (of.ShowDialog() == DialogResult.OK)
+            {
+                string loadedInfo = File.ReadAllText(of.FileName);
+                TestFormatter.LoadOptionsToTest(loadedInfo, Test());
+                RefreshOptionsPanel();
+            }
         }
 
         #endregion
@@ -115,6 +136,33 @@ namespace WebTestGui
         {
             Test().m_Units.MoveUnit(unit, newUId);
             RefreshUnitsPanel();
+        }
+
+        private void gotoUnitComboBox_DropDown(object sender, EventArgs e)
+        {
+            gotoUnitComboBox.Items.Clear();
+            string[] unitNames = new string[Test().m_Units.m_Units.Count];
+            for (int i = 0; i < unitNames.Length; i++)
+            {
+                unitNames[i] = Test().m_Units.m_Units[i].m_UnitName;
+            }
+
+            gotoUnitComboBox.Items.AddRange(unitNames);
+        }
+
+        private void gotoUnitComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string selectedUnitName = gotoUnitComboBox.GetItemText(gotoUnitComboBox.SelectedItem)!;
+
+            IUnit selectedUnit = new UnitPanel();
+            foreach (IUnit unit in Test().m_Units.m_Units)
+            {
+                if (unit.m_UnitName == selectedUnitName)
+                {
+                    selectedUnit = unit;
+                }
+            }
+            unitsPanel.ScrollControlIntoView((Control)selectedUnit);
         }
 
         #endregion
@@ -213,8 +261,8 @@ namespace WebTestGui
 
         #region TEST RUNTIME
 
-        private bool _STOP_JS_LOG_REQ = false;
         private bool _STOP_BRK_LOG_REQ = false;
+        private bool _STOP_JS_LOG_REQ = false;
 
         private async void OnStartTestButtonPressed(object sender, EventArgs e)
         {
@@ -259,6 +307,16 @@ namespace WebTestGui
                 return;
             }
 
+            // Checking if the root log directory contains chrome and firefox folders
+            if (!Directory.Exists(Test().GetRootLogDirectoryPath() + @"/chrome"))
+            {
+                Directory.CreateDirectory(Test().GetRootLogDirectoryPath() + @"/chrome");
+            }
+            if (!Directory.Exists(Test().GetRootLogDirectoryPath() + @"/firefox"))
+            {
+                Directory.CreateDirectory(Test().GetRootLogDirectoryPath() + @"/firefox");
+            }
+
             Test().m_State = WebTestGui.Test.TestState.Run;
             testStartButton.Text = "TESZT FUT";
 
@@ -275,20 +333,32 @@ namespace WebTestGui
 
             StartPython(temparray[0]);
 
-            m_TestTab.RefreshTabItems();
+            m_TestTab.m_TestRunning = true;
 
             File.WriteAllText(Test().GetRootLogDirectoryPath() + @"/chrome/run.log", string.Empty);
             File.WriteAllText(Test().GetRootLogDirectoryPath() + @"/firefox/run.log", string.Empty);
 
-            // string jsLogFilePath = Test().GetRootLogDirectoryPath() + @"/js.log";
-            // StartJSLogFileWatcher(jsLogFilePath);
+            // Later, when there are more files with a filewatcher expand File.Exists() check
+            if (!File.Exists(Test().GetRootLogDirectoryPath() + @"/file.brk"))
+            {
+                File.Create(Test().GetRootLogDirectoryPath() + @"/file.brk");
+            }
+            if (!File.Exists(Test().GetRootLogDirectoryPath() + @"/js.log"))
+            {
+                File.Create(Test().GetRootLogDirectoryPath() + @"/js.log");
+            }
+
+            _STOP_BRK_LOG_REQ = false;
+            _STOP_JS_LOG_REQ = false;
 
             File.WriteAllText(Test().GetRootLogDirectoryPath() + @"/file.brk", string.Empty);
             string breakPointFilePath = Test().GetRootLogDirectoryPath() + @"/file.brk";
             StartBreakPointFileWatcher(breakPointFilePath);
 
-            _STOP_JS_LOG_REQ = false;
-            _STOP_BRK_LOG_REQ = false;
+            File.WriteAllText(Test().GetRootLogDirectoryPath() + @"/js.log", string.Empty);
+            string jsLogFilePath = Test().GetRootLogDirectoryPath() + @"/js.log";
+            StartJsLogFileWatcher(jsLogFilePath);
+            OnSwitchToJsLogButtonPressed(null!, null!);
 
             m_RunLogConsole.AddToConsoles("\n ------TESZT INDITÁSA \n");
         }
@@ -297,7 +367,6 @@ namespace WebTestGui
         {
             m_RunLogConsole.AddToConsoles("\n ------TESZT LEÁLLÍTVA \n");
             m_CurrentProcess.Kill();
-
             SetColorSchemeToEdit();
 
             OnTestFinished();
@@ -306,8 +375,9 @@ namespace WebTestGui
         public void OnTestBreak(string content)
         {
             Test().m_State = WebTestGui.Test.TestState.Break;
-            m_RunLogConsole.AddToConsoles("\n ------TESZT SZÜNETELTETVE \n");
+            m_RunLogConsole.AddToConsoles("\n ------TESZT SZÜNETELTETVE (BREAKPOINT) \n");
             testStartButton.Text = "TESZT FOLYTATÁSA...";
+            SetColorSchemeToBreakpointHit();
 
             string[] contentParts = content.Split('\n')[0].Split(':'); // (c:ble 1:1)
 
@@ -325,10 +395,9 @@ namespace WebTestGui
 
             LoadRunTimesToActions(chromeRunLog, firefoxRunLog);
             LoadRunTimesToUnits();
+            LoadRunTime();
 
             breakpointIcon.Visible = true;
-
-            m_TestTab.RefreshTabItems();
 
             IntPtr mainFormHandle = Handle;
             User32Interop.SetForegroundWindow(mainFormHandle);
@@ -338,6 +407,7 @@ namespace WebTestGui
         {
             Test().m_State = WebTestGui.Test.TestState.Run;
             testStartButton.Text = "TESZT FUT.../ TESZT LEÁLLÍTÁSA";
+            SetColorSchemeToRun();
 
             File.WriteAllText(Test().GetRootLogDirectoryPath() + @"/file.brk", string.Empty);
 
@@ -347,9 +417,7 @@ namespace WebTestGui
             }
             RefreshUnitsPanel();
 
-            breakpointIcon.Visible = true;
-
-            m_TestTab.RefreshTabItems();
+            breakpointIcon.Visible = false;
         }
 
         public void OnTestFinished()
@@ -358,8 +426,8 @@ namespace WebTestGui
             testStartButton.Text = "TESZT INDÍTÁSA...";
             SetColorSchemeToEdit();
 
-            _STOP_JS_LOG_REQ = true;
             _STOP_BRK_LOG_REQ = true;
+            _STOP_JS_LOG_REQ = true;
             File.WriteAllText(Test().GetRootLogDirectoryPath() + @"/file.brk", string.Empty);
 
             string chromeRunLog = File.ReadAllText(Test().GetRootLogDirectoryPath() + @"/chrome/run.log");
@@ -367,15 +435,15 @@ namespace WebTestGui
             m_RunLogConsole.AddToChrome("\n\n" + chromeRunLog);
             m_RunLogConsole.AddToFirefox("\n\n" + firefoxRunLog);
 
-            string JsLog = File.ReadAllText(Test().GetRootLogDirectoryPath() + @"/js.log");
-            m_JsLogConsole.AddToConsoles("\n\n" + JsLog);
+            m_JsLogConsole.AddToConsoles(File.ReadAllText(Test().GetRootLogDirectoryPath() + @"/js.log"));
 
             m_RunLogConsole.AddToConsoles("\n ------TESZT VÉGE \n");
 
             LoadRunTimesToActions(chromeRunLog, firefoxRunLog);
             LoadRunTimesToUnits();
+            LoadRunTime();
 
-            m_TestTab.RefreshTabItems();
+            m_TestTab.m_TestRunning = false;
             RefreshUnitsPanel();
         }
 
@@ -454,6 +522,29 @@ namespace WebTestGui
             foreach (IUnit unit in Test().m_Units.m_Units)
             {
                 unit.SetRunTime();
+            }
+        }
+
+        void LoadRunTime()
+        {
+            int chromeSum = 0;
+            int firefoxSum = 0;
+            foreach (IUnit unit in Test().m_Units.m_Units)
+            {
+                Tuple<int, int> sum = unit.GetRunTime();
+                chromeSum += sum.Item1;
+                firefoxSum += sum.Item2;
+            }
+
+            if (Test().m_State == WebTestGui.Test.TestState.Break)
+            {
+                testRunTimeText.ForeColor = Color.Firebrick;
+                testRunTimeText.Text = "Jelenlegi teszt futási ideje a Breakpoint-ig: " + (chromeSum.ToString() + " / " + firefoxSum.ToString() + " ms");
+            }
+            else if (Test().m_State == WebTestGui.Test.TestState.Edit)
+            {
+                testRunTimeText.ForeColor = Color.DimGray;
+                testRunTimeText.Text = "Elõzõ tesztelés teljes futási ideje: " + (chromeSum.ToString() + " / " + firefoxSum.ToString() + " ms");
             }
         }
 
@@ -578,30 +669,6 @@ namespace WebTestGui
             OnTestFinished();
         }
 
-        public async void StartJSLogFileWatcher(string logPath)
-        {
-            using (FileWatcher fileWatcher = new FileWatcher(logPath, true))
-            {
-                fileWatcher.FileChanged += async (content) =>
-                {
-                    m_RunLogConsole.consoleTextBox.Invoke((Action)(() =>
-                    {
-                        m_JsLogConsole.AddToConsoles("\n" + content + "\n");
-                    }));
-
-                    if (_STOP_JS_LOG_REQ)
-                    {
-                        return;
-                    }
-                };
-
-                while (!_STOP_JS_LOG_REQ)
-                {
-                    await Task.Delay(100);
-                }
-            }
-        }
-
         public async void StartBreakPointFileWatcher(string logPath)
         {
             using (FileWatcher fileWatcher = new FileWatcher(logPath))
@@ -619,7 +686,6 @@ namespace WebTestGui
                                     if (content.Split('\n')[1].Split(':')[0] == "f")
                                     {
                                         OnTestBreak(content);
-                                        m_RunLogConsole.AddToConsoles("\nBREAKPOINT HIT:" + content.Split('\n')[0]);
                                     }
                                 }
                                 if (content.Split('\n')[0].Split(':')[0] == "f")
@@ -627,7 +693,6 @@ namespace WebTestGui
                                     if (content.Split('\n')[1].Split(':')[0] == "c")
                                     {
                                         OnTestBreak(content);
-                                        m_RunLogConsole.AddToConsoles("\nBREAKPOINT HIT:" + content.Split('\n')[0]);
                                     }
                                 }
                             }
@@ -647,11 +712,36 @@ namespace WebTestGui
             }
         }
 
+        public async void StartJsLogFileWatcher(string logPath)
+        {
+            using (FileWatcher fileWatcher = new FileWatcher(logPath, true))
+            {
+                fileWatcher.FileChanged += async (content) =>
+                {
+                    m_JsLogConsole.consoleTextBox.Invoke((Action)(() =>
+                    {
+                        if (!string.IsNullOrEmpty(content))
+                            m_JsLogConsole.AddToConsoles(content);
+                    }));
+
+                    if (_STOP_JS_LOG_REQ)
+                    {
+                        return;
+                    }
+                };
+
+                while (!_STOP_JS_LOG_REQ)
+                {
+                    await Task.Delay(100);
+                }
+            }
+        }
+
         #endregion
 
         #region Save and load test
 
-        private void OnSaveTestButtonPressed(object sender, EventArgs e)
+        public void OnSaveTestButtonPressed(object sender, EventArgs e)
         {
             SaveTest(Test());
         }
@@ -753,6 +843,9 @@ namespace WebTestGui
             currentlyEditedText.Text = Test().m_SaveFilePath;
             testNameLabel.Text = Test().m_Name;
 
+            breakpointIcon.Location = new Point((testNameLabel.Location.X + testNameLabel.Size.Width), 47);
+            testRunTimeText.Location = new Point((breakpointIcon.Location.X + breakpointIcon.Size.Width + 10), 52);
+
             if (Test().m_State == WebTestGui.Test.TestState.Edit)
             {
                 SetColorSchemeToEdit();
@@ -760,7 +853,7 @@ namespace WebTestGui
             }
             else if (Test().m_State == WebTestGui.Test.TestState.Break)
             {
-                SetColorSchemeToRun();
+                SetColorSchemeToBreakpointHit();
                 testStartButton.Text = "TESZT FOLYTATÁSA...";
             }
             else if (Test().m_State == WebTestGui.Test.TestState.Run)
@@ -813,8 +906,34 @@ namespace WebTestGui
             currentlyEditedLabel.BackColor = Color.FromArgb(255, 60, 60, 65);
             currentlyEditedText.BackColor = Color.FromArgb(255, 60, 60, 65);
 
-            saveTestButton.Enabled = true;
-            loadTestButton.Enabled = true;
+            exportOptionsLabel.BackColor = Color.FromArgb(255, 40, 40, 45);
+            importOptionsLabel.BackColor = Color.FromArgb(255, 40, 40, 45);
+        }
+
+        public void SetColorSchemeToBreakpointHit()
+        {
+            BackColor = Color.FromArgb(255, 80, 50, 50);
+            flowLayoutPanel2.BackColor = Color.FromArgb(255, 90, 60, 60);
+            unitHeaderPanel.BackColor = Color.FromArgb(255, 70, 40, 40);
+            optionHeaderPanel.BackColor = Color.FromArgb(255, 70, 40, 40);
+            m_RunLogConsole.SetSchemeToRunning();
+            m_JsLogConsole.SetSchemeToRunning();
+
+            testNameLabel.BackColor = Color.FromArgb(255, 80, 50, 50);
+            browserLabel.BackColor = Color.FromArgb(255, 80, 50, 50);
+            chromeCheckBox.BackColor = Color.FromArgb(255, 80, 50, 50);
+            firefoxCheckBox.BackColor = Color.FromArgb(255, 80, 50, 50);
+            pictureBox1.BackColor = Color.FromArgb(255, 80, 50, 50);
+            pictureBox2.BackColor = Color.FromArgb(255, 80, 50, 50);
+
+            unitLabel.BackColor = Color.FromArgb(255, 70, 40, 40);
+            optionLabel.BackColor = Color.FromArgb(255, 70, 40, 40);
+
+            currentlyEditedLabel.BackColor = Color.FromArgb(255, 90, 60, 60);
+            currentlyEditedText.BackColor = Color.FromArgb(255, 90, 60, 60);
+
+            exportOptionsLabel.BackColor = Color.FromArgb(255, 70, 40, 40);
+            importOptionsLabel.BackColor = Color.FromArgb(255, 70, 40, 40);
         }
 
         public void SetColorSchemeToRun()
@@ -839,8 +958,8 @@ namespace WebTestGui
             currentlyEditedLabel.BackColor = Color.FromArgb(255, 80, 60, 60);
             currentlyEditedText.BackColor = Color.FromArgb(255, 80, 60, 60);
 
-            saveTestButton.Enabled = false;
-            loadTestButton.Enabled = false;
+            exportOptionsLabel.BackColor = Color.FromArgb(255, 60, 40, 40);
+            importOptionsLabel.BackColor = Color.FromArgb(255, 60, 40, 40);
         }
 
         #endregion
