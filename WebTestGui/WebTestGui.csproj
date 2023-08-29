@@ -21,6 +21,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Core\Units\Actions\InterceptorRemoveAction.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Core\Units\Actions\InterceptorAddAction.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Core\Units\Actions\InterceptorOnAction.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Core\Units\Actions\InterceptorOffAction.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Update="Core\Units\Actions\ClearAction.cs">
       <SubType>UserControl</SubType>
     </Compile>

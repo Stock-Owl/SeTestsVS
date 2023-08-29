@@ -1,20 +1,23 @@
 from selenium.webdriver.chrome.webdriver import WebDriver as ChromeDriver
-from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.firefox.webdriver import WebDriver as FirefoxDriver
+from seleniumwire.webdriver import Firefox as WireFirefoxDriver     # selenium-wire because that supports the HTTP request interception 
+from seleniumwire.webdriver import Chrome as WireChromeDriver       # selenium-wire because that supports the HTTP request interception
+
+from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
 
 from support import Support
 from actions import Actions
+from interceptor import Interceptor
 
 from traceback import format_exc, format_stack
 
-from multiprocessing import Process, Value
-from ctypes import c_char_p as cstring
+from multiprocessing import Process
 from copy import copy
 from os import getpid
 
-# V.1.1.0
-#                                                                               24 / 27 + 1
+# V.1.2.0
+#                                                                               25 / 27 + 1
 # TODO: Kitalálni, hogy vannak az argumentumok                                  ✅  1
 # TODO: Megszerelni a random useless conversionöket a JSON-ből                  ✅  2
 # TODO: Relative locators                                                       ❌  NAH FUCK that shit
@@ -52,7 +55,7 @@ from os import getpid
 # TODO: time data collection, bounds etc.                                         GUI
 # TODO: breakpoint intermediate                                                 ✅  25
 # TODO: installer update                                                        ❌  26
-# TODO: refactoring                                                             ❌  27
+# TODO: refactoring                                                             ✅  27
 
 # Snyk deepcode ignores:
 # file deepcode ignore AttributeLoadOnNone: <Keyword arguments only set to None to make them a keyword argument. All parameters will be passed from the host funciton>
@@ -180,8 +183,8 @@ class Core:
         options: dict[str] = json["options"]
         parent_log_path: str = options["parent_log_path"]
         log_js_retry_timeout: int = options["log_JS_retry_timeout"]
-        terminal_mode: bool = options["terminal_mode"]
         keep_browser_open: bool = json["driver_options"]["keep_browser_open"]
+        interceptor: bool = json["interceptor"]
         testname: str = json["name"]
 
         processes: list[Process] = []
@@ -192,8 +195,8 @@ class Core:
             "options": browser_options[0],
             "units": units,
             "testname": testname,
+            "interceptor_active": interceptor,
             "log_js_retry_timeout": log_js_retry_timeout,
-            "terminal_mode": terminal_mode,
             "keep_browser_open": keep_browser_open,
             "browser": "chrome",
             "parent_log_path": f"{parent_log_path}/chrome"
@@ -207,8 +210,8 @@ class Core:
             "options": browser_options[1],
             "units": units,
             "testname": testname,
+            "interceptor_active": interceptor,
             "log_js_retry_timeout": log_js_retry_timeout,
-            "terminal_mode": terminal_mode,
             "keep_browser_open": keep_browser_open,
             "browser": "firefox",
             "parent_log_path": f"{parent_log_path}/firefox"
@@ -224,6 +227,7 @@ class Core:
         options: ChromeOptions | FirefoxOptions = None,
         units: dict[str] = None,
         testname: str = None,
+        interceptor_active: bool = None,
         keep_browser_open: bool = None,
         parent_log_path: str = None,
         log_js_retry_timeout: int = None,
@@ -232,13 +236,22 @@ class Core:
         print(f"Driver ({browser}) PID:", getpid())
         logging_active: bool = False
 
+        if interceptor_active:
+            interceptor = Interceptor()
+            
         if browser == 'chrome':
-            driver = ChromeDriver(options = options)  # , service = service
+            if interceptor_active:
+                driver = WireChromeDriver(options = options) # , service = service
+            else:
+                driver = ChromeDriver(options = options)  # , service = service
             browser_break_char = 'c'
             logging_active = True
 
         elif browser == 'firefox':
-            driver = FirefoxDriver(options = options, keep_alive=keep_browser_open) # , service = service
+            if interceptor_active:
+                driver = WireFirefoxDriver(options = options, keep_alive=keep_browser_open) # , service = service
+            else:
+                driver = FirefoxDriver(options = options, keep_alive=keep_browser_open) # , service = service
             browser_break_char = 'f'
             
         else:
@@ -313,6 +326,43 @@ class Core:
                             Actions.Forward(driver)
                         case "refresh":
                             Actions.Refresh(driver)
+                        case "interceptor_on":
+                            if interceptor_active:
+                                Actions.InterceptorOn(driver, interceptor)
+                            else:
+                                print("Interceptor is off")
+                                Support.LogProc(parent_log_path, "Interceptor is off")
+                                continue
+                        case "interceptor_off":
+                            if interceptor_active:
+                                Actions.InterceptorOff(driver)
+                            else:
+                                print("Interceptor is off")
+                                Support.LogProc(parent_log_path, "Interceptor is off")
+                                continue
+                        case "interceptor_add":
+                            if interceptor_active:
+                                name_: str = action["name"]
+                                type_: str = action["request_section"]
+                                key_: str = action["key"]
+                                value_: str = action["value"]
+                                interceptor.Add(
+                                    name_,
+                                    type_,
+                                    key_,
+                                    value_)
+                            else:
+                                print("Interceptor is off")
+                                Support.LogProc(parent_log_path, "Interceptor is off")
+                                continue
+                        case "interceptor_remove":
+                            if interceptor_active:
+                                name_: str = action["name"]
+                                interceptor.Remove(name_)
+                            else:
+                                print("Interceptor is off")
+                                Support.LogProc(parent_log_path, "Interceptor is off")
+                                continue
                         case "js_execute":
                             commands = action["commands"]
                             Actions.ExecuteJS(driver, commands, path=parent_log_path, retry_timeout=log_js_retry_timeout)
@@ -321,6 +371,19 @@ class Core:
                             Actions.Wait(driver, time)
                         case "wait_for":
                             Actions.WaitFor(driver, action)
+                        case "switch_back":
+                            Actions.SwitchBack(driver)
+                        case "switch_to":
+                            Actions.ElementAction(
+                                driver,
+                                action = 'switch_to',
+                                locator = action['locator'],
+                                value = action['value'],
+                                isSingle = True,
+                                isDisplayed = None,
+                                isEnabled = None,
+                                isSelected = None
+                                )
                         case "click":
                             Actions.ElementAction(
                                 driver,

@@ -1,5 +1,4 @@
-from selenium.webdriver.chrome.webdriver import WebDriver as ChromeDriver
-from selenium.webdriver.firefox.webdriver import WebDriver as FirefoxDriver
+from seleniumwire.webdriver import Chrome as ChromeDriver
 from selenium.common.exceptions import JavascriptException as SeJSException
 
 class Support:

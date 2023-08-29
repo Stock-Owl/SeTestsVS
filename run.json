@@ -1,5 +1,6 @@
 {
-  "name": "run",
+  "interceptor": false,
+  "name": "fastrun",
   "browsers": [
     "chrome",
     "firefox"
@@ -7,8 +8,7 @@
   "options": {
     "auto_exit_iframes": true,
     "log_JS_retry_timeout": 2000,
-    "parent_log_path": "C:\\dev\\SeTestsVS\\logs",
-    "terminal_mode": false
+    "parent_log_path": "./logs"
   },
   "driver_options": {
     "accept_insecure_certs": true,
@@ -16,74 +16,39 @@
     "firefox_arguments": [],
     "keep_browser_open": false,
     "page_load_strategy": "normal",
+    "unhandled_prompt_behavior": "dismiss and notify",
     "timeout": {
       "type": "pageLoad",
       "value": 300000
-    },
-    "unhandled_prompt_behavior": "dismiss and notify"
+    }
   },
   "units": {
-    "Első Unit": {
+    "GyorsUnit": {
       "bindings": null,
       "backup_of": null,
       "actions": {
         "0": {
           "type": "goto",
           "break": false,
-          "url": "https://youtube.com"
+          "url": "https://www.youtube.com/"
         },
         "1": {
           "type": "goto",
           "break": false,
-          "url": "https://github.com"
-        }
-      }
-    },
-    "Második Unit": {
-      "bindings": null,
-      "backup_of": null,
-      "actions": {
-        "0": {
-          "type": "goto",
-          "break": false,
-          "url": "https://wikipedia.org/"
-        }
-      }
-    },
-    "Harmadik Unit": {
-      "bindings": null,
-      "backup_of": null,
-      "actions": {
-        "0": {
-          "type": "goto",
-          "break": false,
-          "url": "https://tesco.com"
-        },
-        "1": {
-          "type": "goto",
-          "break": false,
-          "url": "https://github.com"
+          "url": "https://github.com/"
         },
         "2": {
-          "type": "goto",
+          "type": "interceptor_add",
           "break": false,
-          "url": "https://instagram.com/"
-        }
-      }
-    },
-    "Negyedik Unit": {
-      "bindings": null,
-      "backup_of": null,
-      "actions": {
-        "0": {
-          "type": "goto",
-          "break": false,
-          "url": "https://youtube.com"
+          "name": "interceptor name",
+          "inter_type": "header",
+          "key": "",
+          "value": ""
         },
-        "1": {
+        "3": {
           "type": "goto",
           "break": false,
-          "url": "https://github.com"
+          "url": "https://www.instagram.com/"
         }
       }
     },
@@ -186,30 +151,16 @@
           "url": "https://github.com"
         },
         "2": {
-          "type": "goto",
+          "type": "interceptor_add",
           "break": false,
-          "url": "https://instagram.com/"
-        }
-      }
-    },
-    "Tizedik Unit": {
-      "bindings": null,
-      "backup_of": null,
-      "actions": {
-        "0": {
-          "type": "goto",
-          "break": false,
-          "url": "https://tesco.com"
+          "inter_type": "header",
+          "key": "",
+          "value": ""
         },
-        "1": {
+        "3": {
           "type": "goto",
           "break": false,
-          "url": "https://github.com"
-        },
-        "2": {
-          "type": "goto",
-          "break": false,
-          "url": "https://instagram.com/"
+          "url": "https://www.instagram.com/"
         }
       }
     }

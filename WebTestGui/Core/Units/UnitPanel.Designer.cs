@@ -97,6 +97,7 @@
             // mainPanel
             // 
             mainPanel.BackColor = Color.FromArgb(45, 45, 50);
+            mainPanel.Controls.Add(collapseActionsButton);
             mainPanel.Controls.Add(resetBackupOfButton);
             mainPanel.Controls.Add(resetBindingButton);
             mainPanel.Controls.Add(testRunTimeText);
@@ -114,7 +115,6 @@
             mainPanel.Controls.Add(idTextBox);
             mainPanel.Controls.Add(binImage);
             mainPanel.Controls.Add(idLabel);
-            mainPanel.Controls.Add(collapseActionsButton);
             mainPanel.Controls.Add(expandActionsButtton);
             mainPanel.Dock = DockStyle.Fill;
             mainPanel.Location = new Point(0, 0);
@@ -306,9 +306,9 @@
             // collapseActionsButton
             // 
             collapseActionsButton.Anchor = AnchorStyles.Top;
-            collapseActionsButton.BackColor = Color.FromArgb(60, 60, 65);
+            collapseActionsButton.BackColor = Color.FromArgb(35, 35, 40);
             collapseActionsButton.Image = (Image)resources.GetObject("collapseActionsButton.Image");
-            collapseActionsButton.Location = new Point(8, 43);
+            collapseActionsButton.Location = new Point(8, 42);
             collapseActionsButton.Name = "collapseActionsButton";
             collapseActionsButton.Size = new Size(50, 50);
             collapseActionsButton.SizeMode = PictureBoxSizeMode.StretchImage;
