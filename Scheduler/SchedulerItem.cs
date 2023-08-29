@@ -26,15 +26,8 @@
             of.Filter = $"Teszt fájl|*{AppConsts.s_AppDefaultFileExtension}|Any File|*.*";
             if (of.ShowDialog() == DialogResult.OK)
             {
-                m_TestRawJson = File.ReadAllText(of.FileName);
                 m_TestPath = of.FileName;
-                m_TestName = Path.GetFileNameWithoutExtension(of.FileName);
-
-                m_IsTestLoaded = true;
-                mainLabel.Font = new Font("Segoe UI", 15F, FontStyle.Bold, GraphicsUnit.Point);
-                mainLabel.ForeColor = Color.White;
                 testFilePathTextBox.Text = m_TestPath;
-                mainLabel.Text = m_TestName;
             }
         }
 
@@ -58,12 +51,73 @@
 
         private void pictureBox1_Click(object sender, EventArgs e)
         {
-            m_IsTestLoaded = false;
             mainLabel.Text = "Teszt neve...";
             testFilePathTextBox.Text = "";
             mainLabel.Font = new Font("Segoe UI", 15F, FontStyle.Italic, GraphicsUnit.Point);
             mainLabel.ForeColor = Color.DimGray;
         }
+
+        private void folderIcon_Click(object sender, EventArgs e)
+        {
+            using (var folderDialog = new FolderBrowserDialog())
+            {
+                DialogResult result = folderDialog.ShowDialog();
+
+                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(folderDialog.SelectedPath))
+                {
+                    folderPath.Text = folderDialog.SelectedPath;
+                    m_RootLogDirectory = folderDialog.SelectedPath;
+                }
+            }
+        }
+
+        private void searchForFolderButton_Click(object sender, EventArgs e)
+        {
+            folderIcon_Click(null!, null!);
+        }
+
+        #region Update ready state methods
+
+        void UpdateReadyState()
+        {
+            if (Path.Exists(testFilePathTextBox.Text) && int.TryParse(timeTypeTextBox.Text, out _) && Path.Exists(folderPath.Text))
+            {
+                readyIcon.BringToFront();
+                m_IsScheduledTestReady = true;
+            }
+            else
+            {
+                notReadyIcon.BringToFront();
+                m_IsScheduledTestReady = false;
+            }
+        }
+
+        private void loadTestButton_Click(object sender, EventArgs e)
+        {
+            if (Path.Exists(m_TestPath))
+            {
+                m_TestRawJson = File.ReadAllText(m_TestPath);
+                m_TestName = Path.GetFileNameWithoutExtension(m_TestPath);
+
+                mainLabel.Font = new Font("Segoe UI", 15F, FontStyle.Bold, GraphicsUnit.Point);
+                mainLabel.ForeColor = Color.White;
+                testFilePathTextBox.Text = m_TestPath;
+                mainLabel.Text = m_TestName;
+                UpdateReadyState();
+            }
+        }
+
+        private void timeTypeTextBox_TextChanged(object sender, EventArgs e)
+        {
+            UpdateReadyState();
+        }
+
+        private void folderPath_TextChanged(object sender, EventArgs e)
+        {
+            UpdateReadyState();
+        }
+
+        #endregion
 
         #region ID logic
 
@@ -99,13 +153,35 @@
 
         #endregion
 
+        public int GetWaitTime()
+        {
+            if (timeTypeTextBox.Visible)
+                return int.Parse(timeTypeTextBox.Text);
+            else
+                return 0;
+        }
+
         public Scheduler.Scheduler m_Parent;
-        public bool m_IsTestLoaded = false;
+        public bool m_IsScheduledTestReady = false;
+        public string m_RootLogDirectory;
 
         public string m_TestName;
         public string m_TestPath;
 
         public string m_TestRawJson;
+
+        private void notReadyIcon_Click(object sender, EventArgs e)
+        {
+            if (Path.Exists(testFilePathTextBox.Text) && int.TryParse(timeTypeTextBox.Text, out _) && Path.Exists(folderPath.Text))
+            {
+                readyIcon.BringToFront();
+            }
+            else
+            {
+                notReadyIcon.BringToFront();
+            }
+        }
+
     }
 }
 
