@@ -1,5 +1,5 @@
 {
-  "interceptor": true,
+  "interceptor": false,
   "name": "fastrun",
   "browsers": [
     "chrome",
@@ -16,11 +16,11 @@
     "firefox_arguments": [],
     "keep_browser_open": false,
     "page_load_strategy": "normal",
+    "unhandled_prompt_behavior": "dismiss and notify",
     "timeout": {
       "type": "pageLoad",
       "value": 300000
-    },
-    "unhandled_prompt_behavior": "dismiss and notify"
+    }
   },
   "units": {
     "GyorsUnit": {
@@ -34,12 +34,13 @@
         },
         "1": {
           "type": "goto",
-          "break": true,
+          "break": false,
           "url": "https://github.com/"
         },
         "2": {
           "type": "interceptor_add",
           "break": false,
+          "name": "interceptor name",
           "inter_type": "header",
           "key": "",
           "value": ""

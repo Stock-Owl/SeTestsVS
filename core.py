@@ -236,21 +236,28 @@ class Core:
         print(f"Driver ({browser}) PID:", getpid())
         logging_active: bool = False
 
+        if interceptor_active:
+            interceptor = Interceptor()
+            
         if browser == 'chrome':
-            driver = ChromeDriver(options = options)  # , service = service
+            if interceptor_active:
+                driver = WireChromeDriver(options = options) # , service = service
+            else:
+                driver = ChromeDriver(options = options)  # , service = service
             browser_break_char = 'c'
             logging_active = True
 
         elif browser == 'firefox':
-            driver = FirefoxDriver(options = options, keep_alive=keep_browser_open) # , service = service
+            if interceptor_active:
+                driver = WireFirefoxDriver(options = options, keep_alive=keep_browser_open) # , service = service
+            else:
+                driver = FirefoxDriver(options = options, keep_alive=keep_browser_open) # , service = service
             browser_break_char = 'f'
             
         else:
             print(f"Unknown browser {browser}")
             Support.LogError(parent_log_path, f"Unknown browser {browser}")
             return None
-        if interceptor_active:
-            interceptor = Interceptor()
 
         # clears the previous log files
         Support.ClearAllLogs(parent_log_path)
@@ -321,10 +328,18 @@ class Core:
                             Actions.Refresh(driver)
                         case "interceptor_on":
                             if interceptor_active:
-                                driver.request_interceptor = interceptor.Intercept
+                                Actions.InterceptorOn(driver, interceptor)
+                            else:
+                                print("Interceptor is off")
+                                Support.LogProc(parent_log_path, "Interceptor is off")
+                                continue
                         case "interceptor_off":
                             if interceptor_active:
-                                driver.request_interceptor = None
+                                Actions.InterceptorOff(driver)
+                            else:
+                                print("Interceptor is off")
+                                Support.LogProc(parent_log_path, "Interceptor is off")
+                                continue
                         case "interceptor_add":
                             if interceptor_active:
                                 name_: str = action["name"]
@@ -336,10 +351,18 @@ class Core:
                                     type_,
                                     key_,
                                     value_)
+                            else:
+                                print("Interceptor is off")
+                                Support.LogProc(parent_log_path, "Interceptor is off")
+                                continue
                         case "interceptor_remove":
                             if interceptor_active:
                                 name_: str = action["name"]
                                 interceptor.Remove(name_)
+                            else:
+                                print("Interceptor is off")
+                                Support.LogProc(parent_log_path, "Interceptor is off")
+                                continue
                         case "js_execute":
                             commands = action["commands"]
                             Actions.ExecuteJS(driver, commands, path=parent_log_path, retry_timeout=log_js_retry_timeout)
