@@ -16,7 +16,7 @@ from multiprocessing import Process
 from copy import copy
 from os import getpid
 
-# V.1.2.0
+# V.1.2.1
 #                                                                               25 / 27 + 1
 # TODO: Kitalálni, hogy vannak az argumentumok                                  ✅  1
 # TODO: Megszerelni a random useless conversionöket a JSON-ből                  ✅  2
@@ -183,6 +183,7 @@ class Core:
         options: dict[str] = json["options"]
         parent_log_path: str = options["parent_log_path"]
         log_js_retry_timeout: int = options["log_JS_retry_timeout"]
+        auto_exit_iframes: bool = options["auto_exit_iframes"]
         keep_browser_open: bool = json["driver_options"]["keep_browser_open"]
         interceptor: bool = json["interceptor"]
         testname: str = json["name"]
@@ -197,6 +198,7 @@ class Core:
             "testname": testname,
             "interceptor_active": interceptor,
             "log_js_retry_timeout": log_js_retry_timeout,
+            "auto_exit_iframes": auto_exit_iframes,
             "keep_browser_open": keep_browser_open,
             "browser": "chrome",
             "parent_log_path": f"{parent_log_path}/chrome"
@@ -212,6 +214,7 @@ class Core:
             "testname": testname,
             "interceptor_active": interceptor,
             "log_js_retry_timeout": log_js_retry_timeout,
+            "auto_exit_iframes": auto_exit_iframes,
             "keep_browser_open": keep_browser_open,
             "browser": "firefox",
             "parent_log_path": f"{parent_log_path}/firefox"
@@ -231,6 +234,7 @@ class Core:
         keep_browser_open: bool = None,
         parent_log_path: str = None,
         log_js_retry_timeout: int = None,
+        auto_exit_iframes: bool = None,
         **overflow) -> None:
 
         print(f"Driver ({browser}) PID:", getpid())
@@ -379,6 +383,7 @@ class Core:
                                 action = 'switch_to',
                                 locator = action['locator'],
                                 value = action['value'],
+                                auto_exit_iframes = auto_exit_iframes,
                                 isSingle = True,
                                 isDisplayed = None,
                                 isEnabled = None,
@@ -390,6 +395,7 @@ class Core:
                                 action = 'click',
                                 locator = action['locator'],
                                 value = action['value'],
+                                auto_exit_iframes = auto_exit_iframes,
                                 isSingle = action['single'],
                                 isDisplayed = action['displayed'],
                                 isEnabled = action['enabled'],
@@ -401,6 +407,7 @@ class Core:
                                 locator = action['locator'],
                                 value = action['value'],
                                 keys = action['keys'],
+                                auto_exit_iframes = auto_exit_iframes,
                                 isSingle = action['single'],
                                 isDisplayed = action['displayed'],
                                 isEnabled = action['enabled'],
@@ -411,6 +418,7 @@ class Core:
                                 action = 'clear',
                                 locator = action['locator'],
                                 value = action['value'],
+                                auto_exit_iframes = auto_exit_iframes,
                                 isSingle = action['single'],
                                 isDisplayed = action['displayed'],
                                 isEnabled = action['enabled'],

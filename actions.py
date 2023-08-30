@@ -264,7 +264,8 @@ class Actions:
                     case _:
                         raise ValueError("Invalid action type")
 
-        if action_kwargs["auto_exit_iframes"]:                                  
+        # only switch back from iframe if the action wasn't a switch to an iframe (no counterproductivity hehe)
+        if action_kwargs["auto_exit_iframes"] and action != "switch_to":                                  
             driver.switch_to.parent_frame()     #if there was an iframe, this goes back to the top of the frame 
 
     def CheckDriverExists(driver: object, omit_exceptions: bool = True) -> None | bool | Exception:

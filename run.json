@@ -1,6 +1,6 @@
 {
   "interceptor": false,
-  "name": "fastrun",
+  "name": "bevásárlás",
   "browsers": [
     "chrome",
     "firefox"
@@ -14,7 +14,7 @@
     "accept_insecure_certs": true,
     "chrome_arguments": [],
     "firefox_arguments": [],
-    "keep_browser_open": false,
+    "keep_browser_open": true,
     "page_load_strategy": "normal",
     "unhandled_prompt_behavior": "dismiss and notify",
     "timeout": {
@@ -23,145 +23,134 @@
     }
   },
   "units": {
-    "GyorsUnit": {
+    "bestbyte": {
       "bindings": null,
       "backup_of": null,
       "actions": {
         "0": {
           "type": "goto",
           "break": false,
-          "url": "https://www.youtube.com/"
-        },
-        "1": {
-          "type": "goto",
-          "break": false,
-          "url": "https://github.com/"
-        },
-        "2": {
-          "type": "interceptor_add",
-          "break": false,
-          "name": "interceptor name",
-          "inter_type": "header",
-          "key": "",
-          "value": ""
-        },
-        "3": {
-          "type": "goto",
-          "break": false,
-          "url": "https://www.instagram.com/"
+          "url": "https://bestbyte.hu"
         }
       }
     },
-    "Ötödik Unit": {
+    "cookie ok":
+    {
+        "bindings": null,
+      "backup_of": null,
+      "actions": {
+        "0": {
+                "type": "click",
+                "break": false,
+                "single": true,
+                "displayed": null,
+                "enabled": null,
+                "selected": null,
+                "locator": "xpath",
+                "value": "//*[@id=\"vscookieAlertOk\"]"
+            }
+        }
+    },
+    "login weblogin@visionsoft.hu": {
       "bindings": null,
       "backup_of": null,
       "actions": {
         "0": {
-          "type": "goto",
+          "type": "click",
           "break": false,
-          "url": "https://tesco.com"
+          "single": true,
+          "displayed": null,
+          "enabled": null,
+          "selected": null,
+          "locator": "xpath",
+          "value": "//*[@id=\"aspnetForm\"]/header/div[1]/div/div/div/div[3]/div/div[1]/a[1]"
         },
-        "1": {
-          "type": "goto",
+        "1":
+        {
+          "type": "send_keys",
           "break": false,
-          "url": "https://github.com"
+          "single": true,
+          "displayed": null,
+          "enabled": null,
+          "selected": null,
+          "locator": "xpath",
+          "value": "//*[@id=\"ctl00_CON_default_uco_Login_EDI_loginnev\"]",
+          "keys": "weblogin@visionsoft.hu"
         },
-        "2": {
-          "type": "goto",
+        "2":
+        {
+          "type": "send_keys",
           "break": false,
-          "url": "https://instagram.com/"
+          "single": true,
+          "displayed": null,
+          "enabled": null,
+          "selected": null,
+          "locator": "xpath",
+          "value": "//*[@id=\"ctl00_CON_default_uco_Login_EDI_jelszo\"]",
+          "keys": "pimp@"
+        },
+        "3":
+        {
+          "type": "click",
+          "break": false,
+          "single": true,
+          "displayed": null,
+          "enabled": null,
+          "selected": null,
+          "locator": "xpath",
+          "value": "//*[@id=\"ctl00_CON_default_uco_Login_PAN_login\"]/div/div/div[4]"
         }
       }
     },
-    "Hatodik Unit": {
+    "login weblogin": {
       "bindings": null,
-      "backup_of": null,
+      "backup_of": "login weblogin@visionsoft.hu",
       "actions": {
         "0": {
-          "type": "goto",
-          "break": false,
-          "url": "https://tesco.com"
-        },
-        "1": {
-          "type": "goto",
-          "break": false,
-          "url": "https://github.com"
-        },
-        "2": {
-          "type": "goto",
-          "break": false,
-          "url": "https://instagram.com/"
-        }
-      }
-    },
-    "Hetedik Unit": {
-      "bindings": null,
-      "backup_of": null,
-      "actions": {
-        "0": {
-          "type": "goto",
-          "break": false,
-          "url": "https://tesco.com"
-        },
-        "1": {
-          "type": "goto",
-          "break": false,
-          "url": "https://github.com"
-        },
-        "2": {
-          "type": "goto",
-          "break": false,
-          "url": "https://instagram.com/"
-        }
-      }
-    },
-    "Nyoldacik Unit": {
-      "bindings": null,
-      "backup_of": null,
-      "actions": {
-        "0": {
-          "type": "goto",
-          "break": false,
-          "url": "https://tesco.com"
-        },
-        "1": {
-          "type": "goto",
-          "break": false,
-          "url": "https://github.com"
-        },
-        "2": {
-          "type": "goto",
-          "break": false,
-          "url": "https://instagram.com/"
-        }
-      }
-    },
-    "Kilencedik Unit": {
-      "bindings": null,
-      "backup_of": null,
-      "actions": {
-        "0": {
-          "type": "goto",
-          "break": false,
-          "url": "https://tesco.com"
-        },
-        "1": {
-          "type": "goto",
-          "break": false,
-          "url": "https://github.com"
-        },
-        "2": {
-          "type": "interceptor_add",
-          "break": false,
-          "inter_type": "header",
-          "key": "",
-          "value": ""
-        },
-        "3": {
-          "type": "goto",
-          "break": false,
-          "url": "https://www.instagram.com/"
-        }
+            "type": "click",
+            "break": false,
+            "single": true,
+            "displayed": null,
+            "enabled": null,
+            "selected": null,
+            "locator": "xpath",
+            "value": "//*[@id=\"aspnetForm\"]/header/div[1]/div/div/div/div[3]/div/div[1]/a[1]"
+          },
+          "1":
+          {
+            "type": "send_keys",
+            "break": false,
+            "single": true,
+            "displayed": null,
+            "enabled": null,
+            "selected": null,
+            "locator": "xpath",
+            "value": "//*[@id=\"ctl00_CON_default_uco_Login_EDI_loginnev\"]",
+            "keys": "weblogin"
+          },
+          "2":
+          {
+            "type": "send_keys",
+            "break": false,
+            "single": true,
+            "displayed": null,
+            "enabled": null,
+            "selected": null,
+            "locator": "xpath",
+            "value": "//*[@id=\"ctl00_CON_default_uco_Login_EDI_jelszo\"]",
+            "keys": "pimp@"
+          },
+          "3":
+          {
+            "type": "click",
+            "break": false,
+            "single": true,
+            "displayed": null,
+            "enabled": null,
+            "selected": null,
+            "locator": "xpath",
+            "value": "//*[@id=\"ctl00_CON_default_uco_Login_PAN_login\"]/div/div/div[4]"
+          }
       }
     }
   }
