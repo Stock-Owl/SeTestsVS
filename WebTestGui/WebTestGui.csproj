@@ -21,6 +21,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Core\Units\Actions\SwitchBackAction.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Core\Units\Actions\SwitchToAction.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Update="Core\Units\Actions\InterceptorRemoveAction.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -88,9 +94,6 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="Core\Options\ParentLogPathOption.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="Core\Options\TerminalModeOption.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="Core\Options\LogJSRetryTimeoutOption.cs">

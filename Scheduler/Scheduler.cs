@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 using WebTestGui;
 
@@ -11,7 +12,7 @@ namespace Scheduler
 
             DarkTitleBarManager.UseImmersiveDarkMode(Handle, true);
             BackColor = Color.FromArgb(255, 50, 50, 53);
-            Text = AppConsts.s_AppName + "" + "Idõzítõ" + " " + AppConsts.s_AppVersion;
+            Text = AppConsts.s_AppName + " " + "Idõzítõ" + " " + AppConsts.s_AppVersion;
         }
 
         private void addUnitButton_Click(object sender, EventArgs e)
@@ -19,6 +20,12 @@ namespace Scheduler
             SchedulerItem item = new SchedulerItem(this);
             item.SetId(m_SchedulerItems.Count);
             m_SchedulerItems.Add(item);
+            schedulerPanel.Controls.AddRange(m_SchedulerItems.ToArray());
+        }
+
+        public void RefreshPanel()
+        {
+            schedulerPanel.Controls.Clear();
             schedulerPanel.Controls.AddRange(m_SchedulerItems.ToArray());
         }
 
@@ -59,49 +66,39 @@ namespace Scheduler
             }
         }
 
-        public void SetColorSchemeToRun()
+        private async void testStartButton_Click(object sender, EventArgs e)
         {
-
-        }
-
-        public void SetColorSchemeToEdit()
-        {
-
-        }
-
-        private void folderIcon_Click(object sender, EventArgs e)
-        {
-            using (var folderDialog = new FolderBrowserDialog())
+            foreach (SchedulerItem item in m_SchedulerItems)
             {
-                DialogResult result = folderDialog.ShowDialog();
-
-                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(folderDialog.SelectedPath))
+                if (!item.m_IsScheduledTestReady)
                 {
-                    folderPath.Text = folderDialog.SelectedPath;
-                    m_RootLogDirectory = folderDialog.SelectedPath;
+                    string message = "Minden idõzített tesztnek érvényesek az adatai!\n" +
+                                     "Bizonyosodjon meg róla, hogy mindegyik teszt mellett zöld pipa legyen!";
+                    string title = "Indítási probléma...";
+                    MessageBox.Show(message, title);
+                    return;
                 }
             }
-        }
 
-        private void searchForFolderButton_Click(object sender, EventArgs e)
-        {
-            folderIcon_Click(null!, null!);
-        }
+            BackColor = Color.FromArgb(255, 80, 50, 50);
 
-        private async Task testStartButton_Click(object sender, EventArgs e)
-        {
-            // Start testing loop
-            foreach (SchedulerItem schedulerItem in m_SchedulerItems)
+            if (m_ScheduledTestRunning)
             {
-                m_CurrentlyTestedRawJson = schedulerItem.m_TestRawJson;
-                //OnTestStart();
+                OnTestAbort();
+            }
+            else
+            {
+                m_ScheduledTestRunning = true;
+                STARTTEST();
             }
         }
 
-        public List<SchedulerItem> m_SchedulerItems = new List<SchedulerItem>();
-        public string m_RootLogDirectory;
+        bool m_ScheduledTestRunning = false;
 
-        string m_CurrentlyTestedRawJson;
+        public List<SchedulerItem> m_SchedulerItems = new List<SchedulerItem>();
+
+        SchedulerItem m_CurrentlyTestedTestItem;
+        int m_CurrentlyTestedTestItemID = -1;
         Process m_CurrentProcess;
         string m_TestStartTime;
 
@@ -110,102 +107,102 @@ namespace Scheduler
         private bool _STOP_BRK_LOG_REQ = false;
         private bool _STOP_JS_LOG_REQ = false;
 
-        public async void OnTestStart()
+        public async void STARTTEST()
+        {
+            if (m_CurrentlyTestedTestItemID == (m_SchedulerItems.Count - 1))
+            {
+                OnTestingEnd();
+            }
+            else
+            {
+                m_CurrentlyTestedTestItemID++;
+                m_CurrentlyTestedTestItem = m_SchedulerItems[m_CurrentlyTestedTestItemID];
+                OnTestStart();
+            }
+        }
+
+        public async void OnTestingEnd()
+        {
+            m_ScheduledTestRunning = false;
+
+            BackColor = Color.FromArgb(255, 50, 50, 53);
+            testStartButton.Text = "TESZTELÉS INDITÁSA...";
+        }
+
+        public async Task OnTestStart()
         {
             // TODO: START TIMER FOR TEST
 
-            // Does parent log path exist
-            if (!Path.Exists(m_RootLogDirectory))
-            {
-                string message = "A jelenleg megadott 'Gyökér logolási könyvtár' útvonala nem létezik!";
-                string title = "Indítási probléma...";
-                MessageBox.Show(message, title);
-                return;
-            }
-
             // Checking if the root log directory contains chrome and firefox folders
-            if (!Directory.Exists(m_RootLogDirectory + @"/chrome"))
+            if (!Directory.Exists(m_CurrentlyTestedTestItem.m_RootLogDirectory + @"/chrome"))
             {
-                Directory.CreateDirectory(m_RootLogDirectory + @"/chrome");
+                Directory.CreateDirectory(m_CurrentlyTestedTestItem.m_RootLogDirectory + @"/chrome");
             }
-            if (!Directory.Exists(m_RootLogDirectory + @"/firefox"))
+            if (!Directory.Exists(m_CurrentlyTestedTestItem.m_RootLogDirectory + @"/firefox"))
             {
-                Directory.CreateDirectory(m_RootLogDirectory + @"/firefox");
+                Directory.CreateDirectory(m_CurrentlyTestedTestItem.m_RootLogDirectory + @"/firefox");
             }
 
             testStartButton.Text = "TESZT FUT";
 
-            string JSONString = m_CurrentlyTestedRawJson;
+            string JSONString = m_CurrentlyTestedTestItem.m_TestRawJson;
             DateTime currentTime = DateTime.Now;
             m_TestStartTime = currentTime.ToString("HH:mm:ss:ffffff");
 
             // Getting python directory
             // TODO: MOST LIKELY WILL CHANGE ON PRODUCTION BUILD
             string temp = Application.ExecutablePath;
-            string[] temparray = temp.Split(@"WebTestGui");
+            string[] temparray = temp.Split(@"Scheduler");
 
             File.WriteAllText(temparray[0] + "run.json", JSONString);
 
-            SetColorSchemeToRun();
+            StartPython(temparray[0], "main.py");
 
-            if (!Test().HaveInterceptorActions())
-            {
-                StartPython(temparray[0], "main.py");
-            }
-            else
-            {
-                // Call interceptor python file instead
-                StartPython(temparray[0], "main.py");
-            }
-
-            File.WriteAllText(m_RootLogDirectory + @"/chrome/run.log", string.Empty);
-            File.WriteAllText(m_RootLogDirectory + @"/firefox/run.log", string.Empty);
+            File.WriteAllText(m_CurrentlyTestedTestItem.m_RootLogDirectory + @"/chrome/run.log", string.Empty);
+            File.WriteAllText(m_CurrentlyTestedTestItem.m_RootLogDirectory + @"/firefox/run.log", string.Empty);
 
             // Later, when there are more files with a filewatcher expand File.Exists() check
-            if (!File.Exists(m_RootLogDirectory + @"/file.brk"))
+            if (!File.Exists(m_CurrentlyTestedTestItem.m_RootLogDirectory + @"/file.brk"))
             {
-                File.Create(m_RootLogDirectory + @"/file.brk");
+                File.Create(m_CurrentlyTestedTestItem.m_RootLogDirectory + @"/file.brk");
             }
-            if (!File.Exists(m_RootLogDirectory + @"/js.log"))
+            if (!File.Exists(m_CurrentlyTestedTestItem.m_RootLogDirectory + @"/js.log"))
             {
-                File.Create(m_RootLogDirectory + @"/js.log");
+                File.Create(m_CurrentlyTestedTestItem.m_RootLogDirectory + @"/js.log");
             }
 
             _STOP_BRK_LOG_REQ = false;
             _STOP_JS_LOG_REQ = false;
 
-            File.WriteAllText(m_RootLogDirectory + @"/file.brk", string.Empty);
-            string breakPointFilePath = m_RootLogDirectory + @"/file.brk";
+            File.WriteAllText(m_CurrentlyTestedTestItem.m_RootLogDirectory + @"/file.brk", string.Empty);
+            string breakPointFilePath = m_CurrentlyTestedTestItem.m_RootLogDirectory + @"/file.brk";
             StartBreakPointFileWatcher(breakPointFilePath);
 
-            File.WriteAllText(m_RootLogDirectory + @"/js.log", string.Empty);
-            string jsLogFilePath = m_RootLogDirectory + @"/js.log";
+            File.WriteAllText(m_CurrentlyTestedTestItem.m_RootLogDirectory + @"/js.log", string.Empty);
+            string jsLogFilePath = m_CurrentlyTestedTestItem.m_RootLogDirectory + @"/js.log";
             StartJsLogFileWatcher(jsLogFilePath);
-
-            if (!Test().HaveInterceptorActions())
         }
 
         public void OnTestAbort()
         {
             m_CurrentProcess.Kill();
-            SetColorSchemeToEdit();
 
-            OnTestFinished();
+            OnTestFinished(true);
         }
 
-        public void OnTestFinished()
+        public void OnTestFinished(bool final)
         {
-            Test().m_State = WebTestGui.Test.TestState.Edit;
-            testStartButton.Text = "TESZT INDÍTÁSA...";
-            SetColorSchemeToEdit();
-
             _STOP_BRK_LOG_REQ = true;
             _STOP_JS_LOG_REQ = true;
-            File.WriteAllText(m_RootLogDirectory + @"/file.brk", string.Empty);
+            File.WriteAllText(m_CurrentlyTestedTestItem.m_RootLogDirectory + @"/file.brk", string.Empty);
 
-            string chromeRunLog = File.ReadAllText(m_RootLogDirectory + @"/chrome/run.log");
-            string firefoxRunLog = File.ReadAllText(m_RootLogDirectory + @"/firefox/run.log");
+            string chromeRunLog = File.ReadAllText(m_CurrentlyTestedTestItem.m_RootLogDirectory + @"/chrome/run.log");
+            string firefoxRunLog = File.ReadAllText(m_CurrentlyTestedTestItem.m_RootLogDirectory + @"/firefox/run.log");
 
+            if (final)
+                OnTestingEnd();
+            else
+                STARTTEST();
             // TODO: STOP TIMER FOR TEST
         }
 
@@ -218,12 +215,12 @@ namespace Scheduler
 
             await m_CurrentProcess.WaitForExitAsync();
 
-            OnTestFinished();
+            OnTestFinished(false);
         }
 
         public async void StartBreakPointFileWatcher(string logPath)
         {
-            using (FileWatcher fileWatcher = new FileWatcher(logPath))
+            using (FileWatcher fileWatcher = new FileWatcher(logPath, true))
             {
                 fileWatcher.FileChanged += async (content) =>
                 {
