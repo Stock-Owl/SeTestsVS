@@ -51,7 +51,10 @@ namespace WebTestGui
             m_DriverOptions.m_DriverOptions.AddRange(driverOptionClasses);
 
             UnitPanel sampleUnit = new UnitPanel();
-            sampleUnit.m_ParentForm = m_MainForm;
+            if (m_MainForm != null)
+            {
+                sampleUnit.m_ParentForm = m_MainForm;
+            }
             sampleUnit.SetUId(m_Units.m_Units.Count);
             sampleUnit.m_UnitName = $"Példa Unit";
             sampleUnit.Refresh();

@@ -33,7 +33,10 @@ namespace WebTestGui
                 if (int.TryParse(idTextBox.Text, out int _))
                 {
                     int newId = int.Parse(idTextBox.Text);
-                    m_ParentUnit.MoveAction(this, newId);
+                    if (m_ParentUnit != null)
+                    {
+                        m_ParentUnit.MoveAction(this, newId);
+                    }
                 }
             }
         }
@@ -43,20 +46,29 @@ namespace WebTestGui
             if (int.TryParse(idTextBox.Text, out int _))
             {
                 int newId = int.Parse(idTextBox.Text);
-                m_ParentUnit.MoveAction(this, newId);
+                if (m_ParentUnit != null)
+                {
+                    m_ParentUnit.MoveAction(this, newId);
+                }
             }
         }
 
         public void Delete()
         {
-            m_ParentUnit.DeleteAction(this);
+            if (m_ParentUnit != null)
+            {
+                m_ParentUnit.DeleteAction(this);
+            }
         }
 
         public void Refresh(bool needWholePanelRefresh)
         {
             if (needWholePanelRefresh)
             {
-                m_ParentUnit.Refresh();
+                if (m_ParentUnit != null)
+                {
+                    m_ParentUnit.Refresh();
+                }
             }
         }
 
@@ -74,32 +86,38 @@ namespace WebTestGui
 
         public void SetChromeRunTime(long chromeRunTimeInMicroseconds)
         {
-            m_ChromeRunTimeInMicroseconds = chromeRunTimeInMicroseconds;
+            if (m_ParentUnit != null)
+            {
+                m_ChromeRunTimeInMicroseconds = chromeRunTimeInMicroseconds;
 
-            testRunTimeText.Text =
-                m_ChromeRunTimeInMicroseconds.ToString() + " / " + m_FirefoxRunTimeInMicroseconds.ToString() + " ms";
-            if (m_ParentUnit.m_ParentForm.Test().m_State == Test.TestState.Break)
-            {
-                testRunTimeText.ForeColor = Color.Firebrick;
-            }
-            else if (m_ParentUnit.m_ParentForm.Test().m_State == Test.TestState.Edit)
-            {
-                testRunTimeText.ForeColor = Color.DimGray;
+                testRunTimeText.Text =
+                    m_ChromeRunTimeInMicroseconds.ToString() + " / " + m_FirefoxRunTimeInMicroseconds.ToString() + " ms";
+                if (m_ParentUnit.m_ParentForm.Test().m_State == Test.TestState.Break)
+                {
+                    testRunTimeText.ForeColor = Color.Firebrick;
+                }
+                else if (m_ParentUnit.m_ParentForm.Test().m_State == Test.TestState.Edit)
+                {
+                    testRunTimeText.ForeColor = Color.DimGray;
+                }
             }
         }
         public void SetFirefoxRunTime(long firefoxRunTimeInMicroseconds)
         {
-            m_FirefoxRunTimeInMicroseconds = firefoxRunTimeInMicroseconds;
+            if (m_ParentUnit != null)
+            {
+                m_FirefoxRunTimeInMicroseconds = firefoxRunTimeInMicroseconds;
 
-            testRunTimeText.Text =
-                m_ChromeRunTimeInMicroseconds.ToString() + " / " + m_FirefoxRunTimeInMicroseconds.ToString() + " ms";
-            if (m_ParentUnit.m_ParentForm.Test().m_State == Test.TestState.Break)
-            {
-                testRunTimeText.ForeColor = Color.Firebrick;
-            }
-            else if (m_ParentUnit.m_ParentForm.Test().m_State == Test.TestState.Edit)
-            {
-                testRunTimeText.ForeColor = Color.DimGray;
+                testRunTimeText.Text =
+                    m_ChromeRunTimeInMicroseconds.ToString() + " / " + m_FirefoxRunTimeInMicroseconds.ToString() + " ms";
+                if (m_ParentUnit.m_ParentForm.Test().m_State == Test.TestState.Break)
+                {
+                    testRunTimeText.ForeColor = Color.Firebrick;
+                }
+                else if (m_ParentUnit.m_ParentForm.Test().m_State == Test.TestState.Edit)
+                {
+                    testRunTimeText.ForeColor = Color.DimGray;
+                }
             }
         }
         public Tuple<int, int> GetRunTime()

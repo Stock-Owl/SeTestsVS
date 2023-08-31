@@ -38,7 +38,10 @@ namespace WebTestGui
                 if (int.TryParse(idTextBox.Text, out int _))
                 {
                     int newId = int.Parse(idTextBox.Text);
-                    m_ParentForm.MoveUnit(this, newId);
+                    if (m_ParentForm!= null)
+                    {
+                        m_ParentForm.MoveUnit(this, newId);
+                    }
                 }
             }
         }
@@ -50,8 +53,11 @@ namespace WebTestGui
 
             if (result == DialogResult.Yes)
             {
-                m_ParentForm.DeleteUnit(this);
-                Refresh();
+                if (m_ParentForm!= null)
+                {
+                    m_ParentForm.DeleteUnit(this);
+                    Refresh();
+                }
             }
         }
 
@@ -63,6 +69,7 @@ namespace WebTestGui
             if (result == DialogResult.Yes)
             {
                 m_Actions.m_Actions.Remove(action);
+                OnCollapseActionsButtonClick(null!, null!);
                 OnExpandActionsButttonClick(null!, null!);
             }
         }
@@ -152,13 +159,16 @@ namespace WebTestGui
                 firefoxSum += sum.Item2;
             }
             testRunTimeText.Text = (chromeSum.ToString() + " / " + firefoxSum.ToString() + " ms");
-            if (m_ParentForm.Test().m_State == Test.TestState.Break)
+            if (m_ParentForm != null)
             {
-                testRunTimeText.ForeColor = Color.Firebrick;
-            }
-            else if (m_ParentForm.Test().m_State == Test.TestState.Edit)
-            {
-                testRunTimeText.ForeColor = Color.DimGray;
+                if (m_ParentForm.Test().m_State == Test.TestState.Break)
+                {
+                    testRunTimeText.ForeColor = Color.Firebrick;
+                }
+                else if (m_ParentForm.Test().m_State == Test.TestState.Edit)
+                {
+                    testRunTimeText.ForeColor = Color.DimGray;
+                }
             }
         }
 
@@ -232,31 +242,37 @@ namespace WebTestGui
 
         public void SetUnitBindings()
         {
-            if (bindingsLabel.Text != "null")
+            if (m_ParentForm != null)
             {
-                for (int i = 0; i < m_ParentForm.Test().m_Units.m_Units.Count; i++)
+                if (bindingsLabel.Text != "null")
                 {
-                    if (bindingsLabel.Text == m_ParentForm.Test().m_Units.m_Units[i].m_UnitName)
+                    for (int i = 0; i < m_ParentForm.Test().m_Units.m_Units.Count; i++)
                     {
-                        m_Bindings = m_ParentForm.Test().m_Units.m_Units[i];
+                        if (bindingsLabel.Text == m_ParentForm.Test().m_Units.m_Units[i].m_UnitName)
+                        {
+                            m_Bindings = m_ParentForm.Test().m_Units.m_Units[i];
+                        }
                     }
+                    //Refresh();
                 }
-                //Refresh();
             }
         }
 
         public void SetUnitBackupOf()
         {
-            if (backupOfLabel.Text != "null")
+            if (m_ParentForm != null)
             {
-                for (int i = 0; i < m_ParentForm.Test().m_Units.m_Units.Count; i++)
+                if (backupOfLabel.Text != "null")
                 {
-                    if (backupOfLabel.Text == m_ParentForm.Test().m_Units.m_Units[i].m_UnitName)
+                    for (int i = 0; i < m_ParentForm.Test().m_Units.m_Units.Count; i++)
                     {
-                        m_BackupOf = m_ParentForm.Test().m_Units.m_Units[i];
+                        if (backupOfLabel.Text == m_ParentForm.Test().m_Units.m_Units[i].m_UnitName)
+                        {
+                            m_BackupOf = m_ParentForm.Test().m_Units.m_Units[i];
+                        }
                     }
+                    //Refresh();
                 }
-                //Refresh();
             }
         }
 
@@ -299,26 +315,32 @@ namespace WebTestGui
 
         private void OnUnitBindingsComboBoxDropDown(object sender, EventArgs e)
         {
-            unitBindingsComboBox.Items.Clear();
-            string[] unitNames = new string[m_ParentForm.Test().m_Units.m_Units.Count];
-            for (int i = 0; i < unitNames.Length; i++)
+            if (m_ParentForm != null)
             {
-                unitNames[i] = m_ParentForm.Test().m_Units.m_Units[i].m_UnitName;
-            }
+                unitBindingsComboBox.Items.Clear();
+                string[] unitNames = new string[m_ParentForm.Test().m_Units.m_Units.Count];
+                for (int i = 0; i < unitNames.Length; i++)
+                {
+                    unitNames[i] = m_ParentForm.Test().m_Units.m_Units[i].m_UnitName;
+                }
 
-            unitBindingsComboBox.Items.AddRange(unitNames);
+                unitBindingsComboBox.Items.AddRange(unitNames);
+            }
         }
 
         private void OnUnitBackupComboBoxDropDown(object sender, EventArgs e)
         {
-            unitBackupComboBox.Items.Clear();
-            string[] unitNames = new string[m_ParentForm.Test().m_Units.m_Units.Count];
-            for (int i = 0; i < unitNames.Length; i++)
+            if (m_ParentForm != null)
             {
-                unitNames[i] = m_ParentForm.Test().m_Units.m_Units[i].m_UnitName;
-            }
+                unitBackupComboBox.Items.Clear();
+                string[] unitNames = new string[m_ParentForm.Test().m_Units.m_Units.Count];
+                for (int i = 0; i < unitNames.Length; i++)
+                {
+                    unitNames[i] = m_ParentForm.Test().m_Units.m_Units[i].m_UnitName;
+                }
 
-            unitBackupComboBox.Items.AddRange(unitNames);
+                unitBackupComboBox.Items.AddRange(unitNames);
+            }
         }
 
         private void OnCollapseActionsButtonClick(object sender, EventArgs e)
@@ -350,8 +372,11 @@ namespace WebTestGui
 
         private void OnUnitNameTextFieldChanged(object sender, EventArgs e)
         {
-            m_UnitName = unitNameTextField.Text;
-            m_ParentForm.RefreshEditor();
+            if (m_ParentForm != null)
+            {
+                m_UnitName = unitNameTextField.Text;
+                m_ParentForm.RefreshEditor();
+            }
         }
 
         private void OnUIdTextBoxFocusLeave(object sender, EventArgs e)
@@ -359,7 +384,10 @@ namespace WebTestGui
             if (int.TryParse(idTextBox.Text, out int _))
             {
                 int newId = int.Parse(idTextBox.Text);
-                m_ParentForm.MoveUnit(this, newId);
+                if (m_ParentForm != null)
+                {
+                    m_ParentForm.MoveUnit(this, newId);
+                }
             }
         }
 

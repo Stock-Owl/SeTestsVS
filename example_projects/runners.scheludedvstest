@@ -1,0 +1,20 @@
+{
+  "0": {
+    "test_path": "C:\\dev\\SeTestsVS\\example_projects\\fastrun.vstest",
+    "schedule_type": "Az előző teszt után egyből...",
+    "time_type": "10000",
+    "rootfolder_path": "C:\\dev\\SeTestsVS\\logs"
+  },
+  "1": {
+    "test_path": "C:\\dev\\SeTestsVS\\example_projects\\longtest.vstest",
+    "schedule_type": "Az előző teszt után ennyi idővel...",
+    "time_type": "10",
+    "rootfolder_path": "C:\\dev\\SeTestsVS\\logs"
+  },
+  "2": {
+    "test_path": "C:\\dev\\SeTestsVS\\example_projects\\run.vstest",
+    "schedule_type": "Az előző teszt után ennyi idővel...",
+    "time_type": "30",
+    "rootfolder_path": "C:\\dev\\SeTestsVS\\logs"
+  }
+}

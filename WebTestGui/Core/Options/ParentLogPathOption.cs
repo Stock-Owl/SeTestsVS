@@ -33,6 +33,11 @@ namespace WebTestGui
             return folderPath.Text;
         }
 
+        public void SetRootLogPath(string rootLogPath)
+        {
+            folderPath.Text = rootLogPath;
+        }
+
         private void folderIcon_Click(object sender, EventArgs e)
         {
             using (var folderDialog = new FolderBrowserDialog())

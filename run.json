@@ -1,157 +1,218 @@
 {
-    "interceptor": false,
-    "name": "bevásárlás",
-    "browsers": [
-      "chrome",
-      "firefox"
-    ],
-    "options": {
-      "auto_exit_iframes": true,
-      "log_JS_retry_timeout": 2000,
-      "parent_log_path": "./logs"
+  "interceptor": false,
+  "name": "longtest",
+  "browsers": [
+    "chrome",
+    "firefox"
+  ],
+  "options": {
+    "auto_exit_iframes": true,
+    "log_JS_retry_timeout": 2000,
+    "parent_log_path": "C:\\dev\\SeTestsVS\\logs",
+    "maximize_browser": false
+  },
+  "driver_options": {
+    "accept_insecure_certs": true,
+    "chrome_arguments": [],
+    "firefox_arguments": [],
+    "keep_browser_open": false,
+    "page_load_strategy": "normal",
+    "timeout": {
+      "type": "pageLoad",
+      "value": 300000
     },
-    "driver_options": {
-      "accept_insecure_certs": true,
-      "chrome_arguments": [],
-      "firefox_arguments": [],
-      "keep_browser_open": true,
-      "page_load_strategy": "normal",
-      "unhandled_prompt_behavior": "dismiss and notify",
-      "timeout": {
-        "type": "pageLoad",
-        "value": 300000
+    "unhandled_prompt_behavior": "dismiss and notify"
+  },
+  "units": {
+    "Első Unit": {
+      "bindings": null,
+      "backup_of": null,
+      "actions": {
+        "0": {
+          "type": "goto",
+          "break": false,
+          "url": "https://youtube.com"
+        },
+        "1": {
+          "type": "goto",
+          "break": false,
+          "url": "https://github.com"
+        }
       }
     },
-    "units": {
-      "bestbyte": {
-        "bindings": null,
-        "backup_of": null,
-        "actions": {
-          "0": {
-            "type": "goto",
-            "break": false,
-            "url": "https://bestbyte.hu"
-          }
+    "Második Unit": {
+      "bindings": null,
+      "backup_of": null,
+      "actions": {
+        "0": {
+          "type": "goto",
+          "break": false,
+          "url": "https://wikipedia.org/"
         }
-      },
-      "cookie ok":
-      {
-          "bindings": null,
-        "backup_of": null,
-        "actions": {
-          "0": {
-                  "type": "click",
-                  "break": false,
-                  "single": true,
-                  "displayed": null,
-                  "enabled": null,
-                  "selected": null,
-                  "locator": "xpath",
-                  "value": "//*[@id=\"vscookieAlertOk\"]"
-              }
-          }
-      },
-      "login weblogin@visionsoft.hu": {
-        "bindings": null,
-        "backup_of": null,
-        "actions": {
-          "0": {
-            "type": "click",
-            "break": false,
-            "single": true,
-            "displayed": null,
-            "enabled": null,
-            "selected": null,
-            "locator": "xpath",
-            "value": "//*[@id=\"aspnetForm\"]/header/div[1]/div/div/div/div[3]/div/div[1]/a[1]"
-          },
-          "1":
-          {
-            "type": "send_keys",
-            "break": false,
-            "single": true,
-            "displayed": null,
-            "enabled": null,
-            "selected": null,
-            "locator": "xpath",
-            "value": "//*[@id=\"ctl00_CON_default_uco_Login_EDI_loginnev\"]",
-            "keys": "weblogin@visionsoft.hu"
-          },
-          "2":
-          {
-            "type": "send_keys",
-            "break": false,
-            "single": true,
-            "displayed": null,
-            "enabled": null,
-            "selected": null,
-            "locator": "xpath",
-            "value": "//*[@id=\"ctl00_CON_default_uco_Login_EDI_jelszo\"]",
-            "keys": "pimp@"
-          },
-          "3":
-          {
-            "type": "click",
-            "break": false,
-            "single": true,
-            "displayed": null,
-            "enabled": null,
-            "selected": null,
-            "locator": "xpath",
-            "value": "//*[@id=\"ctl00_CON_default_uco_Login_PAN_login\"]/div/div/div[4]"
-          }
+      }
+    },
+    "Harmadik Unit": {
+      "bindings": null,
+      "backup_of": null,
+      "actions": {
+        "0": {
+          "type": "goto",
+          "break": false,
+          "url": "https://tesco.com"
+        },
+        "1": {
+          "type": "goto",
+          "break": false,
+          "url": "https://github.com"
+        },
+        "2": {
+          "type": "goto",
+          "break": false,
+          "url": "https://instagram.com/"
         }
-      },
-      "login weblogin": {
-        "bindings": null,
-        "backup_of": "login weblogin@visionsoft.hu",
-        "actions": {
-          "0": {
-              "type": "click",
-              "break": false,
-              "single": true,
-              "displayed": null,
-              "enabled": null,
-              "selected": null,
-              "locator": "xpath",
-              "value": "//*[@id=\"aspnetForm\"]/header/div[1]/div/div/div/div[3]/div/div[1]/a[1]"
-            },
-            "1":
-            {
-              "type": "send_keys",
-              "break": false,
-              "single": true,
-              "displayed": null,
-              "enabled": null,
-              "selected": null,
-              "locator": "xpath",
-              "value": "//*[@id=\"ctl00_CON_default_uco_Login_EDI_loginnev\"]",
-              "keys": "weblogin"
-            },
-            "2":
-            {
-              "type": "send_keys",
-              "break": false,
-              "single": true,
-              "displayed": null,
-              "enabled": null,
-              "selected": null,
-              "locator": "xpath",
-              "value": "//*[@id=\"ctl00_CON_default_uco_Login_EDI_jelszo\"]",
-              "keys": "pimp@"
-            },
-            "3":
-            {
-              "type": "click",
-              "break": false,
-              "single": true,
-              "displayed": null,
-              "enabled": null,
-              "selected": null,
-              "locator": "xpath",
-              "value": "//*[@id=\"ctl00_CON_default_uco_Login_PAN_login\"]/div/div/div[4]"
-            }
+      }
+    },
+    "Negyedik Unit": {
+      "bindings": null,
+      "backup_of": null,
+      "actions": {
+        "0": {
+          "type": "goto",
+          "break": false,
+          "url": "https://youtube.com"
+        },
+        "1": {
+          "type": "goto",
+          "break": false,
+          "url": "https://github.com"
+        }
+      }
+    },
+    "Ötödik Unit": {
+      "bindings": null,
+      "backup_of": null,
+      "actions": {
+        "0": {
+          "type": "goto",
+          "break": false,
+          "url": "https://tesco.com"
+        },
+        "1": {
+          "type": "goto",
+          "break": false,
+          "url": "https://github.com"
+        },
+        "2": {
+          "type": "goto",
+          "break": false,
+          "url": "https://instagram.com/"
+        }
+      }
+    },
+    "Hatodik Unit": {
+      "bindings": null,
+      "backup_of": null,
+      "actions": {
+        "0": {
+          "type": "goto",
+          "break": false,
+          "url": "https://tesco.com"
+        },
+        "1": {
+          "type": "goto",
+          "break": false,
+          "url": "https://github.com"
+        },
+        "2": {
+          "type": "goto",
+          "break": false,
+          "url": "https://instagram.com/"
+        }
+      }
+    },
+    "Hetedik Unit": {
+      "bindings": null,
+      "backup_of": null,
+      "actions": {
+        "0": {
+          "type": "goto",
+          "break": false,
+          "url": "https://tesco.com"
+        },
+        "1": {
+          "type": "goto",
+          "break": false,
+          "url": "https://github.com"
+        },
+        "2": {
+          "type": "goto",
+          "break": false,
+          "url": "https://instagram.com/"
+        }
+      }
+    },
+    "Nyoldacik Unit": {
+      "bindings": null,
+      "backup_of": null,
+      "actions": {
+        "0": {
+          "type": "goto",
+          "break": false,
+          "url": "https://tesco.com"
+        },
+        "1": {
+          "type": "goto",
+          "break": false,
+          "url": "https://github.com"
+        },
+        "2": {
+          "type": "goto",
+          "break": false,
+          "url": "https://instagram.com/"
+        }
+      }
+    },
+    "Kilencedik Unit": {
+      "bindings": null,
+      "backup_of": null,
+      "actions": {
+        "0": {
+          "type": "goto",
+          "break": false,
+          "url": "https://tesco.com"
+        },
+        "1": {
+          "type": "goto",
+          "break": false,
+          "url": "https://github.com"
+        },
+        "2": {
+          "type": "goto",
+          "break": false,
+          "url": "https://instagram.com/"
+        }
+      }
+    },
+    "Tizedik Unit": {
+      "bindings": null,
+      "backup_of": null,
+      "actions": {
+        "0": {
+          "type": "goto",
+          "break": false,
+          "url": "https://tesco.com"
+        },
+        "1": {
+          "type": "goto",
+          "break": false,
+          "url": "https://github.com"
+        },
+        "2": {
+          "type": "goto",
+          "break": false,
+          "url": "https://instagram.com/"
         }
       }
     }
   }
+}

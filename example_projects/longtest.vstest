@@ -1,4 +1,5 @@
 {
+  "interceptor": false,
   "name": "longtest",
   "browsers": [
     "chrome",
@@ -7,7 +8,8 @@
   "options": {
     "auto_exit_iframes": true,
     "log_JS_retry_timeout": 2000,
-    "parent_log_path": "C:\\dev\\SeTestsVS\\logs"
+    "parent_log_path": "C:\\dev\\SeTestsVS\\logs",
+    "maximize_browser": false
   },
   "driver_options": {
     "accept_insecure_certs": true,
@@ -181,7 +183,7 @@
         },
         "1": {
           "type": "goto",
-          "break": false,
+          "break": true,
           "url": "https://github.com"
         },
         "2": {
