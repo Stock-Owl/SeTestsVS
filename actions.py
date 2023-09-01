@@ -9,6 +9,7 @@ from selenium.webdriver.support import expected_conditions
 from selenium.common.exceptions import JavascriptException as SeJSException
 from support import Support
 from interceptor import Interceptor
+import time
 
 class Actions:
     def Goto(driver: ChromeDriver | FirefoxDriver | WireChromeDriver | WireFirefoxDriver, url: str):
@@ -48,10 +49,9 @@ class Actions:
         Actions.CheckDriverExists(driver)
         driver.switch_to.parent_frame()
 
-    def Wait(driver: ChromeDriver | FirefoxDriver | WireChromeDriver | WireFirefoxDriver, time_: int):
-        Actions.CheckDriverExists(driver)
-        time = float(time_ / 1000)
-        driver.implicitly_wait(time)
+    def Wait(time_: int):
+        time_ /= 1000
+        time.sleep(time_)
 
     def WaitFor(driver: ChromeDriver | FirefoxDriver | WireChromeDriver | WireFirefoxDriver, kwargs: dict):
 
@@ -84,6 +84,13 @@ class Actions:
 
         match condition:
             case 'element_exists':
+                locator_: str = kwargs['locator']
+                value_: str = kwargs['value']
+                internal_locator: tuple[str, str] = (locator_, value_)
+                expected = expected_conditions.presence_of_element_located(internal_locator)
+                wait.until(condition_container(expected))
+
+            case 'loaded':
                 locator_: str = kwargs['locator']
                 value_: str = kwargs['value']
                 internal_locator: tuple[str, str] = (locator_, value_)
@@ -165,7 +172,7 @@ class Actions:
         isDisplayed = action_kwargs["isDisplayed"]
         if isDisplayed is not None:
             # Checks for for the condition, if it isn't it throws an error. Kinda weird syntax but it wokrs
-            assert isDisplayed == element.is_displayed(), f"Element is{' 'if isDisplayed is False else 'not '}displayed"
+            assert isDisplayed == element.is_displayed(), f"Element is{' 'if isDisplayed is False else ' not '}displayed"
 
         isSelected = action_kwargs["isSelected"]
         if isSelected is not None:
@@ -209,7 +216,7 @@ class Actions:
             if isDisplayed is not None:
                 # Checks for for the condition, if it isn't it throws an error. Kinda weird syntax but it wokrs
                 for element in elements:
-                    assert isDisplayed == element.is_displayed(), f"Element is{' 'if isDisplayed is False else 'not '}displayed"
+                    assert isDisplayed == element.is_displayed(), f"Element is{' 'if isDisplayed is False else ' not '}displayed"
 
             isSelected = action_kwargs["isSelected"]
             if isSelected is not None:

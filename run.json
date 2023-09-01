@@ -7,6 +7,7 @@
     ],
     "options": {
       "auto_exit_iframes": true,
+      "start_fullscreen": true,
       "log_JS_retry_timeout": 2000,
       "parent_log_path": "./logs"
     },
@@ -23,7 +24,8 @@
       }
     },
     "units": {
-      "bestbyte": {
+      "bestbyte":
+      {
         "bindings": null,
         "backup_of": null,
         "actions": {
@@ -51,7 +53,8 @@
               }
           }
       },
-      "login weblogin@visionsoft.hu": {
+      "login weblogin@visionsoft.hu":
+      {
         "bindings": null,
         "backup_of": null,
         "actions": {
@@ -91,6 +94,12 @@
           },
           "3":
           {
+            "type": "wait",
+            "break": false,
+            "amount": 1000
+          },
+          "4":
+          {
             "type": "click",
             "break": false,
             "single": true,
@@ -98,15 +107,82 @@
             "enabled": null,
             "selected": null,
             "locator": "xpath",
-            "value": "//*[@id=\"ctl00_CON_default_uco_Login_PAN_login\"]/div/div/div[4]"
+            "value": "//*[@id=\"ctl00_CON_default_uco_Login_BUT_login\"]"
           }
         }
       },
-      "login weblogin": {
+      "login weblogin":
+      {
         "bindings": null,
         "backup_of": "login weblogin@visionsoft.hu",
         "actions": {
-          "0": {
+            "0": {
+                "type": "click",
+                "break": false,
+                "single": true,
+                "displayed": null,
+                "enabled": null,
+                "selected": null,
+                "locator": "xpath",
+                "value": "//*[@id=\"aspnetForm\"]/header/div[1]/div/div/div/div[3]/div/div[1]/a[1]"
+              },
+              "1":
+              {
+                "type": "send_keys",
+                "break": false,
+                "single": true,
+                "displayed": null,
+                "enabled": null,
+                "selected": null,
+                "locator": "xpath",
+                "value": "//*[@id=\"ctl00_CON_default_uco_Login_EDI_loginnev\"]",
+                "keys": "weblogin"
+              },
+              "2":
+              {
+                "type": "send_keys",
+                "break": false,
+                "single": true,
+                "displayed": null,
+                "enabled": null,
+                "selected": null,
+                "locator": "xpath",
+                "value": "//*[@id=\"ctl00_CON_default_uco_Login_EDI_jelszo\"]",
+                "keys": "pimp@"
+              },
+              "3":
+              {
+                "type": "wait",
+                "break": false,
+                "amount": 1000
+              },
+              "4":
+              {
+                "type": "click",
+                "break": false,
+                "single": true,
+                "displayed": null,
+                "enabled": null,
+                "selected": null,
+                "locator": "xpath",
+                "value": "//*[@id=\"ctl00_CON_default_uco_Login_BUT_login\"]"
+              }
+        }
+      },
+      "nav to GPUs":
+      {
+        "bindings": null,
+        "backup_of": null,
+        "actions":
+        {
+          "-1":
+          {
+              "type": "wait",
+              "break": false,
+              "amount": 4000
+          },
+          "0":
+          {
               "type": "click",
               "break": false,
               "single": true,
@@ -114,34 +190,41 @@
               "enabled": null,
               "selected": null,
               "locator": "xpath",
-              "value": "//*[@id=\"aspnetForm\"]/header/div[1]/div/div/div/div[3]/div/div[1]/a[1]"
-            },
-            "1":
-            {
-              "type": "send_keys",
+              "value": "/html/body/form/main/section/div[2]/div[1]/nav/ul/li[5]/a"
+          },
+          "-2":
+          {
+            "type": "wait",
+            "break": false,
+            "amount": 1000
+          },
+          "1":
+          {
+            "type": "click",
               "break": false,
               "single": true,
               "displayed": null,
               "enabled": null,
               "selected": null,
               "locator": "xpath",
-              "value": "//*[@id=\"ctl00_CON_default_uco_Login_EDI_loginnev\"]",
-              "keys": "weblogin"
-            },
-            "2":
-            {
-              "type": "send_keys",
+              "value": "/html/body/form/main/section/div[2]/div[1]/nav/div/ul/li[1]/ul/li[4]/a"
+          }
+        }
+      },
+      "filter nVidia":
+      {
+        "bindings": null,
+        "backup_of": null,
+        "actions":
+        {
+          "-1":
+          {
+              "type": "wait",
               "break": false,
-              "single": true,
-              "displayed": null,
-              "enabled": null,
-              "selected": null,
-              "locator": "xpath",
-              "value": "//*[@id=\"ctl00_CON_default_uco_Login_EDI_jelszo\"]",
-              "keys": "pimp@"
-            },
-            "3":
-            {
+              "amount": 1000
+          },
+          "0":
+          {
               "type": "click",
               "break": false,
               "single": true,
@@ -149,8 +232,108 @@
               "enabled": null,
               "selected": null,
               "locator": "xpath",
-              "value": "//*[@id=\"ctl00_CON_default_uco_Login_PAN_login\"]/div/div/div[4]"
-            }
+              "value": "/html/body/form/main/section/div[2]/div/div[3]/div[1]/div[2]/div[2]/div/div[1]/div[2]/div/div/div/div[2]/div/div[1]/div"
+          }
+        }
+      },
+      "filter zotac":
+      {
+        "bindings": null,
+        "backup_of": null,
+        "actions":
+        {
+            "-1":
+            {
+                "type": "wait",
+                "break": false,
+                "amount": 3000
+            },
+          "0":
+          {
+              "type": "click",
+              "break": false,
+              "single": true,
+              "displayed": null,
+              "enabled": null,
+              "selected": null,
+              "locator": "xpath",
+              "value": "/html/body/form/main/section/div[2]/div/div[3]/div[1]/div[2]/div[2]/div/div/div/div[4]/div/div/div/div/div[2]/div/div[8]/div"
+          }
+        }
+      },
+      "open memory dropdown":
+      {
+        "bindings": null,
+        "backup_of": null,
+        "actions":
+        {
+            "-1":
+          {
+              "type": "wait",
+              "break": false,
+              "amount": 3000
+          },
+          "0":
+          {
+              "type": "click",
+              "break": false,
+              "single": true,
+              "displayed": null,
+              "enabled": null,
+              "selected": null,
+              "locator": "xpath",
+              "value": "/html/body/form/main/section/div[2]/div/div[3]/div[1]/div[2]/div[2]/div/div[2]/div/div[7]/div/div/h3"
+          }
+        }
+      },
+      "filter memory":
+      {
+        "bindings": "open memory dropdown",
+        "backup_of": null,
+        "actions":
+        {
+            "-1":
+          {
+              "type": "wait",
+              "break": false,
+              "amount": 1000
+          },
+          "0":
+          {
+              "type": "click",
+              "break": false,
+              "single": true,
+              "displayed": null,
+              "enabled": null,
+              "selected": null,
+              "locator": "xpath",
+              "value": "/html/body/form/main/section/div[2]/div/div[3]/div[1]/div[2]/div[2]/div/div[2]/div/div[7]/div/div/div/div[2]/div[2]/div/div[1]"
+          }
+        }
+      },
+      "click item":
+      {
+        "bindings": null,
+        "backup_of": null,
+        "actions":
+        {
+            "-1":
+          {
+              "type": "wait",
+              "break": false,
+              "amount": 3000
+          },
+          "0":
+          {
+            "type": "click",
+            "break": false,
+            "single": true,
+            "displayed": null,
+            "enabled": null,
+            "selected": null,
+            "locator": "xpath",
+            "value": "/html/body/form/main/section/div[2]/div/div[3]/div[1]/div[2]/div[1]/div[3]/div/div/div/a/div/img"
+          }
         }
       }
     }

@@ -16,7 +16,7 @@ from multiprocessing import Process
 from copy import copy
 from os import getpid
 
-# V.1.2.1
+# V.1.2.4
 #                                                                               25 / 27 + 1
 # TODO: Kitalálni, hogy vannak az argumentumok                                  ✅  1
 # TODO: Megszerelni a random useless conversionöket a JSON-ből                  ✅  2
@@ -184,6 +184,7 @@ class Core:
         parent_log_path: str = options["parent_log_path"]
         log_js_retry_timeout: int = options["log_JS_retry_timeout"]
         auto_exit_iframes: bool = options["auto_exit_iframes"]
+        start_fullscreen: bool = options["start_fullscreen"]
         keep_browser_open: bool = json["driver_options"]["keep_browser_open"]
         interceptor: bool = json["interceptor"]
         testname: str = json["name"]
@@ -199,6 +200,7 @@ class Core:
             "interceptor_active": interceptor,
             "log_js_retry_timeout": log_js_retry_timeout,
             "auto_exit_iframes": auto_exit_iframes,
+            "start_fullscreen": start_fullscreen,
             "keep_browser_open": keep_browser_open,
             "browser": "chrome",
             "parent_log_path": f"{parent_log_path}/chrome"
@@ -215,6 +217,7 @@ class Core:
             "interceptor_active": interceptor,
             "log_js_retry_timeout": log_js_retry_timeout,
             "auto_exit_iframes": auto_exit_iframes,
+            "start_fullscreen": start_fullscreen,
             "keep_browser_open": keep_browser_open,
             "browser": "firefox",
             "parent_log_path": f"{parent_log_path}/firefox"
@@ -234,6 +237,7 @@ class Core:
         keep_browser_open: bool = None,
         parent_log_path: str = None,
         log_js_retry_timeout: int = None,
+        start_fullscreen: bool = None,
         auto_exit_iframes: bool = None,
         **overflow) -> None:
 
@@ -266,6 +270,10 @@ class Core:
         # clears the previous log files
         Support.ClearAllLogs(parent_log_path)
         
+        # needed because chrome is a bitch with some webpages and the firefox arguments don't work for some fucking reason
+        if start_fullscreen:
+            driver.maximize_window()
+
         active_bindings: list[str] = []
         failed_units: list[str] = []
         
@@ -279,7 +287,7 @@ class Core:
                         pass
                     # if the backup target executed, skip the backup
                     else:
-                        log_line = f"\'{uname}\' backup skipped because backup target unit sucessfully executed\n"
+                        log_line = f"\'{uname}\' backup skipped because backup target unit sucessfully executed"
                         Support.LogProc(parent_log_path, log_line)
                         continue
 
@@ -372,7 +380,7 @@ class Core:
                             Actions.ExecuteJS(driver, commands, path=parent_log_path, retry_timeout=log_js_retry_timeout)
                         case "wait":
                             time = action['amount']
-                            Actions.Wait(driver, time)
+                            Actions.Wait(time)
                         case "wait_for":
                             Actions.WaitFor(driver, action)
                         case "switch_back":
