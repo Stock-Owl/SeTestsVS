@@ -87,10 +87,15 @@
             consoleTextBox.Clear();
         }
 
+        public void HideClearIcon()
+        {
+            clearButton.Visible = false;
+        }
+
         bool isChrome = true;
 
-        string m_ChromeLogString;
-        string m_FirefoxLogString;
+        public string m_ChromeLogString;
+        public string m_FirefoxLogString;
 
         MainForm m_ParentForm;
     }

@@ -1,6 +1,6 @@
 ﻿namespace WebTestGui
 {
-    public class FileWatcher : IDisposable
+    public class FileWatcher
     {
         private readonly string filePath;
         private FileSystemWatcher fileSystemWatcher;

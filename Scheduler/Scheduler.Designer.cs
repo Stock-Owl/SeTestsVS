@@ -29,145 +29,211 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Scheduler));
-            mainLabel = new Label();
-            schedulerPanel = new FlowLayoutPanel();
-            testRunTimeText = new Label();
-            vsLogo = new PictureBox();
-            addUnitButton = new PictureBox();
-            unitLabel = new Label();
-            unitHeaderPanel = new Panel();
-            testStartButton = new Button();
-            ((System.ComponentModel.ISupportInitialize)vsLogo).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)addUnitButton).BeginInit();
-            unitHeaderPanel.SuspendLayout();
-            SuspendLayout();
+            this.mainLabel = new System.Windows.Forms.Label();
+            this.schedulerPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.testRunTimeText = new System.Windows.Forms.Label();
+            this.vsLogo = new System.Windows.Forms.PictureBox();
+            this.addUnitButton = new System.Windows.Forms.PictureBox();
+            this.unitLabel = new System.Windows.Forms.Label();
+            this.unitHeaderPanel = new System.Windows.Forms.Panel();
+            this.testStartButton = new System.Windows.Forms.Button();
+            this.saveSchedulerButton = new System.Windows.Forms.Button();
+            this.loadSchedulerButton = new System.Windows.Forms.Button();
+            this.currentlyEditedLabel = new System.Windows.Forms.Label();
+            this.currentlyEditedText = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.vsLogo)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.addUnitButton)).BeginInit();
+            this.unitHeaderPanel.SuspendLayout();
+            this.SuspendLayout();
             // 
             // mainLabel
             // 
-            mainLabel.AutoSize = true;
-            mainLabel.BackColor = Color.Transparent;
-            mainLabel.Font = new Font("Segoe UI Semibold", 20F, FontStyle.Bold, GraphicsUnit.Point);
-            mainLabel.ForeColor = Color.Silver;
-            mainLabel.Location = new Point(4, 3);
-            mainLabel.Margin = new Padding(4, 0, 4, 0);
-            mainLabel.Name = "mainLabel";
-            mainLabel.Size = new Size(234, 37);
-            mainLabel.TabIndex = 53;
-            mainLabel.Text = "Időzítő applikáció";
+            this.mainLabel.AutoSize = true;
+            this.mainLabel.BackColor = System.Drawing.Color.Transparent;
+            this.mainLabel.Font = new System.Drawing.Font("Segoe UI Semibold", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.mainLabel.ForeColor = System.Drawing.Color.Silver;
+            this.mainLabel.Location = new System.Drawing.Point(4, 3);
+            this.mainLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.mainLabel.Name = "mainLabel";
+            this.mainLabel.Size = new System.Drawing.Size(234, 37);
+            this.mainLabel.TabIndex = 53;
+            this.mainLabel.Text = "Időzítő applikáció";
             // 
             // schedulerPanel
             // 
-            schedulerPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            schedulerPanel.AutoScroll = true;
-            schedulerPanel.BackColor = Color.FromArgb(45, 45, 50);
-            schedulerPanel.Location = new Point(4, 91);
-            schedulerPanel.Margin = new Padding(4, 3, 4, 3);
-            schedulerPanel.Name = "schedulerPanel";
-            schedulerPanel.Size = new Size(556, 368);
-            schedulerPanel.TabIndex = 54;
+            this.schedulerPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.schedulerPanel.AutoScroll = true;
+            this.schedulerPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(50)))));
+            this.schedulerPanel.Location = new System.Drawing.Point(4, 91);
+            this.schedulerPanel.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.schedulerPanel.Name = "schedulerPanel";
+            this.schedulerPanel.Size = new System.Drawing.Size(618, 501);
+            this.schedulerPanel.TabIndex = 54;
             // 
             // testRunTimeText
             // 
-            testRunTimeText.AutoSize = true;
-            testRunTimeText.BackColor = Color.Transparent;
-            testRunTimeText.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
-            testRunTimeText.ForeColor = Color.DimGray;
-            testRunTimeText.Location = new Point(12, 43);
-            testRunTimeText.Margin = new Padding(4, 0, 4, 0);
-            testRunTimeText.Name = "testRunTimeText";
-            testRunTimeText.Size = new Size(358, 15);
-            testRunTimeText.TabIndex = 62;
-            testRunTimeText.Text = "Válassza ki az időzítendő teszteket és állítsa be az időzítés módját...";
+            this.testRunTimeText.AutoSize = true;
+            this.testRunTimeText.BackColor = System.Drawing.Color.Transparent;
+            this.testRunTimeText.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point);
+            this.testRunTimeText.ForeColor = System.Drawing.Color.DimGray;
+            this.testRunTimeText.Location = new System.Drawing.Point(12, 43);
+            this.testRunTimeText.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.testRunTimeText.Name = "testRunTimeText";
+            this.testRunTimeText.Size = new System.Drawing.Size(358, 15);
+            this.testRunTimeText.TabIndex = 62;
+            this.testRunTimeText.Text = "Válassza ki az időzítendő teszteket és állítsa be az időzítés módját...";
             // 
             // vsLogo
             // 
-            vsLogo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            vsLogo.BackColor = Color.Transparent;
-            vsLogo.Image = (Image)resources.GetObject("vsLogo.Image");
-            vsLogo.Location = new Point(504, 3);
-            vsLogo.Margin = new Padding(4, 3, 4, 3);
-            vsLogo.Name = "vsLogo";
-            vsLogo.Size = new Size(55, 55);
-            vsLogo.SizeMode = PictureBoxSizeMode.StretchImage;
-            vsLogo.TabIndex = 63;
-            vsLogo.TabStop = false;
+            this.vsLogo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.vsLogo.BackColor = System.Drawing.Color.Transparent;
+            this.vsLogo.Image = ((System.Drawing.Image)(resources.GetObject("vsLogo.Image")));
+            this.vsLogo.Location = new System.Drawing.Point(566, 3);
+            this.vsLogo.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.vsLogo.Name = "vsLogo";
+            this.vsLogo.Size = new System.Drawing.Size(55, 55);
+            this.vsLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.vsLogo.TabIndex = 63;
+            this.vsLogo.TabStop = false;
             // 
             // addUnitButton
             // 
-            addUnitButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            addUnitButton.BackColor = Color.FromArgb(50, 50, 53);
-            addUnitButton.Image = (Image)resources.GetObject("addUnitButton.Image");
-            addUnitButton.Location = new Point(528, 3);
-            addUnitButton.Margin = new Padding(4, 3, 4, 3);
-            addUnitButton.Name = "addUnitButton";
-            addUnitButton.Size = new Size(24, 25);
-            addUnitButton.SizeMode = PictureBoxSizeMode.StretchImage;
-            addUnitButton.TabIndex = 57;
-            addUnitButton.TabStop = false;
-            addUnitButton.Click += addUnitButton_Click;
+            this.addUnitButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.addUnitButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(53)))));
+            this.addUnitButton.Image = ((System.Drawing.Image)(resources.GetObject("addUnitButton.Image")));
+            this.addUnitButton.Location = new System.Drawing.Point(590, 3);
+            this.addUnitButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.addUnitButton.Name = "addUnitButton";
+            this.addUnitButton.Size = new System.Drawing.Size(24, 25);
+            this.addUnitButton.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.addUnitButton.TabIndex = 57;
+            this.addUnitButton.TabStop = false;
+            this.addUnitButton.Click += new System.EventHandler(this.addUnitButton_Click);
             // 
             // unitLabel
             // 
-            unitLabel.AutoSize = true;
-            unitLabel.BackColor = Color.FromArgb(40, 40, 43);
-            unitLabel.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
-            unitLabel.ForeColor = Color.White;
-            unitLabel.Location = new Point(4, 3);
-            unitLabel.Margin = new Padding(4, 0, 4, 0);
-            unitLabel.Name = "unitLabel";
-            unitLabel.Size = new Size(131, 21);
-            unitLabel.TabIndex = 9;
-            unitLabel.Text = "Időzített tesztek:";
+            this.unitLabel.AutoSize = true;
+            this.unitLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(43)))));
+            this.unitLabel.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point);
+            this.unitLabel.ForeColor = System.Drawing.Color.White;
+            this.unitLabel.Location = new System.Drawing.Point(4, 3);
+            this.unitLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.unitLabel.Name = "unitLabel";
+            this.unitLabel.Size = new System.Drawing.Size(131, 21);
+            this.unitLabel.TabIndex = 9;
+            this.unitLabel.Text = "Időzített tesztek:";
             // 
             // unitHeaderPanel
             // 
-            unitHeaderPanel.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            unitHeaderPanel.BackColor = Color.FromArgb(40, 40, 45);
-            unitHeaderPanel.Controls.Add(addUnitButton);
-            unitHeaderPanel.Controls.Add(unitLabel);
-            unitHeaderPanel.Location = new Point(4, 61);
-            unitHeaderPanel.Margin = new Padding(4, 3, 4, 3);
-            unitHeaderPanel.Name = "unitHeaderPanel";
-            unitHeaderPanel.Size = new Size(556, 30);
-            unitHeaderPanel.TabIndex = 64;
+            this.unitHeaderPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.unitHeaderPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(45)))));
+            this.unitHeaderPanel.Controls.Add(this.addUnitButton);
+            this.unitHeaderPanel.Controls.Add(this.unitLabel);
+            this.unitHeaderPanel.Location = new System.Drawing.Point(4, 61);
+            this.unitHeaderPanel.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.unitHeaderPanel.Name = "unitHeaderPanel";
+            this.unitHeaderPanel.Size = new System.Drawing.Size(618, 30);
+            this.unitHeaderPanel.TabIndex = 64;
             // 
             // testStartButton
             // 
-            testStartButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            testStartButton.BackColor = Color.FromArgb(45, 45, 48);
-            testStartButton.Font = new Font("Segoe UI Semibold", 15F, FontStyle.Bold, GraphicsUnit.Point);
-            testStartButton.ForeColor = Color.White;
-            testStartButton.Location = new Point(4, 465);
-            testStartButton.Name = "testStartButton";
-            testStartButton.Size = new Size(327, 40);
-            testStartButton.TabIndex = 65;
-            testStartButton.Text = "TESZTELÉS INDITÁSA...";
-            testStartButton.UseVisualStyleBackColor = false;
-            testStartButton.Click += testStartButton_Click;
+            this.testStartButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.testStartButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.testStartButton.Font = new System.Drawing.Font("Segoe UI Semibold", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.testStartButton.ForeColor = System.Drawing.Color.White;
+            this.testStartButton.Location = new System.Drawing.Point(4, 633);
+            this.testStartButton.Name = "testStartButton";
+            this.testStartButton.Size = new System.Drawing.Size(327, 40);
+            this.testStartButton.TabIndex = 65;
+            this.testStartButton.Text = "TESZTELÉS INDITÁSA...";
+            this.testStartButton.UseVisualStyleBackColor = false;
+            this.testStartButton.Click += new System.EventHandler(this.testStartButton_Click);
+            // 
+            // saveSchedulerButton
+            // 
+            this.saveSchedulerButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.saveSchedulerButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.saveSchedulerButton.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.saveSchedulerButton.ForeColor = System.Drawing.Color.White;
+            this.saveSchedulerButton.Location = new System.Drawing.Point(355, 633);
+            this.saveSchedulerButton.Name = "saveSchedulerButton";
+            this.saveSchedulerButton.Size = new System.Drawing.Size(128, 40);
+            this.saveSchedulerButton.TabIndex = 66;
+            this.saveSchedulerButton.Text = "Időzítő mentése...";
+            this.saveSchedulerButton.UseVisualStyleBackColor = false;
+            this.saveSchedulerButton.Click += new System.EventHandler(this.saveSchedulerButton_Click);
+            // 
+            // loadSchedulerButton
+            // 
+            this.loadSchedulerButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.loadSchedulerButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.loadSchedulerButton.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.loadSchedulerButton.ForeColor = System.Drawing.Color.White;
+            this.loadSchedulerButton.Location = new System.Drawing.Point(489, 633);
+            this.loadSchedulerButton.Name = "loadSchedulerButton";
+            this.loadSchedulerButton.Size = new System.Drawing.Size(132, 40);
+            this.loadSchedulerButton.TabIndex = 67;
+            this.loadSchedulerButton.Text = "Időzítő betöltése...";
+            this.loadSchedulerButton.UseVisualStyleBackColor = false;
+            this.loadSchedulerButton.Click += new System.EventHandler(this.loadSchedulerButton_Click);
+            // 
+            // currentlyEditedLabel
+            // 
+            this.currentlyEditedLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.currentlyEditedLabel.AutoSize = true;
+            this.currentlyEditedLabel.BackColor = System.Drawing.Color.Transparent;
+            this.currentlyEditedLabel.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.currentlyEditedLabel.ForeColor = System.Drawing.Color.White;
+            this.currentlyEditedLabel.Location = new System.Drawing.Point(5, 599);
+            this.currentlyEditedLabel.Name = "currentlyEditedLabel";
+            this.currentlyEditedLabel.Size = new System.Drawing.Size(226, 19);
+            this.currentlyEditedLabel.TabIndex = 68;
+            this.currentlyEditedLabel.Text = "Jelenleg szerkeztett időzített teszt:";
+            // 
+            // currentlyEditedText
+            // 
+            this.currentlyEditedText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.currentlyEditedText.AutoSize = true;
+            this.currentlyEditedText.BackColor = System.Drawing.Color.Transparent;
+            this.currentlyEditedText.Font = new System.Drawing.Font("Segoe UI", 7F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point);
+            this.currentlyEditedText.ForeColor = System.Drawing.Color.DarkGray;
+            this.currentlyEditedText.Location = new System.Drawing.Point(5, 618);
+            this.currentlyEditedText.Name = "currentlyEditedText";
+            this.currentlyEditedText.Size = new System.Drawing.Size(68, 12);
+            this.currentlyEditedText.TabIndex = 69;
+            this.currentlyEditedText.Text = "Új időzített fájl";
             // 
             // Scheduler
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.FromArgb(50, 50, 53);
-            ClientSize = new Size(562, 511);
-            Controls.Add(testStartButton);
-            Controls.Add(unitHeaderPanel);
-            Controls.Add(vsLogo);
-            Controls.Add(testRunTimeText);
-            Controls.Add(schedulerPanel);
-            Controls.Add(mainLabel);
-            Icon = (Icon)resources.GetObject("$this.Icon");
-            Margin = new Padding(4, 3, 4, 3);
-            MinimumSize = new Size(578, 550);
-            Name = "Scheduler";
-            Text = "Form1";
-            ((System.ComponentModel.ISupportInitialize)vsLogo).EndInit();
-            ((System.ComponentModel.ISupportInitialize)addUnitButton).EndInit();
-            unitHeaderPanel.ResumeLayout(false);
-            unitHeaderPanel.PerformLayout();
-            ResumeLayout(false);
-            PerformLayout();
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(53)))));
+            this.ClientSize = new System.Drawing.Size(624, 679);
+            this.Controls.Add(this.currentlyEditedLabel);
+            this.Controls.Add(this.currentlyEditedText);
+            this.Controls.Add(this.loadSchedulerButton);
+            this.Controls.Add(this.saveSchedulerButton);
+            this.Controls.Add(this.testStartButton);
+            this.Controls.Add(this.unitHeaderPanel);
+            this.Controls.Add(this.vsLogo);
+            this.Controls.Add(this.testRunTimeText);
+            this.Controls.Add(this.schedulerPanel);
+            this.Controls.Add(this.mainLabel);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.MinimumSize = new System.Drawing.Size(578, 550);
+            this.Name = "Scheduler";
+            this.Text = "Form1";
+            ((System.ComponentModel.ISupportInitialize)(this.vsLogo)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.addUnitButton)).EndInit();
+            this.unitHeaderPanel.ResumeLayout(false);
+            this.unitHeaderPanel.PerformLayout();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
         #endregion
@@ -180,5 +246,9 @@
         private Label unitLabel;
         private Panel unitHeaderPanel;
         private Button testStartButton;
+        private Button saveSchedulerButton;
+        private Button loadSchedulerButton;
+        private Label currentlyEditedLabel;
+        private Label currentlyEditedText;
     }
 }

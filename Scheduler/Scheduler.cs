@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 using WebTestGui;
@@ -15,6 +16,8 @@ namespace Scheduler
             Text = AppConsts.s_AppName + " " + "Idõzítõ" + " " + AppConsts.s_AppVersion;
         }
 
+        #region Item logic
+
         private void addUnitButton_Click(object sender, EventArgs e)
         {
             SchedulerItem item = new SchedulerItem(this);
@@ -25,6 +28,10 @@ namespace Scheduler
 
         public void RefreshPanel()
         {
+            foreach (SchedulerItem item in m_SchedulerItems)
+            {
+                item.SetId(m_SchedulerItems.IndexOf(item));
+            }
             schedulerPanel.Controls.Clear();
             schedulerPanel.Controls.AddRange(m_SchedulerItems.ToArray());
         }
@@ -66,6 +73,16 @@ namespace Scheduler
             }
         }
 
+        public void DeleteSchedulerItem(SchedulerItem item)
+        {
+            m_SchedulerItems.Remove(item);
+            RefreshPanel();
+        }
+
+        #endregion
+
+        #region Runtime
+
         private async void testStartButton_Click(object sender, EventArgs e)
         {
             foreach (SchedulerItem item in m_SchedulerItems)
@@ -81,10 +98,13 @@ namespace Scheduler
             }
 
             BackColor = Color.FromArgb(255, 80, 50, 50);
+            addUnitButton.Enabled = false;
+
+            saveSchedulerButton.Enabled = false;
+            loadSchedulerButton.Enabled = false;
 
             if (m_ScheduledTestRunning)
             {
-                OnTestAbort();
             }
             else
             {
@@ -93,22 +113,9 @@ namespace Scheduler
             }
         }
 
-        bool m_ScheduledTestRunning = false;
-
-        public List<SchedulerItem> m_SchedulerItems = new List<SchedulerItem>();
-
-        SchedulerItem m_CurrentlyTestedTestItem;
-        int m_CurrentlyTestedTestItemID = -1;
-        Process m_CurrentProcess;
-        string m_TestStartTime;
-
-        #region TEST RUNTIME
-
-        private bool _STOP_BRK_LOG_REQ = false;
-        private bool _STOP_JS_LOG_REQ = false;
-
         public async void STARTTEST()
         {
+            testStartButton.Text = "TESZTELÉS FUT";
             if (m_CurrentlyTestedTestItemID == (m_SchedulerItems.Count - 1))
             {
                 OnTestingEnd();
@@ -117,6 +124,12 @@ namespace Scheduler
             {
                 m_CurrentlyTestedTestItemID++;
                 m_CurrentlyTestedTestItem = m_SchedulerItems[m_CurrentlyTestedTestItemID];
+                if (m_CurrentlyTestedTestItem.GetWaitTime() != 0)
+                {
+                    m_CurrentlyTestedTestItem.HighlightWaitTextBox();
+                    Thread.Sleep(m_CurrentlyTestedTestItem.GetWaitTime() * 1000);
+                    m_CurrentlyTestedTestItem.StopHighlight();
+                }
                 OnTestStart();
             }
         }
@@ -124,135 +137,102 @@ namespace Scheduler
         public async void OnTestingEnd()
         {
             m_ScheduledTestRunning = false;
+            m_CurrentlyTestedTestItemID = -1;
 
             BackColor = Color.FromArgb(255, 50, 50, 53);
+            addUnitButton.Enabled = true;
+
+            saveSchedulerButton.Enabled = true;
+            loadSchedulerButton.Enabled = true;
+
+            m_ScheduledTestMainForm = null!;
             testStartButton.Text = "TESZTELÉS INDITÁSA...";
         }
 
-        public async Task OnTestStart()
+        public async void OnTestStart()
         {
-            // TODO: START TIMER FOR TEST
+            m_TestStopwatch = new Stopwatch();
+            m_TestStopwatch.Start();
 
-            // Checking if the root log directory contains chrome and firefox folders
-            if (!Directory.Exists(m_CurrentlyTestedTestItem.m_RootLogDirectory + @"/chrome"))
-            {
-                Directory.CreateDirectory(m_CurrentlyTestedTestItem.m_RootLogDirectory + @"/chrome");
-            }
-            if (!Directory.Exists(m_CurrentlyTestedTestItem.m_RootLogDirectory + @"/firefox"))
-            {
-                Directory.CreateDirectory(m_CurrentlyTestedTestItem.m_RootLogDirectory + @"/firefox");
-            }
-
-            testStartButton.Text = "TESZT FUT";
-
-            string JSONString = m_CurrentlyTestedTestItem.m_TestRawJson;
             DateTime currentTime = DateTime.Now;
-            m_TestStartTime = currentTime.ToString("HH:mm:ss:ffffff");
+            m_CurrentlyTestedTestItem.m_TestStartTime = currentTime.ToString("HH:mm:ss:ffffff");
 
-            // Getting python directory
-            // TODO: MOST LIKELY WILL CHANGE ON PRODUCTION BUILD
-            string temp = Application.ExecutablePath;
-            string[] temparray = temp.Split(@"Scheduler");
+            m_CurrentlyTestedTestItem.OnTestStart();
+            m_ScheduledTestMainForm = new MainForm();
+            m_ScheduledTestMainForm.Show();
 
-            File.WriteAllText(temparray[0] + "run.json", JSONString);
+            ScheduledTestResult testResult = await m_ScheduledTestMainForm.RUN_SCHEDULED_TEST(m_CurrentlyTestedTestItem.m_TestPath,
+                m_CurrentlyTestedTestItem.m_RootLogDirectory);
+            m_CurrentlyTestedTestItem.m_Result = testResult;
 
-            StartPython(temparray[0], "main.py");
+            m_ScheduledTestMainForm.Close();
+            m_ScheduledTestMainForm.Dispose();
 
-            File.WriteAllText(m_CurrentlyTestedTestItem.m_RootLogDirectory + @"/chrome/run.log", string.Empty);
-            File.WriteAllText(m_CurrentlyTestedTestItem.m_RootLogDirectory + @"/firefox/run.log", string.Empty);
+            m_TestStopwatch.Stop();
+            m_CurrentlyTestedTestItem.OnTestEnd(m_TestStopwatch.ElapsedMilliseconds);
 
-            // Later, when there are more files with a filewatcher expand File.Exists() check
-            if (!File.Exists(m_CurrentlyTestedTestItem.m_RootLogDirectory + @"/file.brk"))
-            {
-                File.Create(m_CurrentlyTestedTestItem.m_RootLogDirectory + @"/file.brk");
-            }
-            if (!File.Exists(m_CurrentlyTestedTestItem.m_RootLogDirectory + @"/js.log"))
-            {
-                File.Create(m_CurrentlyTestedTestItem.m_RootLogDirectory + @"/js.log");
-            }
-
-            _STOP_BRK_LOG_REQ = false;
-            _STOP_JS_LOG_REQ = false;
-
-            File.WriteAllText(m_CurrentlyTestedTestItem.m_RootLogDirectory + @"/file.brk", string.Empty);
-            string breakPointFilePath = m_CurrentlyTestedTestItem.m_RootLogDirectory + @"/file.brk";
-            StartBreakPointFileWatcher(breakPointFilePath);
-
-            File.WriteAllText(m_CurrentlyTestedTestItem.m_RootLogDirectory + @"/js.log", string.Empty);
-            string jsLogFilePath = m_CurrentlyTestedTestItem.m_RootLogDirectory + @"/js.log";
-            StartJsLogFileWatcher(jsLogFilePath);
+            STARTTEST();
         }
 
-        public void OnTestAbort()
+        #endregion
+
+        bool m_ScheduledTestRunning = false;
+
+        public List<SchedulerItem> m_SchedulerItems = new List<SchedulerItem>();
+
+        public MainForm m_ScheduledTestMainForm;
+
+        Stopwatch m_TestStopwatch;
+
+        SchedulerItem m_CurrentlyTestedTestItem;
+        int m_CurrentlyTestedTestItemID = -1;
+
+        public bool m_IsProjectLoaded;
+        public string m_ProjectFilePath;
+
+        #region Save and load projects
+
+        private void saveSchedulerButton_Click(object sender, EventArgs e)
         {
-            m_CurrentProcess.Kill();
-
-            OnTestFinished(true);
-        }
-
-        public void OnTestFinished(bool final)
-        {
-            _STOP_BRK_LOG_REQ = true;
-            _STOP_JS_LOG_REQ = true;
-            File.WriteAllText(m_CurrentlyTestedTestItem.m_RootLogDirectory + @"/file.brk", string.Empty);
-
-            string chromeRunLog = File.ReadAllText(m_CurrentlyTestedTestItem.m_RootLogDirectory + @"/chrome/run.log");
-            string firefoxRunLog = File.ReadAllText(m_CurrentlyTestedTestItem.m_RootLogDirectory + @"/firefox/run.log");
-
-            if (final)
-                OnTestingEnd();
+            string savedJSON = SchedulerTestFormatter.SaveSchedulerTestToJson(m_SchedulerItems);
+            if (m_IsProjectLoaded)
+            {
+                File.WriteAllText(m_ProjectFilePath, savedJSON);
+            }
             else
-                STARTTEST();
-            // TODO: STOP TIMER FOR TEST
-        }
-
-        public async Task StartPython(string targetDir, string pythonScriptName)
-        {
-            string targetDirectory = targetDir;
-            string pythonScript = pythonScriptName;
-
-            m_CurrentProcess = Process.Start("cmd.exe", $"/K cd /D {targetDirectory} && python {pythonScript} && exit");
-
-            await m_CurrentProcess.WaitForExitAsync();
-
-            OnTestFinished(false);
-        }
-
-        public async void StartBreakPointFileWatcher(string logPath)
-        {
-            using (FileWatcher fileWatcher = new FileWatcher(logPath, true))
             {
-                fileWatcher.FileChanged += async (content) =>
+                SaveFileDialog of = new SaveFileDialog();
+                of.Title = "Idõzített teszt mentése...";
+                of.Filter = $"Teszt fájl|*{AppConsts.s_AppDefaultSchedulerTestFileExtension}|Any File|*.*";
+                if (of.ShowDialog() == DialogResult.OK)
                 {
-                    // clearing breakpoint log immediately
-
-                    if (_STOP_BRK_LOG_REQ)
-                    {
-                        return;
-                    }
-                };
-
-                while (!_STOP_BRK_LOG_REQ)
-                {
-                    await Task.Delay(100);
+                    File.WriteAllText(of.FileName, savedJSON);
+                    m_ProjectFilePath = of.FileName;
+                    m_IsProjectLoaded = true;
                 }
             }
+
+            currentlyEditedLabel.Text = $"Jelenleg szerkeztett idõzített teszt: {Path.GetFileNameWithoutExtension(m_ProjectFilePath)}";
+            currentlyEditedText.Text = m_ProjectFilePath;
         }
 
-        public async void StartJsLogFileWatcher(string logPath)
+        private void loadSchedulerButton_Click(object sender, EventArgs e)
         {
-            using (FileWatcher fileWatcher = new FileWatcher(logPath, true))
+            OpenFileDialog of = new OpenFileDialog();
+            of.Title = "Teszt betöltése...";
+            of.Filter = $"Teszt fájl|*{AppConsts.s_AppDefaultSchedulerTestFileExtension}|Any File|*.*";
+            if (of.ShowDialog() == DialogResult.OK)
             {
-                fileWatcher.FileChanged += async (content) =>
-                {
-                    // clearing js log immediately
-                };
+                string loadedJSON = File.ReadAllText(of.FileName);
+                m_SchedulerItems = SchedulerTestFormatter.LoadSchedulerTestFromJson(loadedJSON, this);
+                RefreshPanel();
 
-                while (!_STOP_JS_LOG_REQ)
-                {
-                    await Task.Delay(100);
-                }
+                m_ProjectFilePath = of.FileName;
+                m_IsProjectLoaded = true;
             }
+
+            currentlyEditedLabel.Text = $"Jelenleg szerkeztett idõzített teszt: {Path.GetFileNameWithoutExtension(m_ProjectFilePath)}";
+            currentlyEditedText.Text = m_ProjectFilePath;
         }
 
         #endregion

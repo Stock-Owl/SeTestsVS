@@ -113,6 +113,14 @@
             }
         }
 
+        public void HideAddButtons()
+        {
+            addBlankIcon.Visible = false;
+            plusIcon.Visible = false;
+
+            tabPanel.Location = new Point(5, -2);
+        }
+
         public TestTabItem m_SelectedItem;
         public List<TestTabItem> m_TestTabItems = new List<TestTabItem>();
         public MainForm m_ParentForm;

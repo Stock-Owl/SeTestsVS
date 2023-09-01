@@ -1,22 +1,50 @@
-﻿namespace WebTestGui
+﻿using Newtonsoft.Json.Linq;
+using WebTestGui;
+
+namespace Scheduler
 {
     public partial class SchedulerItem : UserControl
     {
-        public SchedulerItem(Scheduler.Scheduler parent)
+        public SchedulerItem(Scheduler parent)
         {
             InitializeComponent();
 
             m_Parent = parent;
         }
 
+        #region Runtime
+
         public void OnTestStart()
         {
+            readyIcon.Visible = false;
+            notReadyIcon.Visible = false;
 
+            mainPanel.BackColor = Color.FromArgb(255, 80, 50, 50);
         }
 
-        public void OnTestEnd(bool successful)
+        public void OnTestEnd(long runtimeInMiliseconds)
         {
+            testRunTimeLabel.Text = $"Előző tesztelés teljes futási ideje: {runtimeInMiliseconds} ms";
 
+            testRunTimeLabel.Visible = true;
+            peekButton.Visible = true;
+
+            readyIcon.Visible = true;
+            notReadyIcon.Visible = true;
+
+            mainPanel.BackColor = Color.FromArgb(255, 0, 0, 30);
+        }
+
+        public void HighlightWaitTextBox()
+        {
+            timeTypeTextBox.BackColor = Color.Maroon;
+            timeTypeTextBox.ForeColor = Color.Black;
+        }
+
+        public void StopHighlight()
+        {
+            timeTypeTextBox.BackColor = Color.FromArgb(255, 40, 40, 43);
+            timeTypeTextBox.ForeColor = Color.DarkGray;
         }
 
         private void pictureBox3_Click(object sender, EventArgs e)
@@ -28,13 +56,53 @@
             {
                 m_TestPath = of.FileName;
                 testFilePathTextBox.Text = m_TestPath;
+                loadTestButton_Click(null!, null!);
             }
         }
 
+        private void loadTestButton_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(testFilePathTextBox.Text))
+            {
+                pictureBox3_Click(null!, null!);
+                return;
+            }
+            if (Path.Exists(testFilePathTextBox.Text))
+            {
+                m_TestRawJson = File.ReadAllText(testFilePathTextBox.Text);
+                m_TestName = Path.GetFileNameWithoutExtension(testFilePathTextBox.Text);
+                m_TestPath = testFilePathTextBox.Text;
+
+                mainLabel.Font = new Font("Segoe UI", 15F, FontStyle.Bold, GraphicsUnit.Point);
+                mainLabel.ForeColor = Color.White;
+                testFilePathTextBox.Text = m_TestPath;
+                mainLabel.Text = m_TestName;
+                UpdateReadyState();
+            }
+            else
+            {
+                string message = "A megadott útvonalon nincsen valid .vstest fájl, vagy az út nem érvényes!";
+                string title = "Teszt betöltési probléme...";
+                MessageBox.Show(message, title);
+            }
+        }
+
+        private void firefoxlogbutton_Click(object sender, EventArgs e)
+        {
+            if (m_Result != null)
+            {
+                m_Parent.m_ScheduledTestMainForm = new MainForm();
+                m_Parent.m_ScheduledTestMainForm.LoadScheduledTestResults(m_TestPath, m_Result, m_TestStartTime);
+                m_Parent.m_ScheduledTestMainForm.ShowDialog();
+            }
+        }
+
+        #endregion
+
         private void locatorTextBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string selected = locatorTextBox.GetItemText(locatorTextBox.SelectedItem)!;
-            locatorTextBox.Text = selected;
+            string selected = scheduleTypeTextBox.GetItemText(scheduleTypeTextBox.SelectedItem)!;
+            scheduleTypeTextBox.Text = selected;
             if (selected == "Az előző teszt után egyből...")
             {
                 timeTypeTextBox.Visible = false;
@@ -92,20 +160,7 @@
             }
         }
 
-        private void loadTestButton_Click(object sender, EventArgs e)
-        {
-            if (Path.Exists(m_TestPath))
-            {
-                m_TestRawJson = File.ReadAllText(m_TestPath);
-                m_TestName = Path.GetFileNameWithoutExtension(m_TestPath);
 
-                mainLabel.Font = new Font("Segoe UI", 15F, FontStyle.Bold, GraphicsUnit.Point);
-                mainLabel.ForeColor = Color.White;
-                testFilePathTextBox.Text = m_TestPath;
-                mainLabel.Text = m_TestName;
-                UpdateReadyState();
-            }
-        }
 
         private void timeTypeTextBox_TextChanged(object sender, EventArgs e)
         {
@@ -151,6 +206,11 @@
             }
         }
 
+        private void binImage_Click(object sender, EventArgs e)
+        {
+            m_Parent.DeleteSchedulerItem(this);
+        }
+
         #endregion
 
         public int GetWaitTime()
@@ -161,7 +221,42 @@
                 return 0;
         }
 
-        public Scheduler.Scheduler m_Parent;
+        #region Load and Save data
+
+        public Dictionary<string, object> GetData()
+        {
+            Refresh();
+
+            Dictionary<string, object> data = new Dictionary<string, object>();
+            data["test_path"] = testFilePathTextBox.Text;
+            data["schedule_type"] = scheduleTypeTextBox.Text;
+            data["time_type"] = timeTypeTextBox.Text;
+            data["rootfolder_path"] = folderPath.Text;
+
+            return data;
+        }
+
+        public void SetData(JToken data)
+        {
+            testFilePathTextBox.Text = (string)data["test_path"]!;
+            m_TestPath = testFilePathTextBox.Text;
+
+            scheduleTypeTextBox.Text = (string)data["schedule_type"]!;
+
+            timeTypeTextBox.Text = (string)data["time_type"]!;
+
+            folderPath.Text = (string)data["rootfolder_path"]!;
+            m_RootLogDirectory = folderPath.Text;
+
+            loadTestButton_Click(null!, null!);
+
+            UpdateReadyState();
+        }
+
+        #endregion
+
+        public Scheduler m_Parent;
+        public ScheduledTestResult m_Result;
         public bool m_IsScheduledTestReady = false;
         public string m_RootLogDirectory;
 
@@ -170,18 +265,11 @@
 
         public string m_TestRawJson;
 
-        private void notReadyIcon_Click(object sender, EventArgs e)
-        {
-            if (Path.Exists(testFilePathTextBox.Text) && int.TryParse(timeTypeTextBox.Text, out _) && Path.Exists(folderPath.Text))
-            {
-                readyIcon.BringToFront();
-            }
-            else
-            {
-                notReadyIcon.BringToFront();
-            }
-        }
+        public string m_TestStartTime;
+        public long m_TestRunTime = 0;
 
+        public string m_ChromeRuntimeLog;
+        public string m_FirefoxRuntimeLog;    
     }
 }
 
