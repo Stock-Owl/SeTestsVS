@@ -16,5 +16,29 @@
     "schedule_type": "Az előző teszt után ennyi idővel...",
     "time_type": "30",
     "rootfolder_path": "C:\\dev\\SeTestsVS\\logs"
+  },
+"3": {
+    "test_path": "C:\\dev\\SeTestsVS\\example_projects\\run.vstest",
+    "schedule_type": "Az előző teszt után ennyi idővel...",
+    "time_type": "30",
+    "rootfolder_path": "C:\\dev\\SeTestsVS\\logs"
+  },
+"4": {
+    "test_path": "C:\\dev\\SeTestsVS\\example_projects\\run.vstest",
+    "schedule_type": "Az előző teszt után ennyi idővel...",
+    "time_type": "30",
+    "rootfolder_path": "C:\\dev\\SeTestsVS\\logs"
+  },
+"5": {
+    "test_path": "C:\\dev\\SeTestsVS\\example_projects\\run.vstest",
+    "schedule_type": "Az előző teszt után ennyi idővel...",
+    "time_type": "30",
+    "rootfolder_path": "C:\\dev\\SeTestsVS\\logs"
+  },
+"6": {
+    "test_path": "C:\\dev\\SeTestsVS\\example_projects\\run.vstest",
+    "schedule_type": "Az előző teszt után ennyi idővel...",
+    "time_type": "30",
+    "rootfolder_path": "C:\\dev\\SeTestsVS\\logs"
   }
 }

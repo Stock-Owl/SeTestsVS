@@ -1,55 +1,92 @@
 {
-    "interceptor": false,
-    "name": "bevásárlás",
-    "browsers": [
-      "chrome",
-      "firefox"
-    ],
-    "options": {
-      "auto_exit_iframes": true,
-      "log_JS_retry_timeout": 2000,
-      "parent_log_path": "./logs"
+  "interceptor": false,
+  "name": "run",
+  "browsers": [
+    "chrome",
+    "firefox"
+  ],
+  "options": {
+    "auto_exit_iframes": true,
+    "log_JS_retry_timeout": 2000,
+    "parent_log_path": "C:\\dev\\SeTestsVS\\logs",
+    "start_fullscreen": true
+  },
+  "driver_options": {
+    "accept_insecure_certs": true,
+    "chrome_arguments": [],
+    "firefox_arguments": [],
+    "keep_browser_open": false,
+    "page_load_strategy": "normal",
+    "timeout": {
+      "type": "pageLoad",
+      "value": 300000
     },
-    "driver_options": {
-      "accept_insecure_certs": true,
-      "chrome_arguments": [],
-      "firefox_arguments": [],
-      "keep_browser_open": true,
-      "page_load_strategy": "normal",
-      "unhandled_prompt_behavior": "dismiss and notify",
-      "timeout": {
-        "type": "pageLoad",
-        "value": 300000
+    "unhandled_prompt_behavior": "dismiss and notify"
+  },
+  "units": {
+    "Első Unit": {
+      "bindings": null,
+      "backup_of": null,
+      "actions": {
+        "0": {
+          "type": "goto",
+          "break": false,
+          "url": "https://youtube.com"
+        },
+        "1": {
+          "type": "goto",
+          "break": false,
+          "url": "https://github.com"
+        }
       }
     },
-    "units": {
-      "bestbyte": {
-        "bindings": null,
-        "backup_of": null,
-        "actions": {
-          "0": {
-            "type": "goto",
-            "break": false,
-            "url": "https://bestbyte.hu"
-          }
+    "Második Unit": {
+      "bindings": null,
+      "backup_of": null,
+      "actions": {
+        "0": {
+          "type": "goto",
+          "break": false,
+          "url": "https://wikipedia.org/"
         }
-      },
-      "cookie ok":
-      {
-          "bindings": null,
-        "backup_of": null,
-        "actions": {
-          "0": {
-                  "type": "click",
-                  "break": false,
-                  "single": true,
-                  "displayed": null,
-                  "enabled": null,
-                  "selected": null,
-                  "locator": "xpath",
-                  "value": "//*[@id=\"vscookieAlertOk\"]"
-              }
-          }
+      }
+    },
+    "Harmadik Unit": {
+      "bindings": null,
+      "backup_of": null,
+      "actions": {
+        "0": {
+          "type": "goto",
+          "break": false,
+          "url": "https://tesco.com"
+        },
+        "1": {
+          "type": "goto",
+          "break": false,
+          "url": "https://github.com"
+        },
+        "2": {
+          "type": "goto",
+          "break": false,
+          "url": "https://instagram.com/"
+        }
+      }
+    },
+    "Negyedik Unit": {
+      "bindings": null,
+      "backup_of": null,
+      "actions": {
+        "0": {
+          "type": "goto",
+          "break": false,
+          "url": "https://youtube.com"
+        },
+        "1": {
+          "type": "goto",
+          "break": false,
+          "url": "https://github.com"
+        }
       }
     }
   }
+}

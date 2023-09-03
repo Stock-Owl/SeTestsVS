@@ -89,12 +89,9 @@ namespace Scheduler
 
         private void firefoxlogbutton_Click(object sender, EventArgs e)
         {
-            if (m_Result != null)
-            {
-                m_Parent.m_ScheduledTestMainForm = new MainForm();
-                m_Parent.m_ScheduledTestMainForm.LoadScheduledTestResults(m_TestPath, m_Result, m_TestStartTime);
-                m_Parent.m_ScheduledTestMainForm.ShowDialog();
-            }
+            m_Parent.m_ScheduledTestMainForm = new MainForm();
+            m_Parent.m_ScheduledTestMainForm.LoadScheduledTestResults(m_TestPath, m_Result, m_TestStartTime);
+            m_Parent.m_ScheduledTestMainForm.ShowDialog();
         }
 
         #endregion

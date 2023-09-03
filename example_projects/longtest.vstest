@@ -9,7 +9,7 @@
     "auto_exit_iframes": true,
     "log_JS_retry_timeout": 2000,
     "parent_log_path": "C:\\dev\\SeTestsVS\\logs",
-    "maximize_browser": false
+    "start_fullscreen": false
   },
   "driver_options": {
     "accept_insecure_certs": true,

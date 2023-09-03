@@ -1,6 +1,6 @@
 ﻿namespace WebTestGui
 {
-    partial class MaximizeWindowOnStartOption
+    partial class StartFullScreenOption
     {
         /// <summary> 
         /// Required designer variable.
