@@ -50,6 +50,49 @@
                   "value": "//*[@id=\"vscookieAlertOk\"]"
               }
           }
+      },
+      "test":
+      {
+        "bindings": null,
+        "backup_off": null,
+        "actions":
+        {
+          "0":
+          {
+            "tpye": "waitfor",
+            "break": false,
+            "frequency": 1000,
+            "timeout": 10000,
+            "logic_modifier": "?",
+            "conditions": 
+            [
+                {
+                    "locator": "xpath",
+                    "value": "some xpath"
+                },
+                {
+                  "locator": "xpath",
+                  "value":"some xpath",
+                  "visibility": true
+                },
+                {
+                  "url": "some url"
+                },
+                {
+                  "url_sub": "url substring"
+                },
+                {
+                  "title": "some title"
+                },
+                {
+                  "title_sub": "title substring"
+                },
+                {
+                  "alert": true
+                }
+            ]
+          }
+        }
       }
     }
-  }
+}

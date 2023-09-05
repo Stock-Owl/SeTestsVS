@@ -406,5 +406,5 @@ wininstaller.exe
 side1.py
 side2.py
 todelete.c
-
+*/run.json
 .vscode/*
