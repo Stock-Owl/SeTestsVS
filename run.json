@@ -1,98 +1,98 @@
 {
-    "interceptor": false,
-    "name": "bevásárlás",
-    "browsers": [
-      "chrome",
-      "firefox"
-    ],
-    "options": {
-      "auto_exit_iframes": true,
-      "log_JS_retry_timeout": 2000,
-      "parent_log_path": "./logs"
-    },
-    "driver_options": {
-      "accept_insecure_certs": true,
-      "chrome_arguments": [],
-      "firefox_arguments": [],
-      "keep_browser_open": true,
-      "page_load_strategy": "normal",
-      "unhandled_prompt_behavior": "dismiss and notify",
-      "timeout": {
-        "type": "pageLoad",
-        "value": 300000
+  "interceptor": false,
+  "name": "bevásárlás",
+  "browsers": [
+    "chrome",
+    "firefox"
+  ],
+  "options": {
+    "auto_exit_iframes": true,
+    "log_JS_retry_timeout": 2000,
+    "parent_log_path": "./logs"
+  },
+  "driver_options": {
+    "accept_insecure_certs": true,
+    "chrome_arguments": [],
+    "firefox_arguments": [],
+    "keep_browser_open": true,
+    "page_load_strategy": "normal",
+    "unhandled_prompt_behavior": "dismiss and notify",
+    "timeout": {
+      "type": "pageLoad",
+      "value": 300000
+    }
+  },
+  "units": {
+    "bestbyte": {
+      "bindings": null,
+      "backup_of": null,
+      "actions": {
+        "0": {
+          "type": "goto",
+          "break": false,
+          "url": "https://bestbyte.hu"
+        }
       }
     },
-    "units": {
-      "bestbyte": {
+    "cookie ok":
+    {
         "bindings": null,
-        "backup_of": null,
-        "actions": {
-          "0": {
-            "type": "goto",
-            "break": false,
-            "url": "https://bestbyte.hu"
-          }
+      "backup_of": null,
+      "actions": {
+        "0": {
+                "type": "click",
+                "break": false,
+                "single": true,
+                "displayed": null,
+                "enabled": null,
+                "selected": null,
+                "locator": "xpath",
+                "value": "//*[@id=\"vscookieAlertOk\"]"
+            }
         }
-      },
-      "cookie ok":
+    },
+    "test":
+    {
+      "bindings": null,
+      "backup_off": null,
+      "actions":
       {
-          "bindings": null,
-        "backup_of": null,
-        "actions": {
-          "0": {
-                  "type": "click",
-                  "break": false,
-                  "single": true,
-                  "displayed": null,
-                  "enabled": null,
-                  "selected": null,
-                  "locator": "xpath",
-                  "value": "//*[@id=\"vscookieAlertOk\"]"
-              }
-          }
-      },
-      "test":
-      {
-        "bindings": null,
-        "backup_off": null,
-        "actions":
+        "0":
         {
-          "0":
-          {
-            "tpye": "waitfor",
-            "break": false,
-            "frequency": 1000,
-            "timeout": 10000,
-            "logic_modifier": "?",
-            "conditions": 
-            [
-                {
-                    "locator": "xpath",
-                    "value": "some xpath"
-                },
-                {
+          "tpye": "waitfor",
+          "break": false,
+          "frequency": 1000,
+          "timeout": 10000,
+          "logic_modifier": "?",
+          "conditions": 
+          [
+              {
                   "locator": "xpath",
-                  "value":"some xpath",
-                  "visibility": true
-                },
-                {
-                  "url": "some url"
-                },
-                {
-                  "url_sub": "url substring"
-                },
-                {
-                  "title": "some title"
-                },
-                {
-                  "title_sub": "title substring"
-                },
-                {
-                  "alert": true
-                }
-            ]
-          }
+                  "value": "some xpath"
+              },
+              {
+                "locator": "xpath",
+                "value":"some xpath",
+                "visibility": true
+              },
+              {
+                "url": "some url"
+              },
+              {
+                "url_sub": "url substring"
+              },
+              {
+                "title": "some title"
+              },
+              {
+                "title_sub": "title substring"
+              },
+              {
+                "alert": true
+              }
+          ]
         }
       }
     }
+  }
 }

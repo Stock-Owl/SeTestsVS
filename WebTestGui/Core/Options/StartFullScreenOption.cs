@@ -2,13 +2,13 @@
 
 namespace WebTestGui
 {
-    public partial class MaximizeWindowOnStartOption : UserControl, IOption
+    public partial class StartFullScreenOption : UserControl, IOption
     {
-        public MaximizeWindowOnStartOption()
+        public StartFullScreenOption()
         {
             InitializeComponent();
 
-            m_OptionName = "maximize_browser";
+            m_OptionName = "start_fullscreen";
         }
 
         // INTERFACE FUNCTIONS AND MEMBERS

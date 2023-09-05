@@ -9,7 +9,7 @@
     "auto_exit_iframes": true,
     "log_JS_retry_timeout": 2000,
     "parent_log_path": "C:\\dev\\SeTestsVS\\logs",
-    "maximize_browser": false
+    "start_fullscreen": true
   },
   "driver_options": {
     "accept_insecure_certs": true,
@@ -46,7 +46,7 @@
       "actions": {
         "0": {
           "type": "goto",
-          "break": true,
+          "break": false,
           "url": "https://wikipedia.org/"
         }
       }
@@ -78,7 +78,7 @@
       "actions": {
         "0": {
           "type": "goto",
-          "break": true,
+          "break": false,
           "url": "https://youtube.com"
         },
         "1": {

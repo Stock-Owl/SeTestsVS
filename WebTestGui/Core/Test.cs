@@ -1,7 +1,4 @@
-﻿using Accessibility;
-using System;
-
-namespace WebTestGui
+﻿namespace WebTestGui
 {
     public class Test
     {
@@ -91,6 +88,8 @@ namespace WebTestGui
         public List<string> m_Browsers = new List<string>();
         public Options m_Options;
         public DriverOptions m_DriverOptions;
+
+        public string m_FullTestRunTime = "Előző tesztelés teljes futási ideje: 0 / 0 ms";
 
         public Units m_Units;
 

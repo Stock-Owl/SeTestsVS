@@ -329,6 +329,12 @@ namespace WebTestGui
             testStartButton.Text = "TESZT FUT";
 
             string JSONString = GetTestJSON(Test());
+
+            if (ignoreBreakpointsCheckbox.Checked)
+            {
+                JSONString = JSONString.Replace("\"break\": true", "\"break\": false");
+            }
+
             DateTime currentTime = DateTime.Now;
             m_TestStartTime = currentTime.ToString("HH:mm:ss:ffffff");
 
@@ -580,6 +586,8 @@ namespace WebTestGui
                 testRunTimeText.ForeColor = Color.DimGray;
                 testRunTimeText.Text = "Elõzõ tesztelés teljes futási ideje: " + (chromeSum.ToString() + " / " + firefoxSum.ToString() + " ms");
             }
+
+            Test().m_FullTestRunTime = testRunTimeText.Text;
         }
 
         long TimeToMicroseconds(string timeStr)
@@ -913,6 +921,8 @@ namespace WebTestGui
                 testStartButton.Text = "TESZT FUT";
             }
 
+            testRunTimeText.Text = Test().m_FullTestRunTime;
+
             RefreshOptionsPanel();
             RefreshUnitsPanel();
         }
@@ -1024,6 +1034,9 @@ namespace WebTestGui
 
         public async Task<ScheduledTestResult> RUN_SCHEDULED_TEST(string scheduledTestFilePath, string parentLogPath)
         {
+            m_TestTab.m_TestTabItems.Clear();
+            m_TestTab.AddNewBlankItem();
+
             m_IsScheduled = true;
 
             m_TestTab.AddNewItemFromFilePath(scheduledTestFilePath);
@@ -1062,11 +1075,17 @@ namespace WebTestGui
             scheduledTestResult.m_ChromeJsLog = m_JsLogConsole.m_FirefoxLogString;
             scheduledTestResult.m_FirefoxJsLog = m_JsLogConsole.m_FirefoxLogString;
 
+            if (m_CurrentProcess != null)
+                m_CurrentProcess.Kill();
+
             return scheduledTestResult;
         }
 
         public void LoadScheduledTestResults(string scheduledTestFilePath, ScheduledTestResult results, string testStartTime)
         {
+            m_TestTab.m_TestTabItems.Clear();
+            m_TestTab.AddNewBlankItem();
+
             Text = Text + " Teszt eredmény vizsgáló";
 
             testStartButton.Visible = false;
@@ -1133,6 +1152,14 @@ namespace WebTestGui
             }
         }
 
+        public void Killllllllllllllllllllllllllll()
+        {
+            if (m_CurrentProcess != null)
+            {
+                m_CurrentProcess.Kill();
+            }
+        }
+
         #endregion
 
         public bool m_IsScheduled = false;
@@ -1146,6 +1173,18 @@ namespace WebTestGui
 
         Console m_RunLogConsole;
         Console m_JsLogConsole;
+
+        private void ignoreBreakpointsCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ignoreBreakpointsCheckbox.Checked)
+            {
+                ignoreBreakpointsLabel.Font = new Font(ignoreBreakpointsLabel.Font, FontStyle.Bold);
+            }
+            else
+            {
+                ignoreBreakpointsLabel.Font = new Font(ignoreBreakpointsLabel.Font, FontStyle.Regular);
+            }
+        }
     }
 
     public class ScheduledTestResult

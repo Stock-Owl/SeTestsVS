@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Core\Options\MaximizeWindowOnStartOption.cs" />
+    <Compile Update="Core\Options\StartFullScreenOption.cs" />
     <Compile Update="Core\Units\Actions\SwitchBackAction.cs">
       <SubType>UserControl</SubType>
     </Compile>
