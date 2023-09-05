@@ -329,6 +329,12 @@ namespace WebTestGui
             testStartButton.Text = "TESZT FUT";
 
             string JSONString = GetTestJSON(Test());
+
+            if (ignoreBreakpointsCheckbox.Checked)
+            {
+                JSONString = JSONString.Replace("\"break\": true", "\"break\": false");
+            }
+
             DateTime currentTime = DateTime.Now;
             m_TestStartTime = currentTime.ToString("HH:mm:ss:ffffff");
 
@@ -1146,6 +1152,14 @@ namespace WebTestGui
             }
         }
 
+        public void Killllllllllllllllllllllllllll()
+        {
+            if (m_CurrentProcess != null)
+            {
+                m_CurrentProcess.Kill();
+            }
+        }
+
         #endregion
 
         public bool m_IsScheduled = false;
@@ -1159,6 +1173,18 @@ namespace WebTestGui
 
         Console m_RunLogConsole;
         Console m_JsLogConsole;
+
+        private void ignoreBreakpointsCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ignoreBreakpointsCheckbox.Checked)
+            {
+                ignoreBreakpointsLabel.Font = new Font(ignoreBreakpointsLabel.Font, FontStyle.Bold);
+            }
+            else
+            {
+                ignoreBreakpointsLabel.Font = new Font(ignoreBreakpointsLabel.Font, FontStyle.Regular);
+            }
+        }
     }
 
     public class ScheduledTestResult

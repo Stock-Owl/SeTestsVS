@@ -145,7 +145,6 @@ namespace Scheduler
             saveSchedulerButton.Enabled = true;
             loadSchedulerButton.Enabled = true;
 
-            m_ScheduledTestMainForm = null!;
             testStartButton.Text = "TESZTELÉS INDITÁSA...";
         }
 
@@ -165,8 +164,10 @@ namespace Scheduler
                 m_CurrentlyTestedTestItem.m_RootLogDirectory);
             m_CurrentlyTestedTestItem.m_Result = testResult;
 
+            m_ScheduledTestMainForm.Killllllllllllllllllllllllllll();
             m_ScheduledTestMainForm.Close();
-            m_ScheduledTestMainForm.Dispose();
+            m_ScheduledTestMainForm = null!;
+            GC.Collect();
 
             m_TestStopwatch.Stop();
             m_CurrentlyTestedTestItem.OnTestEnd(m_TestStopwatch.ElapsedMilliseconds);

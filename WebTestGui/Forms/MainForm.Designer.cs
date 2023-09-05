@@ -61,6 +61,8 @@
             this.testNameLabel = new System.Windows.Forms.Label();
             this.breakpointIcon = new System.Windows.Forms.PictureBox();
             this.testRunTimeText = new System.Windows.Forms.Label();
+            this.ignoreBreakpointsLabel = new System.Windows.Forms.Label();
+            this.ignoreBreakpointsCheckbox = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.unitHeaderPanel.SuspendLayout();
@@ -312,7 +314,7 @@
             this.unitsPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(50)))));
             this.unitsPanel.Location = new System.Drawing.Point(412, 103);
             this.unitsPanel.Name = "unitsPanel";
-            this.unitsPanel.Size = new System.Drawing.Size(364, 450);
+            this.unitsPanel.Size = new System.Drawing.Size(364, 438);
             this.unitsPanel.TabIndex = 39;
             // 
             // switchToOptionsButton
@@ -495,11 +497,40 @@
             this.testRunTimeText.TabIndex = 61;
             this.testRunTimeText.Text = "Előző tesztelés teljes futási ideje: 0 / 0 ms";
             // 
+            // ignoreBreakpointsLabel
+            // 
+            this.ignoreBreakpointsLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.ignoreBreakpointsLabel.AutoSize = true;
+            this.ignoreBreakpointsLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(53)))));
+            this.ignoreBreakpointsLabel.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.ignoreBreakpointsLabel.ForeColor = System.Drawing.Color.White;
+            this.ignoreBreakpointsLabel.Location = new System.Drawing.Point(412, 544);
+            this.ignoreBreakpointsLabel.Name = "ignoreBreakpointsLabel";
+            this.ignoreBreakpointsLabel.Size = new System.Drawing.Size(218, 15);
+            this.ignoreBreakpointsLabel.TabIndex = 63;
+            this.ignoreBreakpointsLabel.Text = "Breakpoint-ok figyelmen kívűl  hagyása:";
+            // 
+            // ignoreBreakpointsCheckbox
+            // 
+            this.ignoreBreakpointsCheckbox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.ignoreBreakpointsCheckbox.AutoSize = true;
+            this.ignoreBreakpointsCheckbox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(53)))));
+            this.ignoreBreakpointsCheckbox.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.ignoreBreakpointsCheckbox.ForeColor = System.Drawing.Color.White;
+            this.ignoreBreakpointsCheckbox.Location = new System.Drawing.Point(641, 546);
+            this.ignoreBreakpointsCheckbox.Name = "ignoreBreakpointsCheckbox";
+            this.ignoreBreakpointsCheckbox.Size = new System.Drawing.Size(15, 14);
+            this.ignoreBreakpointsCheckbox.TabIndex = 62;
+            this.ignoreBreakpointsCheckbox.UseVisualStyleBackColor = false;
+            this.ignoreBreakpointsCheckbox.CheckedChanged += new System.EventHandler(this.ignoreBreakpointsCheckbox_CheckedChanged);
+            // 
             // MainForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(53)))));
             this.ClientSize = new System.Drawing.Size(1134, 611);
+            this.Controls.Add(this.ignoreBreakpointsLabel);
+            this.Controls.Add(this.ignoreBreakpointsCheckbox);
             this.Controls.Add(this.testRunTimeText);
             this.Controls.Add(this.breakpointIcon);
             this.Controls.Add(this.rootLogDirectoryButton);
@@ -578,5 +609,7 @@
         protected Label exportOptionsLabel;
         protected Label importOptionsLabel;
         private PictureBox importOptionTemplate;
+        private Label ignoreBreakpointsLabel;
+        private CheckBox ignoreBreakpointsCheckbox;
     }
 }
