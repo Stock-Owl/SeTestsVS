@@ -83,15 +83,17 @@
               },
               {
                 "type": "suburl",
-                "url_sub": "url substring"
+                "url": "url substring"
               },
               {
                 "type": "title",
+                "case_sensitive": false,
                 "title": "some title"
               },
               {
                 "type": "subtitle",
-                "title_sub": "title substring"
+                "case_sensitive": false,
+                "title": "title substring"
               },
               {
                 "type": "alert",

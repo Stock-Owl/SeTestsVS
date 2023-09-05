@@ -3,8 +3,12 @@ from selenium.webdriver.firefox.webdriver import WebDriver as FirefoxDriver
 from seleniumwire.webdriver import Firefox as WireFirefoxDriver     # selenium-wire because that supports the HTTP request interception 
 from seleniumwire.webdriver import Chrome as WireChromeDriver       # selenium-wire because that supports the HTTP request interception
 
+from selenium.webdriver.common.by import By
+from selenium.common.exceptions import NoSuchElementException as ElementNotFound
+from selenium.common.exceptions import NoAlertPresentException as AlertNotFound
+
 import time
-from multiprocessing import Process, Array, Value
+from multiprocessing import Process, Array
 
 BOOL: str = 'b'
 
@@ -63,9 +67,9 @@ class Wait:
             case _:
                 raise ValueError(f"Argument `logic_modifier` expected to be one of the following: ?, !, |, ^, !|, !^ not {logic_modifier}")
 
-    def Check(driver: ChromeDriver | FirefoxDriver | WireChromeDriver | WireFirefoxDriver, 
-              condition: dict[str, str | int] = None,
-              shared_array: Array = None) -> bool:
+    def Check(
+            driver: ChromeDriver | FirefoxDriver | WireChromeDriver | WireFirefoxDriver = None, 
+            condition: dict[str, str | int] = None) -> bool:
         checktype = condition["type"]
         match checktype.lower():
             case "loaded":
@@ -78,18 +82,73 @@ class Wait:
                     else:
                         raise ValueError(f"Parameter `locator` must be either 'xpath' or 'css_selector', not f{locator}")
                     return True
-                except:
+                except ElementNotFound:
                     return False
             case "visible":
-                pass
+                try:
+                    locator: str = condition["locator"]
+                    if locator == "xpath": 
+                        visibility = driver.find_element(By.XPATH, condition["value"]).is_displayed()
+                    elif locator == "css_selector":
+                        visibility = driver.find_element(By.CSS_SELECTOR, condition["value"])
+                    else:
+                        raise ValueError(f"Parameter `locator` must be either 'xpath' or 'css_selector', not f{locator}")
+                    if visibility == condition[visibility]:
+                        return True
+                    return False
+                except ElementNotFound:
+                    return False
             case "title_is":
-                pass
+                try:
+                    if condition["case_sensitive"]:
+                        if condition["title"] == driver.title:
+                            return True
+                    if condition["title"].lower() == driver.title.lower():
+                        return True
+                    return False
+                except:
+                    return False
             case "title_contains":
-                pass
+                try:
+                    if condition["case_sensitive"]:
+                        if condition["title"] in driver.title:
+                            return True
+                    if condition["title"].lower() in driver.title.lower():
+                        return True
+                    return False
+                except:
+                    return False
             case "url_is":
-                pass
+                try:
+                    if condition["url"] == driver.current_url:
+                        return True
+                    return False
+                except:
+                    return False
             case "url_contains":
-                pass
+                try:
+                    if condition["url"] in driver.current_url:
+                        return True
+                    return False
+                except:
+                    return False
             case "alert_present":
-                pass
-        
+                alert_present: bool
+                try:
+                    driver.switch_to.alert()
+                    alert_present = True
+                except AlertNotFound:
+                    alert_present = False
+
+                if alert_present == condition["alert"]:
+                    return True
+                return False
+
+    def CheckPoller(
+            driver: ChromeDriver | FirefoxDriver | WireChromeDriver | WireFirefoxDriver = None, 
+            condition: dict[str, str | int] = None,
+            frequency: int = None,
+            timeout: int = None,
+            shared_array: Array = None) -> None:
+        pass
+
