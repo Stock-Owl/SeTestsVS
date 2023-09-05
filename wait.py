@@ -63,10 +63,23 @@ class Wait:
             case _:
                 raise ValueError(f"Argument `logic_modifier` expected to be one of the following: ?, !, |, ^, !|, !^ not {logic_modifier}")
 
-    def Check(condition: str = None) -> bool:
-        match condition.lower():
+    def Check(driver: ChromeDriver | FirefoxDriver | WireChromeDriver | WireFirefoxDriver, 
+              condition: dict[str, str | int] = None,
+              shared_array: Array = None) -> bool:
+        checktype = condition["type"]
+        match checktype.lower():
             case "loaded":
-                pass
+                try:
+                    locator: str = condition["locator"]
+                    if locator == "xpath": 
+                        driver.find_element(By.XPATH, condition["value"])
+                    elif locator == "css_selector":
+                        driver.find_element(By.CSS_SELECTOR, condition["value"])
+                    else:
+                        raise ValueError(f"Parameter `locator` must be either 'xpath' or 'css_selector', not f{locator}")
+                    return True
+                except:
+                    return False
             case "visible":
                 pass
             case "title_is":
@@ -79,3 +92,4 @@ class Wait:
                 pass
             case "alert_present":
                 pass
+        

@@ -67,27 +67,34 @@
           "conditions": 
           [
               {
+                "type": "loaded",
                   "locator": "xpath",
                   "value": "some xpath"
               },
               {
+                "type": "visible",
                 "locator": "xpath",
                 "value":"some xpath",
                 "visibility": true
               },
               {
+                "type": "url",
                 "url": "some url"
               },
               {
+                "type": "suburl",
                 "url_sub": "url substring"
               },
               {
+                "type": "title",
                 "title": "some title"
               },
               {
+                "type": "subtitle",
                 "title_sub": "title substring"
               },
               {
+                "type": "alert",
                 "alert": true
               }
           ]
