@@ -64,42 +64,12 @@
           "frequency": 1000,
           "timeout": 10000,
           "logic_modifier": "?",
-          "conditions": 
-          [
+          "condition": 
               {
                 "type": "loaded",
                   "locator": "xpath",
                   "value": "some xpath"
-              },
-              {
-                "type": "visible",
-                "locator": "xpath",
-                "value":"some xpath",
-                "visibility": true
-              },
-              {
-                "type": "url",
-                "url": "some url"
-              },
-              {
-                "type": "suburl",
-                "url": "url substring"
-              },
-              {
-                "type": "title",
-                "case_sensitive": false,
-                "title": "some title"
-              },
-              {
-                "type": "subtitle",
-                "case_sensitive": false,
-                "title": "title substring"
-              },
-              {
-                "type": "alert",
-                "alert": true
               }
-          ]
         }
       }
     }

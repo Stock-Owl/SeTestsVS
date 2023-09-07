@@ -8,7 +8,7 @@ from selenium.common.exceptions import NoSuchElementException as ElementNotFound
 from selenium.common.exceptions import NoAlertPresentException as AlertNotFound
 
 import time
-from multiprocessing import Process, Array
+from math import ceil
 
 BOOL: str = 'b'
 
@@ -22,54 +22,45 @@ BOOL: str = 'b'
 # TODO: should be doing this shit with multiprocessing, so we suck dick once again!
 
 class Wait:
-    def Wait(time_: int, raw: bool = False) -> None:
-        if not raw:
-            time_ /= 1000
-        time.sleep(time_)
+    def Wait(milliseconds: int) -> None:
+        milliseconds /= 1000
+        time.sleep(milliseconds)
 
     def WaitFor(
+        driver: ChromeDriver | FirefoxDriver | WireChromeDriver | WireFirefoxDriver,
         frequency_ms: int = 1000,  # ms
         timeout_ms: int = 10000,   # ms
         logic_modifier: str = '?',
-        conditions_: list[dict[str, str | int]] = []
+        condition_: dict[str, str | int] = []
         ) -> None:
 
         frequency: int | float = frequency_ms / 1000
         timeout: int | float = timeout_ms / 1000
-
-        conditions: list[dict[str, str | int]] = conditions_
-
-        assert conditions != list(), "default argument `conditions_` must not be empty"
-
-        returned: list[bool] = []
-
+        iterations: int = ceil(timeout / frequency)
+        satisfied: bool
 
         match logic_modifier:
             # true
             case "?":
-                pass
+                satisfied = Wait.Check(driver, condition_)
             # false / not
             case "!":
-                pass
-            # or
-            case "|":
-                pass
-            # xor
-            case "^":
-                pass
-            # nor
-            case "!|":
-                pass
-            # xnor
-            case "!^":
-                pass
+                satisfied = not Wait.Check(driver, condition_)
             # undefined
             case _:
-                raise ValueError(f"Argument `logic_modifier` expected to be one of the following: ?, !, |, ^, !|, !^ not {logic_modifier}")
+                raise ValueError(f"Argument `logic_modifier` expected to be one of the following: ?, ! not {logic_modifier}")
+        
+        for _ in range(iterations):
+            if satisfied:
+                return
+            time.sleep(frequency)
+        
+        raise RuntimeError("The requested condition has not been met in the given timeframe")
 
     def Check(
-            driver: ChromeDriver | FirefoxDriver | WireChromeDriver | WireFirefoxDriver = None, 
-            condition: dict[str, str | int] = None) -> bool:
+        driver: ChromeDriver | FirefoxDriver | WireChromeDriver | WireFirefoxDriver = None, 
+        condition: dict[str, str | int] = None
+        ) -> bool:
         checktype = condition["type"]
         match checktype.lower():
             case "loaded":
@@ -143,12 +134,5 @@ class Wait:
                 if alert_present == condition["alert"]:
                     return True
                 return False
-
-    def CheckPoller(
-            driver: ChromeDriver | FirefoxDriver | WireChromeDriver | WireFirefoxDriver = None, 
-            condition: dict[str, str | int] = None,
-            frequency: int = None,
-            timeout: int = None,
-            shared_array: Array = None) -> None:
-        pass
-
+            case _:
+                raise ValueError(f"\'{checktype}\' is not a valid condition to await")

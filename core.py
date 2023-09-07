@@ -16,7 +16,7 @@ from multiprocessing import Process
 from copy import copy
 from os import getpid
 
-# V.1.2.4
+# V.1.3.0
 #                                                                               25 / 27 + 1
 # TODO: Kitalálni, hogy vannak az argumentumok                                  ✅  1
 # TODO: Megszerelni a random useless conversionöket a JSON-ből                  ✅  2
@@ -382,7 +382,17 @@ class Core:
                             time = action['amount']
                             Actions.Wait(time)
                         case "wait_for":
-                            Actions.WaitFor(driver, action)
+                            frequency_ = action['frequency']
+                            timeout_ = action['timeout']
+                            logic_modifier_ = action['logic_modifier']
+                            condition_ = action['condition']
+
+                            Actions.WaitFor(
+                                driver,
+                                frequency_ms=frequency_,
+                                timeout_ms=timeout_,
+                                logic_modifier=logic_modifier_,
+                                condition_=condition_)
                         case "switch_back":
                             Actions.SwitchBack(driver)
                         case "switch_to":

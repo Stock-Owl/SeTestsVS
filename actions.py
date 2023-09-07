@@ -9,7 +9,9 @@ from selenium.webdriver.support import expected_conditions
 from selenium.common.exceptions import JavascriptException as SeJSException
 from support import Support
 from interceptor import Interceptor
-import time
+from wait import Wait as Waitclass
+
+# renaming shit from the wait class, because code segmentation
 
 class Actions:
     def Goto(driver: ChromeDriver | FirefoxDriver | WireChromeDriver | WireFirefoxDriver, url: str):
@@ -45,87 +47,12 @@ class Actions:
         Actions.CheckInterceptorExists(interceptor)
         interceptor.Remove(name_)
 
+    WaitFor = Waitclass.WaitFor
+    Wait = Waitclass.Wait
+
     def SwitchBack(driver: ChromeDriver | FirefoxDriver | WireChromeDriver | WireFirefoxDriver):
         Actions.CheckDriverExists(driver)
         driver.switch_to.parent_frame()
-
-    def Wait(time_: int):
-        time_ /= 1000
-        time.sleep(time_)
-
-    def WaitFor(driver: ChromeDriver | FirefoxDriver | WireChromeDriver | WireFirefoxDriver, kwargs: dict):
-
-        Actions.CheckDriverExists(driver)
-
-        # title match       ✅
-        # title contains    ✅
-        # url match         ✅
-        # url contains      ✅
-        # alert present     ✅
-        # element present   ✅
-        # element visible   ✅
-        # 
-        timeout = kwargs['timeout']
-        frequency = kwargs['frequency']
-        if timeout is None:
-            timeout = 1000
-        if frequency is None:
-            wait = WebDriverWait(driver, timeout=timeout)
-        else:
-            wait = WebDriverWait(driver, timeout=timeout, poll_frequency=frequency)
-
-        raw_condition: str = kwargs['condition']
-        condition = raw_condition
-        condition_container: function = expected_conditions.all_of
-
-        if raw_condition[0] == '!':
-            condition = raw_condition.removeprefix('!')
-            condition_container: function = expected_conditions.none_of
-
-        match condition:
-            case 'element_exists':
-                locator_: str = kwargs['locator']
-                value_: str = kwargs['value']
-                internal_locator: tuple[str, str] = (locator_, value_)
-                expected = expected_conditions.presence_of_element_located(internal_locator)
-                wait.until(condition_container(expected))
-
-            case 'loaded':
-                locator_: str = kwargs['locator']
-                value_: str = kwargs['value']
-                internal_locator: tuple[str, str] = (locator_, value_)
-                expected = expected_conditions.presence_of_element_located(internal_locator)
-                wait.until(condition_container(expected))
-
-            case 'element_visible':
-                locator_: str = kwargs['locator']
-                value_: str = kwargs['value']
-                element = Actions.matchElement(driver, locator = locator_, value = value_)
-                expected = expected_conditions.visibility_of(element)
-                wait.unitl(expected)
-
-            case 'alert_present':
-                expected = expected_conditions.alert_is_present()
-                wait.until(condition_container(expected))
-
-            case 'title_matches':
-                expected = expected_conditions.title_is(kwargs['title'])
-                wait.until(expected)
-
-            case 'title_contains':
-                expected = expected_conditions.title_contains(kwargs['title_sub'])
-                wait.until(expected)
-
-            case 'url_matches':
-                expected = expected_conditions.url_matches(kwargs['url'])
-                wait.until(expected)
-
-            case 'url_contains':
-                expected = expected_conditions.url_contains(kwargs['url_sub'])
-                wait.until(expected)
-
-            case _:
-                raise ValueError(f"\'{condition}\' is not a valid condition to await")
 
     def ExecuteJS(
         driver: ChromeDriver | FirefoxDriver | WireChromeDriver | WireFirefoxDriver,
