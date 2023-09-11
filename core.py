@@ -17,7 +17,7 @@ from copy import copy
 from os import getpid
 
 # V.1.3.0
-#                                                                               25 / 27 + 1
+#                                                                               26 / 27 + 1
 # TODO: Kitalálni, hogy vannak az argumentumok                                  ✅  1
 # TODO: Megszerelni a random useless conversionöket a JSON-ből                  ✅  2
 # TODO: Relative locators                                                       ❌  NAH FUCK that shit
@@ -51,7 +51,7 @@ from os import getpid
 # TODO: multiprocessing funny (O = O(n)/2)                                      ✅  21
 # TODO: FIrefoxDriver typecheck in CheckDriverExists so it won't cry abt it     ✅  22
 # TODO: add test names to JSON and combined logs                                ✅  23
-# TODO: add request shit for drivers. Seleniumwire!!! Needs to be implemented!  ❌  24
+# TODO: add request shit for drivers. Seleniumwire!!! Needs to be implemented!  ✅  24
 # TODO: time data collection, bounds etc.                                         GUI
 # TODO: breakpoint intermediate                                                 ✅  25
 # TODO: installer update                                                        ❌  26
