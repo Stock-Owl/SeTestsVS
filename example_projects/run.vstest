@@ -62,7 +62,7 @@
         },
         "1": {
           "type": "goto",
-          "break": false,
+          "break": true,
           "url": "https://github.com"
         },
         "2": {
