@@ -139,18 +139,18 @@ namespace WebTestGui
             Dictionary<string, object> clickData = new Dictionary<string, object>();
             clickData["type"] = m_ActionType;
             clickData["break"] = m_HaveBreakpoint;
-
-            clickData["condition"] = conditionComboBox.Text;
             clickData["frequency"] = string.IsNullOrEmpty(frequencyTextField.Text) == true ? 0 : int.Parse(frequencyTextField.Text);
             clickData["timeout"] = string.IsNullOrEmpty(timeOutTextBox.Text) == true ? 0 : int.Parse(timeOutTextBox.Text);
-            clickData["single"] = singleCheckbox.Checked;
+            clickData["logic_modifier"] = logicModifierComboBox.Text;
 
-            clickData["displayed"] = displayedCheckbox.Checked;
-            clickData["enabled"] = enabledCheckBox.Checked;
-            clickData["selected"] = selectedCheckBox.Checked;
+            Dictionary<string, object> conditionData = new Dictionary<string, object>();
 
-            clickData["locator"] = locatorTextBox.Text;
-            clickData["value"] = valueTextBox.Text;
+            conditionData["type"] = conditionComboBox.Text;
+            conditionData["locator"] = locatorTextBox.Text;
+            conditionData["value"] = valueTextBox.Text;
+
+            clickData["condition"] = conditionData;
+
             return clickData;
         }
 
@@ -166,29 +166,18 @@ namespace WebTestGui
                 SetBreakpoint(false);
             }
 
-            conditionComboBox.Text = (string)data["condition"]!;
             frequencyTextField.Text = ((int)data["frequency"]!).ToString();
             timeOutTextBox.Text = ((int)data["timeout"]!).ToString();
-            singleCheckbox.Checked = (bool)data["single"]!;
+            logicModifierComboBox.Text = ((string)data["logic_modifier"]!).ToString();
 
-            try
-            {
-                displayedCheckbox.Checked = (bool)data["displayed"]!;
-                enabledCheckBox.Checked = (bool)data["enabled"]!;
-                selectedCheckBox.Checked = (bool)data["selected"]!;
-            }
-            catch (Exception ex)
-            {
-                var exception = ex;
-            }
+            JToken conditionData = data["condition"]!;
 
-            singleCheckbox.Checked = (bool)data["single"]!;
-
-            locatorTextBox.Text = (string)data["locator"]!;
-            valueTextBox.Text = (string)data["value"]!;
+            conditionComboBox.Text = (string)conditionData["type"]!;
+            locatorTextBox.Text = (string)conditionData["locator"]!;
+            valueTextBox.Text = (string)conditionData["value"]!;
         }
 
-        public string m_ActionType { get { return "wait_for"; } }
+        public string m_ActionType { get { return "waitfor"; } }
         public IUnit m_ParentUnit { get; set; }
         public bool m_HaveBreakpoint { get; set; }
 
@@ -211,18 +200,6 @@ namespace WebTestGui
             breakpointOnPicture.Visible = active;
             breakpointOffPicture.Visible = !active;
             m_HaveBreakpoint = active;
-        }
-
-        private void singleCheckbox_CheckedChanged(object sender, EventArgs e)
-        {
-            if (singleCheckbox.Checked)
-            {
-                singleLabel.Text = "Elemek";
-            }
-            else
-            {
-                singleLabel.Text = "Elem";
-            }
         }
 
         private void binImage_Click(object sender, EventArgs e)

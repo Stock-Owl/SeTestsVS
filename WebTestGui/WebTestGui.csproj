@@ -9,11 +9,11 @@
     <PackageOutputPath>bin\$(OutputPath)</PackageOutputPath>
     <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
     <BaseOutputPath>bin</BaseOutputPath>
-    <ApplicationIcon>AppIcon.ico</ApplicationIcon>
+    <ApplicationIcon>AppConsts\Images\AppLogo.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="AppIcon.ico" />
+    <Content Include="AppConsts\Images\AppLogo.ico" />
   </ItemGroup>
 
   <ItemGroup>
