@@ -1,13 +1,10 @@
-using System.Diagnostics;
+Ôªøusing System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace WebTestGui
 {
     public partial class MainForm : Form
     {
-        /* TODO:
-            - RAW szerkeztı (a teszt JSON szˆveg˚ ˆssze·llÌt·sa)
-        */
 
         public MainForm()
         {
@@ -36,15 +33,28 @@ namespace WebTestGui
             m_TestTab.Location = new Point(410, 0);
             m_TestTab.AddNewBlankItem();
 
-            m_RunLogConsole.AddToConsoles("Applik·ciÛ indÌt·sa...\n");
-            m_RunLogConsole.AddToConsoles("VerziÛ: " + $"{AppConsts.s_AppVersion}\n");
-            m_RunLogConsole.AddToConsoles("Idı: " + $"{DateTime.Now}\n");
+            m_RunLogConsole.AddToConsoles("Applik√°ci√≥ ind√≠t√°sa...\n");
+            m_RunLogConsole.AddToConsoles("Verzi√≥: " + $"{AppConsts.s_AppVersion}\n");
+            m_RunLogConsole.AddToConsoles("Id≈ë: " + $"{DateTime.Now}\n");
 
             m_JsLogConsole.AddToConsoles("JavaScript konzol...\n");
             m_JsLogConsole.AddToConsoles("A teszt ideje alatt minden JavaScript log " +
-                "inform·ciÛ ide lesz kiiratva.\n");
+                "inform√°ci√≥ ide lesz kiiratva.\n");
 
             RefreshOptionsPanel();
+
+            string[] args = Environment.GetCommandLineArgs();
+            if (args != null)
+            {
+                if (args.Length > 2)
+                {
+                    if (!string.IsNullOrEmpty(args[1]) && !string.IsNullOrEmpty(args[2]))
+                    {
+                        RUN_SCHEDULED_TEST(args[1], args[2]);
+                    }
+                }
+                
+            }
         }
 
         #region Option panel function
@@ -71,8 +81,8 @@ namespace WebTestGui
         private void exportOptionTemplate_Click(object sender, EventArgs e)
         {
             SaveFileDialog of = new SaveFileDialog();
-            of.Title = "Teszt opciÛk mentÈse...";
-            of.Filter = $"Teszt opciÛk f·jl|*{AppConsts.s_AppDefaultFileExtension + "options"}|Any File|*.*";
+            of.Title = "Teszt opci√≥k ment√©se...";
+            of.Filter = $"Teszt opci√≥k f√°jl|*{AppConsts.s_AppDefaultFileExtension + "options"}|Any File|*.*";
             if (of.ShowDialog() == DialogResult.OK)
             {
                 string savedInfo = TestFormatter.SaveOptionsFromTest(Test());
@@ -83,8 +93,8 @@ namespace WebTestGui
         private void importOptionTemplate_Click(object sender, EventArgs e)
         {
             OpenFileDialog of = new OpenFileDialog();
-            of.Title = "Teszt opciÛk betˆltÈse...";
-            of.Filter = $"Teszt opciÛk f·jl|*{AppConsts.s_AppDefaultFileExtension + "options"}|Any File|*.*";
+            of.Title = "Teszt opci√≥k bet√∂lt√©se...";
+            of.Filter = $"Teszt opci√≥k f√°jl|*{AppConsts.s_AppDefaultFileExtension + "options"}|Any File|*.*";
             if (of.ShowDialog() == DialogResult.OK)
             {
                 string loadedInfo = File.ReadAllText(of.FileName);
@@ -284,24 +294,24 @@ namespace WebTestGui
             // Does parent log path exist
             if (!Path.Exists(Test().GetRootLogDirectoryPath()))
             {
-                string message = "A jelenleg megadott 'GyˆkÈr logol·si kˆnyvt·r' ˙tvonala nem lÈtezik!";
-                string title = "IndÌt·si problÈma...";
+                string message = "A jelenleg megadott 'Gy√∂k√©r logol√°si k√∂nyvt√°r' √∫tvonala nem l√©tezik!";
+                string title = "Ind√≠t√°si probl√©ma...";
                 MessageBox.Show(message, title);
                 return;
             }
             // Both browsers selected
             if (!chromeCheckBox.Checked || !firefoxCheckBox.Checked)
             {
-                string message = "Jelenleg a TesztelÈs csak mindkÈt bˆngÈszıvel tˆrtÈnhet egyszerre!";
-                string title = "IndÌt·si problÈma...";
+                string message = "Jelenleg a Tesztel√©s csak mindk√©t b√∂ng√©sz≈ëvel t√∂rt√©nhet egyszerre!";
+                string title = "Ind√≠t√°si probl√©ma...";
                 MessageBox.Show(message, title);
                 return;
             }
             // Unit Panel empty
             if (Test().m_Units.m_Units.Count == 0)
             {
-                string message = "‹res tesztet nem lehet futtatni!";
-                string title = "IndÌt·si problÈma...";
+                string message = "√úres tesztet nem lehet futtatni!";
+                string title = "Ind√≠t√°si probl√©ma...";
                 MessageBox.Show(message, title);
                 return;
             }
@@ -341,11 +351,7 @@ namespace WebTestGui
             // Getting python directory
             // TODO: MOST LIKELY WILL CHANGE ON PRODUCTION BUILD
             string temp = Application.ExecutablePath;
-            string[] temparray;
-            if (!m_IsScheduled)
-                temparray = temp.Split(@"WebTestGui");
-            else
-                temparray = temp.Split(@"Scheduler");
+            string[] temparray = temp.Split(@"WebTestGui");
 
             File.WriteAllText(temparray[0] + "run.json", JSONString);
 
@@ -391,12 +397,12 @@ namespace WebTestGui
             StartJsLogFileWatcher(jsLogFilePath);
             OnSwitchToJsLogButtonPressed(null!, null!);
 
-            m_RunLogConsole.AddToConsoles("\n ------TESZT INDIT¡SA \n");
+            m_RunLogConsole.AddToConsoles("\n ------TESZT INDIT√ÅSA \n");
         }
 
         public void OnTestAbort()
         {
-            m_RunLogConsole.AddToConsoles("\n ------TESZT LE¡LLÕTVA \n");
+            m_RunLogConsole.AddToConsoles("\n ------TESZT LE√ÅLL√çTVA \n");
             m_CurrentProcess.Kill();
             SetColorSchemeToEdit();
 
@@ -406,8 +412,8 @@ namespace WebTestGui
         public void OnTestBreak(string content, bool continueImmediately = false)
         {
             Test().m_State = WebTestGui.Test.TestState.Break;
-            m_RunLogConsole.AddToConsoles("\n ------TESZT SZ‹NETELTETVE (BREAKPOINT) \n");
-            testStartButton.Text = "TESZT FOLYTAT¡SA...";
+            m_RunLogConsole.AddToConsoles("\n ------TESZT SZ√úNETELTETVE (BREAKPOINT) \n");
+            testStartButton.Text = "TESZT FOLYTAT√ÅSA...";
             SetColorSchemeToBreakpointHit();
 
             string[] contentParts = content.Split('\n')[0].Split(':'); // (c:ble 1:1)
@@ -443,7 +449,7 @@ namespace WebTestGui
         public void OnTestContinue() // Should be called only after a breakpoint hit
         {
             Test().m_State = WebTestGui.Test.TestState.Run;
-            testStartButton.Text = "TESZT FUT.../ TESZT LE¡LLÕT¡SA";
+            testStartButton.Text = "TESZT FUT.../ TESZT LE√ÅLL√çT√ÅSA";
             SetColorSchemeToRun();
 
             File.WriteAllText(Test().GetRootLogDirectoryPath() + @"/file.brk", string.Empty);
@@ -460,7 +466,7 @@ namespace WebTestGui
         public void OnTestFinished()
         {
             Test().m_State = WebTestGui.Test.TestState.Edit;
-            testStartButton.Text = "TESZT INDÕT¡SA...";
+            testStartButton.Text = "TESZT IND√çT√ÅSA...";
             SetColorSchemeToEdit();
 
             _STOP_BRK_LOG_REQ = true;
@@ -474,17 +480,36 @@ namespace WebTestGui
 
             m_JsLogConsole.AddToConsoles(File.ReadAllText(Test().GetRootLogDirectoryPath() + @"/js.log"));
 
-            m_RunLogConsole.AddToConsoles("\n ------TESZT V…GE \n");
+            m_RunLogConsole.AddToConsoles("\n ------TESZT V√âGE \n");
 
-            LoadRunTimesToActions(chromeRunLog, firefoxRunLog);
-            LoadRunTimesToUnits();
-            LoadRunTime();
+            if (m_IsScheduled)
+            {
+                ScheduledTestResult scheduledTestResult = new ScheduledTestResult();
 
-            m_TestTab.m_TestRunning = false;
-            // FOR SCHEDULING
-            File.WriteAllText(Test().GetRootLogDirectoryPath() + @"/end.end", "END");
+                string schedulerChromeRunLog = File.ReadAllText(Test().GetRootLogDirectoryPath() + @"/chrome/run.log");
+                string schedulerFirefoxRunLog = File.ReadAllText(Test().GetRootLogDirectoryPath() + @"/firefox/run.log");
 
-            RefreshUnitsPanel();
+                scheduledTestResult.m_ChromeRunLog = schedulerChromeRunLog;
+                scheduledTestResult.m_FirefoxRunLog = schedulerFirefoxRunLog;
+
+                scheduledTestResult.m_ChromeJsLog = m_JsLogConsole.m_FirefoxLogString;
+                scheduledTestResult.m_FirefoxJsLog = m_JsLogConsole.m_FirefoxLogString;
+
+                if (m_CurrentProcess != null)
+                    m_CurrentProcess.Kill();
+
+                LoadScheduledTestResults(scheduledTestResult);
+            }
+            else
+            {
+                LoadRunTimesToActions(chromeRunLog, firefoxRunLog);
+                LoadRunTimesToUnits();
+                LoadRunTime();
+
+                m_TestTab.m_TestRunning = false;
+                // FOR SCHEDULING
+                RefreshUnitsPanel();
+            }
         }
 
         #region Extract time information from logs methods
@@ -579,12 +604,12 @@ namespace WebTestGui
             if (Test().m_State == WebTestGui.Test.TestState.Break)
             {
                 testRunTimeText.ForeColor = Color.Firebrick;
-                testRunTimeText.Text = "Jelenlegi teszt fut·si ideje a Breakpoint-ig: " + (chromeSum.ToString() + " / " + firefoxSum.ToString() + " ms");
+                testRunTimeText.Text = "Jelenlegi teszt fut√°si ideje a Breakpoint-ig: " + (chromeSum.ToString() + " / " + firefoxSum.ToString() + " ms");
             }
             else if (Test().m_State == WebTestGui.Test.TestState.Edit)
             {
                 testRunTimeText.ForeColor = Color.DimGray;
-                testRunTimeText.Text = "Elızı tesztelÈs teljes fut·si ideje: " + (chromeSum.ToString() + " / " + firefoxSum.ToString() + " ms");
+                testRunTimeText.Text = "El≈ëz≈ë tesztel√©s teljes fut√°si ideje: " + (chromeSum.ToString() + " / " + firefoxSum.ToString() + " ms");
             }
 
             Test().m_FullTestRunTime = testRunTimeText.Text;
@@ -821,8 +846,8 @@ namespace WebTestGui
             if (string.IsNullOrEmpty(test.m_SaveFilePath))
             {
                 SaveFileDialog of = new SaveFileDialog();
-                of.Title = "Teszt mentÈse...";
-                of.Filter = $"Teszt f·jl|*{AppConsts.s_AppDefaultFileExtension}|Any File|*.*";
+                of.Title = "Teszt ment√©se...";
+                of.Filter = $"Teszt f√°jl|*{AppConsts.s_AppDefaultFileExtension}|Any File|*.*";
                 if (of.ShowDialog() == DialogResult.OK)
                 {
                     Test().m_Name = Path.GetFileNameWithoutExtension(of.FileName);
@@ -848,8 +873,8 @@ namespace WebTestGui
             Test loadedTest = new Test(this);
 
             OpenFileDialog of = new OpenFileDialog();
-            of.Title = "Teszt betˆltÈse...";
-            of.Filter = $"Teszt f·jl|*{AppConsts.s_AppDefaultFileExtension}|Any File|*.*";
+            of.Title = "Teszt bet√∂lt√©se...";
+            of.Filter = $"Teszt f√°jl|*{AppConsts.s_AppDefaultFileExtension}|Any File|*.*";
             if (of.ShowDialog() == DialogResult.OK)
             {
                 string loadedInfo = File.ReadAllText(of.FileName);
@@ -908,12 +933,12 @@ namespace WebTestGui
             if (Test().m_State == WebTestGui.Test.TestState.Edit)
             {
                 SetColorSchemeToEdit();
-                testStartButton.Text = "TESZT INDÕT¡SA...";
+                testStartButton.Text = "TESZT IND√çT√ÅSA...";
             }
             else if (Test().m_State == WebTestGui.Test.TestState.Break)
             {
                 SetColorSchemeToBreakpointHit();
-                testStartButton.Text = "TESZT FOLYTAT¡SA...";
+                testStartButton.Text = "TESZT FOLYTAT√ÅSA...";
             }
             else if (Test().m_State == WebTestGui.Test.TestState.Run)
             {
@@ -1030,9 +1055,7 @@ namespace WebTestGui
 
         #region Scheduling
 
-        private bool _STOP_END_REQ = false;
-
-        public async Task<ScheduledTestResult> RUN_SCHEDULED_TEST(string scheduledTestFilePath, string parentLogPath)
+        public void RUN_SCHEDULED_TEST(string scheduledTestFilePath, string parentLogPath)
         {
             m_TestTab.m_TestTabItems.Clear();
             m_TestTab.AddNewBlankItem();
@@ -1041,7 +1064,6 @@ namespace WebTestGui
 
             m_TestTab.AddNewItemFromFilePath(scheduledTestFilePath);
             m_TestTab.DeleteItem(m_TestTab.m_TestTabItems[0]);
-            File.WriteAllText(parentLogPath + "/end.end", string.Empty);
 
             // Setting log path
             foreach (IOption option in Test().m_Options.m_Options)
@@ -1061,33 +1083,10 @@ namespace WebTestGui
             }
 
             OnTestStart();
-
-            await StartEndFileWatcher(parentLogPath + "/end.end");
-
-            ScheduledTestResult scheduledTestResult = new ScheduledTestResult();
-
-            string chromeRunLog = File.ReadAllText(Test().GetRootLogDirectoryPath() + @"/chrome/run.log");
-            string firefoxRunLog = File.ReadAllText(Test().GetRootLogDirectoryPath() + @"/firefox/run.log");
-
-            scheduledTestResult.m_ChromeRunLog = chromeRunLog;
-            scheduledTestResult.m_FirefoxRunLog = firefoxRunLog;
-
-            scheduledTestResult.m_ChromeJsLog = m_JsLogConsole.m_FirefoxLogString;
-            scheduledTestResult.m_FirefoxJsLog = m_JsLogConsole.m_FirefoxLogString;
-
-            if (m_CurrentProcess != null)
-                m_CurrentProcess.Kill();
-
-            return scheduledTestResult;
         }
 
-        public void LoadScheduledTestResults(string scheduledTestFilePath, ScheduledTestResult results, string testStartTime)
+        public void LoadScheduledTestResults(ScheduledTestResult results)
         {
-            m_TestTab.m_TestTabItems.Clear();
-            m_TestTab.AddNewBlankItem();
-
-            Text = Text + " Teszt eredmÈny vizsg·lÛ";
-
             testStartButton.Visible = false;
             saveTestButton.Visible = false;
             loadTestButton.Visible = false;
@@ -1113,10 +1112,6 @@ namespace WebTestGui
 
             m_TestTab.HideAddButtons();
 
-            m_TestTab.AddNewItemFromFilePath(scheduledTestFilePath);
-            m_TestTab.DeleteItem(m_TestTab.m_TestTabItems[0]);
-
-            m_TestStartTime = testStartTime;
             LoadRunTimesToActions(results.m_ChromeRunLog, results.m_FirefoxRunLog);
             LoadRunTimesToUnits();
             LoadRunTime();
@@ -1126,38 +1121,6 @@ namespace WebTestGui
 
             m_JsLogConsole.AddToChrome(results.m_ChromeJsLog);
             m_JsLogConsole.AddToFirefox(results.m_FirefoxJsLog);
-        }
-
-        public async Task StartEndFileWatcher(string endPath)
-        {
-            FileWatcher fileWatcher = new FileWatcher(endPath, true);
-
-            fileWatcher.FileChanged += async (content) =>
-            {
-                if (content == "END")
-                {
-                    _STOP_END_REQ = true;
-                    return;
-                }
-
-                if (_STOP_END_REQ)
-                {
-                    return;
-                }
-            };
-
-            while (!_STOP_END_REQ)
-            {
-                await Task.Delay(100);
-            }
-        }
-
-        public void Killllllllllllllllllllllllllll()
-        {
-            if (m_CurrentProcess != null)
-            {
-                m_CurrentProcess.Kill();
-            }
         }
 
         #endregion
