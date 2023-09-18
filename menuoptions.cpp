@@ -73,11 +73,8 @@ int Menuoptions::Install(std::string path)
         std::cin >> install_path;
     }
 
-    // which branch to pull from with git
-    std::string branch = parsed_json["branch"];
-
     // cd "<installpath>" && git clone -b "<branch> https://github.com/Stock-Owl/SeTestsVS.git"
-    std::string install_cmd = "cd \"" + install_path + "\" && git clone -b \"" + branch + "\" https://github.com/Stock-Owl/SeTestsVS.git";
+    std::string install_cmd = "cd \"" + install_path + "\" && git clone -b \"distribution\" https://github.com/Stock-Owl/SeTestsVS.git";
 
     // converts the modified json back to std::string then writes it into the original .json file
     std::ofstream wfile(path.c_str());
@@ -227,7 +224,7 @@ int Menuoptions::Reinstall(std::string path)
     // which branch to pull from with git
     std::string branch = parsed_json["branch"];
 
-    // cd "<installpath>" && rmdir /s /f SeTestsVS && git clone -b "<branch> https://github.com/Stock-Owl/SeTestsVS.git"
+    // cd "<installpath>" && rmdir /s /f SeTestsVS && git clone -b "<branch>" https://github.com/Stock-Owl/SeTestsVS.git"
     std::string install_cmd = "cd \"" + install_path + "\" && rmdir /s /f \"SeTestsVS\" && git clone -b \"" + branch + "\" https://github.com/Stock-Owl/SeTestsVS.git";
 
     int install_rv = system(install_cmd.c_str());
