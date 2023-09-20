@@ -71,6 +71,19 @@
             }
         }
 
+        public void AddNewItemFromJSON(string json)
+        {
+            Test loadedTest = m_ParentForm.LoadTestFromJSONString(json);
+            if (loadedTest != null)
+            {
+                TestTabItem loadedTestTabItem = new TestTabItem(this, loadedTest);
+                m_TestTabItems.Add(loadedTestTabItem);
+                RefreshTabItems();
+                SelectItem(loadedTestTabItem);
+                m_ParentForm.RefreshEditor();
+            }
+        }
+
         public void DeleteItem(TestTabItem item)
         {
             if (item == m_SelectedItem)
@@ -80,7 +93,7 @@
                     return;
                 }
             }
-            item.m_Test.m_MainForm.OnSaveTestButtonPressed(null!, null!);
+            // item.m_Test.m_MainForm.OnSaveTestButtonPressed(null!, null!);
             m_TestTabItems.Remove(item);
             if (m_TestTabItems.Count != 0)
             {

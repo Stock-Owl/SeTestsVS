@@ -24,7 +24,7 @@ namespace WebTestGui
             m_JsLogConsole = new Console(this);
             Controls.Add(m_JsLogConsole);
             m_JsLogConsole.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
-            m_JsLogConsole.Location = new Point(795, 136);
+            m_JsLogConsole.Location = new Point(795, 109);
             m_JsLogConsole.Size = new Size(327, 353);
             m_JsLogConsole.Visible = false;
 
@@ -51,6 +51,15 @@ namespace WebTestGui
                     if (!string.IsNullOrEmpty(args[1]) && !string.IsNullOrEmpty(args[2]))
                     {
                         RUN_SCHEDULED_TEST(args[1], args[2]);
+                    }
+                    m_RunLogConsole.AddToConsoles((args[0]));
+
+                    if (args.Length > 3)
+                    {
+                        if (!string.IsNullOrEmpty(args[3]))
+                        {
+                            m_ScheduledTestLogName = args[3];
+                        }
                     }
                 }
                 
@@ -338,6 +347,10 @@ namespace WebTestGui
             Test().m_State = WebTestGui.Test.TestState.Run;
             testStartButton.Text = "TESZT FUT";
 
+            m_TestStartDate = DateTime.Now.ToString("MM_dd_yyyy_HH_mm");
+            m_TestStartDateExtra = DateTime.Now.ToString("MM/dd/yyyy HH:mm");
+            testDateLabel.Text = $"Teszt indításának időpontja: {m_TestStartDateExtra}";
+
             string JSONString = GetTestJSON(Test());
 
             if (ignoreBreakpointsCheckbox.Checked)
@@ -495,10 +508,24 @@ namespace WebTestGui
                 scheduledTestResult.m_ChromeJsLog = m_JsLogConsole.m_FirefoxLogString;
                 scheduledTestResult.m_FirefoxJsLog = m_JsLogConsole.m_FirefoxLogString;
 
+                scheduledTestResult.m_TestStartTime = m_TestStartTime;
+                scheduledTestResult.m_StartDate = m_TestStartDate;
+                scheduledTestResult.m_TestJSON = m_ScheduledTestJSON;
+
+                scheduledTestResult.m_ScheduledTestName = Test().m_Name;
+                scheduledTestResult.m_StartDateExtra = m_TestStartDateExtra;
+
                 if (m_CurrentProcess != null)
                     m_CurrentProcess.Kill();
 
-                LoadScheduledTestResults(scheduledTestResult);
+                string logName = m_ScheduledTestLogName == "" ? scheduledTestResult.m_StartDate : m_ScheduledTestLogName;
+                string data = scheduledTestResult.GetCompiledData();
+                if (!Directory.Exists(Test().GetRootLogDirectoryPath() + "/scheduled_logs"))
+                    Directory.CreateDirectory(Test().GetRootLogDirectoryPath() + "/scheduled_logs");
+                string filename = Test().GetRootLogDirectoryPath() + "/scheduled_logs/" + logName + ".vslog";
+                File.WriteAllText(filename, data);
+                Close();
+                //LoadScheduledTestResults(scheduledTestResult);
             }
             else
             {
@@ -897,6 +924,17 @@ namespace WebTestGui
             return loadedTest;
         }
 
+        public Test LoadTestFromJSONString(string JSON)
+        {
+            Test loadedTest = new Test(this);
+
+            string loadedInfo = JSON;
+            loadedTest = TestFormatter.LoadTestFromJson(loadedInfo, loadedTest);
+            loadedTest.m_SaveFilePath = ":(";
+
+            return loadedTest;
+        }
+
         #endregion
 
         #region Editor Refresh method
@@ -973,6 +1011,10 @@ namespace WebTestGui
         public void SetColorSchemeToEdit()
         {
             BackColor = Color.FromArgb(255, 50, 50, 53);
+
+            ignoreBreakpointsLabel.BackColor = Color.FromArgb(255, 50, 50, 53);
+            ignoreBreakpointsCheckbox.BackColor = Color.FromArgb(255, 50, 50, 53);
+
             flowLayoutPanel2.BackColor = Color.FromArgb(255, 60, 60, 65);
             unitHeaderPanel.BackColor = Color.FromArgb(255, 40, 40, 45);
             optionHeaderPanel.BackColor = Color.FromArgb(255, 40, 40, 45);
@@ -1000,6 +1042,10 @@ namespace WebTestGui
         public void SetColorSchemeToBreakpointHit()
         {
             BackColor = Color.FromArgb(255, 80, 50, 50);
+
+            ignoreBreakpointsLabel.BackColor = Color.FromArgb(255, 80, 50, 50);
+            ignoreBreakpointsCheckbox.BackColor = Color.FromArgb(255, 80, 50, 50);
+
             flowLayoutPanel2.BackColor = Color.FromArgb(255, 90, 60, 60);
             unitHeaderPanel.BackColor = Color.FromArgb(255, 70, 40, 40);
             optionHeaderPanel.BackColor = Color.FromArgb(255, 70, 40, 40);
@@ -1027,6 +1073,10 @@ namespace WebTestGui
         public void SetColorSchemeToRun()
         {
             BackColor = Color.FromArgb(255, 70, 50, 50);
+
+            ignoreBreakpointsLabel.BackColor = Color.FromArgb(255, 70, 50, 50);
+            ignoreBreakpointsCheckbox.BackColor = Color.FromArgb(255, 70, 50, 50);
+
             flowLayoutPanel2.BackColor = Color.FromArgb(255, 80, 60, 60);
             unitHeaderPanel.BackColor = Color.FromArgb(255, 60, 40, 40);
             optionHeaderPanel.BackColor = Color.FromArgb(255, 60, 40, 40);
@@ -1065,6 +1115,8 @@ namespace WebTestGui
             m_TestTab.AddNewItemFromFilePath(scheduledTestFilePath);
             m_TestTab.DeleteItem(m_TestTab.m_TestTabItems[0]);
 
+            m_ScheduledTestJSON = File.ReadAllText(scheduledTestFilePath);
+
             // Setting log path
             foreach (IOption option in Test().m_Options.m_Options)
             {
@@ -1085,8 +1137,32 @@ namespace WebTestGui
             OnTestStart();
         }
 
-        public void LoadScheduledTestResults(ScheduledTestResult results)
+        private void scheduledTestLogLoadButton_Click(object sender, EventArgs e)
         {
+            OpenFileDialog of = new OpenFileDialog();
+            of.Title = "Teszt opciók mentése...";
+            of.Filter = $"Teszt opciók fájl|*.vslog|Any File|*.*";
+            if (of.ShowDialog() == DialogResult.OK)
+            {
+                string loadedLog = File.ReadAllText(of.FileName);
+                ScheduledTestResult scheduledTestResult = new ScheduledTestResult();
+                scheduledTestResult.SetData(loadedLog);
+                MainForm mainForm = new MainForm();
+                mainForm.LoadScheduledTestResults(scheduledTestResult, of.FileName);
+                mainForm.Show();
+            }
+        }
+
+        public void LoadScheduledTestResults(ScheduledTestResult results, string logFileName)
+        {
+            m_TestTab.AddNewItemFromJSON(results.m_TestJSON);
+            m_TestTab.DeleteItem(m_TestTab.m_TestTabItems[0]);
+
+            m_RunLogConsole.Clear();
+            m_JsLogConsole.Clear();
+
+            Text += $" Időzített teszt vizsgáló: {results.m_ScheduledTestName} teszt -{results.m_StartDateExtra}";
+
             testStartButton.Visible = false;
             saveTestButton.Visible = false;
             loadTestButton.Visible = false;
@@ -1097,6 +1173,15 @@ namespace WebTestGui
             importOptionTemplate.Visible = false;
             optionsPanel.Size = new Size(optionsPanel.Size.Width, optionsPanel.Size.Height + 45);
             m_JsLogConsole.Size = new Size(m_JsLogConsole.Size.Width, m_JsLogConsole.Size.Height + 45);
+
+            testDateLabel.Location = new Point(testDateLabel.Location.X, testDateLabel.Location.Y + 45);
+            testDateLabel.Text = $"Teszt indításának időpontja: {results.m_StartDateExtra}";
+
+            ignoreBreakpointsLabel.Visible = false;
+            ignoreBreakpointsCheckbox.Visible = false;
+
+            currentlyEditedLabel.Text = $"A '{results.m_ScheduledTestName}' időzített teszt ekkor: '{results.m_StartDateExtra}'";
+            currentlyEditedText.Text = $"{Path.GetFileNameWithoutExtension(logFileName)} log fájl alapján itt: {logFileName}";
 
             browserLabel.Visible = false;
             chromeCheckBox.Visible = false;
@@ -1112,6 +1197,7 @@ namespace WebTestGui
 
             m_TestTab.HideAddButtons();
 
+            m_TestStartTime = results.m_TestStartTime;
             LoadRunTimesToActions(results.m_ChromeRunLog, results.m_FirefoxRunLog);
             LoadRunTimesToUnits();
             LoadRunTime();
@@ -1126,6 +1212,8 @@ namespace WebTestGui
         #endregion
 
         public bool m_IsScheduled = false;
+        string m_ScheduledTestLogName = "";
+        string m_ScheduledTestJSON;
 
         TestTab m_TestTab;
         public Test Test() { return m_TestTab.m_SelectedItem.m_Test; }
@@ -1133,6 +1221,8 @@ namespace WebTestGui
         Process m_CurrentProcess;
 
         string m_TestStartTime;
+        string m_TestStartDate;
+        string m_TestStartDateExtra;
 
         Console m_RunLogConsole;
         Console m_JsLogConsole;
@@ -1157,6 +1247,45 @@ namespace WebTestGui
 
         public string m_ChromeJsLog;
         public string m_FirefoxJsLog;
+
+        public string m_TestStartTime;
+        public string m_StartDate;
+        public string m_TestJSON;
+
+        public string m_ScheduledTestName;
+        public string m_StartDateExtra;
+
+        public string GetCompiledData()
+        {
+            string data = "";
+            data += m_ChromeRunLog + m_SplitString; 
+            data += m_FirefoxRunLog + m_SplitString;
+            data += m_ChromeJsLog + m_SplitString;
+            data += m_FirefoxJsLog + m_SplitString;
+            data += m_TestStartTime + m_SplitString;
+            data += m_StartDate + m_SplitString;
+            data += m_TestJSON + m_SplitString;
+            data += m_ScheduledTestName + m_SplitString;
+            data += m_StartDateExtra;
+
+            return data;
+        }
+
+        public void SetData(string compiledData)
+        {
+            string[] data = compiledData.Split(m_SplitString);
+            m_ChromeRunLog = data[0];
+            m_FirefoxRunLog = data[1];
+            m_ChromeJsLog = data[2];
+            m_FirefoxJsLog = data[3];
+            m_TestStartTime = data[4];
+            m_StartDate = data[5];
+            m_TestJSON = data[6];
+            m_ScheduledTestName = data[7];
+            m_StartDateExtra = data[8];
+        }
+
+        string m_SplitString = "Ł$";
     }
 
     public static class User32Interop

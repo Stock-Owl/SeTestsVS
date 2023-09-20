@@ -63,6 +63,8 @@
             this.testRunTimeText = new System.Windows.Forms.Label();
             this.ignoreBreakpointsLabel = new System.Windows.Forms.Label();
             this.ignoreBreakpointsCheckbox = new System.Windows.Forms.CheckBox();
+            this.testDateLabel = new System.Windows.Forms.Label();
+            this.scheduledTestLogLoadButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.unitHeaderPanel.SuspendLayout();
@@ -84,7 +86,7 @@
             this.chromeCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chromeCheckBox.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.chromeCheckBox.ForeColor = System.Drawing.Color.White;
-            this.chromeCheckBox.Location = new System.Drawing.Point(907, 77);
+            this.chromeCheckBox.Location = new System.Drawing.Point(907, 50);
             this.chromeCheckBox.Name = "chromeCheckBox";
             this.chromeCheckBox.Size = new System.Drawing.Size(83, 24);
             this.chromeCheckBox.TabIndex = 3;
@@ -97,7 +99,7 @@
             this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(53)))));
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(989, 77);
+            this.pictureBox1.Location = new System.Drawing.Point(989, 50);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(25, 25);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -109,7 +111,7 @@
             this.pictureBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(53)))));
             this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-            this.pictureBox2.Location = new System.Drawing.Point(1097, 76);
+            this.pictureBox2.Location = new System.Drawing.Point(1097, 49);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(25, 25);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -125,7 +127,7 @@
             this.firefoxCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
             this.firefoxCheckBox.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.firefoxCheckBox.ForeColor = System.Drawing.Color.White;
-            this.firefoxCheckBox.Location = new System.Drawing.Point(1025, 77);
+            this.firefoxCheckBox.Location = new System.Drawing.Point(1025, 50);
             this.firefoxCheckBox.Name = "firefoxCheckBox";
             this.firefoxCheckBox.Size = new System.Drawing.Size(73, 24);
             this.firefoxCheckBox.TabIndex = 5;
@@ -139,7 +141,7 @@
             this.testStartButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.testStartButton.Font = new System.Drawing.Font("Segoe UI Semibold", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.testStartButton.ForeColor = System.Drawing.Color.White;
-            this.testStartButton.Location = new System.Drawing.Point(795, 513);
+            this.testStartButton.Location = new System.Drawing.Point(795, 486);
             this.testStartButton.Name = "testStartButton";
             this.testStartButton.Size = new System.Drawing.Size(327, 40);
             this.testStartButton.TabIndex = 7;
@@ -225,7 +227,7 @@
             this.optionHeaderPanel.Controls.Add(this.exportOptionsLabel);
             this.optionHeaderPanel.Controls.Add(this.exportOptionTemplate);
             this.optionHeaderPanel.Controls.Add(this.optionLabel);
-            this.optionHeaderPanel.Location = new System.Drawing.Point(795, 136);
+            this.optionHeaderPanel.Location = new System.Drawing.Point(795, 109);
             this.optionHeaderPanel.Name = "optionHeaderPanel";
             this.optionHeaderPanel.Size = new System.Drawing.Size(327, 42);
             this.optionHeaderPanel.TabIndex = 37;
@@ -237,7 +239,7 @@
             this.importOptionsLabel.BackColor = System.Drawing.Color.Transparent;
             this.importOptionsLabel.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point);
             this.importOptionsLabel.ForeColor = System.Drawing.Color.DarkGray;
-            this.importOptionsLabel.Location = new System.Drawing.Point(172, 24);
+            this.importOptionsLabel.Location = new System.Drawing.Point(172, 23);
             this.importOptionsLabel.Name = "importOptionsLabel";
             this.importOptionsLabel.Size = new System.Drawing.Size(134, 15);
             this.importOptionsLabel.TabIndex = 66;
@@ -248,7 +250,7 @@
             this.importOptionTemplate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.importOptionTemplate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(45)))));
             this.importOptionTemplate.Image = ((System.Drawing.Image)(resources.GetObject("importOptionTemplate.Image")));
-            this.importOptionTemplate.Location = new System.Drawing.Point(305, 22);
+            this.importOptionTemplate.Location = new System.Drawing.Point(305, 21);
             this.importOptionTemplate.Name = "importOptionTemplate";
             this.importOptionTemplate.Size = new System.Drawing.Size(20, 20);
             this.importOptionTemplate.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -263,7 +265,7 @@
             this.exportOptionsLabel.BackColor = System.Drawing.Color.Transparent;
             this.exportOptionsLabel.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point);
             this.exportOptionsLabel.ForeColor = System.Drawing.Color.DarkGray;
-            this.exportOptionsLabel.Location = new System.Drawing.Point(172, 4);
+            this.exportOptionsLabel.Location = new System.Drawing.Point(172, 5);
             this.exportOptionsLabel.Name = "exportOptionsLabel";
             this.exportOptionsLabel.Size = new System.Drawing.Size(131, 15);
             this.exportOptionsLabel.TabIndex = 64;
@@ -274,7 +276,7 @@
             this.exportOptionTemplate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.exportOptionTemplate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(45)))));
             this.exportOptionTemplate.Image = ((System.Drawing.Image)(resources.GetObject("exportOptionTemplate.Image")));
-            this.exportOptionTemplate.Location = new System.Drawing.Point(305, 2);
+            this.exportOptionTemplate.Location = new System.Drawing.Point(307, 2);
             this.exportOptionTemplate.Name = "exportOptionTemplate";
             this.exportOptionTemplate.Size = new System.Drawing.Size(20, 20);
             this.exportOptionTemplate.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -300,9 +302,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.optionsPanel.AutoScroll = true;
             this.optionsPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(50)))));
-            this.optionsPanel.Location = new System.Drawing.Point(795, 178);
+            this.optionsPanel.Location = new System.Drawing.Point(795, 151);
             this.optionsPanel.Name = "optionsPanel";
-            this.optionsPanel.Size = new System.Drawing.Size(327, 330);
+            this.optionsPanel.Size = new System.Drawing.Size(327, 314);
             this.optionsPanel.TabIndex = 38;
             // 
             // unitsPanel
@@ -323,7 +325,7 @@
             this.switchToOptionsButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(43)))));
             this.switchToOptionsButton.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.switchToOptionsButton.ForeColor = System.Drawing.Color.White;
-            this.switchToOptionsButton.Location = new System.Drawing.Point(794, 105);
+            this.switchToOptionsButton.Location = new System.Drawing.Point(794, 78);
             this.switchToOptionsButton.Name = "switchToOptionsButton";
             this.switchToOptionsButton.Size = new System.Drawing.Size(87, 25);
             this.switchToOptionsButton.TabIndex = 40;
@@ -337,7 +339,7 @@
             this.switchToJsLogButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(43)))));
             this.switchToJsLogButton.Font = new System.Drawing.Font("Segoe UI Semibold", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point);
             this.switchToJsLogButton.ForeColor = System.Drawing.Color.Silver;
-            this.switchToJsLogButton.Location = new System.Drawing.Point(1035, 105);
+            this.switchToJsLogButton.Location = new System.Drawing.Point(1035, 78);
             this.switchToJsLogButton.Name = "switchToJsLogButton";
             this.switchToJsLogButton.Size = new System.Drawing.Size(87, 25);
             this.switchToJsLogButton.TabIndex = 41;
@@ -352,7 +354,7 @@
             this.browserLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(53)))));
             this.browserLabel.Font = new System.Drawing.Font("Segoe UI Semibold", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.browserLabel.ForeColor = System.Drawing.Color.White;
-            this.browserLabel.Location = new System.Drawing.Point(795, 76);
+            this.browserLabel.Location = new System.Drawing.Point(795, 49);
             this.browserLabel.Name = "browserLabel";
             this.browserLabel.Size = new System.Drawing.Size(99, 25);
             this.browserLabel.TabIndex = 45;
@@ -376,9 +378,9 @@
             this.saveTestButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.saveTestButton.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.saveTestButton.ForeColor = System.Drawing.Color.White;
-            this.saveTestButton.Location = new System.Drawing.Point(795, 572);
+            this.saveTestButton.Location = new System.Drawing.Point(794, 530);
             this.saveTestButton.Name = "saveTestButton";
-            this.saveTestButton.Size = new System.Drawing.Size(117, 31);
+            this.saveTestButton.Size = new System.Drawing.Size(132, 31);
             this.saveTestButton.TabIndex = 48;
             this.saveTestButton.Text = "Teszt mentése...";
             this.saveTestButton.UseVisualStyleBackColor = false;
@@ -390,9 +392,9 @@
             this.loadTestButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.loadTestButton.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.loadTestButton.ForeColor = System.Drawing.Color.White;
-            this.loadTestButton.Location = new System.Drawing.Point(952, 572);
+            this.loadTestButton.Location = new System.Drawing.Point(989, 530);
             this.loadTestButton.Name = "loadTestButton";
-            this.loadTestButton.Size = new System.Drawing.Size(122, 31);
+            this.loadTestButton.Size = new System.Drawing.Size(133, 31);
             this.loadTestButton.TabIndex = 49;
             this.loadTestButton.Text = "Teszt betöltése...";
             this.loadTestButton.UseVisualStyleBackColor = false;
@@ -524,11 +526,40 @@
             this.ignoreBreakpointsCheckbox.UseVisualStyleBackColor = false;
             this.ignoreBreakpointsCheckbox.CheckedChanged += new System.EventHandler(this.ignoreBreakpointsCheckbox_CheckedChanged);
             // 
+            // testDateLabel
+            // 
+            this.testDateLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.testDateLabel.AutoSize = true;
+            this.testDateLabel.BackColor = System.Drawing.Color.Transparent;
+            this.testDateLabel.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point);
+            this.testDateLabel.ForeColor = System.Drawing.Color.DarkGray;
+            this.testDateLabel.Location = new System.Drawing.Point(795, 468);
+            this.testDateLabel.Name = "testDateLabel";
+            this.testDateLabel.Size = new System.Drawing.Size(155, 15);
+            this.testDateLabel.TabIndex = 64;
+            this.testDateLabel.Text = "Teszt indításának időpontja:";
+            // 
+            // scheduledTestLogLoadButton
+            // 
+            this.scheduledTestLogLoadButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.scheduledTestLogLoadButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.scheduledTestLogLoadButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point);
+            this.scheduledTestLogLoadButton.ForeColor = System.Drawing.Color.White;
+            this.scheduledTestLogLoadButton.Location = new System.Drawing.Point(829, 572);
+            this.scheduledTestLogLoadButton.Name = "scheduledTestLogLoadButton";
+            this.scheduledTestLogLoadButton.Size = new System.Drawing.Size(227, 34);
+            this.scheduledTestLogLoadButton.TabIndex = 65;
+            this.scheduledTestLogLoadButton.Text = "Időzített teszt log betöltése...";
+            this.scheduledTestLogLoadButton.UseVisualStyleBackColor = false;
+            this.scheduledTestLogLoadButton.Click += new System.EventHandler(this.scheduledTestLogLoadButton_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(53)))));
             this.ClientSize = new System.Drawing.Size(1134, 611);
+            this.Controls.Add(this.scheduledTestLogLoadButton);
+            this.Controls.Add(this.testDateLabel);
             this.Controls.Add(this.ignoreBreakpointsLabel);
             this.Controls.Add(this.ignoreBreakpointsCheckbox);
             this.Controls.Add(this.testRunTimeText);
@@ -611,5 +642,7 @@
         private PictureBox importOptionTemplate;
         private Label ignoreBreakpointsLabel;
         private CheckBox ignoreBreakpointsCheckbox;
+        protected Label testDateLabel;
+        private Button scheduledTestLogLoadButton;
     }
 }

@@ -87,6 +87,11 @@
             consoleTextBox.Clear();
         }
 
+        public void Clear()
+        {
+            clearButton_Click(null!, null!);
+        }
+
         public void HideClearIcon()
         {
             clearButton.Visible = false;
