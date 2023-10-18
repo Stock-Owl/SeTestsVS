@@ -125,6 +125,11 @@ namespace WebTestGui
             SetUnitBackupOf();
         }
 
+        public void Enable(bool enabled)
+        {
+            Enabled = enabled;
+        }
+
         public void OnBreakpointHit(int actionIndex)
         {
             OnExpandActionsButttonClick(null!, null!);
@@ -406,4 +411,3 @@ namespace WebTestGui
         }
     }
 }
-

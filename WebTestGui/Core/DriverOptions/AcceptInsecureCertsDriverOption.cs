@@ -23,6 +23,11 @@ namespace WebTestGui
             mainCheckbox.Checked = (bool)jSondata!;
         }
 
+        public void Enable(bool enabled)
+        {
+            Enabled = enabled;
+        }
+
         private void mainCheckbox_CheckedChanged(object sender, EventArgs e)
         {
             if (mainCheckbox.Checked)

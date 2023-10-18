@@ -34,6 +34,8 @@ namespace WebTestGui
         public object GetData();
         public void SetData(JToken jSondata);
 
+        public void Enable(bool enable);
+
         public MainForm m_ParentForm { get; set; }
     }
 }

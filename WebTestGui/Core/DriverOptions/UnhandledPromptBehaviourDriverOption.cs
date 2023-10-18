@@ -23,6 +23,11 @@ namespace WebTestGui
             mainComboBox.Text = (string)jSondata!;
         }
 
+        public void Enable(bool enabled)
+        {
+            Enabled = enabled;
+        }
+
         public string m_DriverOptionName { get; set; }
         public MainForm m_ParentForm { get; set; }
     }

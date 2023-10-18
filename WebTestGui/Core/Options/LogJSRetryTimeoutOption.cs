@@ -23,6 +23,11 @@ namespace WebTestGui
             timeoutTextBox.Text = ((int)jSondata!).ToString();
         }
 
+        public void Enable(bool enabled)
+        {
+            Enabled = enabled;
+        }
+
         public string m_OptionName { get; set; }
         public MainForm m_ParentForm { get; set; }
 

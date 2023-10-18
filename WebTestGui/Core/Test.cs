@@ -85,13 +85,13 @@
         public string m_SaveFilePath;
 
         public string m_Name = "Névtelen";
-        public List<string> m_Browsers = new List<string>();
+
         public Options m_Options;
         public DriverOptions m_DriverOptions;
+        public Units m_Units;
 
         public string m_FullTestRunTime = "Előző tesztelés teljes futási ideje: 0 / 0 ms";
 
-        public Units m_Units;
 
         public MainForm m_MainForm;
 

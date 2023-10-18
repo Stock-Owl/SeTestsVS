@@ -29,6 +29,11 @@ namespace WebTestGui
             timeoutTextBox.Text = ((int)jSondata["value"]!).ToString();
         }
 
+        public void Enable(bool enabled)
+        {
+            Enabled = enabled;
+        }
+
         private void mainComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             string selected = mainComboBox.GetItemText(mainComboBox.SelectedItem)!;

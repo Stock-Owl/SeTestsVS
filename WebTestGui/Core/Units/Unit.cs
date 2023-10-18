@@ -48,6 +48,7 @@ namespace WebTestGui
         public void MoveAction(IAction action, int newId);
 
         public void Refresh();
+        public void Enable(bool enable);
 
         public void OnBreakpointHit(int actionIndex);
         public void OnBreakpointLeave();

@@ -24,8 +24,8 @@ namespace WebTestGui
             m_JsLogConsole = new Console(this);
             Controls.Add(m_JsLogConsole);
             m_JsLogConsole.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
-            m_JsLogConsole.Location = new Point(795, 109);
-            m_JsLogConsole.Size = new Size(327, 353);
+            m_JsLogConsole.Location = new Point(795, 77);
+            m_JsLogConsole.Size = new Size(327, 400);
             m_JsLogConsole.Visible = false;
 
             m_TestTab = new TestTab(this);
@@ -62,7 +62,7 @@ namespace WebTestGui
                         }
                     }
                 }
-                
+
             }
         }
 
@@ -185,64 +185,6 @@ namespace WebTestGui
 
         #endregion
 
-        #region Browser Checkboxes logic functions
-
-        private void OnChromeCheckBoxChecked(object sender, EventArgs e)
-        {
-            if (chromeCheckBox.Checked)
-            {
-                chromeCheckBox.Checked = true;
-                chromeCheckBox.Font = new Font(chromeCheckBox.Font, FontStyle.Bold);
-                Test().m_Browsers.AddIfNotExists("chrome");
-            }
-            else
-            {
-                chromeCheckBox.Font = new Font(chromeCheckBox.Font, FontStyle.Regular);
-                Test().m_Browsers.Remove("chrome");
-
-                if (!firefoxCheckBox.Checked)
-                {
-                    firefoxCheckBox.Checked = true;
-                }
-            }
-        }
-
-        private void OnFirefoxCheckBoxChecked(object sender, EventArgs e)
-        {
-            if (firefoxCheckBox.Checked)
-            {
-                firefoxCheckBox.Checked = true;
-                firefoxCheckBox.Font = new Font(firefoxCheckBox.Font, FontStyle.Bold);
-                Test().m_Browsers.AddIfNotExists("firefox");
-            }
-            else
-            {
-                firefoxCheckBox.Font = new Font(chromeCheckBox.Font, FontStyle.Regular);
-                Test().m_Browsers.Remove("firefox");
-
-                if (!chromeCheckBox.Checked)
-                {
-                    chromeCheckBox.Checked = true;
-                }
-            }
-        }
-
-        #endregion
-
-        #region Methods for handling picture ratios when the window got resized
-
-        private void OnChromeLogoResize(object sender, EventArgs e)
-        {
-            pictureBox1.Size = new Size(25, 25);
-        }
-
-        private void OnFirefoxLogoResize(object sender, EventArgs e)
-        {
-            pictureBox2.Size = new Size(25, 25);
-        }
-
-        #endregion
-
         #region Logic switching between options and JS console
 
         private void OnSwitchToOptionsButtonPressed(object sender, EventArgs e)
@@ -304,14 +246,6 @@ namespace WebTestGui
             if (!Path.Exists(Test().GetRootLogDirectoryPath()))
             {
                 string message = "A jelenleg megadott 'Gyökér logolási könyvtár' útvonala nem létezik!";
-                string title = "Indítási probléma...";
-                MessageBox.Show(message, title);
-                return;
-            }
-            // Both browsers selected
-            if (!chromeCheckBox.Checked || !firefoxCheckBox.Checked)
-            {
-                string message = "Jelenleg a Tesztelés csak mindkét böngészővel történhet egyszerre!";
                 string title = "Indítási probléma...";
                 MessageBox.Show(message, title);
                 return;
@@ -400,7 +334,13 @@ namespace WebTestGui
 
             if (!m_IsScheduled)
             {
-                File.WriteAllText(Test().GetRootLogDirectoryPath() + @"/file.brk", string.Empty);
+                try
+                {
+                    File.WriteAllText(Test().GetRootLogDirectoryPath() + @"/file.brk", string.Empty);
+                }
+                catch
+                {
+                }
                 string breakPointFilePath = Test().GetRootLogDirectoryPath() + @"/file.brk";
                 StartBreakPointFileWatcher(breakPointFilePath);
             }
@@ -409,6 +349,9 @@ namespace WebTestGui
             string jsLogFilePath = Test().GetRootLogDirectoryPath() + @"/js.log";
             StartJsLogFileWatcher(jsLogFilePath);
             OnSwitchToJsLogButtonPressed(null!, null!);
+
+            m_RunLogConsole.Clear();
+            m_JsLogConsole.Clear();
 
             m_RunLogConsole.AddToConsoles("\n ------TESZT INDITÁSA \n");
         }
@@ -944,24 +887,6 @@ namespace WebTestGui
             // Must happen after m_TestTab.m_SelectedItem.m_Test set in the TestTab
             // it uses that Test instance to load information
 
-            if (Test().m_Browsers.Contains("chrome"))
-            {
-                chromeCheckBox.Checked = true;
-            }
-            else
-            {
-                chromeCheckBox.Checked = false;
-            }
-
-            if (Test().m_Browsers.Contains("firefox"))
-            {
-                firefoxCheckBox.Checked = true;
-            }
-            else
-            {
-                firefoxCheckBox.Checked = false;
-            }
-
             currentlyEditedText.Text = Test().m_SaveFilePath;
             testNameLabel.Text = Test().m_Name;
 
@@ -1022,11 +947,6 @@ namespace WebTestGui
             m_JsLogConsole.SetSchemeToEdtiting();
 
             testNameLabel.BackColor = Color.FromArgb(255, 50, 50, 53);
-            browserLabel.BackColor = Color.FromArgb(255, 50, 50, 53);
-            chromeCheckBox.BackColor = Color.FromArgb(255, 50, 50, 53);
-            firefoxCheckBox.BackColor = Color.FromArgb(255, 50, 50, 53);
-            pictureBox1.BackColor = Color.FromArgb(255, 50, 50, 53);
-            pictureBox2.BackColor = Color.FromArgb(255, 50, 50, 53);
 
             unitLabel.BackColor = Color.FromArgb(255, 40, 40, 45);
             optionLabel.BackColor = Color.FromArgb(255, 40, 40, 45);
@@ -1053,11 +973,6 @@ namespace WebTestGui
             m_JsLogConsole.SetSchemeToRunning();
 
             testNameLabel.BackColor = Color.FromArgb(255, 80, 50, 50);
-            browserLabel.BackColor = Color.FromArgb(255, 80, 50, 50);
-            chromeCheckBox.BackColor = Color.FromArgb(255, 80, 50, 50);
-            firefoxCheckBox.BackColor = Color.FromArgb(255, 80, 50, 50);
-            pictureBox1.BackColor = Color.FromArgb(255, 80, 50, 50);
-            pictureBox2.BackColor = Color.FromArgb(255, 80, 50, 50);
 
             unitLabel.BackColor = Color.FromArgb(255, 70, 40, 40);
             optionLabel.BackColor = Color.FromArgb(255, 70, 40, 40);
@@ -1084,11 +999,6 @@ namespace WebTestGui
             m_JsLogConsole.SetSchemeToRunning();
 
             testNameLabel.BackColor = Color.FromArgb(255, 70, 50, 50);
-            browserLabel.BackColor = Color.FromArgb(255, 70, 50, 50);
-            chromeCheckBox.BackColor = Color.FromArgb(255, 70, 50, 50);
-            firefoxCheckBox.BackColor = Color.FromArgb(255, 70, 50, 50);
-            pictureBox1.BackColor = Color.FromArgb(255, 70, 50, 50);
-            pictureBox2.BackColor = Color.FromArgb(255, 70, 50, 50);
 
             unitLabel.BackColor = Color.FromArgb(255, 60, 40, 40);
             optionLabel.BackColor = Color.FromArgb(255, 60, 40, 40);
@@ -1167,6 +1077,19 @@ namespace WebTestGui
             saveTestButton.Visible = false;
             loadTestButton.Visible = false;
 
+            foreach (IOption option in Test().m_Options.m_Options)
+            {
+                option.Enable(false);
+            }
+            foreach (IDriverOption driverOption in Test().m_DriverOptions.m_DriverOptions)
+            {
+                driverOption.Enable(false);
+            }
+            foreach (IUnit unit in Test().m_Units.m_Units)
+            {
+                unit.Enable(false);
+            }
+
             exportOptionsLabel.Visible = false;
             exportOptionTemplate.Visible = false;
             importOptionsLabel.Visible = false;
@@ -1174,20 +1097,28 @@ namespace WebTestGui
             optionsPanel.Size = new Size(optionsPanel.Size.Width, optionsPanel.Size.Height + 45);
             m_JsLogConsole.Size = new Size(m_JsLogConsole.Size.Width, m_JsLogConsole.Size.Height + 45);
 
+            optionsPanel.Size = new Size(optionsPanel.Size.Width, 423);
+            testDateLabel.Visible = false;
+
+            rootLogDirectoryButton.Location = new Point(rootLogDirectoryButton.Location.X + 300, rootLogDirectoryButton.Location.Y);
+            pictureBox3.Location = new Point(pictureBox3.Location.X + 300, pictureBox3.Location.Y);
+
+            gotoUnitComboBox.Location = new Point(gotoUnitComboBox.Location.X + 24, gotoUnitComboBox.Location.Y);
+            gotoUnitLabel.Location = new Point(gotoUnitLabel.Location.X + 24, gotoUnitLabel.Location.Y);
+
+            rootLogDirectoryButton.Anchor = AnchorStyles.Right | AnchorStyles.Bottom;
+            pictureBox3.Anchor = AnchorStyles.Right | AnchorStyles.Bottom;
+
             testDateLabel.Location = new Point(testDateLabel.Location.X, testDateLabel.Location.Y + 45);
             testDateLabel.Text = $"Teszt indításának időpontja: {results.m_StartDateExtra}";
 
             ignoreBreakpointsLabel.Visible = false;
             ignoreBreakpointsCheckbox.Visible = false;
 
+            scheduledTestLogLoadButton.Visible = false;
+
             currentlyEditedLabel.Text = $"A '{results.m_ScheduledTestName}' időzített teszt ekkor: '{results.m_StartDateExtra}'";
             currentlyEditedText.Text = $"{Path.GetFileNameWithoutExtension(logFileName)} log fájl alapján itt: {logFileName}";
-
-            browserLabel.Visible = false;
-            chromeCheckBox.Visible = false;
-            pictureBox1.Visible = false;
-            firefoxCheckBox.Visible = false;
-            pictureBox2.Visible = false;
 
             addUnitButton.Visible = false;
             gotoUnitComboBox.Size = new Size(126, 21);
@@ -1258,7 +1189,7 @@ namespace WebTestGui
         public string GetCompiledData()
         {
             string data = "";
-            data += m_ChromeRunLog + m_SplitString; 
+            data += m_ChromeRunLog + m_SplitString;
             data += m_FirefoxRunLog + m_SplitString;
             data += m_ChromeJsLog + m_SplitString;
             data += m_FirefoxJsLog + m_SplitString;

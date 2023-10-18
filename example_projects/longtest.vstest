@@ -15,7 +15,7 @@
     "accept_insecure_certs": true,
     "chrome_arguments": [],
     "firefox_arguments": [],
-    "keep_browser_open": true,
+    "keep_browser_open": false,
     "page_load_strategy": "normal",
     "timeout": {
       "type": "pageLoad",
@@ -162,7 +162,7 @@
         },
         "1": {
           "type": "goto",
-          "break": false,
+          "break": true,
           "url": "https://github.com"
         },
         "2": {
@@ -211,17 +211,6 @@
           "type": "goto",
           "break": false,
           "url": "https://instagram.com/"
-        }
-      }
-    },
-    "Példa Unit": {
-      "bindings": null,
-      "backup_of": null,
-      "actions": {
-        "0": {
-          "type": "goto",
-          "break": false,
-          "url": "https://www.visionsoft.hu/"
         }
       }
     }
