@@ -46,8 +46,21 @@ namespace WebTestGui
             string[] args = Environment.GetCommandLineArgs();
             if (args != null)
             {
-                if (args.Length > 2)
+                if (args.Length > 1)
                 {
+                    if (!string.IsNullOrEmpty(args[1]))
+                    {
+                        string ext = Path.GetExtension(args[1]);
+                        if (ext == ".vslog")
+                        {
+                            string loadedLog = File.ReadAllText(args[1]);
+                            ScheduledTestResult scheduledTestResult = new ScheduledTestResult();
+                            scheduledTestResult.SetData(loadedLog);
+                            LoadScheduledTestResults(scheduledTestResult, args[1]);
+                            return;
+                        }
+                        
+                    }
                     if (!string.IsNullOrEmpty(args[1]) && !string.IsNullOrEmpty(args[2]))
                     {
                         RUN_SCHEDULED_TEST(args[1], args[2]);
@@ -1054,12 +1067,9 @@ namespace WebTestGui
             of.Filter = $"Teszt opciók fájl|*.vslog|Any File|*.*";
             if (of.ShowDialog() == DialogResult.OK)
             {
-                string loadedLog = File.ReadAllText(of.FileName);
-                ScheduledTestResult scheduledTestResult = new ScheduledTestResult();
-                scheduledTestResult.SetData(loadedLog);
-                MainForm mainForm = new MainForm();
-                mainForm.LoadScheduledTestResults(scheduledTestResult, of.FileName);
-                mainForm.Show();
+                string path = Application.StartupPath + "/WebTestGui.exe";
+                Process.Start(path, of.FileName);
+                
             }
         }
 

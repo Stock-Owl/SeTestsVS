@@ -1,13 +1,13 @@
 {
   "interceptor": false,
-  "name": "longtest",
+  "name": "run",
   "browsers": [
     "chrome",
     "firefox"
   ],
   "options": {
     "auto_exit_iframes": true,
-    "log_JS_retry_timeout": 1000,
+    "log_JS_retry_timeout": 2000,
     "parent_log_path": "C:\\dev\\SeTestsVS\\example_projects\\logs",
     "start_fullscreen": false
   },
@@ -15,7 +15,7 @@
     "accept_insecure_certs": true,
     "chrome_arguments": [],
     "firefox_arguments": [],
-    "keep_browser_open": true,
+    "keep_browser_open": false,
     "page_load_strategy": "normal",
     "timeout": {
       "type": "pageLoad",
@@ -85,132 +85,6 @@
           "type": "goto",
           "break": false,
           "url": "https://github.com"
-        }
-      }
-    },
-    "Ötödik Unit": {
-      "bindings": null,
-      "backup_of": null,
-      "actions": {
-        "0": {
-          "type": "goto",
-          "break": false,
-          "url": "https://tesco.com"
-        },
-        "1": {
-          "type": "goto",
-          "break": false,
-          "url": "https://github.com"
-        },
-        "2": {
-          "type": "goto",
-          "break": false,
-          "url": "https://instagram.com/"
-        }
-      }
-    },
-    "Hatodik Unit": {
-      "bindings": null,
-      "backup_of": null,
-      "actions": {
-        "0": {
-          "type": "goto",
-          "break": false,
-          "url": "https://tesco.com"
-        },
-        "1": {
-          "type": "goto",
-          "break": false,
-          "url": "https://github.com"
-        },
-        "2": {
-          "type": "goto",
-          "break": false,
-          "url": "https://instagram.com/"
-        }
-      }
-    },
-    "Hetedik Unit": {
-      "bindings": null,
-      "backup_of": null,
-      "actions": {
-        "0": {
-          "type": "goto",
-          "break": false,
-          "url": "https://tesco.com"
-        },
-        "1": {
-          "type": "goto",
-          "break": false,
-          "url": "https://github.com"
-        },
-        "2": {
-          "type": "goto",
-          "break": false,
-          "url": "https://instagram.com/"
-        }
-      }
-    },
-    "Nyoldacik Unit": {
-      "bindings": null,
-      "backup_of": null,
-      "actions": {
-        "0": {
-          "type": "goto",
-          "break": false,
-          "url": "https://tesco.com"
-        },
-        "1": {
-          "type": "goto",
-          "break": false,
-          "url": "https://github.com"
-        },
-        "2": {
-          "type": "goto",
-          "break": false,
-          "url": "https://instagram.com/"
-        }
-      }
-    },
-    "Kilencedik Unit": {
-      "bindings": null,
-      "backup_of": null,
-      "actions": {
-        "0": {
-          "type": "goto",
-          "break": false,
-          "url": "https://tesco.com"
-        },
-        "1": {
-          "type": "goto",
-          "break": false,
-          "url": "https://github.com"
-        },
-        "2": {
-          "type": "goto",
-          "break": false,
-          "url": "https://instagram.com/"
-        }
-      }
-    },
-    "Tizedik Unit": {
-      "bindings": null,
-      "backup_of": null,
-      "actions": {
-        "0": {
-          "type": "goto",
-          "break": false,
-          "url": "https://tesco.com"
-        },
-        "1": {
-          "type": "goto",
-          "break": false,
-          "url": "https://github.com"
-        },
-        "2": {
-          "type": "goto",
-          "break": false,
-          "url": "https://instagram.com/"
         }
       }
     }
