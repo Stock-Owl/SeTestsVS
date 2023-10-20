@@ -91,7 +91,7 @@
         public Units m_Units;
 
         public string m_FullTestRunTime = "Előző tesztelés teljes futási ideje: 0 / 0 ms";
-
+        public string m_TestDateTimeStart = "Teszt indításának időpontja: ";
 
         public MainForm m_MainForm;
 

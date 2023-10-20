@@ -22,6 +22,9 @@
 
   <ItemGroup>
     <Compile Update="Core\Options\StartFullScreenOption.cs" />
+    <Compile Update="Core\UnitHierarchy\UnitHierarchy.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Update="Core\Units\Actions\SwitchBackAction.cs">
       <SubType>UserControl</SubType>
     </Compile>

@@ -9,13 +9,13 @@
     "auto_exit_iframes": true,
     "log_JS_retry_timeout": 2000,
     "parent_log_path": "C:\\dev\\SeTestsVS\\example_projects\\logs",
-    "start_fullscreen": true
+    "start_fullscreen": false
   },
   "driver_options": {
     "accept_insecure_certs": true,
     "chrome_arguments": [],
     "firefox_arguments": [],
-    "keep_browser_open": true,
+    "keep_browser_open": false,
     "page_load_strategy": "normal",
     "timeout": {
       "type": "pageLoad",

@@ -28,6 +28,13 @@ namespace WebTestGui
             m_JsLogConsole.Size = new Size(327, 400);
             m_JsLogConsole.Visible = false;
 
+            m_UnitHierarchyPanel = new UnitHierarchy(this);
+            Controls.Add(m_UnitHierarchyPanel);
+            m_UnitHierarchyPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
+            m_UnitHierarchyPanel.Location = new Point(795, 77);
+            m_UnitHierarchyPanel.Size = new Size(327, 400);
+            m_UnitHierarchyPanel.Visible = false;
+
             m_TestTab = new TestTab(this);
             Controls.Add(m_TestTab);
             m_TestTab.Location = new Point(410, 0);
@@ -59,7 +66,7 @@ namespace WebTestGui
                             LoadScheduledTestResults(scheduledTestResult, args[1]);
                             return;
                         }
-                        
+
                     }
                     if (!string.IsNullOrEmpty(args[1]) && !string.IsNullOrEmpty(args[2]))
                     {
@@ -133,11 +140,13 @@ namespace WebTestGui
         {
             Control[] controls = new Control[Test().m_Units.m_Units.Count];
 
+            m_UnitHierarchyPanel.ClearItems();
             for (int i = 0; i < controls.Length; i++)
             {
                 Test().m_Units.m_Units[i].SetUId(i);
                 Test().m_Units.m_Units[i].Refresh();
                 controls[i] = (Control)Test().m_Units.m_Units[i];
+                m_UnitHierarchyPanel.AddUnitHierarchyItem(Test().m_Units.m_Units[i]);
             }
 
             unitsPanel.Controls.Clear();
@@ -184,11 +193,15 @@ namespace WebTestGui
         private void gotoUnitComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             string selectedUnitName = gotoUnitComboBox.GetItemText(gotoUnitComboBox.SelectedItem)!;
+            ScrollToUnit(selectedUnitName);
+        }
 
+        public void ScrollToUnit(string unitName)
+        {
             IUnit selectedUnit = new UnitPanel();
             foreach (IUnit unit in Test().m_Units.m_Units)
             {
-                if (unit.m_UnitName == selectedUnitName)
+                if (unit.m_UnitName == unitName)
                 {
                     selectedUnit = unit;
                 }
@@ -198,10 +211,31 @@ namespace WebTestGui
 
         #endregion
 
-        #region Logic switching between options and JS console
+        #region Logic switching between unit hierarchia options and JS console
+
+        private void unitHierarchyButton_Click(object sender, EventArgs e)
+        {
+            m_UnitHierarchyPanel.Visible = true;
+
+            optionHeaderPanel.Visible = false;
+            optionsPanel.Visible = false;
+            optionLabel.Visible = false;
+
+            m_JsLogConsole.Visible = false;
+
+            unitHierarchyButton.ForeColor = Color.White;
+            unitHierarchyButton.Font = new Font(unitHierarchyButton.Font, FontStyle.Bold);
+
+            switchToJsLogButton.ForeColor = Color.Silver;
+            switchToJsLogButton.Font = new Font(switchToOptionsButton.Font, FontStyle.Italic);
+            switchToOptionsButton.ForeColor = Color.Silver;
+            switchToOptionsButton.Font = new Font(switchToOptionsButton.Font, FontStyle.Italic);
+        }
 
         private void OnSwitchToOptionsButtonPressed(object sender, EventArgs e)
         {
+            m_UnitHierarchyPanel.Visible = false;
+
             optionHeaderPanel.Visible = true;
             optionsPanel.Visible = true;
             optionLabel.Visible = true;
@@ -213,10 +247,14 @@ namespace WebTestGui
 
             switchToJsLogButton.ForeColor = Color.Silver;
             switchToJsLogButton.Font = new Font(switchToOptionsButton.Font, FontStyle.Italic);
+            unitHierarchyButton.ForeColor = Color.Silver;
+            unitHierarchyButton.Font = new Font(unitHierarchyButton.Font, FontStyle.Italic);
         }
 
         private void OnSwitchToJsLogButtonPressed(object sender, EventArgs e)
         {
+            m_UnitHierarchyPanel.Visible = false;
+
             m_JsLogConsole.Visible = true;
 
             optionHeaderPanel.Visible = false;
@@ -228,6 +266,8 @@ namespace WebTestGui
 
             switchToOptionsButton.ForeColor = Color.Silver;
             switchToOptionsButton.Font = new Font(switchToOptionsButton.Font, FontStyle.Italic);
+            unitHierarchyButton.ForeColor = Color.Silver;
+            unitHierarchyButton.Font = new Font(unitHierarchyButton.Font, FontStyle.Italic);
         }
 
         #endregion
@@ -297,6 +337,7 @@ namespace WebTestGui
             m_TestStartDate = DateTime.Now.ToString("MM_dd_yyyy_HH_mm");
             m_TestStartDateExtra = DateTime.Now.ToString("MM/dd/yyyy HH:mm");
             testDateLabel.Text = $"Teszt indításának időpontja: {m_TestStartDateExtra}";
+            Test().m_TestDateTimeStart = testDateLabel.Text;
 
             string JSONString = GetTestJSON(Test());
 
@@ -923,6 +964,7 @@ namespace WebTestGui
             }
 
             testRunTimeText.Text = Test().m_FullTestRunTime;
+            testDateLabel.Text = Test().m_TestDateTimeStart;
 
             RefreshOptionsPanel();
             RefreshUnitsPanel();
@@ -1069,7 +1111,7 @@ namespace WebTestGui
             {
                 string path = Application.StartupPath + "/WebTestGui.exe";
                 Process.Start(path, of.FileName);
-                
+
             }
         }
 
@@ -1142,6 +1184,7 @@ namespace WebTestGui
             LoadRunTimesToActions(results.m_ChromeRunLog, results.m_FirefoxRunLog);
             LoadRunTimesToUnits();
             LoadRunTime();
+            RefreshUnitsPanel();
 
             m_RunLogConsole.AddToChrome(results.m_ChromeRunLog);
             m_RunLogConsole.AddToFirefox(results.m_FirefoxRunLog);
@@ -1167,6 +1210,7 @@ namespace WebTestGui
 
         Console m_RunLogConsole;
         Console m_JsLogConsole;
+        UnitHierarchy m_UnitHierarchyPanel;
 
         private void ignoreBreakpointsCheckbox_CheckedChanged(object sender, EventArgs e)
         {

@@ -60,6 +60,7 @@
             ignoreBreakpointsCheckbox = new CheckBox();
             testDateLabel = new Label();
             scheduledTestLogLoadButton = new Button();
+            unitHierarchyButton = new Button();
             unitHeaderPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)addUnitButton).BeginInit();
             optionHeaderPanel.SuspendLayout();
@@ -255,7 +256,7 @@
             switchToOptionsButton.BackColor = Color.FromArgb(40, 40, 43);
             switchToOptionsButton.Font = new Font("Segoe UI", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
             switchToOptionsButton.ForeColor = Color.White;
-            switchToOptionsButton.Location = new Point(794, 49);
+            switchToOptionsButton.Location = new Point(944, 49);
             switchToOptionsButton.Name = "switchToOptionsButton";
             switchToOptionsButton.Size = new Size(87, 25);
             switchToOptionsButton.TabIndex = 40;
@@ -469,11 +470,26 @@
             scheduledTestLogLoadButton.UseVisualStyleBackColor = false;
             scheduledTestLogLoadButton.Click += scheduledTestLogLoadButton_Click;
             // 
+            // unitHierarchyButton
+            // 
+            unitHierarchyButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            unitHierarchyButton.BackColor = Color.FromArgb(40, 40, 43);
+            unitHierarchyButton.Font = new Font("Segoe UI Semibold", 8.25F, FontStyle.Italic, GraphicsUnit.Point);
+            unitHierarchyButton.ForeColor = Color.Silver;
+            unitHierarchyButton.Location = new Point(795, 49);
+            unitHierarchyButton.Name = "unitHierarchyButton";
+            unitHierarchyButton.Size = new Size(143, 25);
+            unitHierarchyButton.TabIndex = 66;
+            unitHierarchyButton.Text = "Unit hierarchia...";
+            unitHierarchyButton.UseVisualStyleBackColor = false;
+            unitHierarchyButton.Click += unitHierarchyButton_Click;
+            // 
             // MainForm
             // 
             AutoScaleMode = AutoScaleMode.None;
             BackColor = Color.FromArgb(50, 50, 53);
             ClientSize = new Size(1134, 611);
+            Controls.Add(unitHierarchyButton);
             Controls.Add(switchToOptionsButton);
             Controls.Add(scheduledTestLogLoadButton);
             Controls.Add(testDateLabel);
@@ -547,5 +563,6 @@
         private CheckBox ignoreBreakpointsCheckbox;
         protected Label testDateLabel;
         private Button scheduledTestLogLoadButton;
+        private Button unitHierarchyButton;
     }
 }
