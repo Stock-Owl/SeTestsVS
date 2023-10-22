@@ -6,6 +6,8 @@ namespace WebTestGui
     public partial class MainForm : Form
     {
 
+        #region On start
+
         public MainForm()
         {
             InitializeComponent();
@@ -86,23 +88,25 @@ namespace WebTestGui
             }
         }
 
+        #endregion
+
         #region Option panel function
 
         private void RefreshOptionsPanel()
         {
             optionsPanel.Controls.Clear();
 
-            Control[] optionControls = new Control[Test().m_Options.m_Options.Count];
+            Control[] optionControls = new Control[GetMainTest().m_Options.m_Options.Count];
             for (int i = 0; i < optionControls.Length; i++)
             {
-                optionControls[i] = (Control)Test().m_Options.m_Options[i];
+                optionControls[i] = (Control)GetMainTest().m_Options.m_Options[i];
             }
             optionsPanel.Controls.AddRange(optionControls);
 
-            Control[] driverOptionControls = new Control[Test().m_DriverOptions.m_DriverOptions.Count];
+            Control[] driverOptionControls = new Control[GetMainTest().m_DriverOptions.m_DriverOptions.Count];
             for (int i = 0; i < driverOptionControls.Length; i++)
             {
-                driverOptionControls[i] = (Control)Test().m_DriverOptions.m_DriverOptions[i];
+                driverOptionControls[i] = (Control)GetMainTest().m_DriverOptions.m_DriverOptions[i];
             }
             optionsPanel.Controls.AddRange(driverOptionControls);
         }
@@ -114,7 +118,7 @@ namespace WebTestGui
             of.Filter = $"Teszt opciók fájl|*{AppConsts.s_AppDefaultFileExtension + "options"}|Any File|*.*";
             if (of.ShowDialog() == DialogResult.OK)
             {
-                string savedInfo = TestFormatter.SaveOptionsFromTest(Test());
+                string savedInfo = TestFormatter.SaveOptionsFromTest(GetMainTest());
                 File.WriteAllText(of.FileName, savedInfo);
             }
         }
@@ -127,7 +131,7 @@ namespace WebTestGui
             if (of.ShowDialog() == DialogResult.OK)
             {
                 string loadedInfo = File.ReadAllText(of.FileName);
-                TestFormatter.LoadOptionsToTest(loadedInfo, Test());
+                TestFormatter.LoadOptionsToTest(loadedInfo, GetMainTest());
                 RefreshOptionsPanel();
             }
         }
@@ -136,17 +140,18 @@ namespace WebTestGui
 
         #region Unit handlers and functions
 
-        private void RefreshUnitsPanel()
+        private void RefreshUnitsPanel(bool closeAllUnits = false)
         {
-            Control[] controls = new Control[Test().m_Units.m_Units.Count];
+            Control[] controls = new Control[GetMainTest().m_Units.m_Units.Count];
 
             m_UnitHierarchyPanel.ClearItems();
             for (int i = 0; i < controls.Length; i++)
             {
-                Test().m_Units.m_Units[i].SetUId(i);
-                Test().m_Units.m_Units[i].Refresh();
-                controls[i] = (Control)Test().m_Units.m_Units[i];
-                m_UnitHierarchyPanel.AddUnitHierarchyItem(Test().m_Units.m_Units[i]);
+                GetMainTest().m_Units.m_Units[i].SetUId(i);
+                GetMainTest().m_Units.m_Units[i].Refresh();
+                GetMainTest().m_Units.m_Units[i].Collapse(true);
+                controls[i] = (Control)GetMainTest().m_Units.m_Units[i];
+                m_UnitHierarchyPanel.AddUnitHierarchyItem(GetMainTest().m_Units.m_Units[i]);
             }
 
             unitsPanel.Controls.Clear();
@@ -159,8 +164,8 @@ namespace WebTestGui
             unit.m_ParentForm = this;
 
             unit.SetUId(unitsPanel.Controls.Count);
-            Test().m_Units.m_Units.Add(unit);
-            unit.m_UnitName = $"UNIT {Test().m_Units.m_Units.Count}";
+            GetMainTest().m_Units.m_Units.Add(unit);
+            unit.m_UnitName = $"UNIT {GetMainTest().m_Units.m_Units.Count}";
             unit.Refresh();
             RefreshUnitsPanel();
             unitsPanel.ScrollControlIntoView((Control)unit);
@@ -168,23 +173,23 @@ namespace WebTestGui
 
         public void DeleteUnit(IUnit unit)
         {
-            Test().m_Units.m_Units.Remove(unit);
+            GetMainTest().m_Units.m_Units.Remove(unit);
             RefreshUnitsPanel();
         }
 
         public void MoveUnit(IUnit unit, int newUId)
         {
-            Test().m_Units.MoveUnit(unit, newUId);
+            GetMainTest().m_Units.MoveUnit(unit, newUId);
             RefreshUnitsPanel();
         }
 
         private void gotoUnitComboBox_DropDown(object sender, EventArgs e)
         {
             gotoUnitComboBox.Items.Clear();
-            string[] unitNames = new string[Test().m_Units.m_Units.Count];
+            string[] unitNames = new string[GetMainTest().m_Units.m_Units.Count];
             for (int i = 0; i < unitNames.Length; i++)
             {
-                unitNames[i] = Test().m_Units.m_Units[i].m_UnitName;
+                unitNames[i] = GetMainTest().m_Units.m_Units[i].m_UnitName;
             }
 
             gotoUnitComboBox.Items.AddRange(unitNames);
@@ -199,7 +204,7 @@ namespace WebTestGui
         public void ScrollToUnit(string unitName)
         {
             IUnit selectedUnit = new UnitPanel();
-            foreach (IUnit unit in Test().m_Units.m_Units)
+            foreach (IUnit unit in GetMainTest().m_Units.m_Units)
             {
                 if (unit.m_UnitName == unitName)
                 {
@@ -211,7 +216,7 @@ namespace WebTestGui
 
         #endregion
 
-        #region Logic switching between unit hierarchia options and JS console
+        #region Logic switching between unit hierarchy options and JS console
 
         private void unitHierarchyButton_Click(object sender, EventArgs e)
         {
@@ -279,15 +284,15 @@ namespace WebTestGui
 
         private async void OnStartTestButtonPressed(object sender, EventArgs e)
         {
-            if (Test().m_State == WebTestGui.Test.TestState.Edit)
+            if (GetMainTest().m_State == WebTestGui.Test.TestState.Edit)
             {
                 OnTestStart();
             }
-            else if (Test().m_State == WebTestGui.Test.TestState.Run)
+            else if (GetMainTest().m_State == WebTestGui.Test.TestState.Run)
             {
                 OnTestAbort();
             }
-            else if (Test().m_State == WebTestGui.Test.TestState.Break)
+            else if (GetMainTest().m_State == WebTestGui.Test.TestState.Break)
             {
                 OnTestContinue();
             }
@@ -296,7 +301,7 @@ namespace WebTestGui
         public void OnTestStart()
         {
             // Does parent log path exist
-            if (!Path.Exists(Test().GetRootLogDirectoryPath()))
+            if (!Path.Exists(GetMainTest().GetRootLogDirectoryPath()))
             {
                 string message = "A jelenleg megadott 'Gyökér logolási könyvtár' útvonala nem létezik!";
                 string title = "Indítási probléma...";
@@ -304,7 +309,7 @@ namespace WebTestGui
                 return;
             }
             // Unit Panel empty
-            if (Test().m_Units.m_Units.Count == 0)
+            if (GetMainTest().m_Units.m_Units.Count == 0)
             {
                 string message = "Üres tesztet nem lehet futtatni!";
                 string title = "Indítási probléma...";
@@ -313,33 +318,33 @@ namespace WebTestGui
             }
 
             // Checking if the root log directory contains chrome and firefox folders
-            if (!Directory.Exists(Test().GetRootLogDirectoryPath() + @"/chrome"))
+            if (!Directory.Exists(GetMainTest().GetRootLogDirectoryPath() + @"/chrome"))
             {
-                Directory.CreateDirectory(Test().GetRootLogDirectoryPath() + @"/chrome");
+                Directory.CreateDirectory(GetMainTest().GetRootLogDirectoryPath() + @"/chrome");
             }
-            if (!Directory.Exists(Test().GetRootLogDirectoryPath() + @"/firefox"))
+            if (!Directory.Exists(GetMainTest().GetRootLogDirectoryPath() + @"/firefox"))
             {
-                Directory.CreateDirectory(Test().GetRootLogDirectoryPath() + @"/firefox");
-            }
-
-            if (!Directory.Exists(Test().GetRootLogDirectoryPath() + @"/chrome/ltlogs"))
-            {
-                Directory.CreateDirectory(Test().GetRootLogDirectoryPath() + @"/chrome/ltlogs");
-            }
-            if (!Directory.Exists(Test().GetRootLogDirectoryPath() + @"/firefox/ltlogs"))
-            {
-                Directory.CreateDirectory(Test().GetRootLogDirectoryPath() + @"/firefox/ltlogs");
+                Directory.CreateDirectory(GetMainTest().GetRootLogDirectoryPath() + @"/firefox");
             }
 
-            Test().m_State = WebTestGui.Test.TestState.Run;
+            if (!Directory.Exists(GetMainTest().GetRootLogDirectoryPath() + @"/chrome/ltlogs"))
+            {
+                Directory.CreateDirectory(GetMainTest().GetRootLogDirectoryPath() + @"/chrome/ltlogs");
+            }
+            if (!Directory.Exists(GetMainTest().GetRootLogDirectoryPath() + @"/firefox/ltlogs"))
+            {
+                Directory.CreateDirectory(GetMainTest().GetRootLogDirectoryPath() + @"/firefox/ltlogs");
+            }
+
+            GetMainTest().m_State = WebTestGui.Test.TestState.Run;
             testStartButton.Text = "TESZT FUT";
 
             m_TestStartDate = DateTime.Now.ToString("MM_dd_yyyy_HH_mm");
             m_TestStartDateExtra = DateTime.Now.ToString("MM/dd/yyyy HH:mm");
             testDateLabel.Text = $"Teszt indításának időpontja: {m_TestStartDateExtra}";
-            Test().m_TestDateTimeStart = testDateLabel.Text;
+            GetMainTest().m_TestDateTimeStart = testDateLabel.Text;
 
-            string JSONString = GetTestJSON(Test());
+            string JSONString = GetTestJSON(GetMainTest());
 
             if (ignoreBreakpointsCheckbox.Checked)
             {
@@ -358,7 +363,7 @@ namespace WebTestGui
 
             SetColorSchemeToRun();
 
-            if (!Test().HaveInterceptorActions())
+            if (!GetMainTest().HaveInterceptorActions())
             {
                 StartPython(temparray[0], "main.py");
             }
@@ -370,17 +375,17 @@ namespace WebTestGui
 
             m_TestTab.m_TestRunning = true;
 
-            File.WriteAllText(Test().GetRootLogDirectoryPath() + @"/chrome/run.log", string.Empty);
-            File.WriteAllText(Test().GetRootLogDirectoryPath() + @"/firefox/run.log", string.Empty);
+            File.WriteAllText(GetMainTest().GetRootLogDirectoryPath() + @"/chrome/run.log", string.Empty);
+            File.WriteAllText(GetMainTest().GetRootLogDirectoryPath() + @"/firefox/run.log", string.Empty);
 
             // Later, when there are more files with a filewatcher expand File.Exists() check
-            if (!File.Exists(Test().GetRootLogDirectoryPath() + @"/file.brk"))
+            if (!File.Exists(GetMainTest().GetRootLogDirectoryPath() + @"/file.brk"))
             {
-                File.Create(Test().GetRootLogDirectoryPath() + @"/file.brk");
+                File.Create(GetMainTest().GetRootLogDirectoryPath() + @"/file.brk");
             }
-            if (!File.Exists(Test().GetRootLogDirectoryPath() + @"/js.log"))
+            if (!File.Exists(GetMainTest().GetRootLogDirectoryPath() + @"/js.log"))
             {
-                File.Create(Test().GetRootLogDirectoryPath() + @"/js.log");
+                File.Create(GetMainTest().GetRootLogDirectoryPath() + @"/js.log");
             }
 
             _STOP_BRK_LOG_REQ = false;
@@ -390,29 +395,29 @@ namespace WebTestGui
             {
                 try
                 {
-                    File.WriteAllText(Test().GetRootLogDirectoryPath() + @"/file.brk", string.Empty);
+                    File.WriteAllText(GetMainTest().GetRootLogDirectoryPath() + @"/file.brk", string.Empty);
                 }
                 catch
                 {
                 }
-                string breakPointFilePath = Test().GetRootLogDirectoryPath() + @"/file.brk";
+                string breakPointFilePath = GetMainTest().GetRootLogDirectoryPath() + @"/file.brk";
                 StartBreakPointFileWatcher(breakPointFilePath);
             }
 
-            File.WriteAllText(Test().GetRootLogDirectoryPath() + @"/js.log", string.Empty);
-            string jsLogFilePath = Test().GetRootLogDirectoryPath() + @"/js.log";
+            File.WriteAllText(GetMainTest().GetRootLogDirectoryPath() + @"/js.log", string.Empty);
+            string jsLogFilePath = GetMainTest().GetRootLogDirectoryPath() + @"/js.log";
             StartJsLogFileWatcher(jsLogFilePath);
             OnSwitchToJsLogButtonPressed(null!, null!);
 
             m_RunLogConsole.Clear();
             m_JsLogConsole.Clear();
 
-            m_RunLogConsole.AddToConsoles("\n ------TESZT INDITÁSA \n");
+            m_RunLogConsole.AddToConsoles($"\n ------TESZT INDITÁSA: ({m_TestStartDateExtra}) \n");
         }
 
         public void OnTestAbort()
         {
-            m_RunLogConsole.AddToConsoles("\n ------TESZT LEÁLLÍTVA \n");
+            m_RunLogConsole.AddToConsoles("\n ------TESZT ABORTÁLVA \n");
             m_CurrentProcess.Kill();
             SetColorSchemeToEdit();
 
@@ -421,14 +426,14 @@ namespace WebTestGui
 
         public void OnTestBreak(string content, bool continueImmediately = false)
         {
-            Test().m_State = WebTestGui.Test.TestState.Break;
-            m_RunLogConsole.AddToConsoles("\n ------TESZT SZÜNETELTETVE (BREAKPOINT) \n");
+            GetMainTest().m_State = WebTestGui.Test.TestState.Break;
             testStartButton.Text = "TESZT FOLYTATÁSA...";
             SetColorSchemeToBreakpointHit();
 
             string[] contentParts = content.Split('\n')[0].Split(':'); // (c:ble 1:1)
+            m_RunLogConsole.AddToConsoles($"\n ------TESZT SZÜNETELTETVE: UNIT:{contentParts[1]}, ACTION:{contentParts[2]} \n");
 
-            foreach (IUnit unit in Test().m_Units.m_Units)
+            foreach (IUnit unit in GetMainTest().m_Units.m_Units)
             {
                 if (unit.m_UnitName == contentParts[1])
                 {
@@ -437,8 +442,8 @@ namespace WebTestGui
                 }
             }
 
-            string chromeRunLog = File.ReadAllText(Test().GetRootLogDirectoryPath() + @"/chrome/run.log");
-            string firefoxRunLog = File.ReadAllText(Test().GetRootLogDirectoryPath() + @"/firefox/run.log");
+            string chromeRunLog = File.ReadAllText(GetMainTest().GetRootLogDirectoryPath() + @"/chrome/run.log");
+            string firefoxRunLog = File.ReadAllText(GetMainTest().GetRootLogDirectoryPath() + @"/firefox/run.log");
 
             LoadRunTimesToActions(chromeRunLog, firefoxRunLog);
             LoadRunTimesToUnits();
@@ -458,13 +463,13 @@ namespace WebTestGui
 
         public void OnTestContinue() // Should be called only after a breakpoint hit
         {
-            Test().m_State = WebTestGui.Test.TestState.Run;
+            GetMainTest().m_State = WebTestGui.Test.TestState.Run;
             testStartButton.Text = "TESZT FUT.../ TESZT LEÁLLÍTÁSA";
             SetColorSchemeToRun();
 
-            File.WriteAllText(Test().GetRootLogDirectoryPath() + @"/file.brk", string.Empty);
+            File.WriteAllText(GetMainTest().GetRootLogDirectoryPath() + @"/file.brk", string.Empty);
 
-            foreach (IUnit unit in Test().m_Units.m_Units)
+            foreach (IUnit unit in GetMainTest().m_Units.m_Units)
             {
                 unit.OnBreakpointLeave();
             }
@@ -475,20 +480,20 @@ namespace WebTestGui
 
         public void OnTestFinished()
         {
-            Test().m_State = WebTestGui.Test.TestState.Edit;
+            GetMainTest().m_State = WebTestGui.Test.TestState.Edit;
             testStartButton.Text = "TESZT INDÍTÁSA...";
             SetColorSchemeToEdit();
 
             _STOP_BRK_LOG_REQ = true;
             _STOP_JS_LOG_REQ = true;
-            File.WriteAllText(Test().GetRootLogDirectoryPath() + @"/file.brk", string.Empty);
+            File.WriteAllText(GetMainTest().GetRootLogDirectoryPath() + @"/file.brk", string.Empty);
 
-            string chromeRunLog = File.ReadAllText(Test().GetRootLogDirectoryPath() + @"/chrome/run.log");
-            string firefoxRunLog = File.ReadAllText(Test().GetRootLogDirectoryPath() + @"/firefox/run.log");
+            string chromeRunLog = File.ReadAllText(GetMainTest().GetRootLogDirectoryPath() + @"/chrome/run.log");
+            string firefoxRunLog = File.ReadAllText(GetMainTest().GetRootLogDirectoryPath() + @"/firefox/run.log");
             m_RunLogConsole.AddToChrome("\n\n" + chromeRunLog);
             m_RunLogConsole.AddToFirefox("\n\n" + firefoxRunLog);
 
-            m_JsLogConsole.AddToConsoles(File.ReadAllText(Test().GetRootLogDirectoryPath() + @"/js.log"));
+            m_JsLogConsole.AddToConsoles(File.ReadAllText(GetMainTest().GetRootLogDirectoryPath() + @"/js.log"));
 
             m_RunLogConsole.AddToConsoles("\n ------TESZT VÉGE \n");
 
@@ -496,8 +501,8 @@ namespace WebTestGui
             {
                 ScheduledTestResult scheduledTestResult = new ScheduledTestResult();
 
-                string schedulerChromeRunLog = File.ReadAllText(Test().GetRootLogDirectoryPath() + @"/chrome/run.log");
-                string schedulerFirefoxRunLog = File.ReadAllText(Test().GetRootLogDirectoryPath() + @"/firefox/run.log");
+                string schedulerChromeRunLog = File.ReadAllText(GetMainTest().GetRootLogDirectoryPath() + @"/chrome/run.log");
+                string schedulerFirefoxRunLog = File.ReadAllText(GetMainTest().GetRootLogDirectoryPath() + @"/firefox/run.log");
 
                 scheduledTestResult.m_ChromeRunLog = schedulerChromeRunLog;
                 scheduledTestResult.m_FirefoxRunLog = schedulerFirefoxRunLog;
@@ -509,7 +514,7 @@ namespace WebTestGui
                 scheduledTestResult.m_StartDate = m_TestStartDate;
                 scheduledTestResult.m_TestJSON = m_ScheduledTestJSON;
 
-                scheduledTestResult.m_ScheduledTestName = Test().m_Name;
+                scheduledTestResult.m_ScheduledTestName = GetMainTest().m_Name;
                 scheduledTestResult.m_StartDateExtra = m_TestStartDateExtra;
 
                 if (m_CurrentProcess != null)
@@ -517,9 +522,9 @@ namespace WebTestGui
 
                 string logName = m_ScheduledTestLogName == "" ? scheduledTestResult.m_StartDate : m_ScheduledTestLogName;
                 string data = scheduledTestResult.GetCompiledData();
-                if (!Directory.Exists(Test().GetRootLogDirectoryPath() + "/scheduled_logs"))
-                    Directory.CreateDirectory(Test().GetRootLogDirectoryPath() + "/scheduled_logs");
-                string filename = Test().GetRootLogDirectoryPath() + "/scheduled_logs/" + logName + ".vslog";
+                if (!Directory.Exists(GetMainTest().GetRootLogDirectoryPath() + "/scheduled_logs"))
+                    Directory.CreateDirectory(GetMainTest().GetRootLogDirectoryPath() + "/scheduled_logs");
+                string filename = GetMainTest().GetRootLogDirectoryPath() + "/scheduled_logs/" + logName + ".vslog";
                 File.WriteAllText(filename, data);
                 Close();
                 //LoadScheduledTestResults(scheduledTestResult);
@@ -533,6 +538,111 @@ namespace WebTestGui
                 m_TestTab.m_TestRunning = false;
                 // FOR SCHEDULING
                 RefreshUnitsPanel();
+            }
+        }
+
+        public async Task StartPython(string targetDir, string pythonScriptName)
+        {
+            string targetDirectory = targetDir;
+            string pythonScript = pythonScriptName;
+
+            m_CurrentProcess = Process.Start("cmd.exe", $"/K cd /D {targetDirectory} && python {pythonScript} && exit");
+
+            await m_CurrentProcess.WaitForExitAsync();
+
+            OnTestFinished();
+        }
+
+        public async Task StartBreakPointFileWatcher(string logPath)
+        {
+            FileWatcher fileWatcher = new FileWatcher(logPath);
+
+            fileWatcher.FileChanged += async (content) =>
+            {
+                m_RunLogConsole.consoleTextBox.Invoke((Action)(() =>
+                {
+                    if (!string.IsNullOrEmpty(content))
+                    {
+                        if (content.Split('\n').Length >= 2)
+                        {
+                            if (content.Split('\n')[0].Split(':')[0] == "c")
+                            {
+                                if (content.Split('\n')[1].Split(':')[0] == "f")
+                                {
+                                    if (m_IsScheduled)
+                                    {
+                                        OnTestBreak(content, true);
+                                    }
+                                    else
+                                    {
+                                        OnTestBreak(content);
+                                    }
+                                }
+                            }
+                            if (content.Split('\n')[0].Split(':')[0] == "f")
+                            {
+                                if (content.Split('\n')[1].Split(':')[0] == "c")
+                                {
+                                    if (m_IsScheduled)
+                                    {
+                                        OnTestBreak(content, true);
+                                    }
+                                    else
+                                    {
+                                        OnTestBreak(content);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }));
+            };
+
+            while (!_STOP_BRK_LOG_REQ)
+            {
+                await Task.Delay(100);
+            }
+        }
+
+        public async void StartJsLogFileWatcher(string logPath)
+        {
+            FileWatcher fileWatcher = new FileWatcher(logPath, true);
+            fileWatcher.FileChanged += async (content) =>
+            {
+                try
+                {
+                    m_JsLogConsole.consoleTextBox.Invoke((Action)(() =>
+                    {
+                        if (!string.IsNullOrEmpty(content))
+                            m_JsLogConsole.AddToConsoles(content);
+                    }));
+                }
+                catch (Exception ex)
+                {
+                    ex.GetBaseException();
+                }
+
+                if (_STOP_JS_LOG_REQ)
+                {
+                    return;
+                }
+            };
+
+            while (!_STOP_JS_LOG_REQ)
+            {
+                await Task.Delay(100);
+            }
+        }
+
+        private void ignoreBreakpointsCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ignoreBreakpointsCheckbox.Checked)
+            {
+                ignoreBreakpointsLabel.Font = new Font(ignoreBreakpointsLabel.Font, FontStyle.Bold);
+            }
+            else
+            {
+                ignoreBreakpointsLabel.Font = new Font(ignoreBreakpointsLabel.Font, FontStyle.Regular);
             }
         }
 
@@ -582,7 +692,7 @@ namespace WebTestGui
 
                 if (tempRunLog.chromeUnitName != "" && tempRunLog.chromeActionName != "")
                 {
-                    foreach (IUnit unit in Test().m_Units.m_Units)
+                    foreach (IUnit unit in GetMainTest().m_Units.m_Units)
                     {
                         if (unit.m_UnitName == tempRunLog.chromeUnitName)
                         {
@@ -594,7 +704,7 @@ namespace WebTestGui
 
                 if (tempRunLog.firefoxUnitName != "" && tempRunLog.firefoxActionName != "")
                 {
-                    foreach (IUnit unit in Test().m_Units.m_Units)
+                    foreach (IUnit unit in GetMainTest().m_Units.m_Units)
                     {
                         if (unit.m_UnitName == tempRunLog.firefoxUnitName)
                         {
@@ -608,7 +718,7 @@ namespace WebTestGui
 
         void LoadRunTimesToUnits()
         {
-            foreach (IUnit unit in Test().m_Units.m_Units)
+            foreach (IUnit unit in GetMainTest().m_Units.m_Units)
             {
                 unit.SetRunTime();
             }
@@ -618,25 +728,25 @@ namespace WebTestGui
         {
             int chromeSum = 0;
             int firefoxSum = 0;
-            foreach (IUnit unit in Test().m_Units.m_Units)
+            foreach (IUnit unit in GetMainTest().m_Units.m_Units)
             {
                 Tuple<int, int> sum = unit.GetRunTime();
                 chromeSum += sum.Item1;
                 firefoxSum += sum.Item2;
             }
 
-            if (Test().m_State == WebTestGui.Test.TestState.Break)
+            if (GetMainTest().m_State == WebTestGui.Test.TestState.Break)
             {
                 testRunTimeText.ForeColor = Color.Firebrick;
                 testRunTimeText.Text = "Jelenlegi teszt futási ideje a Breakpoint-ig: " + (chromeSum.ToString() + " / " + firefoxSum.ToString() + " ms");
             }
-            else if (Test().m_State == WebTestGui.Test.TestState.Edit)
+            else if (GetMainTest().m_State == WebTestGui.Test.TestState.Edit)
             {
                 testRunTimeText.ForeColor = Color.DimGray;
                 testRunTimeText.Text = "Előző tesztelés teljes futási ideje: " + (chromeSum.ToString() + " / " + firefoxSum.ToString() + " ms");
             }
 
-            Test().m_FullTestRunTime = testRunTimeText.Text;
+            GetMainTest().m_FullTestRunTime = testRunTimeText.Text;
         }
 
         long TimeToMicroseconds(string timeStr)
@@ -752,106 +862,13 @@ namespace WebTestGui
 
         #endregion
 
-        public async Task StartPython(string targetDir, string pythonScriptName)
-        {
-            string targetDirectory = targetDir;
-            string pythonScript = pythonScriptName;
-
-            m_CurrentProcess = Process.Start("cmd.exe", $"/K cd /D {targetDirectory} && python {pythonScript} && exit");
-
-            await m_CurrentProcess.WaitForExitAsync();
-
-            OnTestFinished();
-        }
-
-        public async Task StartBreakPointFileWatcher(string logPath)
-        {
-            FileWatcher fileWatcher = new FileWatcher(logPath);
-
-            fileWatcher.FileChanged += async (content) =>
-            {
-                m_RunLogConsole.consoleTextBox.Invoke((Action)(() =>
-                {
-                    if (!string.IsNullOrEmpty(content))
-                    {
-                        if (content.Split('\n').Length >= 2)
-                        {
-                            if (content.Split('\n')[0].Split(':')[0] == "c")
-                            {
-                                if (content.Split('\n')[1].Split(':')[0] == "f")
-                                {
-                                    if (m_IsScheduled)
-                                    {
-                                        OnTestBreak(content, true);
-                                    }
-                                    else
-                                    {
-                                        OnTestBreak(content);
-                                    }
-                                }
-                            }
-                            if (content.Split('\n')[0].Split(':')[0] == "f")
-                            {
-                                if (content.Split('\n')[1].Split(':')[0] == "c")
-                                {
-                                    if (m_IsScheduled)
-                                    {
-                                        OnTestBreak(content, true);
-                                    }
-                                    else
-                                    {
-                                        OnTestBreak(content);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }));
-            };
-
-            while (!_STOP_BRK_LOG_REQ)
-            {
-                await Task.Delay(100);
-            }
-        }
-
-        public async void StartJsLogFileWatcher(string logPath)
-        {
-            FileWatcher fileWatcher = new FileWatcher(logPath, true);
-            fileWatcher.FileChanged += async (content) =>
-            {
-                try
-                {
-                    m_JsLogConsole.consoleTextBox.Invoke((Action)(() =>
-                    {
-                        if (!string.IsNullOrEmpty(content))
-                            m_JsLogConsole.AddToConsoles(content);
-                    }));
-                }
-                catch (Exception ex)
-                {
-                    ex.GetBaseException();
-                }
-
-                if (_STOP_JS_LOG_REQ)
-                {
-                    return;
-                }
-            };
-
-            while (!_STOP_JS_LOG_REQ)
-            {
-                await Task.Delay(100);
-            }
-        }
-
         #endregion
 
         #region Save and load test
 
         public void OnSaveTestButtonPressed(object sender, EventArgs e)
         {
-            SaveTest(Test());
+            SaveTest(GetMainTest());
         }
 
         private void OnLoadTestButtonPressed(object sender, EventArgs e)
@@ -874,8 +891,8 @@ namespace WebTestGui
                 of.Filter = $"Teszt fájl|*{AppConsts.s_AppDefaultFileExtension}|Any File|*.*";
                 if (of.ShowDialog() == DialogResult.OK)
                 {
-                    Test().m_Name = Path.GetFileNameWithoutExtension(of.FileName);
-                    string savedInfo = GetTestJSON(Test());
+                    GetMainTest().m_Name = Path.GetFileNameWithoutExtension(of.FileName);
+                    string savedInfo = GetTestJSON(GetMainTest());
                     File.WriteAllText(of.FileName, savedInfo);
 
                     test.m_SaveFilePath = of.FileName;
@@ -887,7 +904,7 @@ namespace WebTestGui
             }
             else
             {
-                string savedInfo = GetTestJSON(Test());
+                string savedInfo = GetTestJSON(GetMainTest());
                 File.WriteAllText(test.m_SaveFilePath, savedInfo);
             }
         }
@@ -927,7 +944,7 @@ namespace WebTestGui
 
             string loadedInfo = JSON;
             loadedTest = TestFormatter.LoadTestFromJson(loadedInfo, loadedTest);
-            loadedTest.m_SaveFilePath = ":(";
+            loadedTest.m_SaveFilePath = "NaN";
 
             return loadedTest;
         }
@@ -936,38 +953,38 @@ namespace WebTestGui
 
         #region Editor Refresh method
 
-        public void RefreshEditor()
+        public void RefreshEditor(bool collapseAllUnits = false)
         {
             // Must happen after m_TestTab.m_SelectedItem.m_Test set in the TestTab
             // it uses that Test instance to load information
 
-            currentlyEditedText.Text = Test().m_SaveFilePath;
-            testNameLabel.Text = Test().m_Name;
+            currentlyEditedText.Text = GetMainTest().m_SaveFilePath;
+            testNameLabel.Text = GetMainTest().m_Name;
 
             breakpointIcon.Location = new Point((testNameLabel.Location.X + testNameLabel.Size.Width), 47);
             testRunTimeText.Location = new Point((breakpointIcon.Location.X + breakpointIcon.Size.Width + 10), 52);
 
-            if (Test().m_State == WebTestGui.Test.TestState.Edit)
+            if (GetMainTest().m_State == WebTestGui.Test.TestState.Edit)
             {
                 SetColorSchemeToEdit();
                 testStartButton.Text = "TESZT INDÍTÁSA...";
             }
-            else if (Test().m_State == WebTestGui.Test.TestState.Break)
+            else if (GetMainTest().m_State == WebTestGui.Test.TestState.Break)
             {
                 SetColorSchemeToBreakpointHit();
                 testStartButton.Text = "TESZT FOLYTATÁSA...";
             }
-            else if (Test().m_State == WebTestGui.Test.TestState.Run)
+            else if (GetMainTest().m_State == WebTestGui.Test.TestState.Run)
             {
                 SetColorSchemeToRun();
                 testStartButton.Text = "TESZT FUT";
             }
 
-            testRunTimeText.Text = Test().m_FullTestRunTime;
-            testDateLabel.Text = Test().m_TestDateTimeStart;
+            testRunTimeText.Text = GetMainTest().m_FullTestRunTime;
+            testDateLabel.Text = GetMainTest().m_TestDateTimeStart;
 
             RefreshOptionsPanel();
-            RefreshUnitsPanel();
+            RefreshUnitsPanel(collapseAllUnits);
         }
 
         #endregion
@@ -976,7 +993,7 @@ namespace WebTestGui
 
         private void rootLogDirectoryButton_Click(object sender, EventArgs e)
         {
-            Process.Start("explorer.exe", Test().GetRootLogDirectoryPath());
+            Process.Start("explorer.exe", GetMainTest().GetRootLogDirectoryPath());
         }
 
         private void pictureBox3_Click(object sender, EventArgs e)
@@ -1083,7 +1100,7 @@ namespace WebTestGui
             m_ScheduledTestJSON = File.ReadAllText(scheduledTestFilePath);
 
             // Setting log path
-            foreach (IOption option in Test().m_Options.m_Options)
+            foreach (IOption option in GetMainTest().m_Options.m_Options)
             {
                 if (option is ParentLogPathOption parentLogPathOption)
                 {
@@ -1091,7 +1108,7 @@ namespace WebTestGui
                 }
             }
 
-            foreach (IUnit unit in Test().m_Units.m_Units)
+            foreach (IUnit unit in GetMainTest().m_Units.m_Units)
             {
                 foreach (IAction action in unit.m_Actions.m_Actions)
                 {
@@ -1129,15 +1146,15 @@ namespace WebTestGui
             saveTestButton.Visible = false;
             loadTestButton.Visible = false;
 
-            foreach (IOption option in Test().m_Options.m_Options)
+            foreach (IOption option in GetMainTest().m_Options.m_Options)
             {
                 option.Enable(false);
             }
-            foreach (IDriverOption driverOption in Test().m_DriverOptions.m_DriverOptions)
+            foreach (IDriverOption driverOption in GetMainTest().m_DriverOptions.m_DriverOptions)
             {
                 driverOption.Enable(false);
             }
-            foreach (IUnit unit in Test().m_Units.m_Units)
+            foreach (IUnit unit in GetMainTest().m_Units.m_Units)
             {
                 unit.Enable(false);
             }
@@ -1200,7 +1217,7 @@ namespace WebTestGui
         string m_ScheduledTestJSON;
 
         TestTab m_TestTab;
-        public Test Test() { return m_TestTab.m_SelectedItem.m_Test; }
+        public Test GetMainTest() { return m_TestTab.m_SelectedItem.m_Test; }
 
         Process m_CurrentProcess;
 
@@ -1211,18 +1228,6 @@ namespace WebTestGui
         Console m_RunLogConsole;
         Console m_JsLogConsole;
         UnitHierarchy m_UnitHierarchyPanel;
-
-        private void ignoreBreakpointsCheckbox_CheckedChanged(object sender, EventArgs e)
-        {
-            if (ignoreBreakpointsCheckbox.Checked)
-            {
-                ignoreBreakpointsLabel.Font = new Font(ignoreBreakpointsLabel.Font, FontStyle.Bold);
-            }
-            else
-            {
-                ignoreBreakpointsLabel.Font = new Font(ignoreBreakpointsLabel.Font, FontStyle.Regular);
-            }
-        }
     }
 
     public class ScheduledTestResult

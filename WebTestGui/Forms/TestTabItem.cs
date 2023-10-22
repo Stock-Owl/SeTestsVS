@@ -29,7 +29,7 @@
 
         private void TestTabItem_Click(object sender, EventArgs e)
         {
-            if (m_ParentTab.m_ParentForm.Test().m_State == Test.TestState.Edit)
+            if (m_ParentTab.m_ParentForm.GetMainTest().m_State == Test.TestState.Edit)
                 m_ParentTab.SelectItem(this);
         }
 

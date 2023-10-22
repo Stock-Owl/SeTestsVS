@@ -166,11 +166,11 @@ namespace WebTestGui
             testRunTimeText.Text = (chromeSum.ToString() + " / " + firefoxSum.ToString() + " ms");
             if (m_ParentForm != null)
             {
-                if (m_ParentForm.Test().m_State == Test.TestState.Break)
+                if (m_ParentForm.GetMainTest().m_State == Test.TestState.Break)
                 {
                     testRunTimeText.ForeColor = Color.Firebrick;
                 }
-                else if (m_ParentForm.Test().m_State == Test.TestState.Edit)
+                else if (m_ParentForm.GetMainTest().m_State == Test.TestState.Edit)
                 {
                     testRunTimeText.ForeColor = Color.DimGray;
                 }
@@ -251,11 +251,11 @@ namespace WebTestGui
             {
                 if (bindingsLabel.Text != "null")
                 {
-                    for (int i = 0; i < m_ParentForm.Test().m_Units.m_Units.Count; i++)
+                    for (int i = 0; i < m_ParentForm.GetMainTest().m_Units.m_Units.Count; i++)
                     {
-                        if (bindingsLabel.Text == m_ParentForm.Test().m_Units.m_Units[i].m_UnitName)
+                        if (bindingsLabel.Text == m_ParentForm.GetMainTest().m_Units.m_Units[i].m_UnitName)
                         {
-                            m_Bindings = m_ParentForm.Test().m_Units.m_Units[i];
+                            m_Bindings = m_ParentForm.GetMainTest().m_Units.m_Units[i];
                         }
                     }
                     //Refresh();
@@ -269,15 +269,27 @@ namespace WebTestGui
             {
                 if (backupOfLabel.Text != "null")
                 {
-                    for (int i = 0; i < m_ParentForm.Test().m_Units.m_Units.Count; i++)
+                    for (int i = 0; i < m_ParentForm.GetMainTest().m_Units.m_Units.Count; i++)
                     {
-                        if (backupOfLabel.Text == m_ParentForm.Test().m_Units.m_Units[i].m_UnitName)
+                        if (backupOfLabel.Text == m_ParentForm.GetMainTest().m_Units.m_Units[i].m_UnitName)
                         {
-                            m_BackupOf = m_ParentForm.Test().m_Units.m_Units[i];
+                            m_BackupOf = m_ParentForm.GetMainTest().m_Units.m_Units[i];
                         }
                     }
                     //Refresh();
                 }
+            }
+        }
+
+        public void Collapse(bool collapse)
+        {
+            if (collapse)
+            {
+                OnCollapseActionsButtonClick(null!, null!);
+            }
+            else
+            {
+                OnExpandActionsButttonClick(null!, null!);
             }
         }
 
@@ -323,10 +335,10 @@ namespace WebTestGui
             if (m_ParentForm != null)
             {
                 unitBindingsComboBox.Items.Clear();
-                string[] unitNames = new string[m_ParentForm.Test().m_Units.m_Units.Count];
+                string[] unitNames = new string[m_ParentForm.GetMainTest().m_Units.m_Units.Count];
                 for (int i = 0; i < unitNames.Length; i++)
                 {
-                    unitNames[i] = m_ParentForm.Test().m_Units.m_Units[i].m_UnitName;
+                    unitNames[i] = m_ParentForm.GetMainTest().m_Units.m_Units[i].m_UnitName;
                 }
 
                 unitBindingsComboBox.Items.AddRange(unitNames);
@@ -338,10 +350,10 @@ namespace WebTestGui
             if (m_ParentForm != null)
             {
                 unitBackupComboBox.Items.Clear();
-                string[] unitNames = new string[m_ParentForm.Test().m_Units.m_Units.Count];
+                string[] unitNames = new string[m_ParentForm.GetMainTest().m_Units.m_Units.Count];
                 for (int i = 0; i < unitNames.Length; i++)
                 {
-                    unitNames[i] = m_ParentForm.Test().m_Units.m_Units[i].m_UnitName;
+                    unitNames[i] = m_ParentForm.GetMainTest().m_Units.m_Units[i].m_UnitName;
                 }
 
                 unitBackupComboBox.Items.AddRange(unitNames);

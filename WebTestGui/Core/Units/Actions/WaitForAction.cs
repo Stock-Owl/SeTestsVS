@@ -87,11 +87,11 @@ namespace WebTestGui
 
                 testRunTimeText.Text =
                     m_ChromeRunTimeInMicroseconds.ToString() + " / " + m_FirefoxRunTimeInMicroseconds.ToString() + " ms";
-                if (m_ParentUnit.m_ParentForm.Test().m_State == Test.TestState.Break)
+                if (m_ParentUnit.m_ParentForm.GetMainTest().m_State == Test.TestState.Break)
                 {
                     testRunTimeText.ForeColor = Color.Firebrick;
                 }
-                else if (m_ParentUnit.m_ParentForm.Test().m_State == Test.TestState.Edit)
+                else if (m_ParentUnit.m_ParentForm.GetMainTest().m_State == Test.TestState.Edit)
                 {
                     testRunTimeText.ForeColor = Color.DimGray;
                 }
@@ -105,11 +105,11 @@ namespace WebTestGui
 
                 testRunTimeText.Text =
                     m_ChromeRunTimeInMicroseconds.ToString() + " / " + m_FirefoxRunTimeInMicroseconds.ToString() + " ms";
-                if (m_ParentUnit.m_ParentForm.Test().m_State == Test.TestState.Break)
+                if (m_ParentUnit.m_ParentForm.GetMainTest().m_State == Test.TestState.Break)
                 {
                     testRunTimeText.ForeColor = Color.Firebrick;
                 }
-                else if (m_ParentUnit.m_ParentForm.Test().m_State == Test.TestState.Edit)
+                else if (m_ParentUnit.m_ParentForm.GetMainTest().m_State == Test.TestState.Edit)
                 {
                     testRunTimeText.ForeColor = Color.DimGray;
                 }

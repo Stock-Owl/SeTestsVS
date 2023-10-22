@@ -65,6 +65,8 @@ namespace WebTestGui
         public void SetUnitBindings();
         public void SetUnitBackupOf();
 
+        public void Collapse(bool collapse);
+
         public string m_UnitName { get; set; }
         public MainForm m_ParentForm { get; set; }
 

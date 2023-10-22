@@ -49,7 +49,7 @@
                 m_TestTabItems.Add(loadedTestTabItem);
                 RefreshTabItems();
                 SelectItem(loadedTestTabItem);
-                m_ParentForm.RefreshEditor();
+                m_ParentForm.RefreshEditor(true);
             }
         }
 
