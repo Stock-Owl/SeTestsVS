@@ -149,7 +149,8 @@ namespace WebTestGui
             {
                 GetMainTest().m_Units.m_Units[i].SetUId(i);
                 GetMainTest().m_Units.m_Units[i].Refresh();
-                GetMainTest().m_Units.m_Units[i].Collapse(true);
+                if (closeAllUnits)
+                    GetMainTest().m_Units.m_Units[i].Collapse(true);
                 controls[i] = (Control)GetMainTest().m_Units.m_Units[i];
                 m_UnitHierarchyPanel.AddUnitHierarchyItem(GetMainTest().m_Units.m_Units[i]);
             }

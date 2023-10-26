@@ -34,18 +34,17 @@
             testRunTimeText = new Label();
             testRunTimeLabel = new Label();
             amountTextField = new TextBox();
-            actionTypeLabel = new Label();
             idTextBox = new TextBox();
             binImage = new PictureBox();
-            label1 = new Label();
-            idLabel = new Label();
             breakpointOffPicture = new PictureBox();
             breakpointOnPicture = new PictureBox();
             label2 = new Label();
+            pictureBox1 = new PictureBox();
             mainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)binImage).BeginInit();
             ((System.ComponentModel.ISupportInitialize)breakpointOffPicture).BeginInit();
             ((System.ComponentModel.ISupportInitialize)breakpointOnPicture).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
             // mainLabel
@@ -63,22 +62,20 @@
             // mainPanel
             // 
             mainPanel.BackColor = Color.FromArgb(45, 45, 50);
+            mainPanel.Controls.Add(pictureBox1);
             mainPanel.Controls.Add(testRunTimeText);
             mainPanel.Controls.Add(testRunTimeLabel);
             mainPanel.Controls.Add(amountTextField);
-            mainPanel.Controls.Add(actionTypeLabel);
             mainPanel.Controls.Add(idTextBox);
             mainPanel.Controls.Add(binImage);
-            mainPanel.Controls.Add(label1);
             mainPanel.Controls.Add(mainLabel);
-            mainPanel.Controls.Add(idLabel);
             mainPanel.Controls.Add(breakpointOffPicture);
             mainPanel.Controls.Add(breakpointOnPicture);
             mainPanel.Controls.Add(label2);
             mainPanel.Dock = DockStyle.Fill;
             mainPanel.Location = new Point(0, 0);
             mainPanel.Name = "mainPanel";
-            mainPanel.Size = new Size(863, 125);
+            mainPanel.Size = new Size(686, 82);
             mainPanel.TabIndex = 12;
             // 
             // testRunTimeText
@@ -88,7 +85,7 @@
             testRunTimeText.BackColor = Color.Transparent;
             testRunTimeText.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
             testRunTimeText.ForeColor = Color.DimGray;
-            testRunTimeText.Location = new Point(386, 107);
+            testRunTimeText.Location = new Point(160, 64);
             testRunTimeText.Name = "testRunTimeText";
             testRunTimeText.Size = new Size(48, 15);
             testRunTimeText.TabIndex = 79;
@@ -101,7 +98,7 @@
             testRunTimeLabel.BackColor = Color.Transparent;
             testRunTimeLabel.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
             testRunTimeLabel.ForeColor = Color.Gray;
-            testRunTimeLabel.Location = new Point(229, 107);
+            testRunTimeLabel.Location = new Point(3, 64);
             testRunTimeLabel.Name = "testRunTimeLabel";
             testRunTimeLabel.Size = new Size(157, 15);
             testRunTimeLabel.TabIndex = 78;
@@ -109,35 +106,23 @@
             // 
             // amountTextField
             // 
-            amountTextField.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             amountTextField.BackColor = Color.FromArgb(40, 40, 43);
             amountTextField.Font = new Font("Segoe UI", 11.25F, FontStyle.Italic, GraphicsUnit.Point);
             amountTextField.ForeColor = Color.DarkGray;
-            amountTextField.Location = new Point(206, 49);
+            amountTextField.Location = new Point(311, 12);
             amountTextField.Name = "amountTextField";
             amountTextField.PlaceholderText = "Ennyi időt fog várni a böngésző...";
-            amountTextField.Size = new Size(460, 27);
+            amountTextField.Size = new Size(319, 27);
             amountTextField.TabIndex = 43;
-            // 
-            // actionTypeLabel
-            // 
-            actionTypeLabel.AutoSize = true;
-            actionTypeLabel.BackColor = Color.Transparent;
-            actionTypeLabel.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
-            actionTypeLabel.ForeColor = Color.Gray;
-            actionTypeLabel.Location = new Point(0, 110);
-            actionTypeLabel.Name = "actionTypeLabel";
-            actionTypeLabel.Size = new Size(65, 15);
-            actionTypeLabel.TabIndex = 42;
-            actionTypeLabel.Text = "action:goto";
             // 
             // idTextBox
             // 
+            idTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             idTextBox.BackColor = Color.FromArgb(40, 40, 43);
             idTextBox.BorderStyle = BorderStyle.FixedSingle;
             idTextBox.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
             idTextBox.ForeColor = Color.Gainsboro;
-            idTextBox.Location = new Point(818, 7);
+            idTextBox.Location = new Point(641, 7);
             idTextBox.Name = "idTextBox";
             idTextBox.Size = new Size(35, 25);
             idTextBox.TabIndex = 38;
@@ -146,8 +131,9 @@
             // 
             // binImage
             // 
+            binImage.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             binImage.Image = (Image)resources.GetObject("binImage.Image");
-            binImage.Location = new Point(825, 87);
+            binImage.Location = new Point(641, 40);
             binImage.Name = "binImage";
             binImage.Size = new Size(35, 35);
             binImage.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -155,34 +141,11 @@
             binImage.TabStop = false;
             binImage.Click += binImage_Click;
             // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.BackColor = Color.Transparent;
-            label1.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
-            label1.ForeColor = Color.Gray;
-            label1.Location = new Point(100, 16);
-            label1.Name = "label1";
-            label1.Size = new Size(373, 15);
-            label1.TabIndex = 36;
-            label1.Text = "A böngésző várakozik a megadott időn keresztül (miliszekundumban).";
-            // 
-            // idLabel
-            // 
-            idLabel.AutoSize = true;
-            idLabel.BackColor = Color.Transparent;
-            idLabel.Font = new Font("Segoe UI Semibold", 13F, FontStyle.Bold, GraphicsUnit.Point);
-            idLabel.ForeColor = Color.White;
-            idLabel.Location = new Point(782, 8);
-            idLabel.Name = "idLabel";
-            idLabel.Size = new Size(34, 25);
-            idLabel.TabIndex = 39;
-            idLabel.Text = "ID:";
-            // 
             // breakpointOffPicture
             // 
+            breakpointOffPicture.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             breakpointOffPicture.Image = (Image)resources.GetObject("breakpointOffPicture.Image");
-            breakpointOffPicture.Location = new Point(828, 47);
+            breakpointOffPicture.Location = new Point(605, 46);
             breakpointOffPicture.Name = "breakpointOffPicture";
             breakpointOffPicture.Size = new Size(25, 25);
             breakpointOffPicture.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -192,8 +155,9 @@
             // 
             // breakpointOnPicture
             // 
+            breakpointOnPicture.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             breakpointOnPicture.Image = Properties.Resources.BreakpointOnIcon;
-            breakpointOnPicture.Location = new Point(828, 47);
+            breakpointOnPicture.Location = new Point(605, 46);
             breakpointOnPicture.Name = "breakpointOnPicture";
             breakpointOnPicture.Size = new Size(25, 25);
             breakpointOnPicture.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -207,11 +171,22 @@
             label2.BackColor = Color.Transparent;
             label2.Font = new Font("Segoe UI", 13F, FontStyle.Regular, GraphicsUnit.Point);
             label2.ForeColor = Color.White;
-            label2.Location = new Point(39, 49);
+            label2.Location = new Point(136, 13);
             label2.Name = "label2";
             label2.Size = new Size(169, 25);
             label2.TabIndex = 44;
             label2.Text = "Várakozási idő (ms):";
+            // 
+            // pictureBox1
+            // 
+            pictureBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
+            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
+            pictureBox1.Location = new Point(71, 7);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(45, 45);
+            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+            pictureBox1.TabIndex = 80;
+            pictureBox1.TabStop = false;
             // 
             // WaitAction
             // 
@@ -220,12 +195,13 @@
             BackColor = Color.FromArgb(50, 50, 55);
             Controls.Add(mainPanel);
             Name = "WaitAction";
-            Size = new Size(863, 125);
+            Size = new Size(686, 82);
             mainPanel.ResumeLayout(false);
             mainPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)binImage).EndInit();
             ((System.ComponentModel.ISupportInitialize)breakpointOffPicture).EndInit();
             ((System.ComponentModel.ISupportInitialize)breakpointOnPicture).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
         }
 
@@ -233,16 +209,14 @@
 
         protected Label mainLabel;
         private Panel mainPanel;
-        protected Label label1;
         private PictureBox binImage;
         private TextBox idTextBox;
-        protected Label idLabel;
         private PictureBox breakpointOnPicture;
         private PictureBox breakpointOffPicture;
-        protected Label actionTypeLabel;
         private TextBox amountTextField;
         protected Label label2;
         protected Label testRunTimeText;
         protected Label testRunTimeLabel;
+        private PictureBox pictureBox1;
     }
 }

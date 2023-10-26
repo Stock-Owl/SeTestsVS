@@ -35,7 +35,7 @@
         },
         "1": {
           "type": "goto",
-          "break": false,
+          "break": true,
           "url": "https://github.com"
         }
       }
@@ -46,7 +46,7 @@
       "actions": {
         "0": {
           "type": "goto",
-          "break": false,
+          "break": true,
           "url": "https://wikipedia.org/"
         }
       }
@@ -78,7 +78,7 @@
       "actions": {
         "0": {
           "type": "goto",
-          "break": false,
+          "break": true,
           "url": "https://youtube.com"
         },
         "1": {

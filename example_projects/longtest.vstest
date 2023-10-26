@@ -99,7 +99,7 @@
         },
         "1": {
           "type": "goto",
-          "break": false,
+          "break": true,
           "url": "https://github.com"
         },
         "2": {
@@ -151,7 +151,7 @@
         }
       }
     },
-    "Nyoldacik Unit": {
+    "Nyolcadik Unit": {
       "bindings": null,
       "backup_of": null,
       "actions": {

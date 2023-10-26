@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using System.Drawing.Drawing2D;
 
 namespace WebTestGui
 {
@@ -11,7 +12,6 @@ namespace WebTestGui
             idTextBox.KeyPress += OnIdOverride!;
 
             mainLabel.Text = "Switch-to";
-            actionTypeLabel.Text = "action:" + m_ActionType;
         }
 
         // ACTION INTERFACE FUNCTIONS AND MEMBERS
@@ -124,10 +124,22 @@ namespace WebTestGui
             base.OnPaint(e);
             using (Graphics g = e.Graphics)
             {
-                var p = new Pen(Color.DarkGray, 2);
-                var point1 = new Point(0, 0);
-                var point2 = new Point(Size.Width, 0);
-                g.DrawLine(p, point1, point2);
+                var p = new Pen(Color.FromArgb(255, 75, 75, 70), 2);
+                int cornerRadius = 20; // Az oldalak lekerekítési sugara
+
+                GraphicsPath path = new GraphicsPath();
+
+                // Készíti a lekerekített négyzetet
+                path.AddArc(0, 0, 2 * cornerRadius, 2 * cornerRadius, 180, 90); // Bal felső sarok
+                path.AddLine(cornerRadius, 0, Size.Width - cornerRadius, 0); // Felső él
+                path.AddArc(Size.Width - 2 * cornerRadius, 0, 2 * cornerRadius, 2 * cornerRadius, 270, 90); // Jobb felső sarok
+                path.AddLine(Size.Width, cornerRadius, Size.Width, Size.Height - cornerRadius); // Jobb oldal
+                path.AddArc(Size.Width - 2 * cornerRadius, Size.Height - 2 * cornerRadius, 2 * cornerRadius, 2 * cornerRadius, 0, 90); // Jobb alsó sarok
+                path.AddLine(Size.Width - cornerRadius, Size.Height, cornerRadius, Size.Height); // Alsó él
+                path.AddArc(0, Size.Height - 2 * cornerRadius, 2 * cornerRadius, 2 * cornerRadius, 90, 90); // Bal alsó sarok
+                path.AddLine(0, Size.Height - cornerRadius, 0, cornerRadius); // Bal oldal
+
+                g.DrawPath(p, path);
             }
         }
 

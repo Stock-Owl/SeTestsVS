@@ -31,12 +31,9 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SendKeysAction));
             breakpointOnPicture = new PictureBox();
             breakpointOffPicture = new PictureBox();
-            idLabel = new Label();
             mainLabel = new Label();
-            label1 = new Label();
             binImage = new PictureBox();
             idTextBox = new TextBox();
-            actionTypeLabel = new Label();
             singleCheckbox = new CheckBox();
             singleLabel = new Label();
             label2 = new Label();
@@ -55,16 +52,19 @@
             enabledCheckBox = new CheckBox();
             label6 = new Label();
             displayedCheckbox = new CheckBox();
+            pictureBox1 = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)breakpointOnPicture).BeginInit();
             ((System.ComponentModel.ISupportInitialize)breakpointOffPicture).BeginInit();
             ((System.ComponentModel.ISupportInitialize)binImage).BeginInit();
             mainPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
             // breakpointOnPicture
             // 
+            breakpointOnPicture.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             breakpointOnPicture.Image = Properties.Resources.BreakpointOnIcon;
-            breakpointOnPicture.Location = new Point(828, 38);
+            breakpointOnPicture.Location = new Point(712, 38);
             breakpointOnPicture.Name = "breakpointOnPicture";
             breakpointOnPicture.Size = new Size(25, 25);
             breakpointOnPicture.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -74,26 +74,15 @@
             // 
             // breakpointOffPicture
             // 
+            breakpointOffPicture.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             breakpointOffPicture.Image = (Image)resources.GetObject("breakpointOffPicture.Image");
-            breakpointOffPicture.Location = new Point(828, 38);
+            breakpointOffPicture.Location = new Point(712, 38);
             breakpointOffPicture.Name = "breakpointOffPicture";
             breakpointOffPicture.Size = new Size(25, 25);
             breakpointOffPicture.SizeMode = PictureBoxSizeMode.StretchImage;
             breakpointOffPicture.TabIndex = 41;
             breakpointOffPicture.TabStop = false;
             breakpointOffPicture.Click += breakpointOffPicture_Click;
-            // 
-            // idLabel
-            // 
-            idLabel.AutoSize = true;
-            idLabel.BackColor = Color.Transparent;
-            idLabel.Font = new Font("Segoe UI Semibold", 13F, FontStyle.Bold, GraphicsUnit.Point);
-            idLabel.ForeColor = Color.White;
-            idLabel.Location = new Point(782, 8);
-            idLabel.Name = "idLabel";
-            idLabel.Size = new Size(34, 25);
-            idLabel.TabIndex = 39;
-            idLabel.Text = "ID:";
             // 
             // mainLabel
             // 
@@ -107,23 +96,11 @@
             mainLabel.TabIndex = 11;
             mainLabel.Text = "Send-Keys:";
             // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.BackColor = Color.Transparent;
-            label1.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
-            label1.ForeColor = Color.Gray;
-            label1.Location = new Point(120, 16);
-            label1.Name = "label1";
-            label1.Size = new Size(205, 15);
-            label1.TabIndex = 36;
-            label1.Text = "Kulcsokat küldd megadott elem(ek)re.";
-            // 
             // binImage
             // 
-            binImage.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            binImage.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             binImage.Image = (Image)resources.GetObject("binImage.Image");
-            binImage.Location = new Point(825, 103);
+            binImage.Location = new Point(706, 74);
             binImage.Name = "binImage";
             binImage.Size = new Size(35, 35);
             binImage.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -133,29 +110,17 @@
             // 
             // idTextBox
             // 
+            idTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             idTextBox.BackColor = Color.FromArgb(40, 40, 43);
             idTextBox.BorderStyle = BorderStyle.FixedSingle;
             idTextBox.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
             idTextBox.ForeColor = Color.Gainsboro;
-            idTextBox.Location = new Point(818, 7);
+            idTextBox.Location = new Point(702, 7);
             idTextBox.Name = "idTextBox";
             idTextBox.Size = new Size(35, 25);
             idTextBox.TabIndex = 38;
             idTextBox.Text = "0";
             idTextBox.Leave += OnUIdTextBoxFocusLeave;
-            // 
-            // actionTypeLabel
-            // 
-            actionTypeLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            actionTypeLabel.AutoSize = true;
-            actionTypeLabel.BackColor = Color.Transparent;
-            actionTypeLabel.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
-            actionTypeLabel.ForeColor = Color.Gray;
-            actionTypeLabel.Location = new Point(0, 126);
-            actionTypeLabel.Name = "actionTypeLabel";
-            actionTypeLabel.Size = new Size(95, 15);
-            actionTypeLabel.TabIndex = 43;
-            actionTypeLabel.Text = "action:send-keys";
             // 
             // singleCheckbox
             // 
@@ -163,7 +128,7 @@
             singleCheckbox.BackColor = Color.Transparent;
             singleCheckbox.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
             singleCheckbox.ForeColor = Color.Silver;
-            singleCheckbox.Location = new Point(619, 14);
+            singleCheckbox.Location = new Point(590, 14);
             singleCheckbox.Name = "singleCheckbox";
             singleCheckbox.Size = new Size(15, 14);
             singleCheckbox.TabIndex = 44;
@@ -176,7 +141,7 @@
             singleLabel.BackColor = Color.Transparent;
             singleLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             singleLabel.ForeColor = Color.White;
-            singleLabel.Location = new Point(561, 9);
+            singleLabel.Location = new Point(532, 9);
             singleLabel.Name = "singleLabel";
             singleLabel.Size = new Size(44, 21);
             singleLabel.TabIndex = 45;
@@ -188,7 +153,7 @@
             label2.BackColor = Color.Transparent;
             label2.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
             label2.ForeColor = Color.Gray;
-            label2.Location = new Point(651, 13);
+            label2.Location = new Point(611, 13);
             label2.Name = "label2";
             label2.Size = new Size(80, 15);
             label2.TabIndex = 46;
@@ -197,6 +162,7 @@
             // mainPanel
             // 
             mainPanel.BackColor = Color.FromArgb(45, 45, 50);
+            mainPanel.Controls.Add(pictureBox1);
             mainPanel.Controls.Add(testRunTimeText);
             mainPanel.Controls.Add(testRunTimeLabel);
             mainPanel.Controls.Add(keysLabel);
@@ -214,18 +180,15 @@
             mainPanel.Controls.Add(label2);
             mainPanel.Controls.Add(singleLabel);
             mainPanel.Controls.Add(singleCheckbox);
-            mainPanel.Controls.Add(actionTypeLabel);
             mainPanel.Controls.Add(idTextBox);
             mainPanel.Controls.Add(binImage);
-            mainPanel.Controls.Add(label1);
             mainPanel.Controls.Add(mainLabel);
-            mainPanel.Controls.Add(idLabel);
             mainPanel.Controls.Add(breakpointOffPicture);
             mainPanel.Controls.Add(breakpointOnPicture);
             mainPanel.Dock = DockStyle.Fill;
             mainPanel.Location = new Point(0, 0);
             mainPanel.Name = "mainPanel";
-            mainPanel.Size = new Size(863, 141);
+            mainPanel.Size = new Size(747, 114);
             mainPanel.TabIndex = 12;
             // 
             // testRunTimeText
@@ -235,7 +198,7 @@
             testRunTimeText.BackColor = Color.Transparent;
             testRunTimeText.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
             testRunTimeText.ForeColor = Color.DimGray;
-            testRunTimeText.Location = new Point(388, 123);
+            testRunTimeText.Location = new Point(160, 96);
             testRunTimeText.Name = "testRunTimeText";
             testRunTimeText.Size = new Size(48, 15);
             testRunTimeText.TabIndex = 87;
@@ -248,7 +211,7 @@
             testRunTimeLabel.BackColor = Color.Transparent;
             testRunTimeLabel.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
             testRunTimeLabel.ForeColor = Color.Gray;
-            testRunTimeLabel.Location = new Point(231, 123);
+            testRunTimeLabel.Location = new Point(3, 96);
             testRunTimeLabel.Name = "testRunTimeLabel";
             testRunTimeLabel.Size = new Size(157, 15);
             testRunTimeLabel.TabIndex = 86;
@@ -260,7 +223,7 @@
             keysLabel.BackColor = Color.Transparent;
             keysLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             keysLabel.ForeColor = Color.White;
-            keysLabel.Location = new Point(159, 37);
+            keysLabel.Location = new Point(129, 11);
             keysLabel.Name = "keysLabel";
             keysLabel.Size = new Size(66, 21);
             keysLabel.TabIndex = 85;
@@ -271,10 +234,10 @@
             keysTextBox.BackColor = Color.FromArgb(40, 40, 43);
             keysTextBox.Font = new Font("Segoe UI", 8F, FontStyle.Italic, GraphicsUnit.Point);
             keysTextBox.ForeColor = Color.DarkGray;
-            keysTextBox.Location = new Point(231, 37);
+            keysTextBox.Location = new Point(201, 11);
             keysTextBox.Name = "keysTextBox";
             keysTextBox.PlaceholderText = "Kulcsok...";
-            keysTextBox.Size = new Size(308, 22);
+            keysTextBox.Size = new Size(192, 22);
             keysTextBox.TabIndex = 84;
             // 
             // locatorTextBox
@@ -285,7 +248,7 @@
             locatorTextBox.ForeColor = Color.DarkGray;
             locatorTextBox.FormattingEnabled = true;
             locatorTextBox.Items.AddRange(new object[] { "xpath", "css_selector" });
-            locatorTextBox.Location = new Point(201, 65);
+            locatorTextBox.Location = new Point(201, 39);
             locatorTextBox.Name = "locatorTextBox";
             locatorTextBox.Size = new Size(192, 21);
             locatorTextBox.TabIndex = 83;
@@ -297,7 +260,7 @@
             valueLabel.BackColor = Color.Transparent;
             valueLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             valueLabel.ForeColor = Color.White;
-            valueLabel.Location = new Point(129, 92);
+            valueLabel.Location = new Point(129, 66);
             valueLabel.Name = "valueLabel";
             valueLabel.Size = new Size(48, 21);
             valueLabel.TabIndex = 82;
@@ -309,7 +272,7 @@
             locatorLabel.BackColor = Color.Transparent;
             locatorLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             locatorLabel.ForeColor = Color.White;
-            locatorLabel.Location = new Point(129, 65);
+            locatorLabel.Location = new Point(129, 39);
             locatorLabel.Name = "locatorLabel";
             locatorLabel.Size = new Size(66, 21);
             locatorLabel.TabIndex = 81;
@@ -320,7 +283,7 @@
             valueTextBox.BackColor = Color.FromArgb(40, 40, 43);
             valueTextBox.Font = new Font("Segoe UI", 8F, FontStyle.Italic, GraphicsUnit.Point);
             valueTextBox.ForeColor = Color.DarkGray;
-            valueTextBox.Location = new Point(201, 92);
+            valueTextBox.Location = new Point(201, 66);
             valueTextBox.Name = "valueTextBox";
             valueTextBox.PlaceholderText = "Érték...";
             valueTextBox.Size = new Size(192, 22);
@@ -332,7 +295,7 @@
             label8.BackColor = Color.Transparent;
             label8.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
             label8.ForeColor = Color.White;
-            label8.Location = new Point(641, 103);
+            label8.Location = new Point(414, 55);
             label8.Name = "label8";
             label8.Size = new Size(52, 19);
             label8.TabIndex = 70;
@@ -344,7 +307,7 @@
             selectedCheckBox.BackColor = Color.Transparent;
             selectedCheckBox.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
             selectedCheckBox.ForeColor = Color.Silver;
-            selectedCheckBox.Location = new Point(734, 107);
+            selectedCheckBox.Location = new Point(507, 59);
             selectedCheckBox.Name = "selectedCheckBox";
             selectedCheckBox.Size = new Size(15, 14);
             selectedCheckBox.TabIndex = 69;
@@ -356,7 +319,7 @@
             label7.BackColor = Color.Transparent;
             label7.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
             label7.ForeColor = Color.White;
-            label7.Location = new Point(641, 82);
+            label7.Location = new Point(414, 34);
             label7.Name = "label7";
             label7.Size = new Size(77, 19);
             label7.TabIndex = 68;
@@ -368,7 +331,7 @@
             enabledCheckBox.BackColor = Color.Transparent;
             enabledCheckBox.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
             enabledCheckBox.ForeColor = Color.Silver;
-            enabledCheckBox.Location = new Point(734, 86);
+            enabledCheckBox.Location = new Point(507, 38);
             enabledCheckBox.Name = "enabledCheckBox";
             enabledCheckBox.Size = new Size(15, 14);
             enabledCheckBox.TabIndex = 67;
@@ -380,7 +343,7 @@
             label6.BackColor = Color.Transparent;
             label6.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
             label6.ForeColor = Color.White;
-            label6.Location = new Point(641, 61);
+            label6.Location = new Point(414, 13);
             label6.Name = "label6";
             label6.Size = new Size(90, 19);
             label6.TabIndex = 66;
@@ -392,11 +355,22 @@
             displayedCheckbox.BackColor = Color.Transparent;
             displayedCheckbox.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
             displayedCheckbox.ForeColor = Color.Silver;
-            displayedCheckbox.Location = new Point(734, 65);
+            displayedCheckbox.Location = new Point(507, 17);
             displayedCheckbox.Name = "displayedCheckbox";
             displayedCheckbox.Size = new Size(15, 14);
             displayedCheckbox.TabIndex = 65;
             displayedCheckbox.UseVisualStyleBackColor = false;
+            // 
+            // pictureBox1
+            // 
+            pictureBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
+            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
+            pictureBox1.Location = new Point(16, 39);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(55, 45);
+            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+            pictureBox1.TabIndex = 88;
+            pictureBox1.TabStop = false;
             // 
             // SendKeysAction
             // 
@@ -405,12 +379,13 @@
             BackColor = Color.FromArgb(50, 50, 55);
             Controls.Add(mainPanel);
             Name = "SendKeysAction";
-            Size = new Size(863, 141);
+            Size = new Size(747, 114);
             ((System.ComponentModel.ISupportInitialize)breakpointOnPicture).EndInit();
             ((System.ComponentModel.ISupportInitialize)breakpointOffPicture).EndInit();
             ((System.ComponentModel.ISupportInitialize)binImage).EndInit();
             mainPanel.ResumeLayout(false);
             mainPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
         }
 
@@ -418,12 +393,9 @@
 
         private PictureBox breakpointOnPicture;
         private PictureBox breakpointOffPicture;
-        protected Label idLabel;
         protected Label mainLabel;
-        protected Label label1;
         private PictureBox binImage;
         private TextBox idTextBox;
-        protected Label actionTypeLabel;
         private CheckBox singleCheckbox;
         protected Label singleLabel;
         protected Label label2;
@@ -442,5 +414,6 @@
         private TextBox keysTextBox;
         protected Label testRunTimeText;
         protected Label testRunTimeLabel;
+        private PictureBox pictureBox1;
     }
 }

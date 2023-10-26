@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json.Linq;
-using System;
 
 namespace WebTestGui
 {
@@ -38,7 +37,7 @@ namespace WebTestGui
                 if (int.TryParse(idTextBox.Text, out int _))
                 {
                     int newId = int.Parse(idTextBox.Text);
-                    if (m_ParentForm!= null)
+                    if (m_ParentForm != null)
                     {
                         m_ParentForm.MoveUnit(this, newId);
                     }
@@ -53,7 +52,7 @@ namespace WebTestGui
 
             if (result == DialogResult.Yes)
             {
-                if (m_ParentForm!= null)
+                if (m_ParentForm != null)
                 {
                     m_ParentForm.DeleteUnit(this);
                     Refresh();
@@ -95,7 +94,11 @@ namespace WebTestGui
                 actionsPanel.SuspendLayout();
 
                 actionsPanel.Controls.Clear();
-                actionsPanel.Controls.AddRange(controls);
+                foreach (Control control in controls)
+                {
+                    actionsPanel.Controls.Add(control);
+                    actionsPanel.SetFlowBreak(control, true);
+                }
 
                 int totalHeight = 74;
                 int counter = 0;
@@ -123,6 +126,8 @@ namespace WebTestGui
 
             SetUnitBindings();
             SetUnitBackupOf();
+
+            Invalidate();
         }
 
         public void Enable(bool enabled)
@@ -189,9 +194,10 @@ namespace WebTestGui
             using (Graphics g = e.Graphics)
             {
                 var p = new Pen(Color.DarkGray, 2);
-                var point1 = new Point(0, 0);
-                var point2 = new Point(Size.Width, 0);
-                g.DrawLine(p, point1, point2);
+                g.DrawLine(p, new Point(0, 0), new Point(Size.Width, 0));
+                //g.DrawLine(p, new Point(0, Size.Height), new Point(Size.Width, Size.Height));
+                g.DrawLine(p, new Point(0, 0), new Point(0, Size.Height));
+                g.DrawLine(p, new Point(Size.Width, 0), new Point(Size.Width, Size.Height));
             }
         }
 
@@ -314,6 +320,7 @@ namespace WebTestGui
             m_Actions.m_Actions.Add(action);
             OnExpandActionsButttonClick(sender, e);
             Refresh();
+            Invalidate();
         }
 
         private void OnUnitBindingsComboBoxSelectedIndexChanged(object sender, EventArgs e)
