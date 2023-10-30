@@ -5,7 +5,6 @@ namespace WebTestGui
 {
     public partial class MainForm : Form
     {
-
         #region On start
 
         public MainForm()
