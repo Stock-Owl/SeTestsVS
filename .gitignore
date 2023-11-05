@@ -403,8 +403,8 @@ run.py
 */vsinstaller/*
 wininstaller.cpp
 wininstaller.exe
-side1.py
-side2.py
+./side1.py
+./side2.py
 todelete.c
 */run.json
 .vscode/*

@@ -17,7 +17,7 @@ from copy import copy
 from os import getpid
 
 # V.1.3.0
-#                                                                               26 / 27 + 1
+#                                                                               26 / 28 + 1
 # TODO: Kitalálni, hogy vannak az argumentumok                                  ✅  1
 # TODO: Megszerelni a random useless conversionöket a JSON-ből                  ✅  2
 # TODO: Relative locators                                                       ❌  NAH FUCK that shit
@@ -41,7 +41,7 @@ from os import getpid
 # TODO: Units and binding                                                       ✅  13
 # TODO: Beautify logging messages                                               ✅  14
 # TODO: Implement breaks                                                        ✅  15
-# TODO: IF the logging is ready, try to use a decorator insted of the static    ❓  + 1
+# TODO: IF the logging is ready, try to use a decorator instead of the static    ❓  + 1
 # TODO: Finish wait_for implementation                                          ✅  16
 # TODO: AutoLogJS needs to be patched so that it writes the logs
 # even if the driver exits while it tries to write into the intermediate file   ✅  17
@@ -56,6 +56,7 @@ from os import getpid
 # TODO: breakpoint intermediate                                                 ✅  25
 # TODO: installer update                                                        ❌  26
 # TODO: refactoring                                                             ✅  27
+# TODO: waitfor fix attempt                                                     ❌  28
 
 # Snyk deepcode ignores:
 # file deepcode ignore AttributeLoadOnNone: <Keyword arguments only set to None to make them a keyword argument. All parameters will be passed from the host funciton>

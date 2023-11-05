@@ -10,8 +10,6 @@ from selenium.common.exceptions import NoAlertPresentException as AlertNotFound
 import time
 from math import ceil
 
-BOOL: str = 'b'
-
 # CONDITIONS
 # element loaded
 # element visible / displayed
@@ -59,7 +57,7 @@ class Wait:
 
     def Check(
         driver: ChromeDriver | FirefoxDriver | WireChromeDriver | WireFirefoxDriver = None, 
-        condition: dict[str, str | int] = None
+        condition: dict[str, str | bool] = None
         ) -> bool:
         checktype = condition["type"]
         match checktype.lower():
