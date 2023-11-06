@@ -1,0 +1,13 @@
+CC = g++
+
+menuoptions.o : menuoptions.cpp prerequisites.o menu.o
+    $(CC) -c menuoptions.cpp -o $@
+
+menu.o : menu.cpp
+    $(CC) -c $? -o $@
+
+prerequisites.o : prerequisites.cpp
+    $(CC) -c $? -o $@
+
+wininstaller.exe: wininstaller.cpp
+    $(CC) $? -o $@

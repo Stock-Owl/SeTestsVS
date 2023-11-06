@@ -1,11 +1,10 @@
 #include <fstream>
 #include <iostream>
 #include <string>
-#include <conio.h>
-#include <nlohmann/json.hpp>
-#include "prerequisites.h"
-#include "menu.h"
-#include "menuoptions.h"
+#include "json.hpp"
+#include "prerequisites.hpp"
+#include "menu.hpp"
+#include "menuoptions.hpp"
 
 using namespace Installer;
 

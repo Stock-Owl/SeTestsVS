@@ -1,8 +1,7 @@
 #include <iostream>
 #include <string>
-#include <conio.h>
 #include <cmath>
-#include "menuoptions.h"
+#include "menuoptions.hpp"
 
 using namespace Installer;
 

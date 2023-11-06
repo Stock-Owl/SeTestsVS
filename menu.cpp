@@ -1,9 +1,9 @@
 #include <iostream>
 #include <string>
-#include <conio.h>
 #include <vector>
 #include <cmath>
-#include "menu.h"
+#include "menu.hpp"
+#include <unistd.h>
 
 using namespace Installer;
 
@@ -134,7 +134,7 @@ std::string Menu::take_input()
         // goes back as many rows as many menu option there is
         std::cout << "\033[" << line_count << "A"; 
 
-        int input = _getch();
+        int input = getchar();
         // using else-if-s so that you can break the while loop at certain cases
         if (prevarrowkey)
         {
