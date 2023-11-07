@@ -157,6 +157,14 @@ class Wait:
             checklist: list[bool | None]
         ) -> bool:
 
+        def Numextractor(string: str, logic_modifier: str) -> None | Exception:
+            _ = string.removeprefix(logic_modifier)
+            try:
+                ret = int(_)
+                return ret
+            except ValueError:
+                raise Exception(f"Invalid logic modifier and or unconvertable value for \'n\': {_}")
+
         _ = Wait.logic_modifiers
 
         match logic_modifier:
