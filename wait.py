@@ -135,60 +135,80 @@ class Wait:
             case _:
                 raise ValueError(f"\'{checktype}\' is not a valid condition to await")
 
+    class logic_modifiers:
+        """
+            Container class for logic modifiers
+        """
+        AND: str = 'and'
+        OR: str = 'or'
+        NAND: str = 'nand'
+        NOR: str = 'nor'
+        XOR: str = 'xor'
+        XNOR: str = 'xnor'
+        N: str = 'n'
+        MINN: str = 'minn'
+        MAXN: str = 'maxn'
+        NOTN: str = 'notn'
+        NMINN: str = 'nminn'
+        NMAXN: str = 'nmaxn'
+
     def LogicCheck(
             logic_modifier: str,
             checklist: list[bool | None]
         ) -> bool:
+
+        _ = Wait.logic_modifiers
+
         match logic_modifier:
             # `and` returns true if all conditions evaluate to true
-            case 'and':
+            case _.AND:
                 if False in checklist:
                     return False
                 return True
             # `or` return true if any of the conditions evaluate to true
-            case "or":
+            case _.OR:
                 if True in checklist:
                     return True
                 return False
             # `nand` return true if any condition evaluates to false
-            case "nand":
+            case _.NAND:
                 if False in checklist:
                     return True
                 return False
             # `nor` return true if all conditions evaluates to false
-            case "nor":
+            case _.NOR:
                 if True in checklist:
                     return False
                 return True
             # `xor` returns true if any condition evaluates to true but not all of them
-            case "xor":
+            case _.XOR:
                 if (True and False) in checklist:
                     return True
                 return False
             # `xnor` returns true if either all of the conditions evaluates to true or false
-            case "xnor":
+            case _.XNOR:
                 if True in checklist and False not in checklist:
                     return True
                 elif False in checklist and True not in checklist:
                     return True
                 return False
-            # exactly n
-            case "n":
+            # `n` returns true if exactly n cases evaluate to true
+            case _.N:
                 pass
-            # minimum n
-            case "minn":
+            # `minn` returns true if at least n cases evaluate to true
+            case _.MINN:
                 pass
-            # maximmum n
-            case "maxn":
+            # `maxn` returns true if at most n cases evaluate to true
+            case _.MAXN:
                 pass
-            # not exactly n
-            case "notn":
+            # `notn` returns true if exactly n cases evaluate to false
+            case _.NOTN:
                 pass
-            # not minimum n
-            case "nminn":
+            # `nminn` returns true if at least n cases evaluate to false
+            case _.NMINN:
                 pass
-            # not maximmum n
-            case "nmaxn":
+            # `nmaxn` returns true if at most n cases evaluate to false
+            case _.NMAXN:
                 pass
             # undefined
             case _:
