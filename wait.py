@@ -134,3 +134,62 @@ class Wait:
                 return False
             case _:
                 raise ValueError(f"\'{checktype}\' is not a valid condition to await")
+
+    def LogicCheck(
+            logic_modifier: str,
+            checklist: list[bool | None]
+        ) -> bool:
+        match logic_modifier:
+            # `and` returns true if all conditions evaluate to true
+            case 'and':
+                if False in checklist:
+                    return False
+                return True
+            # `or` return true if any of the conditions evaluate to true
+            case "or":
+                if True in checklist:
+                    return True
+                return False
+            # `nand` return true if any condition evaluates to false
+            case "nand":
+                if False in checklist:
+                    return True
+                return False
+            # `nor` return true if all conditions evaluates to false
+            case "nor":
+                if True in checklist:
+                    return False
+                return True
+            # `xor` returns true if any condition evaluates to true but not all of them
+            case "xor":
+                if (True and False) in checklist:
+                    return True
+                return False
+            # `xnor` returns true if either all of the conditions evaluates to true or false
+            case "xnor":
+                if True in checklist and False not in checklist:
+                    return True
+                elif False in checklist and True not in checklist:
+                    return True
+                return False
+            # exactly n
+            case "n":
+                pass
+            # minimum n
+            case "minn":
+                pass
+            # maximmum n
+            case "maxn":
+                pass
+            # not exactly n
+            case "notn":
+                pass
+            # not minimum n
+            case "nminn":
+                pass
+            # not maximmum n
+            case "nmaxn":
+                pass
+            # undefined
+            case _:
+                pass
