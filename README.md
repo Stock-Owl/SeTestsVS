@@ -1,4 +1,4 @@
-# VisionSoft Selenium WebTeszt útmutató (WebSquid)
+# VisionSoft Selenium WebTeszt útmutató (webSquid)
 > **Verzió:** Az útmutató az applikáció **V1.1** verziójához készült.
 
 Ez a *Markdown* a **Vision Software** által fejlesztett félautomatikus web-tesztelő applikációhoz készített használati útmutató, ami bemutatja az applikáció funkcióit, használatát, elemeit és a bele épített időzító rendszer alkalmazását is.
