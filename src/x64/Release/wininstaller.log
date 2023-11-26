@@ -1,0 +1,21 @@
+﻿D:\VisualStudio\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(517,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
+  menu.cpp
+C:\Users\balaz\Desktop\talalka\wininstaller\wininstaller\menu.cpp(18,22): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\balaz\Desktop\talalka\wininstaller\wininstaller\menu.cpp(27,22): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\balaz\Desktop\talalka\wininstaller\wininstaller\menu.cpp(35,30): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\balaz\Desktop\talalka\wininstaller\wininstaller\menu.cpp(49,22): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\balaz\Desktop\talalka\wininstaller\wininstaller\menu.cpp(58,22): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\balaz\Desktop\talalka\wininstaller\wininstaller\menu.cpp(66,30): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\balaz\Desktop\talalka\wininstaller\wininstaller\menu.cpp(89,28): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\balaz\Desktop\talalka\wininstaller\wininstaller\menu.cpp(90,25): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\balaz\Desktop\talalka\wininstaller\wininstaller\menu.cpp(104,25): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\balaz\Desktop\talalka\wininstaller\wininstaller\menu.cpp(111,48): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+  menuoptions.cpp
+  prerequisites.cpp
+  wininstaller.cpp
+  Generating code
+  1052 of 1781 functions (59.1%) were compiled, the rest were copied from previous compilation.
+    248 functions were new in current compilation
+    42 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  wininstaller.vcxproj -> C:\Users\balaz\Desktop\talalka\wininstaller\output\wininstaller.exe
