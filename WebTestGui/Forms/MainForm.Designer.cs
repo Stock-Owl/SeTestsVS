@@ -387,7 +387,7 @@
             testNameLabel.BackColor = Color.FromArgb(50, 50, 53);
             testNameLabel.Font = new Font("Segoe UI Semibold", 20F, FontStyle.Bold, GraphicsUnit.Point);
             testNameLabel.ForeColor = Color.White;
-            testNameLabel.Location = new Point(408, 37);
+            testNameLabel.Location = new Point(408, 6);
             testNameLabel.Name = "testNameLabel";
             testNameLabel.Size = new Size(136, 37);
             testNameLabel.TabIndex = 55;
@@ -396,7 +396,7 @@
             // breakpointIcon
             // 
             breakpointIcon.Image = (Image)resources.GetObject("breakpointIcon.Image");
-            breakpointIcon.Location = new Point(544, 47);
+            breakpointIcon.Location = new Point(544, 16);
             breakpointIcon.Name = "breakpointIcon";
             breakpointIcon.Size = new Size(25, 25);
             breakpointIcon.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -410,7 +410,7 @@
             testRunTimeText.BackColor = Color.Transparent;
             testRunTimeText.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
             testRunTimeText.ForeColor = Color.DarkGray;
-            testRunTimeText.Location = new Point(544, 52);
+            testRunTimeText.Location = new Point(414, 52);
             testRunTimeText.Name = "testRunTimeText";
             testRunTimeText.Size = new Size(218, 15);
             testRunTimeText.TabIndex = 61;

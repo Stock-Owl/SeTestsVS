@@ -36,11 +36,6 @@ namespace WebTestGui
             m_UnitHierarchyPanel.Size = new Size(327, 400);
             m_UnitHierarchyPanel.Visible = false;
 
-            m_TestTab = new TestTab(this);
-            Controls.Add(m_TestTab);
-            m_TestTab.Location = new Point(410, 0);
-            m_TestTab.AddNewBlankItem();
-
             m_RunLogConsole.AddToConsoles("Applikáció indítása...\n");
             m_RunLogConsole.AddToConsoles("Verzió: " + $"{AppConsts.s_AppVersion}\n");
             m_RunLogConsole.AddToConsoles("Idő: " + $"{DateTime.Now}\n");
@@ -49,7 +44,11 @@ namespace WebTestGui
             m_JsLogConsole.AddToConsoles("A teszt ideje alatt minden JavaScript log " +
                 "információ ide lesz kiiratva.\n");
 
+            m_Test = new Test(this);
+            m_Test.PopulateDefaultOptions();
+
             RefreshOptionsPanel();
+            RefreshUnitsPanel();
 
             string[] args = Environment.GetCommandLineArgs();
             if (args != null)
@@ -373,8 +372,6 @@ namespace WebTestGui
                 StartPython(temparray[0], "main.py");
             }
 
-            m_TestTab.m_TestRunning = true;
-
             File.WriteAllText(GetMainTest().GetRootLogDirectoryPath() + @"/chrome/run.log", string.Empty);
             File.WriteAllText(GetMainTest().GetRootLogDirectoryPath() + @"/firefox/run.log", string.Empty);
 
@@ -535,7 +532,6 @@ namespace WebTestGui
                 LoadRunTimesToUnits();
                 LoadRunTime();
 
-                m_TestTab.m_TestRunning = false;
                 // FOR SCHEDULING
                 RefreshUnitsPanel();
             }
@@ -873,7 +869,8 @@ namespace WebTestGui
 
         private void OnLoadTestButtonPressed(object sender, EventArgs e)
         {
-            m_TestTab.AddNewItem(sender, e);
+            m_Test = LoadTestFromFile();
+            RefreshEditor();
         }
 
         private string GetTestJSON(Test test)
@@ -898,8 +895,6 @@ namespace WebTestGui
                     test.m_SaveFilePath = of.FileName;
                     test.m_Name = Path.GetFileNameWithoutExtension(of.FileName);
                     currentlyEditedText.Text = test.m_SaveFilePath;
-
-                    m_TestTab.AddNewItemFromFilePath(of.FileName);
                 }
             }
             else
@@ -1089,13 +1084,7 @@ namespace WebTestGui
 
         public void RUN_SCHEDULED_TEST(string scheduledTestFilePath, string parentLogPath)
         {
-            m_TestTab.m_TestTabItems.Clear();
-            m_TestTab.AddNewBlankItem();
-
             m_IsScheduled = true;
-
-            m_TestTab.AddNewItemFromFilePath(scheduledTestFilePath);
-            m_TestTab.DeleteItem(m_TestTab.m_TestTabItems[0]);
 
             m_ScheduledTestJSON = File.ReadAllText(scheduledTestFilePath);
 
@@ -1128,15 +1117,11 @@ namespace WebTestGui
             {
                 string path = Application.StartupPath + "/WebTestGui.exe";
                 Process.Start(path, of.FileName);
-
             }
         }
 
         public void LoadScheduledTestResults(ScheduledTestResult results, string logFileName)
         {
-            m_TestTab.AddNewItemFromJSON(results.m_TestJSON);
-            m_TestTab.DeleteItem(m_TestTab.m_TestTabItems[0]);
-
             m_RunLogConsole.Clear();
             m_JsLogConsole.Clear();
 
@@ -1195,8 +1180,6 @@ namespace WebTestGui
             m_RunLogConsole.HideClearIcon();
             m_JsLogConsole.HideClearIcon();
 
-            m_TestTab.HideAddButtons();
-
             m_TestStartTime = results.m_TestStartTime;
             LoadRunTimesToActions(results.m_ChromeRunLog, results.m_FirefoxRunLog);
             LoadRunTimesToUnits();
@@ -1212,12 +1195,14 @@ namespace WebTestGui
 
         #endregion
 
+        #region Global class variables
+
         public bool m_IsScheduled = false;
         string m_ScheduledTestLogName = "";
         string m_ScheduledTestJSON;
 
-        TestTab m_TestTab;
-        public Test GetMainTest() { return m_TestTab.m_SelectedItem.m_Test; }
+        Test m_Test;
+        public Test GetMainTest() { return m_Test; }
 
         Process m_CurrentProcess;
 
@@ -1228,7 +1213,11 @@ namespace WebTestGui
         Console m_RunLogConsole;
         Console m_JsLogConsole;
         UnitHierarchy m_UnitHierarchyPanel;
+
+        #endregion
     }
+
+    #region Scheduled test information structure
 
     public class ScheduledTestResult
     {
@@ -1278,6 +1267,10 @@ namespace WebTestGui
         string m_SplitString = "Ł$";
     }
 
+    #endregion
+
+    #region Window foreground
+
     public static class User32Interop
     {
         [DllImport("user32.dll")]
@@ -1290,4 +1283,6 @@ namespace WebTestGui
         public const int SW_MINIMIZE = 6;
         public const int SW_SHOWMINNOACTIVE = 7;
     }
+
+    #endregion
 }

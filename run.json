@@ -1,6 +1,6 @@
 {
   "interceptor": false,
-  "name": "fastrun",
+  "name": "run",
   "browsers": [
     "chrome",
     "firefox"
@@ -24,38 +24,67 @@
     "unhandled_prompt_behavior": "dismiss and notify"
   },
   "units": {
-    "Böngészés": {
+    "Első Unit": {
       "bindings": null,
       "backup_of": null,
       "actions": {
         "0": {
           "type": "goto",
           "break": false,
-          "url": "https://www.youtube.com/"
+          "url": "https://youtube.com"
         },
         "1": {
           "type": "goto",
           "break": false,
-          "url": "https://github.com/"
+          "url": "https://github.com"
+        }
+      }
+    },
+    "Második Unit": {
+      "bindings": null,
+      "backup_of": null,
+      "actions": {
+        "0": {
+          "type": "goto",
+          "break": false,
+          "url": "https://wikipedia.org/"
+        }
+      }
+    },
+    "Harmadik Unit": {
+      "bindings": null,
+      "backup_of": null,
+      "actions": {
+        "0": {
+          "type": "goto",
+          "break": false,
+          "url": "https://tesco.com"
+        },
+        "1": {
+          "type": "goto",
+          "break": false,
+          "url": "https://github.com"
         },
         "2": {
           "type": "goto",
           "break": false,
-          "url": "https://www.instagram.com/"
+          "url": "https://instagram.com/"
         }
       }
     },
-    "Navigálás": {
+    "Negyedik Unit": {
       "bindings": null,
       "backup_of": null,
       "actions": {
         "0": {
-          "type": "back",
-          "break": false
+          "type": "goto",
+          "break": false,
+          "url": "https://youtube.com"
         },
         "1": {
-          "type": "forward",
-          "break": false
+          "type": "goto",
+          "break": false,
+          "url": "https://github.com"
         }
       }
     }
