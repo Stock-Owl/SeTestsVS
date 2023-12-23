@@ -161,7 +161,7 @@
             optionHeaderPanel.Controls.Add(exportOptionsLabel);
             optionHeaderPanel.Controls.Add(exportOptionTemplate);
             optionHeaderPanel.Controls.Add(optionLabel);
-            optionHeaderPanel.Location = new Point(795, 77);
+            optionHeaderPanel.Location = new Point(795, 40);
             optionHeaderPanel.Name = "optionHeaderPanel";
             optionHeaderPanel.Size = new Size(327, 42);
             optionHeaderPanel.TabIndex = 37;
@@ -173,7 +173,7 @@
             importOptionsLabel.BackColor = Color.Transparent;
             importOptionsLabel.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
             importOptionsLabel.ForeColor = Color.DarkGray;
-            importOptionsLabel.Location = new Point(172, 23);
+            importOptionsLabel.Location = new Point(172, 20);
             importOptionsLabel.Name = "importOptionsLabel";
             importOptionsLabel.Size = new Size(134, 15);
             importOptionsLabel.TabIndex = 66;
@@ -184,7 +184,7 @@
             importOptionTemplate.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             importOptionTemplate.BackColor = Color.FromArgb(40, 40, 45);
             importOptionTemplate.Image = (Image)resources.GetObject("importOptionTemplate.Image");
-            importOptionTemplate.Location = new Point(305, 21);
+            importOptionTemplate.Location = new Point(305, 18);
             importOptionTemplate.Name = "importOptionTemplate";
             importOptionTemplate.Size = new Size(20, 20);
             importOptionTemplate.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -199,7 +199,7 @@
             exportOptionsLabel.BackColor = Color.Transparent;
             exportOptionsLabel.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
             exportOptionsLabel.ForeColor = Color.DarkGray;
-            exportOptionsLabel.Location = new Point(172, 5);
+            exportOptionsLabel.Location = new Point(172, 2);
             exportOptionsLabel.Name = "exportOptionsLabel";
             exportOptionsLabel.Size = new Size(131, 15);
             exportOptionsLabel.TabIndex = 64;
@@ -210,7 +210,7 @@
             exportOptionTemplate.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             exportOptionTemplate.BackColor = Color.FromArgb(40, 40, 45);
             exportOptionTemplate.Image = (Image)resources.GetObject("exportOptionTemplate.Image");
-            exportOptionTemplate.Location = new Point(307, 2);
+            exportOptionTemplate.Location = new Point(307, -1);
             exportOptionTemplate.Name = "exportOptionTemplate";
             exportOptionTemplate.Size = new Size(20, 20);
             exportOptionTemplate.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -224,7 +224,7 @@
             optionLabel.BackColor = Color.FromArgb(40, 40, 43);
             optionLabel.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
             optionLabel.ForeColor = Color.White;
-            optionLabel.Location = new Point(3, 11);
+            optionLabel.Location = new Point(3, 8);
             optionLabel.Name = "optionLabel";
             optionLabel.Size = new Size(56, 19);
             optionLabel.TabIndex = 45;
@@ -235,9 +235,9 @@
             optionsPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             optionsPanel.AutoScroll = true;
             optionsPanel.BackColor = Color.FromArgb(45, 45, 50);
-            optionsPanel.Location = new Point(795, 118);
+            optionsPanel.Location = new Point(795, 80);
             optionsPanel.Name = "optionsPanel";
-            optionsPanel.Size = new Size(327, 347);
+            optionsPanel.Size = new Size(327, 385);
             optionsPanel.TabIndex = 38;
             // 
             // unitsPanel
@@ -256,7 +256,7 @@
             switchToOptionsButton.BackColor = Color.FromArgb(40, 40, 43);
             switchToOptionsButton.Font = new Font("Segoe UI", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
             switchToOptionsButton.ForeColor = Color.White;
-            switchToOptionsButton.Location = new Point(944, 49);
+            switchToOptionsButton.Location = new Point(944, 12);
             switchToOptionsButton.Name = "switchToOptionsButton";
             switchToOptionsButton.Size = new Size(87, 25);
             switchToOptionsButton.TabIndex = 40;
@@ -270,7 +270,7 @@
             switchToJsLogButton.BackColor = Color.FromArgb(40, 40, 43);
             switchToJsLogButton.Font = new Font("Segoe UI Semibold", 8.25F, FontStyle.Italic, GraphicsUnit.Point);
             switchToJsLogButton.ForeColor = Color.Silver;
-            switchToJsLogButton.Location = new Point(1035, 49);
+            switchToJsLogButton.Location = new Point(1035, 12);
             switchToJsLogButton.Name = "switchToJsLogButton";
             switchToJsLogButton.Size = new Size(87, 25);
             switchToJsLogButton.TabIndex = 41;
@@ -476,7 +476,7 @@
             unitHierarchyButton.BackColor = Color.FromArgb(40, 40, 43);
             unitHierarchyButton.Font = new Font("Segoe UI Semibold", 8.25F, FontStyle.Italic, GraphicsUnit.Point);
             unitHierarchyButton.ForeColor = Color.Silver;
-            unitHierarchyButton.Location = new Point(795, 49);
+            unitHierarchyButton.Location = new Point(795, 12);
             unitHierarchyButton.Name = "unitHierarchyButton";
             unitHierarchyButton.Size = new Size(143, 25);
             unitHierarchyButton.TabIndex = 66;

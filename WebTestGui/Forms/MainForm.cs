@@ -25,15 +25,15 @@ namespace WebTestGui
             m_JsLogConsole = new Console(this);
             Controls.Add(m_JsLogConsole);
             m_JsLogConsole.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
-            m_JsLogConsole.Location = new Point(795, 77);
-            m_JsLogConsole.Size = new Size(327, 400);
+            m_JsLogConsole.Location = new Point(795, 40);
+            m_JsLogConsole.Size = new Size(327, 440);
             m_JsLogConsole.Visible = false;
 
             m_UnitHierarchyPanel = new UnitHierarchy(this);
             Controls.Add(m_UnitHierarchyPanel);
             m_UnitHierarchyPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
-            m_UnitHierarchyPanel.Location = new Point(795, 77);
-            m_UnitHierarchyPanel.Size = new Size(327, 400);
+            m_UnitHierarchyPanel.Location = new Point(795, 40);
+            m_UnitHierarchyPanel.Size = new Size(327, 440);
             m_UnitHierarchyPanel.Visible = false;
 
             m_RunLogConsole.AddToConsoles("Applikáció indítása...\n");
@@ -957,19 +957,18 @@ namespace WebTestGui
             testNameLabel.Text = GetMainTest().m_Name;
 
             breakpointIcon.Location = new Point((testNameLabel.Location.X + testNameLabel.Size.Width), 47);
-            testRunTimeText.Location = new Point((breakpointIcon.Location.X + breakpointIcon.Size.Width + 10), 52);
 
-            if (GetMainTest().m_State == WebTestGui.Test.TestState.Edit)
+            if (GetMainTest().m_State == Test.TestState.Edit)
             {
                 SetColorSchemeToEdit();
                 testStartButton.Text = "TESZT INDÍTÁSA...";
             }
-            else if (GetMainTest().m_State == WebTestGui.Test.TestState.Break)
+            else if (GetMainTest().m_State == Test.TestState.Break)
             {
                 SetColorSchemeToBreakpointHit();
                 testStartButton.Text = "TESZT FOLYTATÁSA...";
             }
-            else if (GetMainTest().m_State == WebTestGui.Test.TestState.Run)
+            else if (GetMainTest().m_State == Test.TestState.Run)
             {
                 SetColorSchemeToRun();
                 testStartButton.Text = "TESZT FUT";
