@@ -1,21 +1,21 @@
 {
   "interceptor": false,
-  "name": "Névtelen",
+  "name": "run",
   "browsers": [
     "chrome",
     "firefox"
   ],
   "options": {
     "auto_exit_iframes": true,
-    "log_JS_retry_timeout": 1000,
-    "parent_log_path": "C:\\dev\\SeTestsVS\\example_projects\\logs\\scheduled_logs",
+    "log_JS_retry_timeout": 2000,
+    "parent_log_path": "C:\\dev\\SeTestsVS\\example_projects\\logs",
     "start_fullscreen": false
   },
   "driver_options": {
     "accept_insecure_certs": true,
     "chrome_arguments": [],
     "firefox_arguments": [],
-    "keep_browser_open": true,
+    "keep_browser_open": false,
     "page_load_strategy": "normal",
     "timeout": {
       "type": "pageLoad",
@@ -24,14 +24,67 @@
     "unhandled_prompt_behavior": "dismiss and notify"
   },
   "units": {
-    "Példa Unit": {
+    "Első Unit": {
       "bindings": null,
       "backup_of": null,
       "actions": {
         "0": {
           "type": "goto",
           "break": false,
-          "url": "https://www.visionsoft.hu/"
+          "url": "https://youtube.com"
+        },
+        "1": {
+          "type": "goto",
+          "break": true,
+          "url": "https://github.com"
+        }
+      }
+    },
+    "Második Unit": {
+      "bindings": null,
+      "backup_of": null,
+      "actions": {
+        "0": {
+          "type": "goto",
+          "break": true,
+          "url": "https://wikipedia.org/"
+        }
+      }
+    },
+    "Harmadik Unit": {
+      "bindings": null,
+      "backup_of": null,
+      "actions": {
+        "0": {
+          "type": "goto",
+          "break": false,
+          "url": "https://tesco.com"
+        },
+        "1": {
+          "type": "goto",
+          "break": false,
+          "url": "https://github.com"
+        },
+        "2": {
+          "type": "goto",
+          "break": false,
+          "url": "https://instagram.com/"
+        }
+      }
+    },
+    "Negyedik Unit": {
+      "bindings": null,
+      "backup_of": null,
+      "actions": {
+        "0": {
+          "type": "goto",
+          "break": true,
+          "url": "https://youtube.com"
+        },
+        "1": {
+          "type": "goto",
+          "break": false,
+          "url": "https://github.com"
         }
       }
     }

@@ -950,8 +950,7 @@ namespace WebTestGui
 
         public void RefreshEditor(bool collapseAllUnits = false)
         {
-            // Must happen after m_TestTab.m_SelectedItem.m_Test set in the TestTab
-            // it uses that Test instance to load information
+            // it uses Test instance to load information
 
             currentlyEditedText.Text = GetMainTest().m_SaveFilePath;
             testNameLabel.Text = GetMainTest().m_Name;
@@ -1083,9 +1082,13 @@ namespace WebTestGui
 
         public void RUN_SCHEDULED_TEST(string scheduledTestFilePath, string parentLogPath)
         {
-            m_IsScheduled = true;
-
             m_ScheduledTestJSON = File.ReadAllText(scheduledTestFilePath);
+            Test m_loadedTest = LoadTestFromJSONString(m_ScheduledTestJSON);
+            m_Test = m_loadedTest;
+
+            RefreshEditor();
+
+            m_IsScheduled = true;
 
             // Setting log path
             foreach (IOption option in GetMainTest().m_Options.m_Options)
@@ -1121,6 +1124,9 @@ namespace WebTestGui
 
         public void LoadScheduledTestResults(ScheduledTestResult results, string logFileName)
         {
+            Test m_loadedTest = LoadTestFromJSONString(results.m_TestJSON);
+            m_Test = m_loadedTest;
+
             m_RunLogConsole.Clear();
             m_JsLogConsole.Clear();
 
@@ -1183,7 +1189,9 @@ namespace WebTestGui
             LoadRunTimesToActions(results.m_ChromeRunLog, results.m_FirefoxRunLog);
             LoadRunTimesToUnits();
             LoadRunTime();
+
             RefreshUnitsPanel();
+            testNameLabel.Text = GetMainTest().m_Name;
 
             m_RunLogConsole.AddToChrome(results.m_ChromeRunLog);
             m_RunLogConsole.AddToFirefox(results.m_FirefoxRunLog);
