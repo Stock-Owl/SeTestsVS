@@ -9,6 +9,7 @@ from selenium.common.exceptions import NoAlertPresentException as AlertNotFound
 
 import time
 from math import ceil
+import asyncio
 
 BOOL: str = 'b'
 
@@ -19,7 +20,7 @@ BOOL: str = 'b'
 # title is / contains
 # alert present
 
-# TODO: should be doing this shit with multiprocessing, so we suck dick once again!
+# TODO: should be doing this shit with asyncio, so we suck dick once again!
 
 class Wait:
     def Wait(milliseconds: int) -> None:
