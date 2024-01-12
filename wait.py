@@ -137,3 +137,70 @@ class Wait:
                 return False
             case _:
                 raise ValueError(f"\'{checktype}\' is not a valid condition to await")
+
+    def LogicOperatorCheck(
+            operator: str,
+            conditions: list[bool] | set[bool] | tuple[bool]
+            ) -> bool:
+
+        """
+        * all:\n
+        \tReturns True if all values in `conditions` are True\n
+        * !all:\n
+        \tReturns True if all values in `conditions` are False\n
+        * any:\n
+        \tReturns True if any value in `conditions` is True\n
+        * !any:\n
+        \tReturns True if any value in `conditions` is False\n
+        """
+        
+        n: int
+
+        try:
+            if operator.startswith("n"):
+                n = int(operator.removeprefix("n"))
+                operator = "n"
+            elif operator.startswith("!n"):
+                n = int(operator.removeprefix("!n"))
+                operator = "!n"
+        except ValueError:
+            raise ValueError("Only integer numbers are allowed for counting logical operators")
+        
+        match operator.lower():
+            case "all":
+                if False not in conditions:
+                    return True
+                return False
+            
+            case "!all":
+                if True not in conditions:
+                    return True
+                return False
+            
+            case "any":
+                if True in conditions:
+                    return True
+                return False
+            
+            case "!any":
+                if False in conditions:
+                    return True
+                return False
+            
+            case "n":
+                if n is None:
+                    raise ValueError("Number parameter wasn't specified for counting logic operator")
+                elif conditions.count(True) == n:
+                    return True
+                return False
+            
+            case "!n":
+                if n is None:
+                    raise ValueError("Number parameter wasn't specified for counting logic operator")
+                elif conditions.count(False) == n:
+                    return True
+                return False
+            
+            case _:
+                pass
+        
