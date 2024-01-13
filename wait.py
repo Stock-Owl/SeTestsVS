@@ -23,16 +23,20 @@ BOOL: str = 'b'
 # TODO: should be doing this shit with asyncio, so we suck dick once again!
 
 class Wait:
-    def Wait(milliseconds: int) -> None:
+    def Wait(
+            milliseconds: int
+        ) -> None:
+
         milliseconds /= 1000
+
         time.sleep(milliseconds)
 
     def WaitFor(
-        driver: ChromeDriver | FirefoxDriver | WireChromeDriver | WireFirefoxDriver,
-        frequency_ms: int = 1000,  # ms
-        timeout_ms: int = 10000,   # ms
-        logic_modifier: str = '?',
-        condition_: dict[str, str | int] = []
+            driver: ChromeDriver | FirefoxDriver | WireChromeDriver | WireFirefoxDriver,
+            logic_modifier: str = '?',
+            condition_: dict[str, str | int] = [],
+            frequency_ms: int = 1000,  # ms
+            timeout_ms: int = 10000   # ms
         ) -> None:
 
         frequency: int | float = frequency_ms / 1000
@@ -62,7 +66,17 @@ class Wait:
         driver: ChromeDriver | FirefoxDriver | WireChromeDriver | WireFirefoxDriver = None, 
         condition: dict[str, str | int] = None
         ) -> bool:
+
+        """
+            Checks if the given condition is met. Returns a boolean.\n
+
+            Conditions:\n
+            * loaded:\n
+            
+        """
+
         checktype = condition["type"]
+        
         match checktype.lower():
             case "loaded":
                 try:
@@ -141,11 +155,11 @@ class Wait:
     def LogicOperatorCheck(
             operator: str,
             conditions: list[bool] | set[bool] | tuple[bool]
-            ) -> bool:
+        ) -> bool:
 
         """
         Applies the specified operator on the given list. Returns a boolean.
-        
+
         * all:\n
         \tReturns True if all values in `conditions` are True\n
         * any:\n
@@ -237,3 +251,15 @@ class Wait:
 
             case _:
                 raise ValueError(f"Incorrect logic operator '{operator}' (available: 'all', 'any', 'n), 'minn', 'maxn' or their negated counterparts (! operator)")
+
+    async def DoStuff():
+        pass
+
+    async def ConditionManager(
+            driver: ChromeDriver | WireChromeDriver | FirefoxDriver | WireFirefoxDriver,
+            logic_modifier: str = "all",
+            conditioins_list: dict[str, str | int] = [],
+            frequency_ms: int = 1000, # ms
+            timeout_ms: int = 10000 # ms
+        ) -> None:
+        pass
