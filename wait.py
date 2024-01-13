@@ -144,14 +144,20 @@ class Wait:
             ) -> bool:
 
         """
+        Applies the specified operator on the given list. Returns a boolean.
+        
         * all:\n
         \tReturns True if all values in `conditions` are True\n
-        * !all:\n
-        \tReturns True if all values in `conditions` are False\n
         * any:\n
         \tReturns True if any value in `conditions` is True\n
-        * !any:\n
-        \tReturns True if any value in `conditions` is False\n
+        * n:\n
+        \tReturns True if n number of  `conditions` is True\n
+        * minn:\n
+        \tReturns True if at least n number of `conditions` is True\n
+        * maxn:\n
+        \tReturns True if at most n number of `conditions` is True\n
+        * ! operator:\n
+        \tInverts the condition. (Replace the True at the ends with False)
         """
         
         n: int
@@ -201,6 +207,33 @@ class Wait:
                     return True
                 return False
             
+            case "minn":
+                if n is None:
+                    raise ValueError("Number parameter wasn't specified for counting logic operator")
+                elif conditions.count(True) >= n:
+                    return True
+                return False
+
+            case "!minn":
+                if n is None:
+                    raise ValueError("Number parameter wasn't specified for counting logic operator")
+                elif conditions.count(False) >= n:
+                    return True
+                return False
+
+            case "maxn":
+                if n is None:
+                    raise ValueError("Number parameter wasn't specified for counting logic operator")
+                elif conditions.count(True) <= n:
+                    return True
+                return False
+
+            case "!maxn":
+                if n is None:
+                    raise ValueError("Number parameter wasn't specified for counting logic operator")
+                elif conditions.count(False) <= n:
+                    return True
+                return False
+
             case _:
-                pass
-        
+                raise ValueError(f"Incorrect logic operator '{operator}' (available: 'all', 'any', 'n), 'minn', 'maxn' or their negated counterparts (! operator)")
