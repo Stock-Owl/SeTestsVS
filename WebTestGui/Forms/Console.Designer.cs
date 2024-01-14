@@ -83,6 +83,7 @@
             // 
             chromeButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             chromeButton.BackColor = Color.FromArgb(45, 45, 48);
+            chromeButton.FlatStyle = FlatStyle.Popup;
             chromeButton.Font = new Font("Segoe UI", 9F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
             chromeButton.ForeColor = Color.White;
             chromeButton.Location = new Point(1, 355);
@@ -97,6 +98,7 @@
             // 
             firefoxButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             firefoxButton.BackColor = Color.FromArgb(45, 45, 48);
+            firefoxButton.FlatStyle = FlatStyle.Popup;
             firefoxButton.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
             firefoxButton.ForeColor = Color.White;
             firefoxButton.Location = new Point(247, 355);

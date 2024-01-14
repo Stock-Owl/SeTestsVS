@@ -78,7 +78,6 @@ namespace WebTestGui
         public Dictionary<string, object> GetJSONFormatted();
         public void SetData(JToken jSondata);
 
-
         public string m_ActionType { get; }
         public IUnit m_ParentUnit { get; set; }
         public bool m_HaveBreakpoint { get; set; }

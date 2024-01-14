@@ -45,9 +45,7 @@
             unitsPanel = new FlowLayoutPanel();
             switchToOptionsButton = new Button();
             switchToJsLogButton = new Button();
-            vsLogo = new PictureBox();
             saveTestButton = new Button();
-            loadTestButton = new Button();
             currentlyEditedLabel = new Label();
             flowLayoutPanel2 = new FlowLayoutPanel();
             currentlyEditedText = new Label();
@@ -59,14 +57,12 @@
             ignoreBreakpointsLabel = new Label();
             ignoreBreakpointsCheckbox = new CheckBox();
             testDateLabel = new Label();
-            scheduledTestLogLoadButton = new Button();
             unitHierarchyButton = new Button();
             unitHeaderPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)addUnitButton).BeginInit();
             optionHeaderPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)importOptionTemplate).BeginInit();
             ((System.ComponentModel.ISupportInitialize)exportOptionTemplate).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)vsLogo).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
             ((System.ComponentModel.ISupportInitialize)breakpointIcon).BeginInit();
             SuspendLayout();
@@ -75,6 +71,7 @@
             // 
             testStartButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             testStartButton.BackColor = Color.FromArgb(45, 45, 48);
+            testStartButton.FlatStyle = FlatStyle.Popup;
             testStartButton.Font = new Font("Segoe UI Semibold", 15F, FontStyle.Bold, GraphicsUnit.Point);
             testStartButton.ForeColor = Color.White;
             testStartButton.Location = new Point(795, 486);
@@ -254,6 +251,7 @@
             // 
             switchToOptionsButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             switchToOptionsButton.BackColor = Color.FromArgb(40, 40, 43);
+            switchToOptionsButton.FlatStyle = FlatStyle.Popup;
             switchToOptionsButton.Font = new Font("Segoe UI", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
             switchToOptionsButton.ForeColor = Color.White;
             switchToOptionsButton.Location = new Point(944, 12);
@@ -268,6 +266,7 @@
             // 
             switchToJsLogButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             switchToJsLogButton.BackColor = Color.FromArgb(40, 40, 43);
+            switchToJsLogButton.FlatStyle = FlatStyle.Popup;
             switchToJsLogButton.Font = new Font("Segoe UI Semibold", 8.25F, FontStyle.Italic, GraphicsUnit.Point);
             switchToJsLogButton.ForeColor = Color.Silver;
             switchToJsLogButton.Location = new Point(1035, 12);
@@ -278,45 +277,20 @@
             switchToJsLogButton.UseVisualStyleBackColor = false;
             switchToJsLogButton.Click += OnSwitchToJsLogButtonPressed;
             // 
-            // vsLogo
-            // 
-            vsLogo.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            vsLogo.BackColor = Color.FromArgb(60, 60, 65);
-            vsLogo.Image = (Image)resources.GetObject("vsLogo.Image");
-            vsLogo.Location = new Point(1090, 566);
-            vsLogo.Name = "vsLogo";
-            vsLogo.Size = new Size(48, 48);
-            vsLogo.SizeMode = PictureBoxSizeMode.StretchImage;
-            vsLogo.TabIndex = 47;
-            vsLogo.TabStop = false;
-            // 
             // saveTestButton
             // 
             saveTestButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             saveTestButton.BackColor = Color.FromArgb(45, 45, 48);
+            saveTestButton.FlatStyle = FlatStyle.Popup;
             saveTestButton.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold, GraphicsUnit.Point);
             saveTestButton.ForeColor = Color.White;
-            saveTestButton.Location = new Point(794, 530);
+            saveTestButton.Location = new Point(938, 529);
             saveTestButton.Name = "saveTestButton";
-            saveTestButton.Size = new Size(132, 31);
+            saveTestButton.Size = new Size(184, 31);
             saveTestButton.TabIndex = 48;
             saveTestButton.Text = "Teszt mentése...";
             saveTestButton.UseVisualStyleBackColor = false;
             saveTestButton.Click += OnSaveTestButtonPressed;
-            // 
-            // loadTestButton
-            // 
-            loadTestButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            loadTestButton.BackColor = Color.FromArgb(45, 45, 48);
-            loadTestButton.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold, GraphicsUnit.Point);
-            loadTestButton.ForeColor = Color.White;
-            loadTestButton.Location = new Point(989, 530);
-            loadTestButton.Name = "loadTestButton";
-            loadTestButton.Size = new Size(133, 31);
-            loadTestButton.TabIndex = 49;
-            loadTestButton.Text = "Teszt betöltése...";
-            loadTestButton.UseVisualStyleBackColor = false;
-            loadTestButton.Click += OnLoadTestButtonPressed;
             // 
             // currentlyEditedLabel
             // 
@@ -359,7 +333,7 @@
             pictureBox3.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             pictureBox3.BackColor = Color.FromArgb(60, 60, 65);
             pictureBox3.Image = (Image)resources.GetObject("pictureBox3.Image");
-            pictureBox3.Location = new Point(745, 573);
+            pictureBox3.Location = new Point(1089, 573);
             pictureBox3.Name = "pictureBox3";
             pictureBox3.Size = new Size(30, 30);
             pictureBox3.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -371,9 +345,10 @@
             // 
             rootLogDirectoryButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             rootLogDirectoryButton.BackColor = Color.FromArgb(45, 45, 48);
+            rootLogDirectoryButton.FlatStyle = FlatStyle.Popup;
             rootLogDirectoryButton.Font = new Font("Segoe UI Semibold", 8F, FontStyle.Bold, GraphicsUnit.Point);
             rootLogDirectoryButton.ForeColor = Color.White;
-            rootLogDirectoryButton.Location = new Point(620, 572);
+            rootLogDirectoryButton.Location = new Point(964, 572);
             rootLogDirectoryButton.Name = "rootLogDirectoryButton";
             rootLogDirectoryButton.Size = new Size(120, 31);
             rootLogDirectoryButton.TabIndex = 54;
@@ -395,8 +370,9 @@
             // 
             // breakpointIcon
             // 
+            breakpointIcon.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             breakpointIcon.Image = (Image)resources.GetObject("breakpointIcon.Image");
-            breakpointIcon.Location = new Point(544, 16);
+            breakpointIcon.Location = new Point(751, 46);
             breakpointIcon.Name = "breakpointIcon";
             breakpointIcon.Size = new Size(25, 25);
             breakpointIcon.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -418,25 +394,25 @@
             // 
             // ignoreBreakpointsLabel
             // 
-            ignoreBreakpointsLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            ignoreBreakpointsLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             ignoreBreakpointsLabel.AutoSize = true;
             ignoreBreakpointsLabel.BackColor = Color.FromArgb(50, 50, 53);
             ignoreBreakpointsLabel.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
             ignoreBreakpointsLabel.ForeColor = Color.White;
-            ignoreBreakpointsLabel.Location = new Point(412, 544);
+            ignoreBreakpointsLabel.Location = new Point(794, 529);
             ignoreBreakpointsLabel.Name = "ignoreBreakpointsLabel";
-            ignoreBreakpointsLabel.Size = new Size(218, 15);
+            ignoreBreakpointsLabel.Size = new Size(138, 30);
             ignoreBreakpointsLabel.TabIndex = 63;
-            ignoreBreakpointsLabel.Text = "Breakpoint-ok figyelmen kívűl  hagyása:";
+            ignoreBreakpointsLabel.Text = "Breakpoint-ok figyelmen\r\nkívűl hagyása:";
             // 
             // ignoreBreakpointsCheckbox
             // 
-            ignoreBreakpointsCheckbox.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            ignoreBreakpointsCheckbox.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             ignoreBreakpointsCheckbox.AutoSize = true;
             ignoreBreakpointsCheckbox.BackColor = Color.FromArgb(50, 50, 53);
             ignoreBreakpointsCheckbox.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
             ignoreBreakpointsCheckbox.ForeColor = Color.White;
-            ignoreBreakpointsCheckbox.Location = new Point(641, 546);
+            ignoreBreakpointsCheckbox.Location = new Point(880, 546);
             ignoreBreakpointsCheckbox.Name = "ignoreBreakpointsCheckbox";
             ignoreBreakpointsCheckbox.Size = new Size(15, 14);
             ignoreBreakpointsCheckbox.TabIndex = 62;
@@ -456,24 +432,11 @@
             testDateLabel.TabIndex = 64;
             testDateLabel.Text = "Teszt indításának időpontja:";
             // 
-            // scheduledTestLogLoadButton
-            // 
-            scheduledTestLogLoadButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            scheduledTestLogLoadButton.BackColor = Color.FromArgb(45, 45, 48);
-            scheduledTestLogLoadButton.Font = new Font("Segoe UI", 12F, FontStyle.Italic, GraphicsUnit.Point);
-            scheduledTestLogLoadButton.ForeColor = Color.White;
-            scheduledTestLogLoadButton.Location = new Point(829, 572);
-            scheduledTestLogLoadButton.Name = "scheduledTestLogLoadButton";
-            scheduledTestLogLoadButton.Size = new Size(227, 34);
-            scheduledTestLogLoadButton.TabIndex = 65;
-            scheduledTestLogLoadButton.Text = "Időzített teszt log betöltése...";
-            scheduledTestLogLoadButton.UseVisualStyleBackColor = false;
-            scheduledTestLogLoadButton.Click += scheduledTestLogLoadButton_Click;
-            // 
             // unitHierarchyButton
             // 
             unitHierarchyButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             unitHierarchyButton.BackColor = Color.FromArgb(40, 40, 43);
+            unitHierarchyButton.FlatStyle = FlatStyle.Popup;
             unitHierarchyButton.Font = new Font("Segoe UI Semibold", 8.25F, FontStyle.Italic, GraphicsUnit.Point);
             unitHierarchyButton.ForeColor = Color.Silver;
             unitHierarchyButton.Location = new Point(795, 12);
@@ -489,21 +452,18 @@
             AutoScaleMode = AutoScaleMode.None;
             BackColor = Color.FromArgb(50, 50, 53);
             ClientSize = new Size(1134, 611);
+            Controls.Add(ignoreBreakpointsCheckbox);
+            Controls.Add(saveTestButton);
             Controls.Add(unitHierarchyButton);
             Controls.Add(switchToOptionsButton);
-            Controls.Add(scheduledTestLogLoadButton);
             Controls.Add(testDateLabel);
             Controls.Add(ignoreBreakpointsLabel);
-            Controls.Add(ignoreBreakpointsCheckbox);
             Controls.Add(testRunTimeText);
             Controls.Add(breakpointIcon);
             Controls.Add(rootLogDirectoryButton);
             Controls.Add(pictureBox3);
             Controls.Add(optionHeaderPanel);
             Controls.Add(currentlyEditedLabel);
-            Controls.Add(loadTestButton);
-            Controls.Add(saveTestButton);
-            Controls.Add(vsLogo);
             Controls.Add(switchToJsLogButton);
             Controls.Add(unitsPanel);
             Controls.Add(optionsPanel);
@@ -516,7 +476,7 @@
             MinimumSize = new Size(1000, 550);
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "VS WebTeszt";
+            Text = "webSquid Editor";
             unitHeaderPanel.ResumeLayout(false);
             unitHeaderPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)addUnitButton).EndInit();
@@ -524,7 +484,6 @@
             optionHeaderPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)importOptionTemplate).EndInit();
             ((System.ComponentModel.ISupportInitialize)exportOptionTemplate).EndInit();
-            ((System.ComponentModel.ISupportInitialize)vsLogo).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).EndInit();
             ((System.ComponentModel.ISupportInitialize)breakpointIcon).EndInit();
             ResumeLayout(false);
@@ -541,9 +500,7 @@
         private Button switchToOptionsButton;
         private Button switchToJsLogButton;
         private Label optionLabel;
-        private PictureBox vsLogo;
         private Button saveTestButton;
-        private Button loadTestButton;
         private Label currentlyEditedLabel;
         private FlowLayoutPanel flowLayoutPanel2;
         private Label currentlyEditedText;
@@ -562,7 +519,6 @@
         private Label ignoreBreakpointsLabel;
         private CheckBox ignoreBreakpointsCheckbox;
         protected Label testDateLabel;
-        private Button scheduledTestLogLoadButton;
         private Button unitHierarchyButton;
     }
 }

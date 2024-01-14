@@ -7,7 +7,7 @@ namespace WebTestGui
     {
         #region On start
 
-        public MainForm()
+        public MainForm(string testFilePath = "")
         {
             InitializeComponent();
 
@@ -44,46 +44,20 @@ namespace WebTestGui
             m_JsLogConsole.AddToConsoles("A teszt ideje alatt minden JavaScript log " +
                 "információ ide lesz kiiratva.\n");
 
-            m_Test = new Test(this);
-            m_Test.PopulateDefaultOptions();
+            if (testFilePath == "")
+            {
+                m_Test = new Test(this);
+                m_Test.PopulateDefaultOptions();
+            }
+            else
+            {
+                m_Test = LoadTestFromFile(testFilePath);
+            }
 
             RefreshOptionsPanel();
             RefreshUnitsPanel();
 
-            string[] args = Environment.GetCommandLineArgs();
-            if (args != null)
-            {
-                if (args.Length > 1)
-                {
-                    if (!string.IsNullOrEmpty(args[1]))
-                    {
-                        string ext = Path.GetExtension(args[1]);
-                        if (ext == ".vslog")
-                        {
-                            string loadedLog = File.ReadAllText(args[1]);
-                            ScheduledTestResult scheduledTestResult = new ScheduledTestResult();
-                            scheduledTestResult.SetData(loadedLog);
-                            LoadScheduledTestResults(scheduledTestResult, args[1]);
-                            return;
-                        }
-
-                    }
-                    if (!string.IsNullOrEmpty(args[1]) && !string.IsNullOrEmpty(args[2]))
-                    {
-                        RUN_SCHEDULED_TEST(args[1], args[2]);
-                    }
-                    m_RunLogConsole.AddToConsoles((args[0]));
-
-                    if (args.Length > 3)
-                    {
-                        if (!string.IsNullOrEmpty(args[3]))
-                        {
-                            m_ScheduledTestLogName = args[3];
-                        }
-                    }
-                }
-
-            }
+            RefreshEditor();
         }
 
         #endregion
@@ -867,12 +841,6 @@ namespace WebTestGui
             SaveTest(GetMainTest());
         }
 
-        private void OnLoadTestButtonPressed(object sender, EventArgs e)
-        {
-            m_Test = LoadTestFromFile();
-            RefreshEditor();
-        }
-
         private string GetTestJSON(Test test)
         {
             string JSON = TestFormatter.SaveTestToJson(test);
@@ -895,6 +863,7 @@ namespace WebTestGui
                     test.m_SaveFilePath = of.FileName;
                     test.m_Name = Path.GetFileNameWithoutExtension(of.FileName);
                     currentlyEditedText.Text = test.m_SaveFilePath;
+                    RefreshEditor();
                 }
             }
             else
@@ -954,8 +923,6 @@ namespace WebTestGui
 
             currentlyEditedText.Text = GetMainTest().m_SaveFilePath;
             testNameLabel.Text = GetMainTest().m_Name;
-
-            breakpointIcon.Location = new Point((testNameLabel.Location.X + testNameLabel.Size.Width), 47);
 
             if (GetMainTest().m_State == Test.TestState.Edit)
             {
@@ -1018,7 +985,6 @@ namespace WebTestGui
 
             currentlyEditedLabel.BackColor = Color.FromArgb(255, 60, 60, 65);
             currentlyEditedText.BackColor = Color.FromArgb(255, 60, 60, 65);
-            vsLogo.BackColor = Color.FromArgb(255, 60, 60, 65);
 
             exportOptionsLabel.BackColor = Color.FromArgb(255, 40, 40, 45);
             importOptionsLabel.BackColor = Color.FromArgb(255, 40, 40, 45);
@@ -1044,7 +1010,6 @@ namespace WebTestGui
 
             currentlyEditedLabel.BackColor = Color.FromArgb(255, 90, 60, 60);
             currentlyEditedText.BackColor = Color.FromArgb(255, 90, 60, 60);
-            vsLogo.BackColor = Color.FromArgb(255, 90, 60, 60);
 
             exportOptionsLabel.BackColor = Color.FromArgb(255, 70, 40, 40);
             importOptionsLabel.BackColor = Color.FromArgb(255, 70, 40, 40);
@@ -1070,7 +1035,6 @@ namespace WebTestGui
 
             currentlyEditedLabel.BackColor = Color.FromArgb(255, 80, 60, 60);
             currentlyEditedText.BackColor = Color.FromArgb(255, 80, 60, 60);
-            vsLogo.BackColor = Color.FromArgb(255, 80, 60, 60);
 
             exportOptionsLabel.BackColor = Color.FromArgb(255, 60, 40, 40);
             importOptionsLabel.BackColor = Color.FromArgb(255, 60, 40, 40);
@@ -1110,18 +1074,6 @@ namespace WebTestGui
             OnTestStart();
         }
 
-        private void scheduledTestLogLoadButton_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog of = new OpenFileDialog();
-            of.Title = "Teszt opciók mentése...";
-            of.Filter = $"Teszt opciók fájl|*.vslog|Any File|*.*";
-            if (of.ShowDialog() == DialogResult.OK)
-            {
-                string path = Application.StartupPath + "/WebTestGui.exe";
-                Process.Start(path, of.FileName);
-            }
-        }
-
         public void LoadScheduledTestResults(ScheduledTestResult results, string logFileName)
         {
             Test m_loadedTest = LoadTestFromJSONString(results.m_TestJSON);
@@ -1134,7 +1086,6 @@ namespace WebTestGui
 
             testStartButton.Visible = false;
             saveTestButton.Visible = false;
-            loadTestButton.Visible = false;
 
             foreach (IOption option in GetMainTest().m_Options.m_Options)
             {
@@ -1174,8 +1125,6 @@ namespace WebTestGui
             ignoreBreakpointsLabel.Visible = false;
             ignoreBreakpointsCheckbox.Visible = false;
 
-            scheduledTestLogLoadButton.Visible = false;
-
             currentlyEditedLabel.Text = $"A '{results.m_ScheduledTestName}' időzített teszt ekkor: '{results.m_StartDateExtra}'";
             currentlyEditedText.Text = $"{Path.GetFileNameWithoutExtension(logFileName)} log fájl alapján itt: {logFileName}";
 
@@ -1205,7 +1154,7 @@ namespace WebTestGui
         #region Global class variables
 
         public bool m_IsScheduled = false;
-        string m_ScheduledTestLogName = "";
+        public string m_ScheduledTestLogName = "";
         string m_ScheduledTestJSON;
 
         Test m_Test;

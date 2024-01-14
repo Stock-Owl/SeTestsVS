@@ -39,7 +39,7 @@
                 string content = await File.ReadAllTextAsync(filePath);
                 if (m_ClearLogImmediately)
                 {
-                    await File.WriteAllTextAsync(filePath, string.Empty);
+                    await File.WriteAllTextAsync(filePath, "");
                 }
                 return content;
             }

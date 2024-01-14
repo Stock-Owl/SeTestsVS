@@ -144,6 +144,7 @@
             // webSearchButton
             // 
             webSearchButton.BackColor = Color.FromArgb(40, 40, 43);
+            webSearchButton.FlatStyle = FlatStyle.Popup;
             webSearchButton.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
             webSearchButton.ForeColor = Color.White;
             webSearchButton.Location = new Point(120, 24);

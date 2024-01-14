@@ -38,6 +38,7 @@
             singleLabel = new Label();
             label2 = new Label();
             mainPanel = new Panel();
+            pictureBox1 = new PictureBox();
             testRunTimeText = new Label();
             testRunTimeLabel = new Label();
             locatorTextBox = new ComboBox();
@@ -50,7 +51,6 @@
             enabledCheckBox = new CheckBox();
             label6 = new Label();
             displayedCheckbox = new CheckBox();
-            pictureBox1 = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)breakpointOnPicture).BeginInit();
             ((System.ComponentModel.ISupportInitialize)breakpointOffPicture).BeginInit();
             ((System.ComponentModel.ISupportInitialize)binImage).BeginInit();
@@ -186,6 +186,17 @@
             mainPanel.Name = "mainPanel";
             mainPanel.Size = new Size(700, 91);
             mainPanel.TabIndex = 12;
+            // 
+            // pictureBox1
+            // 
+            pictureBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
+            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
+            pictureBox1.Location = new Point(15, 34);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(35, 35);
+            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+            pictureBox1.TabIndex = 82;
+            pictureBox1.TabStop = false;
             // 
             // testRunTimeText
             // 
@@ -333,17 +344,6 @@
             displayedCheckbox.Size = new Size(15, 14);
             displayedCheckbox.TabIndex = 65;
             displayedCheckbox.UseVisualStyleBackColor = false;
-            // 
-            // pictureBox1
-            // 
-            pictureBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
-            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
-            pictureBox1.Location = new Point(15, 34);
-            pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(35, 35);
-            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
-            pictureBox1.TabIndex = 82;
-            pictureBox1.TabStop = false;
             // 
             // ClickAction
             // 

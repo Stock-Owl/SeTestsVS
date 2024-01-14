@@ -1,13 +1,13 @@
 {
   "interceptor": false,
-  "name": "fastrun",
+  "name": "tessst",
   "browsers": [
     "chrome",
     "firefox"
   ],
   "options": {
     "auto_exit_iframes": true,
-    "log_JS_retry_timeout": 2000,
+    "log_JS_retry_timeout": 1000,
     "parent_log_path": "C:\\dev\\SeTestsVS\\example_projects\\logs",
     "start_fullscreen": false
   },
@@ -15,7 +15,7 @@
     "accept_insecure_certs": true,
     "chrome_arguments": [],
     "firefox_arguments": [],
-    "keep_browser_open": false,
+    "keep_browser_open": true,
     "page_load_strategy": "normal",
     "timeout": {
       "type": "pageLoad",
@@ -24,38 +24,14 @@
     "unhandled_prompt_behavior": "dismiss and notify"
   },
   "units": {
-    "Böngészés": {
+    "Példa Unit": {
       "bindings": null,
       "backup_of": null,
       "actions": {
         "0": {
           "type": "goto",
           "break": false,
-          "url": "https://www.youtube.com/"
-        },
-        "1": {
-          "type": "goto",
-          "break": false,
-          "url": "https://github.com/"
-        },
-        "2": {
-          "type": "goto",
-          "break": false,
-          "url": "https://www.instagram.com/"
-        }
-      }
-    },
-    "Navigálás": {
-      "bindings": null,
-      "backup_of": null,
-      "actions": {
-        "0": {
-          "type": "back",
-          "break": false
-        },
-        "1": {
-          "type": "forward",
-          "break": false
+          "url": "https://www.visionsoft.hu/"
         }
       }
     }
