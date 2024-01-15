@@ -72,7 +72,19 @@ class Wait:
 
             Conditions:\n
             * loaded:\n
-            
+            \tChecks if the given element has been loaded
+            * visible:\n
+            \tChecks if the given element is currently visible on the page
+            * title_is:\n
+            \tChecks if the page's title is equal to the given value
+            * title_contains:\n
+            \tChecks if the page's title contains the given value
+            * url_is:\n
+            \tChecks if the page's url is equal to the given value
+            * url_contains:\n
+            \tChecks if the page's url contains the given value
+            * alert_present:\n
+            \tChecks if there is a JavaScript alert present
         """
 
         checktype = condition["type"]
@@ -146,9 +158,11 @@ class Wait:
                 except AlertNotFound:
                     alert_present = False
 
-                if alert_present == condition["alert"]:
+                # TODO: figure out what this is supposed to be
+                if alert_present == condition["alert"]:     # FTW
                     return True
                 return False
+            
             case _:
                 raise ValueError(f"\'{checktype}\' is not a valid condition to await")
 
@@ -258,8 +272,16 @@ class Wait:
     async def ConditionManager(
             driver: ChromeDriver | WireChromeDriver | FirefoxDriver | WireFirefoxDriver,
             logic_modifier: str = "all",
-            conditioins_list: dict[str, str | int] = [],
+            conditioins_list: list[dict[str, str | int]] = [],
             frequency_ms: int = 1000, # ms
             timeout_ms: int = 10000 # ms
         ) -> None:
+
+        frequency = frequency_ms / 1000
+        timeout = timeout_ms / 1000
+        iterations = ceil(timeout / frequency)
+
+        for each in conditioins_list:
+            pass
+
         pass
