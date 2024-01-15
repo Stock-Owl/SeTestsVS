@@ -61,7 +61,7 @@ class Wait:
         
         raise RuntimeError("The requested condition has not been met in the given timeframe")
 
-    def Check(
+    async def Check(
         driver: ChromeDriver | FirefoxDriver | WireChromeDriver | WireFirefoxDriver = None, 
         condition: dict[str, str | int | bool] = None
         ) -> bool:
@@ -317,7 +317,9 @@ class Wait:
         timeout = timeout_ms / 1000
         iterations = ceil(timeout / frequency)
 
+        conditions = []
         for each in conditioins_list:
-            pass
+            conditions.append(Wait.Check(driver = driver, condition = each))
 
-        pass
+        for i in range(iterations):
+            await asyncio.gather(*conditions)
