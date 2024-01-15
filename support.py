@@ -93,9 +93,9 @@ class Support:
                     if isinstance(log, SeJSException):
                         stacktrace = "\n".join(log.stacktrace)
                         if index is not None:
-                            to_write: str = f"{index} ❗ JavaScript:\n{log.msg}\nSteack Trace:\n{stacktrace}\n"
+                            to_write: str = f"{index} ❗ JavaScript:\n{log.msg}\nStack Trace:\n{stacktrace}\n"
                         else:
-                            to_write: str = f"❗ JavaScript:\n{log.msg}\nSteack Trace:\n{stacktrace}\n"
+                            to_write: str = f"❗ JavaScript:\n{log.msg}\nStack Trace:\n{stacktrace}\n"
                         with open(path, mode ='a+', encoding='utf-8') as f:
                             f.write(to_write)
                             Support.LogAll(path_, to_write, time_disabled = time_disabled)

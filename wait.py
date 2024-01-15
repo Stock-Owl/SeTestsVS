@@ -11,6 +11,7 @@ import time
 from math import ceil
 import asyncio
 
+# NOTE: I have no fucking clue what's the purpose of this `BOOL`
 BOOL: str = 'b'
 
 # CONDITIONS
@@ -19,8 +20,6 @@ BOOL: str = 'b'
 # url is / contains
 # title is / contains
 # alert present
-
-# TODO: should be doing this shit with asyncio, so we suck dick once again!
 
 class Wait:
     def Wait(
@@ -64,7 +63,7 @@ class Wait:
 
     def Check(
         driver: ChromeDriver | FirefoxDriver | WireChromeDriver | WireFirefoxDriver = None, 
-        condition: dict[str, str | int] = None
+        condition: dict[str, str | int | bool] = None
         ) -> bool:
 
         """
@@ -73,18 +72,49 @@ class Wait:
             Conditions:\n
             * loaded:\n
             \tChecks if the given element has been loaded
+            \t```
+                    "type" : "loaded"                   [str]
+                    "locator": "css_selector" | "xpath" [str]
+                    "value": "value_to_find"            [str]
+            \t```
             * visible:\n
             \tChecks if the given element is currently visible on the page
+            \t```
+                    "type" : "visible"                  [str]
+                    "locator": "css_selector" | "xpath" [str]
+                    "value": "value_to_find"            [str]
+            \t```
             * title_is:\n
             \tChecks if the page's title is equal to the given value
+            \t```
+                    "type" : "title_is"             [str]
+                    "case_sensitive": True | False  [bool]
+                    "value": "value_to_find"        [str]
+            \t```
             * title_contains:\n
             \tChecks if the page's title contains the given value
+            \t```
+                    "type" : "title_contains"       [str]
+                    "case_sensitive": True | False  [bool]
+                    "value": "value_to_find"        [str]
+            \t```
             * url_is:\n
             \tChecks if the page's url is equal to the given value
+            \t```
+                    "type" : "url_is"               [str]
+                    "value": "value_to_find"        [str]
+            \t```
             * url_contains:\n
             \tChecks if the page's url contains the given value
+            \t```
+                    "type" : "url_contains"         [str]
+                    "value": "value_to_find"        [str]
+            \t```
             * alert_present:\n
             \tChecks if there is a JavaScript alert present
+            \t```
+                    "type" : "alert_present"             [str]
+            \t```
         """
 
         checktype = condition["type"]
@@ -102,6 +132,7 @@ class Wait:
                     return True
                 except ElementNotFound:
                     return False
+            
             case "visible":
                 try:
                     locator: str = condition["locator"]
@@ -116,26 +147,29 @@ class Wait:
                     return False
                 except ElementNotFound:
                     return False
+            
             case "title_is":
                 try:
                     if condition["case_sensitive"]:
                         if condition["title"] == driver.title:
                             return True
-                    if condition["title"].lower() == driver.title.lower():
+                    elif condition["title"].lower() == driver.title.lower():
                         return True
                     return False
                 except:
                     return False
+            
             case "title_contains":
                 try:
                     if condition["case_sensitive"]:
                         if condition["title"] in driver.title:
                             return True
-                    if condition["title"].lower() in driver.title.lower():
+                    elif condition["title"].lower() in driver.title.lower():
                         return True
                     return False
                 except:
                     return False
+            
             case "url_is":
                 try:
                     if condition["url"] == driver.current_url:
@@ -143,6 +177,7 @@ class Wait:
                     return False
                 except:
                     return False
+            
             case "url_contains":
                 try:
                     if condition["url"] in driver.current_url:
@@ -150,6 +185,7 @@ class Wait:
                     return False
                 except:
                     return False
+            
             case "alert_present":
                 alert_present: bool
                 try:
@@ -161,7 +197,7 @@ class Wait:
                 # TODO: figure out what this is supposed to be
                 if alert_present == condition["alert"]:     # FTW
                     return True
-                return False
+                return False            
             
             case _:
                 raise ValueError(f"\'{checktype}\' is not a valid condition to await")

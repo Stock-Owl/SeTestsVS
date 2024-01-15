@@ -405,8 +405,7 @@ class Core:
                                 isSingle = True,
                                 isDisplayed = None,
                                 isEnabled = None,
-                                isSelected = None
-                                )
+                                isSelected = None)
                         case "click":
                             Actions.ElementAction(
                                 driver,
@@ -473,7 +472,7 @@ class Core:
                 Support.LogError(parent_log_path, f"{format_exc()}Stack:\n", time_disabled=True)
 
                 stack = format_stack()
-                # -1 to exclude this expression from stack
+                # -1 to exclude this block from stack
                 for x in range(len(stack)-1):
                     stack_parts = stack[x].split('\n')
                     origin = stack_parts[0]
