@@ -104,7 +104,7 @@
             // 
             // openTestButton
             // 
-            openTestButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            openTestButton.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             openTestButton.BackColor = Color.FromArgb(45, 45, 48);
             openTestButton.FlatStyle = FlatStyle.Popup;
             openTestButton.Font = new Font("Segoe UI", 15F, FontStyle.Regular, GraphicsUnit.Point);
@@ -119,7 +119,7 @@
             // 
             // createTestButton
             // 
-            createTestButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            createTestButton.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             createTestButton.BackColor = Color.FromArgb(45, 45, 48);
             createTestButton.FlatStyle = FlatStyle.Popup;
             createTestButton.Font = new Font("Segoe UI", 15F, FontStyle.Bold, GraphicsUnit.Point);
@@ -134,7 +134,7 @@
             // 
             // startQuickTestButton
             // 
-            startQuickTestButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            startQuickTestButton.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             startQuickTestButton.BackColor = Color.FromArgb(45, 45, 48);
             startQuickTestButton.FlatStyle = FlatStyle.Popup;
             startQuickTestButton.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
@@ -149,7 +149,7 @@
             // 
             // scheduledTestLogLoadButton
             // 
-            scheduledTestLogLoadButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            scheduledTestLogLoadButton.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             scheduledTestLogLoadButton.BackColor = Color.FromArgb(45, 45, 48);
             scheduledTestLogLoadButton.FlatStyle = FlatStyle.Popup;
             scheduledTestLogLoadButton.Font = new Font("Segoe UI", 12F, FontStyle.Italic, GraphicsUnit.Point);
@@ -175,7 +175,7 @@
             // 
             // lastOpenedTestsPanel
             // 
-            lastOpenedTestsPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            lastOpenedTestsPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             lastOpenedTestsPanel.AutoScroll = true;
             lastOpenedTestsPanel.BackColor = Color.FromArgb(50, 50, 53);
             lastOpenedTestsPanel.Location = new Point(16, 122);
@@ -197,6 +197,8 @@
             Controls.Add(openTestButton);
             Controls.Add(panel1);
             Icon = (Icon)resources.GetObject("$this.Icon");
+            MaximumSize = new Size(718, 489);
+            MinimumSize = new Size(718, 489);
             Name = "Launcher";
             Text = "webSquid Launcher";
             panel1.ResumeLayout(false);

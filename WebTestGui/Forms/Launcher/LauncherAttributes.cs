@@ -1,4 +1,8 @@
-﻿namespace WebTestGui
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Globalization;
+
+namespace WebTestGui
 {
     public class LauncherAttributes
     {
@@ -52,6 +56,27 @@
             recentlyOpenedTest.m_TestFilePath = testsFilePath;
             recentlyOpenedTest.m_LastOpenedDate = date;
             m_RecentlyOpenedTests.Add(recentlyOpenedTest);
+        }
+
+        public void OrganiseRecentlyOpenedTests()
+        {
+            m_RecentlyOpenedTests.Sort((item1, item2) => DateTime.ParseExact(item1.m_LastOpenedDate, "M/d/yyyy H:mm", CultureInfo.InvariantCulture)
+                                     .CompareTo(DateTime.ParseExact(item2.m_LastOpenedDate, "M/d/yyyy H:mm", CultureInfo.InvariantCulture)));
+            m_RecentlyOpenedTests.Reverse();
+
+            HashSet<string> uniqueNames = new HashSet<string>();
+            List<RecentlyOpenedTest> uniqueList = new List<RecentlyOpenedTest>();
+
+            foreach (RecentlyOpenedTest myClass in m_RecentlyOpenedTests)
+            {
+                if (uniqueNames.Add(myClass.m_TestFilePath))
+                {
+                    uniqueList.Add(myClass);
+                }
+            }
+
+            m_RecentlyOpenedTests.Clear();
+            m_RecentlyOpenedTests.AddRange(uniqueList);
         }
 
         public string m_LauncherAttributesFile =

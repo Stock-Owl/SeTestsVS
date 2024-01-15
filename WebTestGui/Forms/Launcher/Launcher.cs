@@ -92,8 +92,10 @@ namespace WebTestGui
 
         void UpdateRecentlyOpenedPanel()
         {
+            m_LauncherAttributes.OrganiseRecentlyOpenedTests();
             foreach (RecentlyOpenedTest recentlyOpenedTest in m_LauncherAttributes.m_RecentlyOpenedTests)
                 recentlyOpenedTest.UpdateLabels();
+            lastOpenedTestsPanel.Controls.Clear();
             lastOpenedTestsPanel.Controls.AddRange(m_LauncherAttributes.m_RecentlyOpenedTests.ToArray());
         }
 
