@@ -69,7 +69,16 @@ namespace WebTestGui
 
         private void startQuickTestButton_Click(object sender, EventArgs e)
         {
-
+            OpenFileDialog of = new OpenFileDialog();
+            of.Title = "Teszt betöltése...";
+            of.Filter = $"Teszt fájl|*{AppConsts.s_AppDefaultFileExtension}|Any File|*.*";
+            if (of.ShowDialog() == DialogResult.OK)
+            {
+                MainForm mainForm = new MainForm(of.FileName);
+                mainForm.SetBreakpointsIgnore(true);
+                mainForm.OnTestStart();
+                mainForm.Show();
+            }
         }
 
         private void scheduledTestLogLoadButton_Click(object sender, EventArgs e)

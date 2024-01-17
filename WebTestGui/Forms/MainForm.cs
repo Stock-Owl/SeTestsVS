@@ -271,6 +271,11 @@ namespace WebTestGui
             }
         }
 
+        public void SetBreakpointsIgnore(bool ignore)
+        {
+            ignoreBreakpointsCheckbox.Checked = ignore;
+        }
+
         public void OnTestStart()
         {
             // Does parent log path exist
