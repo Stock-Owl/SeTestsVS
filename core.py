@@ -179,6 +179,7 @@ class Core:
         else:
             browser_options: tuple[ChromeOptions, FirefoxOptions] = Core.DefaultOptions()
 
+        requested_browsers: list[str] = json["browsers"] 
         units = json["units"]
         options: dict[str] = json["options"]
         parent_log_path: str = options["parent_log_path"]
@@ -192,39 +193,41 @@ class Core:
         processes: list[Process] = []
         parent_log_path = options["parent_log_path"]
 
-        chrome_kwargs: dict = \
-        {
-            "options": browser_options[0],
-            "units": units,
-            "testname": testname,
-            "interceptor_active": interceptor,
-            "log_js_retry_timeout": log_js_retry_timeout,
-            "auto_exit_iframes": auto_exit_iframes,
-            "start_fullscreen": start_fullscreen,
-            "keep_browser_open": keep_browser_open,
-            "browser": "chrome",
-            "parent_log_path": f"{parent_log_path}/chrome"
-        }
+        if "chrome" in requested_browsers:
+            chrome_kwargs: dict = \
+            {
+                "options": browser_options[0],
+                "units": units,
+                "testname": testname,
+                "interceptor_active": interceptor,
+                "log_js_retry_timeout": log_js_retry_timeout,
+                "auto_exit_iframes": auto_exit_iframes,
+                "start_fullscreen": start_fullscreen,
+                "keep_browser_open": keep_browser_open,
+                "browser": "chrome",
+                "parent_log_path": f"{parent_log_path}/chrome"
+            }
+    
+            chrome_exec = Process(target=Core.DriverExec, kwargs=chrome_kwargs)
+            processes.append(chrome_exec)
 
-        chrome_exec = Process(target=Core.DriverExec, kwargs=chrome_kwargs)
-        processes.append(chrome_exec)
-
-        firefox_kwargs: dict = \
-        {
-            "options": browser_options[1],
-            "units": units,
-            "testname": testname,
-            "interceptor_active": interceptor,
-            "log_js_retry_timeout": log_js_retry_timeout,
-            "auto_exit_iframes": auto_exit_iframes,
-            "start_fullscreen": start_fullscreen,
-            "keep_browser_open": keep_browser_open,
-            "browser": "firefox",
-            "parent_log_path": f"{parent_log_path}/firefox"
-        }
-
-        firefox_exec = Process(target=Core.DriverExec , kwargs=firefox_kwargs)
-        processes.append(firefox_exec)
+        if "firefox" in requested_browsers:
+            firefox_kwargs: dict = \
+            {
+                "options": browser_options[1],
+                "units": units,
+                "testname": testname,
+                "interceptor_active": interceptor,
+                "log_js_retry_timeout": log_js_retry_timeout,
+                "auto_exit_iframes": auto_exit_iframes,
+                "start_fullscreen": start_fullscreen,
+                "keep_browser_open": keep_browser_open,
+                "browser": "firefox",
+                "parent_log_path": f"{parent_log_path}/firefox"
+            }
+    
+            firefox_exec = Process(target=Core.DriverExec , kwargs=firefox_kwargs)
+            processes.append(firefox_exec)
 
         return processes
 
@@ -385,7 +388,7 @@ class Core:
                             frequency_ = action['frequency']
                             timeout_ = action['timeout']
                             logic_modifier_ = action['logic_modifier']
-                            condition_ = action['condition']
+                            condition_list_ = action['condition_list']
 
                             Actions.WaitFor(
                                 driver,

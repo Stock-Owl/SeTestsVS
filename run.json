@@ -8,14 +8,14 @@
   "options": {
     "auto_exit_iframes": true,
     "log_JS_retry_timeout": 2000,
-    "parent_log_path": "C:\\SeTestsVS\\example_projects\\logs",
-    "start_fullscreen": false
+    "parent_log_path": "C:/Users/ibalazs/OneDrive - VISION-SOFTWARE Számítástechnikai Szolgáltató és Kereskedelmi/Asztal/Projects/VS/SeTestsVS/logs",
+    "start_fullscreen": true
   },
   "driver_options": {
     "accept_insecure_certs": true,
     "chrome_arguments": [],
     "firefox_arguments": [],
-    "keep_browser_open": false,
+    "keep_browser_open": true,
     "page_load_strategy": "normal",
     "timeout": {
       "type": "pageLoad",
@@ -24,67 +24,22 @@
     "unhandled_prompt_behavior": "dismiss and notify"
   },
   "units": {
-    "Első Unit": {
+    "1":
+    {
       "bindings": null,
       "backup_of": null,
-      "actions": {
-        "0": {
+      "actions":
+      {
+        "0":
+        {
           "type": "goto",
           "break": false,
-          "url": "https://youtube.com"
+          "url": "https://www.bestbyte.hu/moso-es-szaritogepek-k2284.html"
         },
-        "1": {
-          "type": "goto",
-          "break": true,
-          "url": "https://github.com"
-        }
-      }
-    },
-    "Második Unit": {
-      "bindings": null,
-      "backup_of": null,
-      "actions": {
-        "0": {
-          "type": "goto",
-          "break": true,
-          "url": "https://wikipedia.org/"
-        }
-      }
-    },
-    "Harmadik Unit": {
-      "bindings": null,
-      "backup_of": null,
-      "actions": {
-        "0": {
-          "type": "goto",
-          "break": false,
-          "url": "https://tesco.com"
-        },
-        "1": {
-          "type": "goto",
-          "break": false,
-          "url": "https://github.com"
-        },
-        "2": {
-          "type": "goto",
-          "break": false,
-          "url": "https://instagram.com/"
-        }
-      }
-    },
-    "Negyedik Unit": {
-      "bindings": null,
-      "backup_of": null,
-      "actions": {
-        "0": {
-          "type": "goto",
-          "break": true,
-          "url": "https://youtube.com"
-        },
-        "1": {
-          "type": "goto",
-          "break": false,
-          "url": "https://github.com"
+        "1":
+        {
+          "type": "waitfor"
+          
         }
       }
     }
