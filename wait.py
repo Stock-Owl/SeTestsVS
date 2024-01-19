@@ -34,7 +34,7 @@ class Wait:
         driver: ChromeDriver | FirefoxDriver | WireChromeDriver | WireFirefoxDriver, 
         condition: dict[str, str | int | bool] = None,
         out: list[bool] = []
-        ) -> None:
+        ):
 
         """
             Checks if the given condition is met. Returns a boolean.\n
@@ -184,6 +184,8 @@ class Wait:
             case _:
                 out.append(False)
                 raise ValueError(f"\'{checktype}\' is not a valid condition to await")
+            
+        return
 
     def LogicOperatorCheck(
             operator: str,
@@ -288,7 +290,7 @@ class Wait:
     async def ConditionManager(
             driver: ChromeDriver | WireChromeDriver | FirefoxDriver | WireFirefoxDriver,
             logic_operator: str = "all",
-            conditioins_list: list[dict[str, str | int]] = [],
+            condition_list: list[dict[str, str | int]] = [],
             frequency_ms: int = 1000, # ms
             timeout_ms: int = 10000 # ms
         ) -> None:
@@ -297,32 +299,41 @@ class Wait:
         timeout = timeout_ms / 1000
         iterations = ceil(timeout / frequency)
 
-        conditions = []
-        for each in conditioins_list:
+        conditions: list[asyncio.Future] = []
+        for each in condition_list:
             conditions.append(Wait.Check(driver, condition = each, out = conditions))
+
+        for coro in condition_list:
+            print(type(coro))
 
         for each in range(iterations):
             await asyncio.gather(*conditions)
             if Wait.LogicOperatorCheck(operator = logic_operator, conditions = conditions):
                 return
-            asyncio.sleep(timeout)
+            time.sleep(frequency)
+
+        raise Exception("Target timeframe wasn't met by WaitFor")
 
     def WaitFor(
             driver: ChromeDriver | WireChromeDriver | FirefoxDriver | WireFirefoxDriver,
             logic_operator: str = "all",
-            conditioins_list: list[dict[str, str | int | bool]] = [],
+            condition_list: list[dict[str, str | int | bool]] = [],
             frequency_ms = 1000, # ms
             timeout_ms = 10000 # ms
         ) -> None:
 
-        if conditioins_list == []: return
+        print("WaitFor waiting")
+
+        if condition_list == []: return
 
         asyncio.run(
             Wait.ConditionManager(
                 driver,
                 logic_operator = logic_operator,
-                conditioins_list = conditioins_list,
+                condition_list = condition_list,
                 frequency_ms = frequency_ms,
                 timeout_ms = timeout_ms
                 )
             )
+
+        print("WaitFor done")

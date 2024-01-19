@@ -56,7 +56,7 @@ class Actions:
     def WaitFor(
         driver: ChromeDriver | WireChromeDriver | FirefoxDriver | WireFirefoxDriver,
         logic_operator: str = "all",
-        conditions_list = list[dict[str, str | int | bool]],
+        condition_list = list[dict[str, str | int | bool]],
         frequency_ms = 1000, # ms
         timeout_ms = 10000 # ms
     ) -> None:
@@ -64,7 +64,7 @@ class Actions:
         return WaitClass.WaitFor(
             driver,
             logic_operator = logic_operator,
-            conditions_list = conditions_list,
+            condition_list = condition_list,
             frequency_ms = frequency_ms,
             timeout_ms = timeout_ms
         )

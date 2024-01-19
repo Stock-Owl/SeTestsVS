@@ -387,15 +387,15 @@ class Core:
                         case "wait_for":
                             frequency_ = action['frequency']
                             timeout_ = action['timeout']
-                            logic_modifier_ = action['logic_modifier']
+                            logic_operator_ = action['logic_operator']
                             condition_list_ = action['condition_list']
 
                             Actions.WaitFor(
                                 driver,
+                                logic_operator=logic_operator_,
+                                condition_list=condition_list_,
                                 frequency_ms=frequency_,
-                                timeout_ms=timeout_,
-                                logic_modifier=logic_modifier_,
-                                condition_=condition_)
+                                timeout_ms=timeout_)
                         case "switch_back":
                             Actions.SwitchBack(driver)
                         case "switch_to":
@@ -446,6 +446,7 @@ class Core:
                         case _:
                             action_type = action['type']
                             Support.LogProc(parent_log_path, f"Unknown action \'{action_type}\'")
+                            continue
 
                     log_line = f"[U:{uname}][A:{aname}] of type \'{action['type']}\' successfully executed"
                     Support.LogProc(parent_log_path, log_line)
