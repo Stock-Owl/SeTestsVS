@@ -185,8 +185,6 @@ class Wait:
                 out.append(False)
                 raise ValueError(f"\'{checktype}\' is not a valid condition to await")
             
-        return
-
     def LogicOperatorCheck(
             operator: str,
             conditions: list[bool] | set[bool] | tuple[bool]
