@@ -302,7 +302,7 @@ class Wait:
             conditions.append(Wait.Check(driver, condition = each, out = conditions))
 
         for coro in condition_list:
-            print(type(coro))
+            print(coro)
 
         for each in range(iterations):
             await asyncio.gather(*conditions)
