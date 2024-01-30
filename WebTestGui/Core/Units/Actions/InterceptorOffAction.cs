@@ -3,17 +3,15 @@ using System.Drawing.Drawing2D;
 
 namespace WebTestGui
 {
-    public partial class WaitForAction : UserControl, IAction
+    public partial class InterceptorOffAction : UserControl, IAction
     {
-        public WaitForAction()
+        public InterceptorOffAction()
         {
             InitializeComponent();
             mainPanel.Paint += OnBorderLineDraw!;
             idTextBox.KeyPress += OnIdOverride!;
 
-            mainLabel.Text = "Wait-For";
-
-            logicOperatorComboBox.Items.AddRange(TypeHelpers.GetEnumTypes<LogicOperators>());
+            mainLabel.Text = "Interszeptor ki";
         }
 
         // ACTION INTERFACE FUNCTIONS AND MEMBERS
@@ -65,6 +63,13 @@ namespace WebTestGui
 
         public void Refresh(bool needWholePanelRefresh)
         {
+            if (needWholePanelRefresh)
+            {
+                if (m_ParentUnit != null)
+                {
+                    m_ParentUnit.Refresh();
+                }
+            }
         }
 
         public void OnBreakpointHit()
@@ -147,26 +152,10 @@ namespace WebTestGui
 
         public Dictionary<string, object> GetJSONFormatted()
         {
-            Refresh(true);
-            Dictionary<string, object> clickData = new Dictionary<string, object>();
-            clickData["type"] = m_ActionType;
-            clickData["break"] = m_HaveBreakpoint;
-
-            // Logic operator deduction code
-            string logicOperatorOutString;
-            if (oppOperatorCheckbox.Checked)
-                logicOperatorOutString = "!" + logicOperatorComboBox.Text;
-            else
-                logicOperatorOutString = logicOperatorComboBox.Text;
-            clickData["logic_operator"] = logicOperatorOutString;
-
-            // Condition list
-
-
-            clickData["frequency"] = int.Parse(frequencyTextBox.Text);
-            clickData["timeout"] = int.Parse(timeoutTextBox.Text);
-
-            return clickData;
+            var gotoData = new Dictionary<string, object>();
+            gotoData["type"] = m_ActionType;
+            gotoData["break"] = m_HaveBreakpoint;
+            return gotoData;
         }
 
         public void SetData(JToken data)
@@ -180,31 +169,14 @@ namespace WebTestGui
             {
                 SetBreakpoint(false);
             }
-
-            // Logic operator induction code
-            bool isInverted = ((string)data["logic_operator"]!).Contains("!");
-            if (isInverted)
-            {
-                oppOperatorCheckbox.Checked = true;
-                logicOperatorComboBox.Text = ((string)data["logic_operator"]!).Split("!")[1];
-            }
-            else
-                logicOperatorComboBox.Text = (string)data["logic_operator"]!;
-
-            // Condition list
-
-
-            frequencyTextBox.Text = (string)data["frequency"]!;
-            timeoutTextBox.Text = (string)data["timeout"]!;
+            Refresh(true);
         }
 
-        public string m_ActionType { get { return "wait_for"; } }
+        public string m_ActionType { get { return "interceptor_off"; } }
         public IUnit m_ParentUnit { get; set; }
         public bool m_HaveBreakpoint { get; set; }
 
-        public bool m_Single = false;
-
-        // ACTION SPECIFIC FUNCTIONS
+        // ACTION SPECIFIC FUNCTIONS AND MEMBERS
 
         private void breakpointOnPicture_Click(object sender, EventArgs e)
         {
@@ -228,21 +200,16 @@ namespace WebTestGui
             Delete();
         }
 
-        private void WaitForAction_SizeChanged(object sender, EventArgs e)
+        private void overlayButton_MouseEnter(object sender, EventArgs e)
         {
-            if (Size.Height < 250)
-            {
-                Size = new Size(Size.Width, 250);
-            }
+            base.OnMouseEnter(e);
+            BackColor = Color.Transparent;
         }
 
-        public enum LogicOperators
+        private void overlayButton_MouseLeave(object sender, EventArgs e)
         {
-            all = 0,
-            any = 1,
-            n = 2,
-            minn = 3,
-            maxn = 4
+            base.OnMouseLeave(e);
+            BackColor = Color.Transparent;
         }
     }
 }

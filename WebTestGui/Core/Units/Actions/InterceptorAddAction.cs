@@ -3,17 +3,15 @@ using System.Drawing.Drawing2D;
 
 namespace WebTestGui
 {
-    public partial class WaitForAction : UserControl, IAction
+    public partial class InterceptorAddAction : UserControl, IAction
     {
-        public WaitForAction()
+        public InterceptorAddAction()
         {
             InitializeComponent();
             mainPanel.Paint += OnBorderLineDraw!;
             idTextBox.KeyPress += OnIdOverride!;
 
-            mainLabel.Text = "Wait-For";
-
-            logicOperatorComboBox.Items.AddRange(TypeHelpers.GetEnumTypes<LogicOperators>());
+            mainLabel.Text = "Interszeptor\nhozzáadása";
         }
 
         // ACTION INTERFACE FUNCTIONS AND MEMBERS
@@ -152,19 +150,10 @@ namespace WebTestGui
             clickData["type"] = m_ActionType;
             clickData["break"] = m_HaveBreakpoint;
 
-            // Logic operator deduction code
-            string logicOperatorOutString;
-            if (oppOperatorCheckbox.Checked)
-                logicOperatorOutString = "!" + logicOperatorComboBox.Text;
-            else
-                logicOperatorOutString = logicOperatorComboBox.Text;
-            clickData["logic_operator"] = logicOperatorOutString;
-
-            // Condition list
-
-
-            clickData["frequency"] = int.Parse(frequencyTextBox.Text);
-            clickData["timeout"] = int.Parse(timeoutTextBox.Text);
+            clickData["name"] = textBox1.Text;
+            clickData["inter_type"] = typeTextBox.Text;
+            clickData["key"] = keyTextBox.Text;
+            clickData["value"] = valueTextBox.Text;
 
             return clickData;
         }
@@ -181,24 +170,14 @@ namespace WebTestGui
                 SetBreakpoint(false);
             }
 
-            // Logic operator induction code
-            bool isInverted = ((string)data["logic_operator"]!).Contains("!");
-            if (isInverted)
-            {
-                oppOperatorCheckbox.Checked = true;
-                logicOperatorComboBox.Text = ((string)data["logic_operator"]!).Split("!")[1];
-            }
-            else
-                logicOperatorComboBox.Text = (string)data["logic_operator"]!;
+            textBox1.Text = (string)data["name"]!;
+            typeTextBox.Text = (string)data["inter_type"]!;
 
-            // Condition list
-
-
-            frequencyTextBox.Text = (string)data["frequency"]!;
-            timeoutTextBox.Text = (string)data["timeout"]!;
+            keyTextBox.Text = (string)data["key"]!;
+            valueTextBox.Text = (string)data["value"]!;
         }
 
-        public string m_ActionType { get { return "wait_for"; } }
+        public string m_ActionType { get { return "interceptor_add"; } }
         public IUnit m_ParentUnit { get; set; }
         public bool m_HaveBreakpoint { get; set; }
 
@@ -226,23 +205,6 @@ namespace WebTestGui
         private void binImage_Click(object sender, EventArgs e)
         {
             Delete();
-        }
-
-        private void WaitForAction_SizeChanged(object sender, EventArgs e)
-        {
-            if (Size.Height < 250)
-            {
-                Size = new Size(Size.Width, 250);
-            }
-        }
-
-        public enum LogicOperators
-        {
-            all = 0,
-            any = 1,
-            n = 2,
-            minn = 3,
-            maxn = 4
         }
     }
 }

@@ -35,22 +35,19 @@
             binImage = new PictureBox();
             idTextBox = new TextBox();
             mainPanel = new Panel();
+            msLabel2 = new Label();
+            timeoutLabel = new Label();
+            timeoutTextBox = new TextBox();
+            msLabel1 = new Label();
+            frequencyLabel = new Label();
+            frequencyTextBox = new TextBox();
+            oppOperatorLabel = new Label();
+            oppOperatorCheckbox = new CheckBox();
             pictureBox1 = new PictureBox();
-            label6 = new Label();
-            logicModifierComboBox = new ComboBox();
+            logicOperatorComboBox = new ComboBox();
             label2 = new Label();
             testRunTimeText = new Label();
             testRunTimeLabel = new Label();
-            locatorTextBox = new ComboBox();
-            valueLabel = new Label();
-            locatorLabel = new Label();
-            valueTextBox = new TextBox();
-            timeOutTextBox = new TextBox();
-            label5 = new Label();
-            frequencyTextField = new TextBox();
-            label4 = new Label();
-            conditionComboBox = new ComboBox();
-            label3 = new Label();
             ((System.ComponentModel.ISupportInitialize)breakpointOnPicture).BeginInit();
             ((System.ComponentModel.ISupportInitialize)breakpointOffPicture).BeginInit();
             ((System.ComponentModel.ISupportInitialize)binImage).BeginInit();
@@ -88,7 +85,7 @@
             mainLabel.BackColor = Color.Transparent;
             mainLabel.Font = new Font("Segoe UI Semibold", 13F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point);
             mainLabel.ForeColor = Color.White;
-            mainLabel.Location = new Point(80, 25);
+            mainLabel.Location = new Point(80, 4);
             mainLabel.Name = "mainLabel";
             mainLabel.Size = new Size(87, 25);
             mainLabel.TabIndex = 11;
@@ -123,22 +120,19 @@
             // mainPanel
             // 
             mainPanel.BackColor = Color.FromArgb(45, 45, 50);
+            mainPanel.Controls.Add(msLabel2);
+            mainPanel.Controls.Add(timeoutLabel);
+            mainPanel.Controls.Add(timeoutTextBox);
+            mainPanel.Controls.Add(msLabel1);
+            mainPanel.Controls.Add(frequencyLabel);
+            mainPanel.Controls.Add(frequencyTextBox);
+            mainPanel.Controls.Add(oppOperatorLabel);
+            mainPanel.Controls.Add(oppOperatorCheckbox);
             mainPanel.Controls.Add(pictureBox1);
-            mainPanel.Controls.Add(label6);
-            mainPanel.Controls.Add(logicModifierComboBox);
+            mainPanel.Controls.Add(logicOperatorComboBox);
             mainPanel.Controls.Add(label2);
             mainPanel.Controls.Add(testRunTimeText);
             mainPanel.Controls.Add(testRunTimeLabel);
-            mainPanel.Controls.Add(locatorTextBox);
-            mainPanel.Controls.Add(valueLabel);
-            mainPanel.Controls.Add(locatorLabel);
-            mainPanel.Controls.Add(valueTextBox);
-            mainPanel.Controls.Add(timeOutTextBox);
-            mainPanel.Controls.Add(label5);
-            mainPanel.Controls.Add(frequencyTextField);
-            mainPanel.Controls.Add(label4);
-            mainPanel.Controls.Add(conditionComboBox);
-            mainPanel.Controls.Add(label3);
             mainPanel.Controls.Add(idTextBox);
             mainPanel.Controls.Add(binImage);
             mainPanel.Controls.Add(mainLabel);
@@ -149,6 +143,104 @@
             mainPanel.Name = "mainPanel";
             mainPanel.Size = new Size(870, 118);
             mainPanel.TabIndex = 12;
+            // 
+            // msLabel2
+            // 
+            msLabel2.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            msLabel2.AutoSize = true;
+            msLabel2.BackColor = Color.Transparent;
+            msLabel2.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
+            msLabel2.ForeColor = Color.DimGray;
+            msLabel2.Location = new Point(619, 14);
+            msLabel2.Name = "msLabel2";
+            msLabel2.Size = new Size(30, 15);
+            msLabel2.TabIndex = 101;
+            msLabel2.Text = "(ms)";
+            // 
+            // timeoutLabel
+            // 
+            timeoutLabel.AutoSize = true;
+            timeoutLabel.BackColor = Color.Transparent;
+            timeoutLabel.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            timeoutLabel.ForeColor = Color.White;
+            timeoutLabel.Location = new Point(455, 10);
+            timeoutLabel.Name = "timeoutLabel";
+            timeoutLabel.Size = new Size(79, 19);
+            timeoutLabel.TabIndex = 100;
+            timeoutLabel.Text = "Időtúllépés:";
+            // 
+            // timeoutTextBox
+            // 
+            timeoutTextBox.BackColor = Color.FromArgb(40, 40, 43);
+            timeoutTextBox.Font = new Font("Segoe UI", 8F, FontStyle.Italic, GraphicsUnit.Point);
+            timeoutTextBox.ForeColor = Color.DarkGray;
+            timeoutTextBox.Location = new Point(537, 10);
+            timeoutTextBox.Name = "timeoutTextBox";
+            timeoutTextBox.PlaceholderText = "Érték...";
+            timeoutTextBox.Size = new Size(80, 22);
+            timeoutTextBox.TabIndex = 99;
+            timeoutTextBox.Text = "10000";
+            // 
+            // msLabel1
+            // 
+            msLabel1.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            msLabel1.AutoSize = true;
+            msLabel1.BackColor = Color.Transparent;
+            msLabel1.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
+            msLabel1.ForeColor = Color.DimGray;
+            msLabel1.Location = new Point(409, 14);
+            msLabel1.Name = "msLabel1";
+            msLabel1.Size = new Size(30, 15);
+            msLabel1.TabIndex = 98;
+            msLabel1.Text = "(ms)";
+            // 
+            // frequencyLabel
+            // 
+            frequencyLabel.AutoSize = true;
+            frequencyLabel.BackColor = Color.Transparent;
+            frequencyLabel.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            frequencyLabel.ForeColor = Color.White;
+            frequencyLabel.Location = new Point(245, 10);
+            frequencyLabel.Name = "frequencyLabel";
+            frequencyLabel.Size = new Size(80, 19);
+            frequencyLabel.TabIndex = 97;
+            frequencyLabel.Text = "Gyakoriság:";
+            // 
+            // frequencyTextBox
+            // 
+            frequencyTextBox.BackColor = Color.FromArgb(40, 40, 43);
+            frequencyTextBox.Font = new Font("Segoe UI", 8F, FontStyle.Italic, GraphicsUnit.Point);
+            frequencyTextBox.ForeColor = Color.DarkGray;
+            frequencyTextBox.Location = new Point(327, 10);
+            frequencyTextBox.Name = "frequencyTextBox";
+            frequencyTextBox.PlaceholderText = "Érték...";
+            frequencyTextBox.Size = new Size(80, 22);
+            frequencyTextBox.TabIndex = 96;
+            frequencyTextBox.Text = "1000";
+            // 
+            // oppOperatorLabel
+            // 
+            oppOperatorLabel.AutoSize = true;
+            oppOperatorLabel.BackColor = Color.Transparent;
+            oppOperatorLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            oppOperatorLabel.ForeColor = Color.White;
+            oppOperatorLabel.Location = new Point(128, 75);
+            oppOperatorLabel.Name = "oppOperatorLabel";
+            oppOperatorLabel.Size = new Size(15, 21);
+            oppOperatorLabel.TabIndex = 95;
+            oppOperatorLabel.Text = "!";
+            // 
+            // oppOperatorCheckbox
+            // 
+            oppOperatorCheckbox.AutoSize = true;
+            oppOperatorCheckbox.BackColor = Color.Transparent;
+            oppOperatorCheckbox.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            oppOperatorCheckbox.ForeColor = Color.Silver;
+            oppOperatorCheckbox.Location = new Point(149, 79);
+            oppOperatorCheckbox.Name = "oppOperatorCheckbox";
+            oppOperatorCheckbox.Size = new Size(15, 14);
+            oppOperatorCheckbox.TabIndex = 94;
+            oppOperatorCheckbox.UseVisualStyleBackColor = false;
             // 
             // pictureBox1
             // 
@@ -161,31 +253,18 @@
             pictureBox1.TabIndex = 93;
             pictureBox1.TabStop = false;
             // 
-            // label6
+            // logicOperatorComboBox
             // 
-            label6.AutoSize = true;
-            label6.BackColor = Color.Transparent;
-            label6.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold | FontStyle.Italic | FontStyle.Underline, GraphicsUnit.Point);
-            label6.ForeColor = Color.White;
-            label6.Location = new Point(200, 10);
-            label6.Name = "label6";
-            label6.Size = new Size(139, 19);
-            label6.TabIndex = 92;
-            label6.Text = "Várakozási kondíció:";
-            // 
-            // logicModifierComboBox
-            // 
-            logicModifierComboBox.BackColor = Color.FromArgb(40, 40, 43);
-            logicModifierComboBox.FlatStyle = FlatStyle.Popup;
-            logicModifierComboBox.Font = new Font("Segoe UI Semibold", 8F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
-            logicModifierComboBox.ForeColor = Color.DarkGray;
-            logicModifierComboBox.FormattingEnabled = true;
-            logicModifierComboBox.Items.AddRange(new object[] { "?", "!" });
-            logicModifierComboBox.Location = new Point(705, 14);
-            logicModifierComboBox.Name = "logicModifierComboBox";
-            logicModifierComboBox.Size = new Size(76, 21);
-            logicModifierComboBox.TabIndex = 91;
-            logicModifierComboBox.Text = "?";
+            logicOperatorComboBox.BackColor = Color.FromArgb(40, 40, 43);
+            logicOperatorComboBox.FlatStyle = FlatStyle.Popup;
+            logicOperatorComboBox.Font = new Font("Segoe UI Semibold", 8F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+            logicOperatorComboBox.ForeColor = Color.DarkGray;
+            logicOperatorComboBox.FormattingEnabled = true;
+            logicOperatorComboBox.Location = new Point(120, 53);
+            logicOperatorComboBox.Name = "logicOperatorComboBox";
+            logicOperatorComboBox.Size = new Size(76, 21);
+            logicOperatorComboBox.TabIndex = 91;
+            logicOperatorComboBox.Text = "?";
             // 
             // label2
             // 
@@ -193,7 +272,7 @@
             label2.BackColor = Color.Transparent;
             label2.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
             label2.ForeColor = Color.White;
-            label2.Location = new Point(573, 16);
+            label2.Location = new Point(84, 31);
             label2.Name = "label2";
             label2.Size = new Size(112, 19);
             label2.TabIndex = 90;
@@ -225,126 +304,6 @@
             testRunTimeLabel.TabIndex = 88;
             testRunTimeLabel.Text = "Előző tesztelésen futási ideje:";
             // 
-            // locatorTextBox
-            // 
-            locatorTextBox.BackColor = Color.FromArgb(40, 40, 43);
-            locatorTextBox.FlatStyle = FlatStyle.Popup;
-            locatorTextBox.Font = new Font("Segoe UI Semibold", 6F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
-            locatorTextBox.ForeColor = Color.DarkGray;
-            locatorTextBox.FormattingEnabled = true;
-            locatorTextBox.Items.AddRange(new object[] { "xpath", "css_selector" });
-            locatorTextBox.Location = new Point(283, 58);
-            locatorTextBox.Name = "locatorTextBox";
-            locatorTextBox.Size = new Size(192, 19);
-            locatorTextBox.TabIndex = 87;
-            locatorTextBox.Text = "xpath";
-            // 
-            // valueLabel
-            // 
-            valueLabel.AutoSize = true;
-            valueLabel.BackColor = Color.Transparent;
-            valueLabel.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-            valueLabel.ForeColor = Color.White;
-            valueLabel.Location = new Point(219, 81);
-            valueLabel.Name = "valueLabel";
-            valueLabel.Size = new Size(43, 19);
-            valueLabel.TabIndex = 86;
-            valueLabel.Text = "Érték:";
-            // 
-            // locatorLabel
-            // 
-            locatorLabel.AutoSize = true;
-            locatorLabel.BackColor = Color.Transparent;
-            locatorLabel.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-            locatorLabel.ForeColor = Color.White;
-            locatorLabel.Location = new Point(219, 57);
-            locatorLabel.Name = "locatorLabel";
-            locatorLabel.Size = new Size(59, 19);
-            locatorLabel.TabIndex = 85;
-            locatorLabel.Text = "Lokátor:";
-            // 
-            // valueTextBox
-            // 
-            valueTextBox.BackColor = Color.FromArgb(40, 40, 43);
-            valueTextBox.Font = new Font("Segoe UI", 6F, FontStyle.Italic, GraphicsUnit.Point);
-            valueTextBox.ForeColor = Color.DarkGray;
-            valueTextBox.Location = new Point(283, 83);
-            valueTextBox.Name = "valueTextBox";
-            valueTextBox.PlaceholderText = "Érték...";
-            valueTextBox.Size = new Size(192, 18);
-            valueTextBox.TabIndex = 84;
-            // 
-            // timeOutTextBox
-            // 
-            timeOutTextBox.BackColor = Color.FromArgb(40, 40, 43);
-            timeOutTextBox.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
-            timeOutTextBox.ForeColor = Color.DarkGray;
-            timeOutTextBox.Location = new Point(611, 68);
-            timeOutTextBox.Name = "timeOutTextBox";
-            timeOutTextBox.PlaceholderText = "Időtúllépés értéke...";
-            timeOutTextBox.Size = new Size(171, 23);
-            timeOutTextBox.TabIndex = 58;
-            // 
-            // label5
-            // 
-            label5.AutoSize = true;
-            label5.BackColor = Color.Transparent;
-            label5.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            label5.ForeColor = Color.White;
-            label5.Location = new Point(510, 70);
-            label5.Name = "label5";
-            label5.Size = new Size(95, 15);
-            label5.TabIndex = 57;
-            label5.Text = "Időtúllépés (ms):";
-            // 
-            // frequencyTextField
-            // 
-            frequencyTextField.BackColor = Color.FromArgb(40, 40, 43);
-            frequencyTextField.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
-            frequencyTextField.ForeColor = Color.DarkGray;
-            frequencyTextField.Location = new Point(611, 41);
-            frequencyTextField.Name = "frequencyTextField";
-            frequencyTextField.PlaceholderText = "Várakozás gyakorisága...";
-            frequencyTextField.Size = new Size(171, 23);
-            frequencyTextField.TabIndex = 56;
-            // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.BackColor = Color.Transparent;
-            label4.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            label4.ForeColor = Color.White;
-            label4.Location = new Point(510, 46);
-            label4.Name = "label4";
-            label4.Size = new Size(95, 15);
-            label4.TabIndex = 55;
-            label4.Text = "Gyakoriság (ms):";
-            // 
-            // conditionComboBox
-            // 
-            conditionComboBox.BackColor = Color.FromArgb(40, 40, 43);
-            conditionComboBox.FlatStyle = FlatStyle.Popup;
-            conditionComboBox.Font = new Font("Segoe UI Semibold", 8F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
-            conditionComboBox.ForeColor = Color.DarkGray;
-            conditionComboBox.FormattingEnabled = true;
-            conditionComboBox.Location = new Point(343, 31);
-            conditionComboBox.Name = "conditionComboBox";
-            conditionComboBox.Size = new Size(132, 21);
-            conditionComboBox.TabIndex = 54;
-            conditionComboBox.Text = "loaded";
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.BackColor = Color.Transparent;
-            label3.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-            label3.ForeColor = Color.White;
-            label3.Location = new Point(219, 31);
-            label3.Name = "label3";
-            label3.Size = new Size(105, 19);
-            label3.TabIndex = 53;
-            label3.Text = "Kondíció típusa:";
-            // 
             // WaitForAction
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -370,21 +329,18 @@
         private PictureBox binImage;
         private TextBox idTextBox;
         private Panel mainPanel;
-        private ComboBox conditionComboBox;
-        protected Label label3;
-        protected Label label4;
-        private TextBox frequencyTextField;
-        private TextBox timeOutTextBox;
-        protected Label label5;
-        protected Label valueLabel;
-        protected Label locatorLabel;
-        private TextBox valueTextBox;
-        private ComboBox locatorTextBox;
         protected Label testRunTimeText;
         protected Label testRunTimeLabel;
-        private ComboBox logicModifierComboBox;
+        private ComboBox logicOperatorComboBox;
         protected Label label2;
-        protected Label label6;
         private PictureBox pictureBox1;
+        protected Label oppOperatorLabel;
+        private CheckBox oppOperatorCheckbox;
+        protected Label frequencyLabel;
+        private TextBox frequencyTextBox;
+        protected Label msLabel1;
+        protected Label msLabel2;
+        protected Label timeoutLabel;
+        private TextBox timeoutTextBox;
     }
 }

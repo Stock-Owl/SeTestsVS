@@ -129,18 +129,6 @@
           "break": false,
           "amount": 0
         },
-        "11": {
-          "type": "waitfor",
-          "break": false,
-          "frequency": 0,
-          "timeout": 0,
-          "logic_modifier": "?",
-          "condition": {
-            "type": "loaded",
-            "locator": "xpath",
-            "value": ""
-          }
-        },
         "12": {
           "type": "refresh",
           "break": false
