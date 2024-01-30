@@ -77,18 +77,36 @@ class Actions:
         driver: ChromeDriver | FirefoxDriver | WireChromeDriver | WireFirefoxDriver,
         commands: list[str],
         terminal_mode: bool = False,
-        path_ = "./logs",
-        retry_timeout: int = 1000
+        log_path = "./logs",
+        retry_timeout: int = 1000   # for logging
         ) -> None:
 
-        Actions.CheckDriverExists(driver)
+        if Actions.CheckDriverExists(driver)
         for i in range(len(commands)):
             try:
                 command = commands[i]
                 driver.execute_script(command)
             except SeJSException as e:
                 # print(f"Error: the command {command} was incorrect")
-                Support.LogJS(path_, retry_timeout, e, index=0, terminal_mode=terminal_mode)
+                Support.LogJS(log_path, retry_timeout, e, index=0, terminal_mode=terminal_mode)
+
+    def ExecuteJSFile(
+        driver: ChromeDriver | FirefoxDriver | WireChromeDriver | WireFirefoxDriver,
+        file_path: str,
+        terminal_mode: bool = False,
+        log_path: str = "./logs",
+        retry_timeout: int = 1000
+    ) -> None:
+        Actions.CheckDriverExists(driver)
+
+        if not Support.exists(file_path):
+            raise FileNotFoundError(f"Couldn't reach {file_path}")
+        
+        with open(file_path, mode = 'r', encoding = 'utf8') as f:
+            contents = f.read()
+
+        
+        pass
 
     # PART FUNCS
     def MatchElement(

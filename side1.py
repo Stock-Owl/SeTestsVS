@@ -15,7 +15,9 @@ class Test:
         stuff = []
         for i in range(5):
             stuff.append(Test.boss(100, i))
-        await asyncio.gather(*stuff)
+
+        for i in range(10):
+            await asyncio.gather(*stuff)
 
     def runner():
         asyncio.run(Test.main())

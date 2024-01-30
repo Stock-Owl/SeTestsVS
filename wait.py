@@ -297,14 +297,11 @@ class Wait:
         timeout = timeout_ms / 1000
         iterations = ceil(timeout / frequency)
 
-        conditions: list[asyncio.Future] = []
-        for each in condition_list:
-            conditions.append(Wait.Check(driver, condition = each, out = conditions))
+        for i in range(iterations):
+            conditions  = []    # coros
+            for condition in condition_list:
+                conditions.append(Wait.Check(driver, condition = condition, out = conditions))
 
-        for coro in condition_list:
-            print(coro)
-
-        for each in range(iterations):
             await asyncio.gather(*conditions)
             if Wait.LogicOperatorCheck(operator = logic_operator, conditions = conditions):
                 return
