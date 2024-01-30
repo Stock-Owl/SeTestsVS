@@ -9,7 +9,7 @@ from selenium.webdriver.support import expected_conditions
 from selenium.common.exceptions import JavascriptException as SeJSException
 from support import Support
 from interceptor import Interceptor
-from wait import Wait as Waitclass
+from wait import Wait as WaitClass
 
 # renaming shit from the wait class, because code segmentation
 
@@ -47,8 +47,27 @@ class Actions:
         Actions.CheckInterceptorExists(interceptor)
         interceptor.Remove(name_)
 
-    WaitFor = Waitclass.WaitFor
-    Wait = Waitclass.Wait
+
+    def Wait(milliseconds: int) -> None:
+        return WaitClass.Wait(milliseconds)
+
+    # the only reason we do this shit is that IntelliSense works
+    # and it also helps with access limitation and maintainability
+    def WaitFor(
+        driver: ChromeDriver | WireChromeDriver | FirefoxDriver | WireFirefoxDriver,
+        logic_operator: str = "all",
+        condition_list = list[dict[str, str | int | bool]],
+        frequency_ms = 1000, # ms
+        timeout_ms = 10000 # ms
+    ) -> None:
+        
+        return WaitClass.WaitFor(
+            driver,
+            logic_operator = logic_operator,
+            condition_list = condition_list,
+            frequency_ms = frequency_ms,
+            timeout_ms = timeout_ms
+        )
 
     def SwitchBack(driver: ChromeDriver | FirefoxDriver | WireChromeDriver | WireFirefoxDriver):
         Actions.CheckDriverExists(driver)

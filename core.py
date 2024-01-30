@@ -179,6 +179,7 @@ class Core:
         else:
             browser_options: tuple[ChromeOptions, FirefoxOptions] = Core.DefaultOptions()
 
+        requested_browsers: list[str] = json["browsers"] 
         units = json["units"]
         options: dict[str] = json["options"]
         parent_log_path: str = options["parent_log_path"]
@@ -192,39 +193,41 @@ class Core:
         processes: list[Process] = []
         parent_log_path = options["parent_log_path"]
 
-        chrome_kwargs: dict = \
-        {
-            "options": browser_options[0],
-            "units": units,
-            "testname": testname,
-            "interceptor_active": interceptor,
-            "log_js_retry_timeout": log_js_retry_timeout,
-            "auto_exit_iframes": auto_exit_iframes,
-            "start_fullscreen": start_fullscreen,
-            "keep_browser_open": keep_browser_open,
-            "browser": "chrome",
-            "parent_log_path": f"{parent_log_path}/chrome"
-        }
+        if "chrome" in requested_browsers:
+            chrome_kwargs: dict = \
+            {
+                "options": browser_options[0],
+                "units": units,
+                "testname": testname,
+                "interceptor_active": interceptor,
+                "log_js_retry_timeout": log_js_retry_timeout,
+                "auto_exit_iframes": auto_exit_iframes,
+                "start_fullscreen": start_fullscreen,
+                "keep_browser_open": keep_browser_open,
+                "browser": "chrome",
+                "parent_log_path": f"{parent_log_path}/chrome"
+            }
+    
+            chrome_exec = Process(target=Core.DriverExec, kwargs=chrome_kwargs)
+            processes.append(chrome_exec)
 
-        chrome_exec = Process(target=Core.DriverExec, kwargs=chrome_kwargs)
-        processes.append(chrome_exec)
-
-        firefox_kwargs: dict = \
-        {
-            "options": browser_options[1],
-            "units": units,
-            "testname": testname,
-            "interceptor_active": interceptor,
-            "log_js_retry_timeout": log_js_retry_timeout,
-            "auto_exit_iframes": auto_exit_iframes,
-            "start_fullscreen": start_fullscreen,
-            "keep_browser_open": keep_browser_open,
-            "browser": "firefox",
-            "parent_log_path": f"{parent_log_path}/firefox"
-        }
-
-        firefox_exec = Process(target=Core.DriverExec , kwargs=firefox_kwargs)
-        processes.append(firefox_exec)
+        if "firefox" in requested_browsers:
+            firefox_kwargs: dict = \
+            {
+                "options": browser_options[1],
+                "units": units,
+                "testname": testname,
+                "interceptor_active": interceptor,
+                "log_js_retry_timeout": log_js_retry_timeout,
+                "auto_exit_iframes": auto_exit_iframes,
+                "start_fullscreen": start_fullscreen,
+                "keep_browser_open": keep_browser_open,
+                "browser": "firefox",
+                "parent_log_path": f"{parent_log_path}/firefox"
+            }
+    
+            firefox_exec = Process(target=Core.DriverExec , kwargs=firefox_kwargs)
+            processes.append(firefox_exec)
 
         return processes
 
@@ -384,15 +387,15 @@ class Core:
                         case "wait_for":
                             frequency_ = action['frequency']
                             timeout_ = action['timeout']
-                            logic_modifier_ = action['logic_modifier']
-                            condition_ = action['condition']
+                            logic_operator_ = action['logic_operator']
+                            condition_list_ = action['condition_list']
 
                             Actions.WaitFor(
                                 driver,
+                                logic_operator=logic_operator_,
+                                condition_list=condition_list_,
                                 frequency_ms=frequency_,
-                                timeout_ms=timeout_,
-                                logic_modifier=logic_modifier_,
-                                condition_=condition_)
+                                timeout_ms=timeout_)
                         case "switch_back":
                             Actions.SwitchBack(driver)
                         case "switch_to":
@@ -405,8 +408,7 @@ class Core:
                                 isSingle = True,
                                 isDisplayed = None,
                                 isEnabled = None,
-                                isSelected = None
-                                )
+                                isSelected = None)
                         case "click":
                             Actions.ElementAction(
                                 driver,
@@ -444,6 +446,7 @@ class Core:
                         case _:
                             action_type = action['type']
                             Support.LogProc(parent_log_path, f"Unknown action \'{action_type}\'")
+                            continue
 
                     log_line = f"[U:{uname}][A:{aname}] of type \'{action['type']}\' successfully executed"
                     Support.LogProc(parent_log_path, log_line)
@@ -473,7 +476,7 @@ class Core:
                 Support.LogError(parent_log_path, f"{format_exc()}Stack:\n", time_disabled=True)
 
                 stack = format_stack()
-                # -1 to exclude this expression from stack
+                # -1 to exclude this block from stack
                 for x in range(len(stack)-1):
                     stack_parts = stack[x].split('\n')
                     origin = stack_parts[0]

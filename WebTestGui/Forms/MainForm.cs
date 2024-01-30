@@ -954,11 +954,11 @@ namespace WebTestGui
 
         private void MainForm_Resize(object sender, EventArgs e)
         {
-            unitsPanel.Location = new Point(optionsPanel.Location.X - 954, unitsPanel.Location.Y);
-            unitHeaderPanel.Location = new Point(optionsPanel.Location.X - 954, unitHeaderPanel.Location.Y);
-            testNameLabel.Location = new Point(optionsPanel.Location.X - 954, testNameLabel.Location.Y);
-            testRunTimeText.Location = new Point(optionsPanel.Location.X - 954, testRunTimeText.Location.Y);
-            breakpointIcon.Location = new Point(addUnitButton.Location.X, breakpointIcon.Location.Y);
+            //unitsPanel.Location = new Point(optionsPanel.Location.X - 954, unitsPanel.Location.Y);
+            //unitHeaderPanel.Location = new Point(optionsPanel.Location.X - 954, unitHeaderPanel.Location.Y);
+            //testNameLabel.Location = new Point(optionsPanel.Location.X - 954, testNameLabel.Location.Y);
+            //testRunTimeText.Location = new Point(optionsPanel.Location.X - 954, testRunTimeText.Location.Y);
+            //breakpointIcon.Location = new Point(addUnitButton.Location.X, breakpointIcon.Location.Y);
 
         }
 

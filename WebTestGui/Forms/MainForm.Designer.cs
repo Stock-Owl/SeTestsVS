@@ -102,10 +102,10 @@
             unitHeaderPanel.Controls.Add(gotoUnitComboBox);
             unitHeaderPanel.Controls.Add(addUnitButton);
             unitHeaderPanel.Controls.Add(unitLabel);
-            unitHeaderPanel.Location = new Point(551, 77);
+            unitHeaderPanel.Location = new Point(503, 77);
             unitHeaderPanel.MaximumSize = new Size(950, 30);
             unitHeaderPanel.Name = "unitHeaderPanel";
-            unitHeaderPanel.Size = new Size(240, 30);
+            unitHeaderPanel.Size = new Size(286, 30);
             unitHeaderPanel.TabIndex = 9;
             // 
             // gotoUnitLabel
@@ -115,7 +115,7 @@
             gotoUnitLabel.BackColor = Color.Transparent;
             gotoUnitLabel.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
             gotoUnitLabel.ForeColor = Color.DarkGray;
-            gotoUnitLabel.Location = new Point(-1, 6);
+            gotoUnitLabel.Location = new Point(45, 6);
             gotoUnitLabel.Name = "gotoUnitLabel";
             gotoUnitLabel.Size = new Size(79, 15);
             gotoUnitLabel.TabIndex = 63;
@@ -130,7 +130,7 @@
             gotoUnitComboBox.Font = new Font("Segoe UI Semibold", 8F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
             gotoUnitComboBox.ForeColor = Color.Silver;
             gotoUnitComboBox.FormattingEnabled = true;
-            gotoUnitComboBox.Location = new Point(84, 3);
+            gotoUnitComboBox.Location = new Point(130, 3);
             gotoUnitComboBox.Name = "gotoUnitComboBox";
             gotoUnitComboBox.Size = new Size(126, 21);
             gotoUnitComboBox.TabIndex = 62;
@@ -142,7 +142,7 @@
             addUnitButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             addUnitButton.BackColor = Color.FromArgb(50, 50, 53);
             addUnitButton.Image = (Image)resources.GetObject("addUnitButton.Image");
-            addUnitButton.Location = new Point(216, 3);
+            addUnitButton.Location = new Point(262, 3);
             addUnitButton.Name = "addUnitButton";
             addUnitButton.Size = new Size(20, 20);
             addUnitButton.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -243,10 +243,10 @@
             unitsPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             unitsPanel.AutoScroll = true;
             unitsPanel.BackColor = Color.FromArgb(45, 45, 50);
-            unitsPanel.Location = new Point(551, 103);
+            unitsPanel.Location = new Point(503, 103);
             unitsPanel.MaximumSize = new Size(950, 10000000);
             unitsPanel.Name = "unitsPanel";
-            unitsPanel.Size = new Size(240, 456);
+            unitsPanel.Size = new Size(286, 456);
             unitsPanel.TabIndex = 39;
             // 
             // switchToOptionsButton
@@ -365,7 +365,7 @@
             testNameLabel.BackColor = Color.FromArgb(50, 50, 53);
             testNameLabel.Font = new Font("Segoe UI Semibold", 20F, FontStyle.Bold, GraphicsUnit.Point);
             testNameLabel.ForeColor = Color.White;
-            testNameLabel.Location = new Point(547, 6);
+            testNameLabel.Location = new Point(501, 6);
             testNameLabel.Name = "testNameLabel";
             testNameLabel.Size = new Size(136, 37);
             testNameLabel.TabIndex = 55;
@@ -390,7 +390,7 @@
             testRunTimeText.BackColor = Color.Transparent;
             testRunTimeText.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
             testRunTimeText.ForeColor = Color.DarkGray;
-            testRunTimeText.Location = new Point(553, 43);
+            testRunTimeText.Location = new Point(507, 43);
             testRunTimeText.Name = "testRunTimeText";
             testRunTimeText.Size = new Size(174, 30);
             testRunTimeText.TabIndex = 61;

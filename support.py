@@ -1,5 +1,6 @@
 from seleniumwire.webdriver import Chrome as ChromeDriver
 from selenium.common.exceptions import JavascriptException as SeJSException
+from datetime import datetime as dt
 
 class Support:
     from os.path import exists
@@ -16,7 +17,6 @@ class Support:
                 f.write("")
 
     def LogAll(path_: str, log_line: str, time_disabled: bool = False) -> None:
-        from datetime import datetime as dt
 
         path = f"{path_}/run.log"
 
@@ -29,7 +29,8 @@ class Support:
         with open(path, "a", encoding="utf-8") as f:
             if not time_disabled:
                 time_: str = dt.now().time().strftime("/%H:%M:%S:%f/ ")
-                f.write(time_)
+                f.write(f"{time_} {log_line}")
+                return
             f.write(log_line)
 
     def LogProc(path_: str, log_line: str, time_disabled: bool = False) -> None:
@@ -93,9 +94,9 @@ class Support:
                     if isinstance(log, SeJSException):
                         stacktrace = "\n".join(log.stacktrace)
                         if index is not None:
-                            to_write: str = f"{index} ❗ JavaScript:\n{log.msg}\nSteack Trace:\n{stacktrace}\n"
+                            to_write: str = f"{index} ❗ JavaScript:\n{log.msg}\nStack Trace:\n{stacktrace}\n"
                         else:
-                            to_write: str = f"❗ JavaScript:\n{log.msg}\nSteack Trace:\n{stacktrace}\n"
+                            to_write: str = f"❗ JavaScript:\n{log.msg}\nStack Trace:\n{stacktrace}\n"
                         with open(path, mode ='a+', encoding='utf-8') as f:
                             f.write(to_write)
                             Support.LogAll(path_, to_write, time_disabled = time_disabled)
