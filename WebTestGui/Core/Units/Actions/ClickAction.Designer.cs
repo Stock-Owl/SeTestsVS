@@ -62,9 +62,9 @@
             // 
             breakpointOnPicture.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             breakpointOnPicture.Image = Properties.Resources.BreakpointOnIcon;
-            breakpointOnPicture.Location = new Point(623, 39);
+            breakpointOnPicture.Location = new Point(815, 65);
             breakpointOnPicture.Name = "breakpointOnPicture";
-            breakpointOnPicture.Size = new Size(25, 25);
+            breakpointOnPicture.Size = new Size(20, 20);
             breakpointOnPicture.SizeMode = PictureBoxSizeMode.StretchImage;
             breakpointOnPicture.TabIndex = 40;
             breakpointOnPicture.TabStop = false;
@@ -74,9 +74,9 @@
             // 
             breakpointOffPicture.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             breakpointOffPicture.Image = (Image)resources.GetObject("breakpointOffPicture.Image");
-            breakpointOffPicture.Location = new Point(623, 39);
+            breakpointOffPicture.Location = new Point(815, 65);
             breakpointOffPicture.Name = "breakpointOffPicture";
-            breakpointOffPicture.Size = new Size(25, 25);
+            breakpointOffPicture.Size = new Size(20, 20);
             breakpointOffPicture.SizeMode = PictureBoxSizeMode.StretchImage;
             breakpointOffPicture.TabIndex = 41;
             breakpointOffPicture.TabStop = false;
@@ -86,11 +86,11 @@
             // 
             mainLabel.AutoSize = true;
             mainLabel.BackColor = Color.Transparent;
-            mainLabel.Font = new Font("Segoe UI Semibold", 13F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point);
+            mainLabel.Font = new Font("Segoe UI Semibold", 15F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point);
             mainLabel.ForeColor = Color.White;
-            mainLabel.Location = new Point(6, 6);
+            mainLabel.Location = new Point(70, 21);
             mainLabel.Name = "mainLabel";
-            mainLabel.Size = new Size(55, 25);
+            mainLabel.Size = new Size(60, 28);
             mainLabel.TabIndex = 11;
             mainLabel.Text = "Click:";
             // 
@@ -98,9 +98,9 @@
             // 
             binImage.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             binImage.Image = (Image)resources.GetObject("binImage.Image");
-            binImage.Location = new Point(656, 52);
+            binImage.Location = new Point(841, 65);
             binImage.Name = "binImage";
-            binImage.Size = new Size(35, 35);
+            binImage.Size = new Size(20, 20);
             binImage.SizeMode = PictureBoxSizeMode.StretchImage;
             binImage.TabIndex = 37;
             binImage.TabStop = false;
@@ -113,9 +113,9 @@
             idTextBox.BorderStyle = BorderStyle.FixedSingle;
             idTextBox.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
             idTextBox.ForeColor = Color.Gainsboro;
-            idTextBox.Location = new Point(655, 7);
+            idTextBox.Location = new Point(815, 6);
             idTextBox.Name = "idTextBox";
-            idTextBox.Size = new Size(35, 25);
+            idTextBox.Size = new Size(46, 25);
             idTextBox.TabIndex = 38;
             idTextBox.Text = "0";
             idTextBox.Leave += OnUIdTextBoxFocusLeave;
@@ -126,7 +126,7 @@
             singleCheckbox.BackColor = Color.Transparent;
             singleCheckbox.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
             singleCheckbox.ForeColor = Color.Silver;
-            singleCheckbox.Location = new Point(542, 15);
+            singleCheckbox.Location = new Point(629, 13);
             singleCheckbox.Name = "singleCheckbox";
             singleCheckbox.Size = new Size(15, 14);
             singleCheckbox.TabIndex = 44;
@@ -139,7 +139,7 @@
             singleLabel.BackColor = Color.Transparent;
             singleLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             singleLabel.ForeColor = Color.White;
-            singleLabel.Location = new Point(484, 10);
+            singleLabel.Location = new Point(571, 8);
             singleLabel.Name = "singleLabel";
             singleLabel.Size = new Size(44, 21);
             singleLabel.TabIndex = 45;
@@ -151,7 +151,7 @@
             label2.BackColor = Color.Transparent;
             label2.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
             label2.ForeColor = Color.Gray;
-            label2.Location = new Point(563, 13);
+            label2.Location = new Point(650, 11);
             label2.Name = "label2";
             label2.Size = new Size(80, 15);
             label2.TabIndex = 46;
@@ -184,16 +184,16 @@
             mainPanel.Dock = DockStyle.Fill;
             mainPanel.Location = new Point(0, 0);
             mainPanel.Name = "mainPanel";
-            mainPanel.Size = new Size(700, 91);
+            mainPanel.Size = new Size(870, 91);
             mainPanel.TabIndex = 12;
             // 
             // pictureBox1
             // 
             pictureBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
-            pictureBox1.Location = new Point(15, 34);
+            pictureBox1.Location = new Point(15, 21);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(35, 35);
+            pictureBox1.Size = new Size(50, 50);
             pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox1.TabIndex = 82;
             pictureBox1.TabStop = false;
@@ -205,7 +205,7 @@
             testRunTimeText.BackColor = Color.Transparent;
             testRunTimeText.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
             testRunTimeText.ForeColor = Color.DimGray;
-            testRunTimeText.Location = new Point(160, 73);
+            testRunTimeText.Location = new Point(239, 69);
             testRunTimeText.Name = "testRunTimeText";
             testRunTimeText.Size = new Size(48, 15);
             testRunTimeText.TabIndex = 81;
@@ -218,7 +218,7 @@
             testRunTimeLabel.BackColor = Color.Transparent;
             testRunTimeLabel.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
             testRunTimeLabel.ForeColor = Color.Gray;
-            testRunTimeLabel.Location = new Point(3, 73);
+            testRunTimeLabel.Location = new Point(80, 69);
             testRunTimeLabel.Name = "testRunTimeLabel";
             testRunTimeLabel.Size = new Size(157, 15);
             testRunTimeLabel.TabIndex = 80;
@@ -232,7 +232,7 @@
             locatorTextBox.ForeColor = Color.DarkGray;
             locatorTextBox.FormattingEnabled = true;
             locatorTextBox.Items.AddRange(new object[] { "xpath", "css_selector" });
-            locatorTextBox.Location = new Point(155, 14);
+            locatorTextBox.Location = new Point(373, 20);
             locatorTextBox.Name = "locatorTextBox";
             locatorTextBox.Size = new Size(192, 21);
             locatorTextBox.TabIndex = 79;
@@ -242,11 +242,11 @@
             // 
             valueLabel.AutoSize = true;
             valueLabel.BackColor = Color.Transparent;
-            valueLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            valueLabel.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
             valueLabel.ForeColor = Color.White;
-            valueLabel.Location = new Point(83, 41);
+            valueLabel.Location = new Point(322, 45);
             valueLabel.Name = "valueLabel";
-            valueLabel.Size = new Size(48, 21);
+            valueLabel.Size = new Size(43, 19);
             valueLabel.TabIndex = 78;
             valueLabel.Text = "Érték:";
             // 
@@ -254,11 +254,11 @@
             // 
             locatorLabel.AutoSize = true;
             locatorLabel.BackColor = Color.Transparent;
-            locatorLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            locatorLabel.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
             locatorLabel.ForeColor = Color.White;
-            locatorLabel.Location = new Point(83, 14);
+            locatorLabel.Location = new Point(306, 20);
             locatorLabel.Name = "locatorLabel";
-            locatorLabel.Size = new Size(66, 21);
+            locatorLabel.Size = new Size(59, 19);
             locatorLabel.TabIndex = 77;
             locatorLabel.Text = "Lokátor:";
             // 
@@ -267,7 +267,7 @@
             valueTextBox.BackColor = Color.FromArgb(40, 40, 43);
             valueTextBox.Font = new Font("Segoe UI", 8F, FontStyle.Italic, GraphicsUnit.Point);
             valueTextBox.ForeColor = Color.DarkGray;
-            valueTextBox.Location = new Point(155, 41);
+            valueTextBox.Location = new Point(373, 47);
             valueTextBox.Name = "valueTextBox";
             valueTextBox.PlaceholderText = "Érték...";
             valueTextBox.Size = new Size(192, 22);
@@ -277,11 +277,11 @@
             // 
             label8.AutoSize = true;
             label8.BackColor = Color.Transparent;
-            label8.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            label8.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point);
             label8.ForeColor = Color.White;
-            label8.Location = new Point(363, 52);
+            label8.Location = new Point(579, 63);
             label8.Name = "label8";
-            label8.Size = new Size(52, 19);
+            label8.Size = new Size(45, 13);
             label8.TabIndex = 70;
             label8.Text = "Kijelölt:";
             // 
@@ -291,7 +291,7 @@
             selectedCheckBox.BackColor = Color.Transparent;
             selectedCheckBox.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
             selectedCheckBox.ForeColor = Color.Silver;
-            selectedCheckBox.Location = new Point(456, 56);
+            selectedCheckBox.Location = new Point(661, 64);
             selectedCheckBox.Name = "selectedCheckBox";
             selectedCheckBox.Size = new Size(15, 14);
             selectedCheckBox.TabIndex = 69;
@@ -301,11 +301,11 @@
             // 
             label7.AutoSize = true;
             label7.BackColor = Color.Transparent;
-            label7.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            label7.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point);
             label7.ForeColor = Color.White;
-            label7.Location = new Point(363, 31);
+            label7.Location = new Point(579, 48);
             label7.Name = "label7";
-            label7.Size = new Size(77, 19);
+            label7.Size = new Size(65, 13);
             label7.TabIndex = 68;
             label7.Text = "Bekapcsolt:";
             // 
@@ -315,7 +315,7 @@
             enabledCheckBox.BackColor = Color.Transparent;
             enabledCheckBox.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
             enabledCheckBox.ForeColor = Color.Silver;
-            enabledCheckBox.Location = new Point(456, 35);
+            enabledCheckBox.Location = new Point(661, 49);
             enabledCheckBox.Name = "enabledCheckBox";
             enabledCheckBox.Size = new Size(15, 14);
             enabledCheckBox.TabIndex = 67;
@@ -325,11 +325,11 @@
             // 
             label6.AutoSize = true;
             label6.BackColor = Color.Transparent;
-            label6.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            label6.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point);
             label6.ForeColor = Color.White;
-            label6.Location = new Point(363, 10);
+            label6.Location = new Point(579, 33);
             label6.Name = "label6";
-            label6.Size = new Size(90, 19);
+            label6.Size = new Size(76, 13);
             label6.TabIndex = 66;
             label6.Text = "Megjelenítve:";
             // 
@@ -339,7 +339,7 @@
             displayedCheckbox.BackColor = Color.Transparent;
             displayedCheckbox.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
             displayedCheckbox.ForeColor = Color.Silver;
-            displayedCheckbox.Location = new Point(456, 14);
+            displayedCheckbox.Location = new Point(661, 34);
             displayedCheckbox.Name = "displayedCheckbox";
             displayedCheckbox.Size = new Size(15, 14);
             displayedCheckbox.TabIndex = 65;
@@ -352,7 +352,7 @@
             BackColor = Color.FromArgb(50, 50, 55);
             Controls.Add(mainPanel);
             Name = "ClickAction";
-            Size = new Size(700, 91);
+            Size = new Size(870, 91);
             ((System.ComponentModel.ISupportInitialize)breakpointOnPicture).EndInit();
             ((System.ComponentModel.ISupportInitialize)breakpointOffPicture).EndInit();
             ((System.ComponentModel.ISupportInitialize)binImage).EndInit();

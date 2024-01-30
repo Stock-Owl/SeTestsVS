@@ -82,4 +82,9 @@ namespace WebTestGui
         public IUnit m_ParentUnit { get; set; }
         public bool m_HaveBreakpoint { get; set; }
     }
+
+    public class ActionContainer
+    {
+        public string m_ActionJSON;
+    }
 }

@@ -51,11 +51,11 @@
             // 
             mainLabel.AutoSize = true;
             mainLabel.BackColor = Color.Transparent;
-            mainLabel.Font = new Font("Segoe UI Semibold", 13F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point);
+            mainLabel.Font = new Font("Segoe UI Semibold", 15F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point);
             mainLabel.ForeColor = Color.White;
-            mainLabel.Location = new Point(14, 10);
+            mainLabel.Location = new Point(67, 9);
             mainLabel.Name = "mainLabel";
-            mainLabel.Size = new Size(58, 25);
+            mainLabel.Size = new Size(62, 28);
             mainLabel.TabIndex = 11;
             mainLabel.Text = "Goto:";
             // 
@@ -75,7 +75,7 @@
             mainPanel.Dock = DockStyle.Fill;
             mainPanel.Location = new Point(0, 0);
             mainPanel.Name = "mainPanel";
-            mainPanel.Size = new Size(520, 81);
+            mainPanel.Size = new Size(870, 62);
             mainPanel.TabIndex = 12;
             // 
             // testRunTimeText
@@ -83,11 +83,11 @@
             testRunTimeText.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             testRunTimeText.AutoSize = true;
             testRunTimeText.BackColor = Color.Transparent;
-            testRunTimeText.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
+            testRunTimeText.Font = new Font("Segoe UI", 8F, FontStyle.Italic, GraphicsUnit.Point);
             testRunTimeText.ForeColor = Color.DimGray;
-            testRunTimeText.Location = new Point(160, 63);
+            testRunTimeText.Location = new Point(217, 41);
             testRunTimeText.Name = "testRunTimeText";
-            testRunTimeText.Size = new Size(48, 15);
+            testRunTimeText.Size = new Size(45, 13);
             testRunTimeText.TabIndex = 79;
             testRunTimeText.Text = "0 / 0 ms";
             // 
@@ -96,11 +96,11 @@
             testRunTimeLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             testRunTimeLabel.AutoSize = true;
             testRunTimeLabel.BackColor = Color.Transparent;
-            testRunTimeLabel.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
+            testRunTimeLabel.Font = new Font("Segoe UI", 8F, FontStyle.Italic, GraphicsUnit.Point);
             testRunTimeLabel.ForeColor = Color.Gray;
-            testRunTimeLabel.Location = new Point(3, 63);
+            testRunTimeLabel.Location = new Point(76, 41);
             testRunTimeLabel.Name = "testRunTimeLabel";
-            testRunTimeLabel.Size = new Size(157, 15);
+            testRunTimeLabel.Size = new Size(141, 13);
             testRunTimeLabel.TabIndex = 78;
             testRunTimeLabel.Text = "Előző tesztelésen futási ideje:";
             // 
@@ -109,22 +109,22 @@
             idTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             idTextBox.BackColor = Color.FromArgb(40, 40, 43);
             idTextBox.BorderStyle = BorderStyle.FixedSingle;
-            idTextBox.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+            idTextBox.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
             idTextBox.ForeColor = Color.Gainsboro;
-            idTextBox.Location = new Point(475, 7);
+            idTextBox.Location = new Point(814, 7);
             idTextBox.Name = "idTextBox";
-            idTextBox.Size = new Size(35, 25);
+            idTextBox.Size = new Size(46, 23);
             idTextBox.TabIndex = 38;
             idTextBox.Text = "0";
             idTextBox.Leave += OnUIdTextBoxFocusLeave;
             // 
             // binImage
             // 
-            binImage.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
+            binImage.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             binImage.Image = (Image)resources.GetObject("binImage.Image");
-            binImage.Location = new Point(475, 38);
+            binImage.Location = new Point(840, 37);
             binImage.Name = "binImage";
-            binImage.Size = new Size(35, 35);
+            binImage.Size = new Size(20, 20);
             binImage.SizeMode = PictureBoxSizeMode.StretchImage;
             binImage.TabIndex = 37;
             binImage.TabStop = false;
@@ -133,9 +133,9 @@
             // pictureBox3
             // 
             pictureBox3.Image = (Image)resources.GetObject("pictureBox3.Image");
-            pictureBox3.Location = new Point(90, 24);
+            pictureBox3.Location = new Point(11, 7);
             pictureBox3.Name = "pictureBox3";
-            pictureBox3.Size = new Size(25, 25);
+            pictureBox3.Size = new Size(50, 50);
             pictureBox3.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox3.TabIndex = 35;
             pictureBox3.TabStop = false;
@@ -147,7 +147,7 @@
             webSearchButton.FlatStyle = FlatStyle.Popup;
             webSearchButton.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
             webSearchButton.ForeColor = Color.White;
-            webSearchButton.Location = new Point(120, 24);
+            webSearchButton.Location = new Point(234, 11);
             webSearchButton.Name = "webSearchButton";
             webSearchButton.Size = new Size(87, 25);
             webSearchButton.TabIndex = 34;
@@ -161,19 +161,19 @@
             urlTextField.BackColor = Color.FromArgb(40, 40, 43);
             urlTextField.Font = new Font("Segoe UI", 10F, FontStyle.Italic, GraphicsUnit.Point);
             urlTextField.ForeColor = Color.DarkGray;
-            urlTextField.Location = new Point(213, 24);
+            urlTextField.Location = new Point(327, 11);
             urlTextField.Name = "urlTextField";
             urlTextField.PlaceholderText = "Weboldal URL tesztelésre...";
-            urlTextField.Size = new Size(213, 25);
+            urlTextField.Size = new Size(466, 25);
             urlTextField.TabIndex = 33;
             // 
             // breakpointOffPicture
             // 
-            breakpointOffPicture.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
+            breakpointOffPicture.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             breakpointOffPicture.Image = (Image)resources.GetObject("breakpointOffPicture.Image");
-            breakpointOffPicture.Location = new Point(444, 46);
+            breakpointOffPicture.Location = new Point(814, 37);
             breakpointOffPicture.Name = "breakpointOffPicture";
-            breakpointOffPicture.Size = new Size(25, 25);
+            breakpointOffPicture.Size = new Size(20, 20);
             breakpointOffPicture.SizeMode = PictureBoxSizeMode.StretchImage;
             breakpointOffPicture.TabIndex = 41;
             breakpointOffPicture.TabStop = false;
@@ -181,11 +181,11 @@
             // 
             // breakpointOnPicture
             // 
-            breakpointOnPicture.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
+            breakpointOnPicture.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             breakpointOnPicture.Image = Properties.Resources.BreakpointOnIcon;
-            breakpointOnPicture.Location = new Point(444, 46);
+            breakpointOnPicture.Location = new Point(814, 37);
             breakpointOnPicture.Name = "breakpointOnPicture";
-            breakpointOnPicture.Size = new Size(25, 25);
+            breakpointOnPicture.Size = new Size(20, 20);
             breakpointOnPicture.SizeMode = PictureBoxSizeMode.StretchImage;
             breakpointOnPicture.TabIndex = 40;
             breakpointOnPicture.TabStop = false;
@@ -198,7 +198,7 @@
             BackColor = Color.FromArgb(50, 50, 55);
             Controls.Add(mainPanel);
             Name = "GotoAction";
-            Size = new Size(520, 81);
+            Size = new Size(870, 62);
             mainPanel.ResumeLayout(false);
             mainPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)binImage).EndInit();

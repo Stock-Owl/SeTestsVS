@@ -49,11 +49,11 @@
             // 
             mainLabel.AutoSize = true;
             mainLabel.BackColor = Color.Transparent;
-            mainLabel.Font = new Font("Segoe UI Semibold", 13F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point);
+            mainLabel.Font = new Font("Segoe UI Semibold", 15F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point);
             mainLabel.ForeColor = Color.White;
-            mainLabel.Location = new Point(13, 9);
+            mainLabel.Location = new Point(77, 5);
             mainLabel.Name = "mainLabel";
-            mainLabel.Size = new Size(110, 25);
+            mainLabel.Size = new Size(121, 28);
             mainLabel.TabIndex = 11;
             mainLabel.Text = "Switch-back";
             // 
@@ -71,7 +71,7 @@
             mainPanel.Dock = DockStyle.Fill;
             mainPanel.Location = new Point(0, 0);
             mainPanel.Name = "mainPanel";
-            mainPanel.Size = new Size(324, 58);
+            mainPanel.Size = new Size(870, 58);
             mainPanel.TabIndex = 12;
             // 
             // testRunTimeText
@@ -81,7 +81,7 @@
             testRunTimeText.BackColor = Color.Transparent;
             testRunTimeText.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
             testRunTimeText.ForeColor = Color.DimGray;
-            testRunTimeText.Location = new Point(160, 40);
+            testRunTimeText.Location = new Point(248, 39);
             testRunTimeText.Name = "testRunTimeText";
             testRunTimeText.Size = new Size(48, 15);
             testRunTimeText.TabIndex = 62;
@@ -94,7 +94,7 @@
             testRunTimeLabel.BackColor = Color.Transparent;
             testRunTimeLabel.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
             testRunTimeLabel.ForeColor = Color.Gray;
-            testRunTimeLabel.Location = new Point(3, 40);
+            testRunTimeLabel.Location = new Point(85, 39);
             testRunTimeLabel.Name = "testRunTimeLabel";
             testRunTimeLabel.Size = new Size(157, 15);
             testRunTimeLabel.TabIndex = 61;
@@ -105,22 +105,22 @@
             idTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             idTextBox.BackColor = Color.FromArgb(40, 40, 43);
             idTextBox.BorderStyle = BorderStyle.FixedSingle;
-            idTextBox.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+            idTextBox.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
             idTextBox.ForeColor = Color.Gainsboro;
-            idTextBox.Location = new Point(279, 7);
+            idTextBox.Location = new Point(814, 7);
             idTextBox.Name = "idTextBox";
-            idTextBox.Size = new Size(35, 25);
+            idTextBox.Size = new Size(46, 23);
             idTextBox.TabIndex = 38;
             idTextBox.Text = "0";
             idTextBox.Leave += OnUIdTextBoxFocusLeave;
             // 
             // binImage
             // 
-            binImage.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
+            binImage.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             binImage.Image = (Image)resources.GetObject("binImage.Image");
-            binImage.Location = new Point(238, 10);
+            binImage.Location = new Point(840, 33);
             binImage.Name = "binImage";
-            binImage.Size = new Size(35, 35);
+            binImage.Size = new Size(20, 20);
             binImage.SizeMode = PictureBoxSizeMode.StretchImage;
             binImage.TabIndex = 37;
             binImage.TabStop = false;
@@ -128,11 +128,11 @@
             // 
             // breakpointOffPicture
             // 
-            breakpointOffPicture.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
+            breakpointOffPicture.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             breakpointOffPicture.Image = (Image)resources.GetObject("breakpointOffPicture.Image");
-            breakpointOffPicture.Location = new Point(207, 12);
+            breakpointOffPicture.Location = new Point(814, 33);
             breakpointOffPicture.Name = "breakpointOffPicture";
-            breakpointOffPicture.Size = new Size(25, 25);
+            breakpointOffPicture.Size = new Size(20, 20);
             breakpointOffPicture.SizeMode = PictureBoxSizeMode.StretchImage;
             breakpointOffPicture.TabIndex = 41;
             breakpointOffPicture.TabStop = false;
@@ -140,11 +140,11 @@
             // 
             // breakpointOnPicture
             // 
-            breakpointOnPicture.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
+            breakpointOnPicture.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             breakpointOnPicture.Image = Properties.Resources.BreakpointOnIcon;
-            breakpointOnPicture.Location = new Point(207, 12);
+            breakpointOnPicture.Location = new Point(814, 33);
             breakpointOnPicture.Name = "breakpointOnPicture";
-            breakpointOnPicture.Size = new Size(25, 25);
+            breakpointOnPicture.Size = new Size(20, 20);
             breakpointOnPicture.SizeMode = PictureBoxSizeMode.StretchImage;
             breakpointOnPicture.TabIndex = 40;
             breakpointOnPicture.TabStop = false;
@@ -154,9 +154,9 @@
             // 
             pictureBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
-            pictureBox1.Location = new Point(113, -9);
+            pictureBox1.Location = new Point(7, 4);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(60, 60);
+            pictureBox1.Size = new Size(50, 50);
             pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox1.TabIndex = 63;
             pictureBox1.TabStop = false;
@@ -168,7 +168,7 @@
             BackColor = Color.FromArgb(50, 50, 55);
             Controls.Add(mainPanel);
             Name = "SwitchBackAction";
-            Size = new Size(324, 58);
+            Size = new Size(870, 58);
             mainPanel.ResumeLayout(false);
             mainPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)binImage).EndInit();

@@ -1,0 +1,270 @@
+{
+  "interceptor": false,
+  "name": "guitest",
+  "browsers": [
+    "chrome",
+    "firefox"
+  ],
+  "options": {
+    "auto_exit_iframes": true,
+    "log_JS_retry_timeout": 1000,
+    "parent_log_path": "./logs",
+    "start_fullscreen": false
+  },
+  "driver_options": {
+    "accept_insecure_certs": true,
+    "chrome_arguments": [],
+    "firefox_arguments": [],
+    "keep_browser_open": true,
+    "page_load_strategy": "normal",
+    "timeout": {
+      "type": "pageLoad",
+      "value": 300000
+    },
+    "unhandled_prompt_behavior": "dismiss and notify"
+  },
+  "units": {
+    "GUI teszt unit": {
+      "bindings": null,
+      "backup_of": null,
+      "actions": {
+        "0": {
+          "type": "back",
+          "break": false
+        },
+        "1": {
+          "type": "clear",
+          "break": false,
+          "single": false,
+          "displayed": false,
+          "enabled": false,
+          "selected": false,
+          "locator": "xpath",
+          "value": ""
+        },
+        "2": {
+          "type": "click",
+          "break": false,
+          "single": false,
+          "displayed": false,
+          "enabled": false,
+          "selected": false,
+          "locator": "xpath",
+          "value": ""
+        },
+        "3": {
+          "type": "js_execute",
+          "break": false,
+          "commmands": [
+            "// this is a number\nvar number = 0\nnumer++",
+            "// this is a string\nvar text = \"Hello World!\"",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ]
+        },
+        "4": {
+          "type": "forward",
+          "break": false
+        },
+        "5": {
+          "type": "goto",
+          "break": false,
+          "url": ""
+        },
+        "6": {
+          "type": "refresh",
+          "break": false
+        },
+        "7": {
+          "type": "send_keys",
+          "break": false,
+          "single": false,
+          "displayed": false,
+          "enabled": false,
+          "selected": false,
+          "keys": "",
+          "locator": "xpath",
+          "value": ""
+        },
+        "8": {
+          "type": "switch_back",
+          "break": false
+        },
+        "9": {
+          "type": "switch_to",
+          "break": false,
+          "locator": "xpath",
+          "value": ""
+        },
+        "10": {
+          "type": "wait",
+          "break": false,
+          "amount": 0
+        },
+        "11": {
+          "type": "waitfor",
+          "break": false,
+          "frequency": 0,
+          "timeout": 0,
+          "logic_modifier": "?",
+          "condition": {
+            "type": "loaded",
+            "locator": "xpath",
+            "value": ""
+          }
+        },
+        "12": {
+          "type": "refresh",
+          "break": false
+        },
+        "13": {
+          "type": "js_execute",
+          "break": false,
+          "commmands": []
+        },
+        "14": {
+          "type": "switch_back",
+          "break": false
+        },
+        "15": {
+          "type": "clear",
+          "break": false,
+          "single": false,
+          "displayed": false,
+          "enabled": false,
+          "selected": false,
+          "locator": "xpath",
+          "value": ""
+        },
+        "16": {
+          "type": "goto",
+          "break": false,
+          "url": ""
+        },
+        "17": {
+          "type": "wait",
+          "break": false,
+          "amount": 0
+        },
+        "18": {
+          "type": "clear",
+          "break": false,
+          "single": false,
+          "displayed": false,
+          "enabled": false,
+          "selected": false,
+          "locator": "xpath",
+          "value": ""
+        },
+        "19": {
+          "type": "js_execute",
+          "break": false,
+          "commmands": []
+        },
+        "20": {
+          "type": "refresh",
+          "break": false
+        },
+        "21": {
+          "type": "clear",
+          "break": false,
+          "single": false,
+          "displayed": false,
+          "enabled": false,
+          "selected": false,
+          "locator": "xpath",
+          "value": ""
+        },
+        "22": {
+          "type": "switch_to",
+          "break": false,
+          "locator": "xpath",
+          "value": ""
+        },
+        "23": {
+          "type": "js_execute",
+          "break": false,
+          "commmands": []
+        },
+        "24": {
+          "type": "goto",
+          "break": false,
+          "url": ""
+        },
+        "25": {
+          "type": "click",
+          "break": false,
+          "single": false,
+          "displayed": false,
+          "enabled": false,
+          "selected": false,
+          "locator": "xpath",
+          "value": ""
+        },
+        "26": {
+          "type": "click",
+          "break": false,
+          "single": false,
+          "displayed": false,
+          "enabled": false,
+          "selected": false,
+          "locator": "xpath",
+          "value": ""
+        },
+        "27": {
+          "type": "goto",
+          "break": false,
+          "url": ""
+        }
+      }
+    },
+    "UNIT 2": {
+      "bindings": null,
+      "backup_of": null,
+      "actions": {
+        "0": {
+          "type": "back",
+          "break": true
+        },
+        "1": {
+          "type": "click",
+          "break": false,
+          "single": false,
+          "displayed": false,
+          "enabled": false,
+          "selected": false,
+          "locator": "xpath",
+          "value": ""
+        }
+      }
+    }
+  }
+}

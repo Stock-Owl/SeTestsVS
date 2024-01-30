@@ -102,9 +102,10 @@
             unitHeaderPanel.Controls.Add(gotoUnitComboBox);
             unitHeaderPanel.Controls.Add(addUnitButton);
             unitHeaderPanel.Controls.Add(unitLabel);
-            unitHeaderPanel.Location = new Point(412, 77);
+            unitHeaderPanel.Location = new Point(551, 77);
+            unitHeaderPanel.MaximumSize = new Size(950, 30);
             unitHeaderPanel.Name = "unitHeaderPanel";
-            unitHeaderPanel.Size = new Size(364, 30);
+            unitHeaderPanel.Size = new Size(240, 30);
             unitHeaderPanel.TabIndex = 9;
             // 
             // gotoUnitLabel
@@ -114,7 +115,7 @@
             gotoUnitLabel.BackColor = Color.Transparent;
             gotoUnitLabel.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
             gotoUnitLabel.ForeColor = Color.DarkGray;
-            gotoUnitLabel.Location = new Point(123, 6);
+            gotoUnitLabel.Location = new Point(-1, 6);
             gotoUnitLabel.Name = "gotoUnitLabel";
             gotoUnitLabel.Size = new Size(79, 15);
             gotoUnitLabel.TabIndex = 63;
@@ -129,7 +130,7 @@
             gotoUnitComboBox.Font = new Font("Segoe UI Semibold", 8F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
             gotoUnitComboBox.ForeColor = Color.Silver;
             gotoUnitComboBox.FormattingEnabled = true;
-            gotoUnitComboBox.Location = new Point(208, 3);
+            gotoUnitComboBox.Location = new Point(84, 3);
             gotoUnitComboBox.Name = "gotoUnitComboBox";
             gotoUnitComboBox.Size = new Size(126, 21);
             gotoUnitComboBox.TabIndex = 62;
@@ -141,7 +142,7 @@
             addUnitButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             addUnitButton.BackColor = Color.FromArgb(50, 50, 53);
             addUnitButton.Image = (Image)resources.GetObject("addUnitButton.Image");
-            addUnitButton.Location = new Point(340, 3);
+            addUnitButton.Location = new Point(216, 3);
             addUnitButton.Name = "addUnitButton";
             addUnitButton.Size = new Size(20, 20);
             addUnitButton.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -160,7 +161,7 @@
             optionHeaderPanel.Controls.Add(optionLabel);
             optionHeaderPanel.Location = new Point(795, 40);
             optionHeaderPanel.Name = "optionHeaderPanel";
-            optionHeaderPanel.Size = new Size(327, 42);
+            optionHeaderPanel.Size = new Size(327, 40);
             optionHeaderPanel.TabIndex = 37;
             // 
             // importOptionsLabel
@@ -232,9 +233,9 @@
             optionsPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             optionsPanel.AutoScroll = true;
             optionsPanel.BackColor = Color.FromArgb(45, 45, 50);
-            optionsPanel.Location = new Point(795, 80);
+            optionsPanel.Location = new Point(795, 77);
             optionsPanel.Name = "optionsPanel";
-            optionsPanel.Size = new Size(327, 385);
+            optionsPanel.Size = new Size(327, 388);
             optionsPanel.TabIndex = 38;
             // 
             // unitsPanel
@@ -242,9 +243,10 @@
             unitsPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             unitsPanel.AutoScroll = true;
             unitsPanel.BackColor = Color.FromArgb(45, 45, 50);
-            unitsPanel.Location = new Point(412, 103);
+            unitsPanel.Location = new Point(551, 103);
+            unitsPanel.MaximumSize = new Size(950, 10000000);
             unitsPanel.Name = "unitsPanel";
-            unitsPanel.Size = new Size(364, 438);
+            unitsPanel.Size = new Size(240, 456);
             unitsPanel.TabIndex = 39;
             // 
             // switchToOptionsButton
@@ -299,7 +301,7 @@
             currentlyEditedLabel.BackColor = Color.FromArgb(60, 60, 65);
             currentlyEditedLabel.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold, GraphicsUnit.Point);
             currentlyEditedLabel.ForeColor = Color.White;
-            currentlyEditedLabel.Location = new Point(416, 568);
+            currentlyEditedLabel.Location = new Point(2, 568);
             currentlyEditedLabel.Name = "currentlyEditedLabel";
             currentlyEditedLabel.Size = new Size(169, 19);
             currentlyEditedLabel.TabIndex = 50;
@@ -307,12 +309,12 @@
             // 
             // flowLayoutPanel2
             // 
-            flowLayoutPanel2.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             flowLayoutPanel2.AutoScroll = true;
             flowLayoutPanel2.BackColor = Color.FromArgb(60, 60, 65);
-            flowLayoutPanel2.Location = new Point(412, 565);
+            flowLayoutPanel2.Dock = DockStyle.Bottom;
+            flowLayoutPanel2.Location = new Point(0, 565);
             flowLayoutPanel2.Name = "flowLayoutPanel2";
-            flowLayoutPanel2.Size = new Size(722, 46);
+            flowLayoutPanel2.Size = new Size(1134, 46);
             flowLayoutPanel2.TabIndex = 51;
             // 
             // currentlyEditedText
@@ -322,7 +324,7 @@
             currentlyEditedText.BackColor = Color.FromArgb(60, 60, 65);
             currentlyEditedText.Font = new Font("Segoe UI", 7F, FontStyle.Italic, GraphicsUnit.Point);
             currentlyEditedText.ForeColor = Color.DarkGray;
-            currentlyEditedText.Location = new Point(416, 587);
+            currentlyEditedText.Location = new Point(5, 590);
             currentlyEditedText.Name = "currentlyEditedText";
             currentlyEditedText.Size = new Size(38, 12);
             currentlyEditedText.TabIndex = 52;
@@ -358,11 +360,12 @@
             // 
             // testNameLabel
             // 
+            testNameLabel.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             testNameLabel.AutoSize = true;
             testNameLabel.BackColor = Color.FromArgb(50, 50, 53);
             testNameLabel.Font = new Font("Segoe UI Semibold", 20F, FontStyle.Bold, GraphicsUnit.Point);
             testNameLabel.ForeColor = Color.White;
-            testNameLabel.Location = new Point(408, 6);
+            testNameLabel.Location = new Point(547, 6);
             testNameLabel.Name = "testNameLabel";
             testNameLabel.Size = new Size(136, 37);
             testNameLabel.TabIndex = 55;
@@ -372,9 +375,9 @@
             // 
             breakpointIcon.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             breakpointIcon.Image = (Image)resources.GetObject("breakpointIcon.Image");
-            breakpointIcon.Location = new Point(751, 46);
+            breakpointIcon.Location = new Point(767, 17);
             breakpointIcon.Name = "breakpointIcon";
-            breakpointIcon.Size = new Size(25, 25);
+            breakpointIcon.Size = new Size(20, 20);
             breakpointIcon.SizeMode = PictureBoxSizeMode.StretchImage;
             breakpointIcon.TabIndex = 56;
             breakpointIcon.TabStop = false;
@@ -382,15 +385,16 @@
             // 
             // testRunTimeText
             // 
+            testRunTimeText.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             testRunTimeText.AutoSize = true;
             testRunTimeText.BackColor = Color.Transparent;
             testRunTimeText.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
             testRunTimeText.ForeColor = Color.DarkGray;
-            testRunTimeText.Location = new Point(414, 52);
+            testRunTimeText.Location = new Point(553, 43);
             testRunTimeText.Name = "testRunTimeText";
-            testRunTimeText.Size = new Size(218, 15);
+            testRunTimeText.Size = new Size(174, 30);
             testRunTimeText.TabIndex = 61;
-            testRunTimeText.Text = "Előző tesztelés teljes futási ideje: 0 / 0 ms";
+            testRunTimeText.Text = "Előző tesztelés teljes futási ideje:\r\n0 / 0 ms";
             // 
             // ignoreBreakpointsLabel
             // 
@@ -452,7 +456,9 @@
             AutoScaleMode = AutoScaleMode.None;
             BackColor = Color.FromArgb(50, 50, 53);
             ClientSize = new Size(1134, 611);
+            Controls.Add(currentlyEditedLabel);
             Controls.Add(ignoreBreakpointsCheckbox);
+            Controls.Add(currentlyEditedText);
             Controls.Add(saveTestButton);
             Controls.Add(unitHierarchyButton);
             Controls.Add(switchToOptionsButton);
@@ -463,13 +469,11 @@
             Controls.Add(rootLogDirectoryButton);
             Controls.Add(pictureBox3);
             Controls.Add(optionHeaderPanel);
-            Controls.Add(currentlyEditedLabel);
             Controls.Add(switchToJsLogButton);
             Controls.Add(unitsPanel);
             Controls.Add(optionsPanel);
             Controls.Add(testStartButton);
             Controls.Add(unitHeaderPanel);
-            Controls.Add(currentlyEditedText);
             Controls.Add(flowLayoutPanel2);
             Controls.Add(testNameLabel);
             Icon = (Icon)resources.GetObject("$this.Icon");
@@ -477,6 +481,7 @@
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "webSquid Editor";
+            Resize += MainForm_Resize;
             unitHeaderPanel.ResumeLayout(false);
             unitHeaderPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)addUnitButton).EndInit();

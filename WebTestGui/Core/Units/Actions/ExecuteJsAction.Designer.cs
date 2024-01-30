@@ -47,10 +47,11 @@
             // 
             // breakpointOnPicture
             // 
+            breakpointOnPicture.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             breakpointOnPicture.Image = Properties.Resources.BreakpointOnIcon;
-            breakpointOnPicture.Location = new Point(828, 38);
+            breakpointOnPicture.Location = new Point(816, 140);
             breakpointOnPicture.Name = "breakpointOnPicture";
-            breakpointOnPicture.Size = new Size(25, 25);
+            breakpointOnPicture.Size = new Size(20, 20);
             breakpointOnPicture.SizeMode = PictureBoxSizeMode.StretchImage;
             breakpointOnPicture.TabIndex = 40;
             breakpointOnPicture.TabStop = false;
@@ -58,10 +59,11 @@
             // 
             // breakpointOffPicture
             // 
+            breakpointOffPicture.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             breakpointOffPicture.Image = (Image)resources.GetObject("breakpointOffPicture.Image");
-            breakpointOffPicture.Location = new Point(828, 38);
+            breakpointOffPicture.Location = new Point(816, 140);
             breakpointOffPicture.Name = "breakpointOffPicture";
-            breakpointOffPicture.Size = new Size(25, 25);
+            breakpointOffPicture.Size = new Size(20, 20);
             breakpointOffPicture.SizeMode = PictureBoxSizeMode.StretchImage;
             breakpointOffPicture.TabIndex = 41;
             breakpointOffPicture.TabStop = false;
@@ -83,9 +85,9 @@
             // 
             binImage.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             binImage.Image = (Image)resources.GetObject("binImage.Image");
-            binImage.Location = new Point(821, 126);
+            binImage.Location = new Point(842, 140);
             binImage.Name = "binImage";
-            binImage.Size = new Size(35, 35);
+            binImage.Size = new Size(20, 20);
             binImage.SizeMode = PictureBoxSizeMode.StretchImage;
             binImage.TabIndex = 37;
             binImage.TabStop = false;
@@ -97,9 +99,9 @@
             idTextBox.BorderStyle = BorderStyle.FixedSingle;
             idTextBox.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
             idTextBox.ForeColor = Color.Gainsboro;
-            idTextBox.Location = new Point(818, 7);
+            idTextBox.Location = new Point(816, 7);
             idTextBox.Name = "idTextBox";
-            idTextBox.Size = new Size(35, 25);
+            idTextBox.Size = new Size(46, 25);
             idTextBox.TabIndex = 38;
             idTextBox.Text = "0";
             idTextBox.Leave += OnUIdTextBoxFocusLeave;
@@ -118,15 +120,15 @@
             mainPanel.Dock = DockStyle.Fill;
             mainPanel.Location = new Point(0, 0);
             mainPanel.Name = "mainPanel";
-            mainPanel.Size = new Size(863, 166);
+            mainPanel.Size = new Size(870, 166);
             mainPanel.TabIndex = 12;
             // 
             // pictureBox1
             // 
             pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
-            pictureBox1.Location = new Point(17, 39);
+            pictureBox1.Location = new Point(14, 53);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(50, 50);
+            pictureBox1.Size = new Size(70, 70);
             pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox1.TabIndex = 80;
             pictureBox1.TabStop = false;
@@ -165,7 +167,7 @@
             Controls.Add(mainPanel);
             MinimumSize = new Size(863, 150);
             Name = "ExecuteJsAction";
-            Size = new Size(863, 166);
+            Size = new Size(870, 166);
             ((System.ComponentModel.ISupportInitialize)breakpointOnPicture).EndInit();
             ((System.ComponentModel.ISupportInitialize)breakpointOffPicture).EndInit();
             ((System.ComponentModel.ISupportInitialize)binImage).EndInit();

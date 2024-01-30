@@ -19,8 +19,8 @@ namespace WebTestGui
             Controls.Add(m_RunLogConsole);
             m_RunLogConsole.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             m_RunLogConsole.Location = new Point(0, 0);
-            m_RunLogConsole.Size = new Size(410, 620);
-            m_RunLogConsole.BringToFront();
+            m_RunLogConsole.Size = new Size(500, 575);
+            m_RunLogConsole.SendToBack();
 
             m_JsLogConsole = new Console(this);
             Controls.Add(m_JsLogConsole);
@@ -713,12 +713,12 @@ namespace WebTestGui
             if (GetMainTest().m_State == WebTestGui.Test.TestState.Break)
             {
                 testRunTimeText.ForeColor = Color.Firebrick;
-                testRunTimeText.Text = "Jelenlegi teszt futási ideje a Breakpoint-ig: " + (chromeSum.ToString() + " / " + firefoxSum.ToString() + " ms");
+                testRunTimeText.Text = "Jelenlegi teszt futási ideje a Breakpoint-ig:\n " + (chromeSum.ToString() + " / " + firefoxSum.ToString() + " ms");
             }
             else if (GetMainTest().m_State == WebTestGui.Test.TestState.Edit)
             {
                 testRunTimeText.ForeColor = Color.DimGray;
-                testRunTimeText.Text = "Előző tesztelés teljes futási ideje: " + (chromeSum.ToString() + " / " + firefoxSum.ToString() + " ms");
+                testRunTimeText.Text = "Előző tesztelés teljes futási ideje:\n " + (chromeSum.ToString() + " / " + firefoxSum.ToString() + " ms");
             }
 
             GetMainTest().m_FullTestRunTime = testRunTimeText.Text;
@@ -920,7 +920,7 @@ namespace WebTestGui
 
         #endregion
 
-        #region Editor Refresh method
+        #region Editor Refresh
 
         public void RefreshEditor(bool collapseAllUnits = false)
         {
@@ -950,6 +950,16 @@ namespace WebTestGui
 
             RefreshOptionsPanel();
             RefreshUnitsPanel(collapseAllUnits);
+        }
+
+        private void MainForm_Resize(object sender, EventArgs e)
+        {
+            unitsPanel.Location = new Point(optionsPanel.Location.X - 954, unitsPanel.Location.Y);
+            unitHeaderPanel.Location = new Point(optionsPanel.Location.X - 954, unitHeaderPanel.Location.Y);
+            testNameLabel.Location = new Point(optionsPanel.Location.X - 954, testNameLabel.Location.Y);
+            testRunTimeText.Location = new Point(optionsPanel.Location.X - 954, testRunTimeText.Location.Y);
+            breakpointIcon.Location = new Point(addUnitButton.Location.X, breakpointIcon.Location.Y);
+
         }
 
         #endregion

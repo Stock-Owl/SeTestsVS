@@ -104,8 +104,9 @@ namespace WebTestGui
                 int counter = 0;
                 foreach (Control control in actionsPanel.Controls)
                 {
-                    totalHeight += ((control.Height) + (counter * 2));
-                    counter++;
+                    totalHeight += ((control.Height) + 6);
+                    //totalHeight += ((control.Height) + (counter * 2));
+                    //counter++;
                 }
 
                 actionsPanel.Height = totalHeight;
@@ -193,11 +194,11 @@ namespace WebTestGui
             base.OnPaint(e);
             using (Graphics g = e.Graphics)
             {
-                var p = new Pen(Color.DarkGray, 2);
+                var p = new Pen(Color.DarkGray, 5);
                 g.DrawLine(p, new Point(0, 0), new Point(Size.Width, 0));
                 //g.DrawLine(p, new Point(0, Size.Height), new Point(Size.Width, Size.Height));
-                g.DrawLine(p, new Point(0, 0), new Point(0, Size.Height));
-                g.DrawLine(p, new Point(Size.Width, 0), new Point(Size.Width, Size.Height));
+                //g.DrawLine(p, new Point(0, 0), new Point(0, Size.Height));
+                //g.DrawLine(p, new Point(Size.Width, 0), new Point(Size.Width, Size.Height));
             }
         }
 
@@ -369,9 +370,10 @@ namespace WebTestGui
 
         private void OnCollapseActionsButtonClick(object sender, EventArgs e)
         {
-            Size = new Size(1000, 97);
+            Size = new Size(921, 97);
             actionsPanel.Controls.Clear();
             m_IsCollapsed = true;
+            Refresh();
 
             collapseActionsButton.Visible = false;
             expandActionsButtton.Visible = true;

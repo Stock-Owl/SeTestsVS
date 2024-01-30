@@ -68,6 +68,8 @@
         public bool HaveInterceptorActions()
         {
             bool haveInterceptorActions = false;
+
+            #if false // INTERCEPTORS CURRENTLY NOT SUPPORTED
             foreach (IUnit unit in m_Units.m_Units)
             {
                 foreach (IAction action in unit.m_Actions.m_Actions)
@@ -79,6 +81,8 @@
                     }
                 }
             }
+            #endif
+
             return haveInterceptorActions;
         }
 

@@ -211,6 +211,11 @@ namespace WebTestGui
             base.OnMouseLeave(e);
             BackColor = Color.Transparent;
         }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
 

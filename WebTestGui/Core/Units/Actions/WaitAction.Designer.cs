@@ -31,6 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WaitAction));
             mainLabel = new Label();
             mainPanel = new Panel();
+            pictureBox1 = new PictureBox();
             testRunTimeText = new Label();
             testRunTimeLabel = new Label();
             amountTextField = new TextBox();
@@ -39,23 +40,22 @@
             breakpointOffPicture = new PictureBox();
             breakpointOnPicture = new PictureBox();
             label2 = new Label();
-            pictureBox1 = new PictureBox();
             mainPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)binImage).BeginInit();
             ((System.ComponentModel.ISupportInitialize)breakpointOffPicture).BeginInit();
             ((System.ComponentModel.ISupportInitialize)breakpointOnPicture).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
             // mainLabel
             // 
             mainLabel.AutoSize = true;
             mainLabel.BackColor = Color.Transparent;
-            mainLabel.Font = new Font("Segoe UI Semibold", 13F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point);
+            mainLabel.Font = new Font("Segoe UI Semibold", 15F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point);
             mainLabel.ForeColor = Color.White;
-            mainLabel.Location = new Point(14, 10);
+            mainLabel.Location = new Point(62, 5);
             mainLabel.Name = "mainLabel";
-            mainLabel.Size = new Size(53, 25);
+            mainLabel.Size = new Size(57, 28);
             mainLabel.TabIndex = 11;
             mainLabel.Text = "Wait:";
             // 
@@ -75,8 +75,19 @@
             mainPanel.Dock = DockStyle.Fill;
             mainPanel.Location = new Point(0, 0);
             mainPanel.Name = "mainPanel";
-            mainPanel.Size = new Size(686, 82);
+            mainPanel.Size = new Size(870, 61);
             mainPanel.TabIndex = 12;
+            // 
+            // pictureBox1
+            // 
+            pictureBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
+            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
+            pictureBox1.Location = new Point(6, 5);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(50, 50);
+            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+            pictureBox1.TabIndex = 80;
+            pictureBox1.TabStop = false;
             // 
             // testRunTimeText
             // 
@@ -85,7 +96,7 @@
             testRunTimeText.BackColor = Color.Transparent;
             testRunTimeText.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
             testRunTimeText.ForeColor = Color.DimGray;
-            testRunTimeText.Location = new Point(160, 64);
+            testRunTimeText.Location = new Point(231, 40);
             testRunTimeText.Name = "testRunTimeText";
             testRunTimeText.Size = new Size(48, 15);
             testRunTimeText.TabIndex = 79;
@@ -98,7 +109,7 @@
             testRunTimeLabel.BackColor = Color.Transparent;
             testRunTimeLabel.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
             testRunTimeLabel.ForeColor = Color.Gray;
-            testRunTimeLabel.Location = new Point(3, 64);
+            testRunTimeLabel.Location = new Point(74, 40);
             testRunTimeLabel.Name = "testRunTimeLabel";
             testRunTimeLabel.Size = new Size(157, 15);
             testRunTimeLabel.TabIndex = 78;
@@ -107,12 +118,12 @@
             // amountTextField
             // 
             amountTextField.BackColor = Color.FromArgb(40, 40, 43);
-            amountTextField.Font = new Font("Segoe UI", 11.25F, FontStyle.Italic, GraphicsUnit.Point);
+            amountTextField.Font = new Font("Segoe UI", 10F, FontStyle.Italic, GraphicsUnit.Point);
             amountTextField.ForeColor = Color.DarkGray;
-            amountTextField.Location = new Point(311, 12);
+            amountTextField.Location = new Point(468, 13);
             amountTextField.Name = "amountTextField";
             amountTextField.PlaceholderText = "Ennyi időt fog várni a böngésző...";
-            amountTextField.Size = new Size(319, 27);
+            amountTextField.Size = new Size(319, 25);
             amountTextField.TabIndex = 43;
             // 
             // idTextBox
@@ -120,22 +131,22 @@
             idTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             idTextBox.BackColor = Color.FromArgb(40, 40, 43);
             idTextBox.BorderStyle = BorderStyle.FixedSingle;
-            idTextBox.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+            idTextBox.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
             idTextBox.ForeColor = Color.Gainsboro;
-            idTextBox.Location = new Point(641, 7);
+            idTextBox.Location = new Point(814, 7);
             idTextBox.Name = "idTextBox";
-            idTextBox.Size = new Size(35, 25);
+            idTextBox.Size = new Size(46, 23);
             idTextBox.TabIndex = 38;
             idTextBox.Text = "0";
             idTextBox.Leave += OnUIdTextBoxFocusLeave;
             // 
             // binImage
             // 
-            binImage.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
+            binImage.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             binImage.Image = (Image)resources.GetObject("binImage.Image");
-            binImage.Location = new Point(641, 40);
+            binImage.Location = new Point(840, 35);
             binImage.Name = "binImage";
-            binImage.Size = new Size(35, 35);
+            binImage.Size = new Size(20, 20);
             binImage.SizeMode = PictureBoxSizeMode.StretchImage;
             binImage.TabIndex = 37;
             binImage.TabStop = false;
@@ -143,11 +154,11 @@
             // 
             // breakpointOffPicture
             // 
-            breakpointOffPicture.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
+            breakpointOffPicture.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             breakpointOffPicture.Image = (Image)resources.GetObject("breakpointOffPicture.Image");
-            breakpointOffPicture.Location = new Point(605, 46);
+            breakpointOffPicture.Location = new Point(814, 35);
             breakpointOffPicture.Name = "breakpointOffPicture";
-            breakpointOffPicture.Size = new Size(25, 25);
+            breakpointOffPicture.Size = new Size(20, 20);
             breakpointOffPicture.SizeMode = PictureBoxSizeMode.StretchImage;
             breakpointOffPicture.TabIndex = 41;
             breakpointOffPicture.TabStop = false;
@@ -155,11 +166,11 @@
             // 
             // breakpointOnPicture
             // 
-            breakpointOnPicture.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
+            breakpointOnPicture.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             breakpointOnPicture.Image = Properties.Resources.BreakpointOnIcon;
-            breakpointOnPicture.Location = new Point(605, 46);
+            breakpointOnPicture.Location = new Point(814, 35);
             breakpointOnPicture.Name = "breakpointOnPicture";
-            breakpointOnPicture.Size = new Size(25, 25);
+            breakpointOnPicture.Size = new Size(20, 20);
             breakpointOnPicture.SizeMode = PictureBoxSizeMode.StretchImage;
             breakpointOnPicture.TabIndex = 40;
             breakpointOnPicture.TabStop = false;
@@ -169,24 +180,13 @@
             // 
             label2.AutoSize = true;
             label2.BackColor = Color.Transparent;
-            label2.Font = new Font("Segoe UI", 13F, FontStyle.Regular, GraphicsUnit.Point);
+            label2.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
             label2.ForeColor = Color.White;
-            label2.Location = new Point(136, 13);
+            label2.Location = new Point(335, 16);
             label2.Name = "label2";
-            label2.Size = new Size(169, 25);
+            label2.Size = new Size(129, 19);
             label2.TabIndex = 44;
             label2.Text = "Várakozási idő (ms):";
-            // 
-            // pictureBox1
-            // 
-            pictureBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
-            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
-            pictureBox1.Location = new Point(71, 7);
-            pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(45, 45);
-            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
-            pictureBox1.TabIndex = 80;
-            pictureBox1.TabStop = false;
             // 
             // WaitAction
             // 
@@ -195,13 +195,13 @@
             BackColor = Color.FromArgb(50, 50, 55);
             Controls.Add(mainPanel);
             Name = "WaitAction";
-            Size = new Size(686, 82);
+            Size = new Size(870, 61);
             mainPanel.ResumeLayout(false);
             mainPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ((System.ComponentModel.ISupportInitialize)binImage).EndInit();
             ((System.ComponentModel.ISupportInitialize)breakpointOffPicture).EndInit();
             ((System.ComponentModel.ISupportInitialize)breakpointOnPicture).EndInit();
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
         }
 

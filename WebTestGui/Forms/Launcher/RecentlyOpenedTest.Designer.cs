@@ -62,7 +62,7 @@
             lastOpenedLabel.AutoSize = true;
             lastOpenedLabel.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point);
             lastOpenedLabel.ForeColor = Color.FromArgb(150, 150, 155);
-            lastOpenedLabel.Location = new Point(188, 7);
+            lastOpenedLabel.Location = new Point(176, 7);
             lastOpenedLabel.Name = "lastOpenedLabel";
             lastOpenedLabel.Size = new Size(71, 13);
             lastOpenedLabel.TabIndex = 4;

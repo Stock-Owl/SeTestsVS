@@ -64,7 +64,7 @@
             idLabel.BackColor = Color.Transparent;
             idLabel.Font = new Font("Segoe UI Semibold", 13F, FontStyle.Bold, GraphicsUnit.Point);
             idLabel.ForeColor = Color.White;
-            idLabel.Location = new Point(1025, 3);
+            idLabel.Location = new Point(830, 3);
             idLabel.Name = "idLabel";
             idLabel.Size = new Size(47, 25);
             idLabel.TabIndex = 39;
@@ -74,9 +74,9 @@
             // 
             binImage.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             binImage.Image = (Image)resources.GetObject("binImage.Image");
-            binImage.Location = new Point(1083, 63);
+            binImage.Location = new Point(893, 32);
             binImage.Name = "binImage";
-            binImage.Size = new Size(30, 30);
+            binImage.Size = new Size(25, 25);
             binImage.SizeMode = PictureBoxSizeMode.StretchImage;
             binImage.TabIndex = 37;
             binImage.TabStop = false;
@@ -89,7 +89,7 @@
             idTextBox.BorderStyle = BorderStyle.FixedSingle;
             idTextBox.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
             idTextBox.ForeColor = Color.Gainsboro;
-            idTextBox.Location = new Point(1078, 4);
+            idTextBox.Location = new Point(883, 4);
             idTextBox.Name = "idTextBox";
             idTextBox.Size = new Size(35, 25);
             idTextBox.TabIndex = 38;
@@ -121,16 +121,16 @@
             mainPanel.Dock = DockStyle.Fill;
             mainPanel.Location = new Point(0, 0);
             mainPanel.Name = "mainPanel";
-            mainPanel.Size = new Size(1120, 97);
+            mainPanel.Size = new Size(921, 97);
             mainPanel.TabIndex = 12;
             // 
             // collapseActionsButton
             // 
             collapseActionsButton.BackColor = Color.FromArgb(35, 35, 40);
             collapseActionsButton.Image = (Image)resources.GetObject("collapseActionsButton.Image");
-            collapseActionsButton.Location = new Point(8, 41);
+            collapseActionsButton.Location = new Point(8, 63);
             collapseActionsButton.Name = "collapseActionsButton";
-            collapseActionsButton.Size = new Size(50, 50);
+            collapseActionsButton.Size = new Size(30, 30);
             collapseActionsButton.SizeMode = PictureBoxSizeMode.StretchImage;
             collapseActionsButton.TabIndex = 55;
             collapseActionsButton.TabStop = false;
@@ -138,9 +138,8 @@
             // 
             // resetBackupOfButton
             // 
-            resetBackupOfButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             resetBackupOfButton.Image = (Image)resources.GetObject("resetBackupOfButton.Image");
-            resetBackupOfButton.Location = new Point(672, 36);
+            resetBackupOfButton.Location = new Point(803, 9);
             resetBackupOfButton.Name = "resetBackupOfButton";
             resetBackupOfButton.Size = new Size(20, 20);
             resetBackupOfButton.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -150,9 +149,8 @@
             // 
             // resetBindingButton
             // 
-            resetBindingButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             resetBindingButton.Image = (Image)resources.GetObject("resetBindingButton.Image");
-            resetBindingButton.Location = new Point(672, 8);
+            resetBindingButton.Location = new Point(495, 8);
             resetBindingButton.Name = "resetBindingButton";
             resetBindingButton.Size = new Size(20, 20);
             resetBindingButton.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -166,7 +164,7 @@
             testRunTimeText.BackColor = Color.Transparent;
             testRunTimeText.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
             testRunTimeText.ForeColor = Color.DimGray;
-            testRunTimeText.Location = new Point(235, 41);
+            testRunTimeText.Location = new Point(356, 41);
             testRunTimeText.Name = "testRunTimeText";
             testRunTimeText.Size = new Size(48, 15);
             testRunTimeText.TabIndex = 60;
@@ -178,7 +176,7 @@
             testRunTimeLabel.BackColor = Color.Transparent;
             testRunTimeLabel.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point);
             testRunTimeLabel.ForeColor = Color.Gray;
-            testRunTimeLabel.Location = new Point(78, 41);
+            testRunTimeLabel.Location = new Point(199, 41);
             testRunTimeLabel.Name = "testRunTimeLabel";
             testRunTimeLabel.Size = new Size(157, 15);
             testRunTimeLabel.TabIndex = 59;
@@ -186,12 +184,11 @@
             // 
             // backupOfLabel
             // 
-            backupOfLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             backupOfLabel.AutoSize = true;
             backupOfLabel.BackColor = Color.FromArgb(40, 40, 43);
             backupOfLabel.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
             backupOfLabel.ForeColor = Color.LightGray;
-            backupOfLabel.Location = new Point(495, 38);
+            backupOfLabel.Location = new Point(626, 12);
             backupOfLabel.Name = "backupOfLabel";
             backupOfLabel.Size = new Size(27, 15);
             backupOfLabel.TabIndex = 58;
@@ -199,12 +196,11 @@
             // 
             // bindingsLabel
             // 
-            bindingsLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             bindingsLabel.AutoSize = true;
             bindingsLabel.BackColor = Color.FromArgb(40, 40, 43);
             bindingsLabel.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
             bindingsLabel.ForeColor = Color.LightGray;
-            bindingsLabel.Location = new Point(495, 10);
+            bindingsLabel.Location = new Point(320, 10);
             bindingsLabel.Name = "bindingsLabel";
             bindingsLabel.Size = new Size(27, 15);
             bindingsLabel.TabIndex = 57;
@@ -214,26 +210,25 @@
             // 
             label2.AutoSize = true;
             label2.BackColor = Color.Transparent;
-            label2.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+            label2.Font = new Font("Segoe UI Semibold", 8F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
             label2.ForeColor = Color.Gray;
-            label2.Location = new Point(353, 37);
+            label2.Location = new Point(533, 11);
             label2.Name = "label2";
-            label2.Size = new Size(116, 20);
+            label2.Size = new Size(85, 13);
             label2.TabIndex = 54;
             label2.Text = "Biztonsági Unit:";
             // 
             // unitBackupComboBox
             // 
-            unitBackupComboBox.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             unitBackupComboBox.BackColor = Color.FromArgb(40, 40, 43);
             unitBackupComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             unitBackupComboBox.FlatStyle = FlatStyle.Popup;
-            unitBackupComboBox.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+            unitBackupComboBox.Font = new Font("Segoe UI Semibold", 8F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
             unitBackupComboBox.ForeColor = Color.Silver;
             unitBackupComboBox.FormattingEnabled = true;
-            unitBackupComboBox.Location = new Point(491, 35);
+            unitBackupComboBox.Location = new Point(624, 9);
             unitBackupComboBox.Name = "unitBackupComboBox";
-            unitBackupComboBox.Size = new Size(175, 23);
+            unitBackupComboBox.Size = new Size(175, 21);
             unitBackupComboBox.TabIndex = 53;
             unitBackupComboBox.DropDown += OnUnitBackupComboBoxDropDown;
             unitBackupComboBox.SelectedIndexChanged += OnUnitBackupComboBoxSelectedIndexChanged;
@@ -242,55 +237,52 @@
             // 
             label4.AutoSize = true;
             label4.BackColor = Color.Transparent;
-            label4.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+            label4.Font = new Font("Segoe UI Semibold", 8F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
             label4.ForeColor = Color.Gray;
-            label4.Location = new Point(366, 7);
+            label4.Location = new Point(235, 11);
             label4.Name = "label4";
-            label4.Size = new Size(103, 20);
+            label4.Size = new Size(76, 13);
             label4.TabIndex = 52;
             label4.Text = "Kapcsolt Unit:";
             // 
             // unitBindingsComboBox
             // 
-            unitBindingsComboBox.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             unitBindingsComboBox.BackColor = Color.FromArgb(40, 40, 43);
             unitBindingsComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             unitBindingsComboBox.FlatStyle = FlatStyle.Popup;
-            unitBindingsComboBox.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+            unitBindingsComboBox.Font = new Font("Segoe UI Semibold", 8F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
             unitBindingsComboBox.ForeColor = Color.Silver;
             unitBindingsComboBox.FormattingEnabled = true;
-            unitBindingsComboBox.Location = new Point(491, 6);
+            unitBindingsComboBox.Location = new Point(317, 8);
             unitBindingsComboBox.Name = "unitBindingsComboBox";
-            unitBindingsComboBox.Size = new Size(175, 23);
+            unitBindingsComboBox.Size = new Size(175, 21);
             unitBindingsComboBox.TabIndex = 46;
             unitBindingsComboBox.DropDown += OnUnitBindingsComboBoxDropDown;
             unitBindingsComboBox.SelectedIndexChanged += OnUnitBindingsComboBoxSelectedIndexChanged;
             // 
             // label1
             // 
-            label1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             label1.AutoSize = true;
             label1.BackColor = Color.FromArgb(40, 40, 43);
-            label1.Font = new Font("Segoe UI Semibold", 14F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+            label1.Font = new Font("Segoe UI Semibold", 8F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
             label1.ForeColor = Color.LightGray;
-            label1.Location = new Point(768, 18);
+            label1.Location = new Point(13, 41);
             label1.Name = "label1";
-            label1.Size = new Size(183, 25);
+            label1.Size = new Size(103, 13);
             label1.TabIndex = 44;
             label1.Text = "Akció hozzáadása...";
             // 
             // addActionComboBox
             // 
-            addActionComboBox.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             addActionComboBox.BackColor = Color.FromArgb(40, 40, 43);
             addActionComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             addActionComboBox.FlatStyle = FlatStyle.Popup;
-            addActionComboBox.Font = new Font("Segoe UI Semibold", 14F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+            addActionComboBox.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
             addActionComboBox.ForeColor = Color.Silver;
             addActionComboBox.FormattingEnabled = true;
-            addActionComboBox.Location = new Point(764, 13);
+            addActionComboBox.Location = new Point(8, 36);
             addActionComboBox.Name = "addActionComboBox";
-            addActionComboBox.Size = new Size(215, 33);
+            addActionComboBox.Size = new Size(181, 23);
             addActionComboBox.TabIndex = 45;
             addActionComboBox.SelectedIndexChanged += OnActionComboBoxItemSelect;
             // 
@@ -299,21 +291,20 @@
             actionsPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             actionsPanel.AutoScroll = true;
             actionsPanel.BackColor = Color.FromArgb(45, 45, 50);
-            actionsPanel.Location = new Point(78, 63);
+            actionsPanel.Location = new Point(44, 63);
             actionsPanel.Name = "actionsPanel";
-            actionsPanel.Size = new Size(999, 30);
+            actionsPanel.Size = new Size(874, 30);
             actionsPanel.TabIndex = 43;
             // 
             // unitNameTextField
             // 
-            unitNameTextField.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             unitNameTextField.BackColor = Color.FromArgb(40, 40, 43);
-            unitNameTextField.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            unitNameTextField.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point);
             unitNameTextField.ForeColor = Color.White;
             unitNameTextField.Location = new Point(8, 7);
             unitNameTextField.Name = "unitNameTextField";
             unitNameTextField.PlaceholderText = "Az Unit neve...";
-            unitNameTextField.Size = new Size(245, 29);
+            unitNameTextField.Size = new Size(171, 25);
             unitNameTextField.TabIndex = 42;
             unitNameTextField.Leave += OnUnitNameTextFieldChanged;
             // 
@@ -321,9 +312,9 @@
             // 
             expandActionsButtton.BackColor = Color.FromArgb(60, 60, 65);
             expandActionsButtton.Image = (Image)resources.GetObject("expandActionsButtton.Image");
-            expandActionsButtton.Location = new Point(8, 41);
+            expandActionsButtton.Location = new Point(8, 63);
             expandActionsButtton.Name = "expandActionsButtton";
-            expandActionsButtton.Size = new Size(50, 50);
+            expandActionsButtton.Size = new Size(30, 30);
             expandActionsButtton.SizeMode = PictureBoxSizeMode.StretchImage;
             expandActionsButtton.TabIndex = 56;
             expandActionsButtton.TabStop = false;
@@ -335,9 +326,8 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(50, 50, 55);
             Controls.Add(mainPanel);
-            MinimumSize = new Size(1100, 97);
             Name = "UnitPanel";
-            Size = new Size(1120, 97);
+            Size = new Size(921, 97);
             ((System.ComponentModel.ISupportInitialize)binImage).EndInit();
             mainPanel.ResumeLayout(false);
             mainPanel.PerformLayout();
