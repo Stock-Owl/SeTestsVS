@@ -109,7 +109,7 @@ namespace WebTestGui
                     test.m_Units.m_Units.Add(unit);
                 }
 
-                // Must happen after all the Units have loaded, because of the refernces
+                // Must happen after all the Units have loaded, because of the references
                 foreach (IUnit unit in test.m_Units.m_Units)
                 {
                     unit.SetUnitBindings();

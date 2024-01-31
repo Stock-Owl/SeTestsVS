@@ -14,6 +14,13 @@ namespace WebTestGui
             mainLabel.Text = "Wait-For";
 
             logicOperatorComboBox.Items.AddRange(TypeHelpers.GetEnumTypes<LogicOperators>());
+
+            foreach (object nameObj in TypeHelpers.GetAllSubClassesFromInterface<IWaitForCondition>())
+            {
+                string nameStr = ((string)nameObj).Split("WaitForCondition")[0];
+                conditionTypesComboBox.Items.Add(nameStr);
+            }
+            m_WaitForConditions = new WaitForConditions(this);
         }
 
         // ACTION INTERFACE FUNCTIONS AND MEMBERS
@@ -161,7 +168,7 @@ namespace WebTestGui
             clickData["logic_operator"] = logicOperatorOutString;
 
             // Condition list
-
+            clickData["condition_list"] = m_WaitForConditions.GetWaitForConditionsJSON();
 
             clickData["frequency"] = int.Parse(frequencyTextBox.Text);
             clickData["timeout"] = int.Parse(timeoutTextBox.Text);
@@ -192,7 +199,8 @@ namespace WebTestGui
                 logicOperatorComboBox.Text = (string)data["logic_operator"]!;
 
             // Condition list
-
+            m_WaitForConditions.SetData(data["condition_list"]!);
+            RefreshConditionListPanel();
 
             frequencyTextBox.Text = (string)data["frequency"]!;
             timeoutTextBox.Text = (string)data["timeout"]!;
@@ -205,6 +213,17 @@ namespace WebTestGui
         public bool m_Single = false;
 
         // ACTION SPECIFIC FUNCTIONS
+
+        public WaitForConditions m_WaitForConditions;
+
+        public void RefreshConditionListPanel()
+        {
+            conditionListPanel.Controls.Clear();
+            foreach (IWaitForCondition waitForCondition in m_WaitForConditions.m_WaitForConditions)
+            {
+                conditionListPanel.Controls.Add((Control)waitForCondition);
+            }
+        }
 
         private void breakpointOnPicture_Click(object sender, EventArgs e)
         {

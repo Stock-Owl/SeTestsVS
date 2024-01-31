@@ -61,6 +61,23 @@
           "type": "wait_for",
           "break": true,
           "logic_operator": "all",
+          "condition_list": [
+            {
+              "type": "loaded",
+              "locator": "xpath",
+              "value": ""
+            },
+            {
+              "type": "loaded",
+              "locator": "xpath",
+              "value": ""
+            },
+            {
+              "type": "loaded",
+              "locator": "xpath",
+              "value": ""
+            }
+          ],
           "frequency": 1100,
           "timeout": 12000
         }
