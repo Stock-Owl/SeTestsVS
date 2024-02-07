@@ -10,6 +10,7 @@ from selenium.common.exceptions import JavascriptException as SeJSException
 from support import Support
 from interceptor import Interceptor
 from wait import Wait as WaitClass
+TimeGuard = WaitClass.TimeGuard
 
 # renaming shit from the wait class, because code segmentation
 
@@ -30,12 +31,12 @@ class Actions:
         Actions.CheckDriverExists(driver)
         driver.refresh()
 
-    def InterceptorOn(driver: ChromeDriver | FirefoxDriver | WireChromeDriver | WireFirefoxDriver, interceptor: Interceptor):
+    def InterceptorOn(driver: WireChromeDriver | WireFirefoxDriver, interceptor: Interceptor):
         Actions.CheckDriverExists(driver)
         Actions.CheckInterceptorExists(interceptor)
         driver.request_interceptor = interceptor
 
-    def InterceptorOff(driver: ChromeDriver | FirefoxDriver | WireChromeDriver | WireFirefoxDriver):
+    def InterceptorOff(driver: WireChromeDriver | WireFirefoxDriver):
         Actions.CheckDriverExists(driver)
         driver.request_interceptor = None
 
@@ -69,6 +70,8 @@ class Actions:
             timeout_ms = timeout_ms
         )
 
+
+
     def SwitchBack(driver: ChromeDriver | FirefoxDriver | WireChromeDriver | WireFirefoxDriver):
         Actions.CheckDriverExists(driver)
         driver.switch_to.parent_frame()
@@ -81,7 +84,7 @@ class Actions:
         retry_timeout: int = 1000   # for logging
         ) -> None:
 
-        if Actions.CheckDriverExists(driver)
+        Actions.CheckDriverExists(driver)
         for i in range(len(commands)):
             try:
                 command = commands[i]
@@ -102,9 +105,14 @@ class Actions:
         if not Support.exists(file_path):
             raise FileNotFoundError(f"Couldn't reach {file_path}")
         
+        # we are fucking fucked
+        # we will be treating the shit here as one singular string
+        # because fuck JS devs, that's why
+        # realistically, we can't feed random code to the browser
+        # that refers to stuff that doesn't exist
+        commands: list[str]
         with open(file_path, mode = 'r', encoding = 'utf8') as f:
             contents = f.read()
-
         
         pass
 
@@ -239,8 +247,18 @@ class Actions:
         if action_kwargs["auto_exit_iframes"] and action != "switch_to":                                  
             driver.switch_to.parent_frame()     #if there was an iframe, this goes back to the top of the frame 
 
-    def CheckDriverExists(driver: object, omit_exceptions: bool = True) -> None | bool | Exception:
+    def CheckDriverExists(driver: object, omit_exceptions: bool = True) -> None | bool:
 
+        """
+        So the reason that this is kinda funky,
+        Is that when I - the idiot who - wrote this
+        I wanted it to be able to be used in logical checks
+        Hence, the parameter omit_exceptions
+        if it's set to True, it will return a bool,
+        otherwise it will either raise an exception or return None
+        """
+
+        # check if the driver object is defined
         try:
             assert driver
         except AssertionError:
@@ -248,7 +266,8 @@ class Actions:
                 print("Shit doesn't exist mate")
                 return False
             raise AssertionError("Shit doesn't exist mate")
-            
+        
+        # check if the driver is a correct instance of the driver class
         try:
             assert isinstance(driver, ChromeDriver | FirefoxDriver | WireChromeDriver | WireFirefoxDriver)
         except AssertionError:
@@ -260,7 +279,7 @@ class Actions:
             return True
         return None
 
-    def CheckInterceptorExists(interceptor: Interceptor, omit_exceptions: bool = True) -> None | bool | Exception:
+    def CheckInterceptorExists(interceptor: Interceptor, omit_exceptions: bool = True) -> None | bool:
         try:
             assert interceptor
         except AssertionError:

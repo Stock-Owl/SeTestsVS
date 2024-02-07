@@ -15,7 +15,7 @@ Params (all params are type `string`):
 
 ```json
 {
-	"tpye": "loaded",
+	"type": "loaded",
 	"locator": "xpath",
 	"value": "xpath to be searched and waited for"
 }
@@ -34,12 +34,11 @@ Params (all params are type `string`):
 
 ```json
 {
-	"tpye": "visible",
+	"type": "visible",
 	"locator": "xpath",
 	"value": "xpath to be searched and waited for"
 }
 ```
-
 
 ---
 
@@ -55,13 +54,13 @@ Params:
 
 ```json
 {
-	"tpye": "title_is",
+	"type": "title_is",
 	"case_sensitive": true,	// YouTube == youtube -> false
 	"title": "title to match"
 },
 
 {
-	"tpye": "title_is",
+	"type": "title_is",
 	"case_sensitive": false, // YouTube == youtube -> true
 	"title": "title to match"
 }
@@ -81,14 +80,14 @@ Params:
 
 ```json
 {
-	"tpye": "title_contains",
+	"type": "title_contains",
 	"case_sensitive": true,	// YouTube == youtube -> false
 	"title": "title to match"
 	// e.g.: "official" in "The official website for european football | UEFA.com" -> true
 },
 
 {
-	"tpye": "title_contains",
+	"type": "title_contains",
 	"case_sensitive": false, // YouTube == youtube -> true
 	"title": "title to match"
 }
@@ -99,5 +98,79 @@ Params:
 #### Url_is
 
 Checks if the URL of the page is equal to the given value
+The given value **HAS** to include a protocol or IP used to access the site, such as:
 
-Params (all params are tpye `string`):
+* `http://`
+* `https://`
+* `localhost://`
+* `172.0.0.1://`
+* etc.
+
+Params (all params are type `string`):
+
+* `url`: the literal URL to be checked
+
+```json
+{
+	"type": "url_is",
+	"url": "url to check WITH PROTOCOL PREFIXED"
+	// e.g.:
+	// youtube.com -> invalid, will result in error
+	// https://youtube.com -> valid
+}
+```
+
+---
+
+#### Url_contains
+
+Checks ifthe URL of the page contains a given string literal
+The URL checked includes the protocol or IP used to access the site, such as:
+
+* `http://`
+* `https://`
+* `localhost://`
+* `172.0.0.1://`
+* etc.
+
+Params (all params are type `string`):
+
+* `url`: the literal URL to be checked
+
+```json
+// checks if the page is using a .com domain extension
+{
+	"type": "url_contains",
+	"url": ".com"
+},
+
+// checks if the page is using HTTP
+{
+	"type": "url_contains",
+	"url": "http://"
+}
+```
+
+---
+
+#### Alert_present
+
+Checks if there is an alert present in the browser (JavaScript alert)
+
+Params (all params are type `bool`):
+
+* `present`: specifies if there should or shouldn't be an alert
+
+```json
+// returns true if there is an alert present
+{
+	"type": "alert_present",
+	"present": true
+}
+
+// returns false if there isn't an alert present
+{
+	"type": "alert_present",
+	"present": false
+}
+```

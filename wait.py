@@ -10,6 +10,7 @@ from selenium.common.exceptions import NoAlertPresentException as AlertNotFound
 import time
 from math import ceil
 import asyncio
+import datetime as dt
 
 # NOTE: I have no fucking clue what's the purpose of this `BOOL`
 BOOL: str = 'b'
@@ -22,6 +23,38 @@ BOOL: str = 'b'
 # alert present
 
 class Wait:
+
+    class TimeGuard:
+        def __init__(self, name: str, target_ms: str):
+            self.name: str = name
+            # I could write a format parser here or do some magic with class builtins
+            # But I will just YAGNI it
+            self.target_t: dt.timedelta = dt.timedelta(milliseconds=int(target_ms))
+            self.start: dt.datetime | None = None
+            self.end: dt.datetime | None = None
+
+        def __str__(self):
+            param_: str
+
+            try:
+                param_ = "start"
+                assert self.start is not None
+                param_ = "end"
+                assert self.end is not None
+            except:
+                raise UnboundLocalError(f"TimeGuard {self.name} {param_} property is unbound")
+
+            delta: dt.timedelta = self.end - self.start
+            if delta <= self.target_ms:
+                return f"✅ TimeGuard {self.name} is inside of given timerange {self.target_t} ms"
+            return f"❌ TimeGuard {self.name} is outside of given timerange {self.target_t} ms"
+        
+        def start(self):
+            self.start = dt.datetime.now()
+
+        def end(self):
+            self.end = dt.datetime.now()
+
     def Wait(
             milliseconds: int
         ) -> None:
@@ -59,26 +92,26 @@ class Wait:
             \t```
                     "type" : "title_is"             [str]
                     "case_sensitive": True | False  [bool]
-                    "value": "value_to_find"        [str]
+                    "title": "value_to_find"        [str]
             \t```
             * title_contains:\n
             \tChecks if the page's title contains the given value
             \t```
                     "type" : "title_contains"       [str]
                     "case_sensitive": True | False  [bool]
-                    "value": "value_to_find"        [str]
+                    "title": "value_to_find"        [str]
             \t```
             * url_is:\n
             \tChecks if the page's url is equal to the given value
             \t```
                     "type" : "url_is"               [str]
-                    "value": "value_to_find"        [str]
+                    "url": "value_to_find"        [str]
             \t```
             * url_contains:\n
             \tChecks if the page's url contains the given value
             \t```
                     "type" : "url_contains"         [str]
-                    "value": "value_to_find"        [str]
+                    "url": "value_to_find"        [str]
             \t```
             * alert_present:\n
             \tChecks if there is a JavaScript alert present
@@ -175,8 +208,13 @@ class Wait:
                 except AlertNotFound:
                     alert_present = False
 
-                # TODO: figure out what this is supposed to be
-                if alert_present == condition["alert"]:     # FTW
+                # This part supports the distinguishment between
+                # if there should or shouldn't be an alert present
+                # if there should be an alert and there is -> true
+                # if there should be an alert and there isn't -> false
+                # if there shouldn't be an alert and there is -> false
+                # if there shouldn't be an alert and there isn't -> true
+                if alert_present == condition["present"]:
                     out.append(True)
                 else:
                     out.append(False)
