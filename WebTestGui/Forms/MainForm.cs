@@ -954,6 +954,7 @@ namespace WebTestGui
 
         private void MainForm_Resize(object sender, EventArgs e)
         {
+
         }
 
         #endregion

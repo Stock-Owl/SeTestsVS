@@ -162,7 +162,7 @@ namespace WebTestGui
             // Logic operator deduction code
             string logicOperatorOutString;
             if (oppOperatorCheckbox.Checked)
-                logicOperatorOutString = "!" + logicOperatorComboBox.Text;
+                logicOperatorOutString = "! " + logicOperatorComboBox.Text;
             else
                 logicOperatorOutString = logicOperatorComboBox.Text;
             clickData["logic_operator"] = logicOperatorOutString;
@@ -253,6 +253,19 @@ namespace WebTestGui
             {
                 Size = new Size(Size.Width, 250);
             }
+        }
+
+        private void conditionTypesComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string selectedConditionTypeRaw =
+                conditionTypesComboBox.GetItemText(conditionTypesComboBox.SelectedItem)!;
+            string selectedConditionType = selectedConditionTypeRaw + "WaitForCondition";
+
+            IWaitForCondition condition = WaitForConditions.CreateWaitForConditionByType(selectedConditionType);
+            condition.m_ParentClass = m_WaitForConditions;
+            m_WaitForConditions.m_WaitForConditions.Add(condition);
+
+            RefreshConditionListPanel();
         }
 
         public enum LogicOperators

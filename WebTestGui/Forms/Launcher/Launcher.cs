@@ -31,6 +31,9 @@ namespace WebTestGui
 
             InitializeComponent();
 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+
             DarkTitleBarManager.UseImmersiveDarkMode(Handle, true);
             BackColor = Color.FromArgb(255, 50, 50, 53);
 

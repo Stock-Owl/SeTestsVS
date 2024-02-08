@@ -20,7 +20,8 @@ namespace WebTestGui
             Type matchingType = waitForConditionTypes.FirstOrDefault(t =>
             {
                 var instance = (IWaitForCondition)Activator.CreateInstance(t)!;
-                return instance.m_WaitForConditionType == waitForConditionType;
+                return instance.m_WaitForConditionType ==
+                (waitForConditionType.Split("WaitForCondition")[0]).ToLower();
             })!;
 
             if (matchingType != null)

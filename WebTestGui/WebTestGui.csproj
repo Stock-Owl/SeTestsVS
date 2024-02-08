@@ -103,6 +103,21 @@
     <Compile Update="Core\Options\LogJSRetryTimeoutOption.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="Core\Units\Actions\WaitForConditions\Title_ContainsWaitForCondition.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Core\Units\Actions\WaitForConditions\Url_ContainsWaitForCondition.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Core\Units\Actions\WaitForConditions\Url_IsWaitForCondition.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Core\Units\Actions\WaitForConditions\Title_IsWaitForCondition.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Core\Units\Actions\WaitForConditions\VisibleWaitForCondition.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Update="Core\Units\UnitPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>

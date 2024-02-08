@@ -63,18 +63,13 @@
           "logic_operator": "all",
           "condition_list": [
             {
-              "type": "loaded",
-              "locator": "xpath",
+              "type": "title_contains",
+              "case_sensitive": true,
               "value": ""
             },
             {
-              "type": "loaded",
-              "locator": "xpath",
-              "value": ""
-            },
-            {
-              "type": "loaded",
-              "locator": "xpath",
+              "type": "title_is",
+              "case_sensitive": false,
               "value": ""
             }
           ],

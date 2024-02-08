@@ -352,8 +352,8 @@ class Core:
                             if interceptor_active:
                                 Actions.InterceptorOff(driver)
                             else:
-                                print("Interceptor is off")
-                                Support.LogProc(parent_log_path, "Interceptor is off")
+                                print("Interceptor is on")
+                                Support.LogProc(parent_log_path, "Interceptor is on")
                                 continue
                         case "interceptor_add":
                             if interceptor_active:
@@ -380,7 +380,7 @@ class Core:
                                 continue
                         case "js_execute":
                             commands = action["commands"]
-                            Actions.ExecuteJS(driver, commands, path=parent_log_path, retry_timeout=log_js_retry_timeout)
+                            Actions.ExecuteJS(driver, commands, log_path=parent_log_path, retry_timeout=log_js_retry_timeout)
                         case "wait":
                             time = action['amount']
                             Actions.Wait(time)
