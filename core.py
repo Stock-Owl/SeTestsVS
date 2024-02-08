@@ -352,8 +352,8 @@ class Core:
                             if interceptor_active:
                                 Actions.InterceptorOff(driver)
                             else:
-                                print("Interceptor is off")
-                                Support.LogProc(parent_log_path, "Interceptor is off")
+                                print("Interceptor is on")
+                                Support.LogProc(parent_log_path, "Interceptor is on")
                                 continue
                         case "interceptor_add":
                             if interceptor_active:

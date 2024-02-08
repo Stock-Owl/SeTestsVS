@@ -1,5 +1,5 @@
 {
-  "interceptor": false,
+  "interceptor": true,
   "name": "run",
   "browsers": [
     "chrome",
@@ -16,7 +16,7 @@
     "chrome_arguments": [],
     "firefox_arguments": [],
     "keep_browser_open": true,
-    "page_load_strategy": "eager",
+    "page_load_strategy": "normal",
     "timeout": {
       "type": "pageLoad",
       "value": 300000
@@ -32,36 +32,18 @@
       {
         "0":
         {
-          "type": "goto",
+          "type": "interceptor_add",
           "break": false,
-          "url": "https://www.bestbyte.hu/moso-es-szaritogepek-k2284.html"
+          "name": "név",
+          "request_section": "header",
+          "key": "bar",
+          "value": "encode(foo)"
         },
         "1":
         {
-          "type": "wait_for",
+          "type": "goto",
           "break": false,
-          "logic_operator": "all",
-          "condition_list":
-          [
-            {
-              "type": "loaded",
-              "locator": "xpath",
-              "value": "/html/body/form/main/section/div[2]/div/div[3]/div[1]/div[2]/div[1]/div[4]/div/div[1]/div/a/div/img"
-            },
-            {
-              "type": "loaded",
-              "locator": "xpath",
-              "value": "/html/body/form/main/section/div[2]/div/div[3]/div[1]/div[2]/div[1]/div[4]/div/div[2]/div/a/div/img"
-            },
-            {
-              "type": "loaded",
-              "locator": "xpath",
-              "value": "/html/body/form/main/section/div[2]/div/div[3]/div[1]/div[2]/div[1]/div[4]/div/div[3]/div/a/div/img"
-            }
-          ],
-          "frequency": 1000,
-          "timeout": 10000
-
+          "url": "http://httpbin.org/basic-auth/foo/bar"
         }
       }
     }
