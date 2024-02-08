@@ -22,14 +22,15 @@ class Interceptor:
                 match type_:
                     case "header":
                         request.headers[key_] = value_
+                    # YAGNI
                     case _:
                         print(f"Unkwnown intercept type {type_} If you need this type to be implemented, hit the Issues page!")
     
-    def Add(self, name: str, tpye: str, key: str, value: str) -> None:
+    def Add(self, name: str, type_: str, key: str, value: str) -> None:
         to_add: dict[str, dict[str, str]] = \
         {
             name: {
-                "type": tpye,
+                "type": type_,
                 "key": key,
                 "value": value
             }

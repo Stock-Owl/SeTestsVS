@@ -7,8 +7,8 @@
   ],
   "options": {
     "auto_exit_iframes": true,
-    "log_JS_retry_timeout": 2000,
-    "parent_log_path": "C:\\dev\\SeTestsVS\\logs",
+    "log_JS_retry_timeout": 1000,
+    "parent_log_path": "C:\\dev\\SeTestsVS\\example_projects\\logs",
     "start_fullscreen": false
   },
   "driver_options": {
@@ -62,7 +62,7 @@
         },
         "1": {
           "type": "goto",
-          "break": false,
+          "break": true,
           "url": "https://github.com"
         },
         "2": {
@@ -99,7 +99,7 @@
         },
         "1": {
           "type": "goto",
-          "break": false,
+          "break": true,
           "url": "https://github.com"
         },
         "2": {
@@ -151,28 +151,7 @@
         }
       }
     },
-    "Nyoldacik Unit": {
-      "bindings": null,
-      "backup_of": null,
-      "actions": {
-        "0": {
-          "type": "goto",
-          "break": false,
-          "url": "https://tesco.com"
-        },
-        "1": {
-          "type": "goto",
-          "break": false,
-          "url": "https://github.com"
-        },
-        "2": {
-          "type": "goto",
-          "break": false,
-          "url": "https://instagram.com/"
-        }
-      }
-    },
-    "Kilencedik Unit": {
+    "Nyolcadik Unit": {
       "bindings": null,
       "backup_of": null,
       "actions": {
@@ -193,7 +172,7 @@
         }
       }
     },
-    "Tizedik Unit": {
+    "Kilencedik Unit": {
       "bindings": null,
       "backup_of": null,
       "actions": {
@@ -205,6 +184,27 @@
         "1": {
           "type": "goto",
           "break": false,
+          "url": "https://github.com"
+        },
+        "2": {
+          "type": "goto",
+          "break": false,
+          "url": "https://instagram.com/"
+        }
+      }
+    },
+    "Tizedik Unit": {
+      "bindings": null,
+      "backup_of": null,
+      "actions": {
+        "0": {
+          "type": "goto",
+          "break": false,
+          "url": "https://tesco.com"
+        },
+        "1": {
+          "type": "goto",
+          "break": true,
           "url": "https://github.com"
         },
         "2": {

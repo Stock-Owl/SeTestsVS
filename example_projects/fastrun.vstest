@@ -24,7 +24,7 @@
     "unhandled_prompt_behavior": "dismiss and notify"
   },
   "units": {
-    "GyorsUnit": {
+    "Böngészés": {
       "bindings": null,
       "backup_of": null,
       "actions": {
@@ -42,6 +42,39 @@
           "type": "goto",
           "break": false,
           "url": "https://www.instagram.com/"
+        }
+      }
+    },
+    "Navigálás": {
+      "bindings": null,
+      "backup_of": null,
+      "actions": {
+        "0": {
+          "type": "back",
+          "break": true
+        },
+        "1": {
+          "type": "forward",
+          "break": false
+        },
+        "2": {
+          "type": "wait_for",
+          "break": true,
+          "logic_operator": "all",
+          "condition_list": [
+            {
+              "type": "title_contains",
+              "case_sensitive": true,
+              "value": ""
+            },
+            {
+              "type": "title_is",
+              "case_sensitive": false,
+              "value": ""
+            }
+          ],
+          "frequency": 1100,
+          "timeout": 12000
         }
       }
     }
