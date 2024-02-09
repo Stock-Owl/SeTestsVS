@@ -1,6 +1,6 @@
 {
-  "interceptor": true,
-  "name": "run",
+  "interceptor": false,
+  "name": "fastrun",
   "browsers": [
     "chrome",
     "firefox"
@@ -8,14 +8,14 @@
   "options": {
     "auto_exit_iframes": true,
     "log_JS_retry_timeout": 2000,
-    "parent_log_path": "C:/Users/ibalazs/OneDrive - VISION-SOFTWARE Számítástechnikai Szolgáltató és Kereskedelmi/Asztal/Projects/VS/SeTestsVS/logs",
-    "start_fullscreen": true
+    "parent_log_path": "C:\\Users\\kmarton\\source\\repos\\SeTestsVS\\example_projects\\logs",
+    "start_fullscreen": false
   },
   "driver_options": {
     "accept_insecure_certs": true,
     "chrome_arguments": [],
     "firefox_arguments": [],
-    "keep_browser_open": true,
+    "keep_browser_open": false,
     "page_load_strategy": "normal",
     "timeout": {
       "type": "pageLoad",
@@ -24,26 +24,57 @@
     "unhandled_prompt_behavior": "dismiss and notify"
   },
   "units": {
-    "1":
-    {
+    "Böngészés": {
       "bindings": null,
       "backup_of": null,
-      "actions":
-      {
-        "0":
-        {
-          "type": "interceptor_add",
-          "break": false,
-          "name": "név",
-          "request_section": "header",
-          "key": "bar",
-          "value": "encode(foo)"
-        },
-        "1":
-        {
+      "actions": {
+        "0": {
           "type": "goto",
           "break": false,
-          "url": "http://httpbin.org/basic-auth/foo/bar"
+          "url": "https://www.youtube.com/"
+        },
+        "1": {
+          "type": "goto",
+          "break": false,
+          "url": "https://github.com/"
+        },
+        "2": {
+          "type": "goto",
+          "break": false,
+          "url": "https://www.instagram.com/"
+        }
+      }
+    },
+    "Navigálás": {
+      "bindings": null,
+      "backup_of": null,
+      "actions": {
+        "0": {
+          "type": "back",
+          "break": false
+        },
+        "1": {
+          "type": "forward",
+          "break": false
+        },
+        "2": {
+          "type": "wait_for",
+          "break": false,
+          "logic_operator": "all",
+          "condition_list": [
+            {
+              "type": "title_contains",
+              "case_sensitive": true,
+              "value": ""
+            },
+            {
+              "type": "title_is",
+              "case_sensitive": false,
+              "value": ""
+            }
+          ],
+          "frequency": 1100,
+          "timeout": 12000
         }
       }
     }
