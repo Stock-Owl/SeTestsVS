@@ -335,7 +335,7 @@ namespace WebTestGui
             // Getting python directory
             // TODO: MOST LIKELY WILL CHANGE ON PRODUCTION BUILD
             string temp = Application.ExecutablePath;
-            string[] temparray = temp.Split(@"WebTestGui");
+            string[] temparray = temp.Split(@"gui");
 
             File.WriteAllText(temparray[0] + "run.json", JSONString);
 

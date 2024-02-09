@@ -60,8 +60,8 @@ namespace WebTestGui
 
         public void OrganiseRecentlyOpenedTests()
         {
-            m_RecentlyOpenedTests.Sort((item1, item2) => DateTime.ParseExact(item1.m_LastOpenedDate, "M/d/yyyy H:mm", CultureInfo.InvariantCulture)
-                                     .CompareTo(DateTime.ParseExact(item2.m_LastOpenedDate, "M/d/yyyy H:mm", CultureInfo.InvariantCulture)));
+            //m_RecentlyOpenedTests.Sort((item1, item2) => DateTime.ParseExact(item1.m_LastOpenedDate, "M/d/yyyy H:mm", CultureInfo.InvariantCulture)
+            //                         .CompareTo(DateTime.ParseExact(item2.m_LastOpenedDate, "M/d/yyyy H:mm", CultureInfo.InvariantCulture)));
             m_RecentlyOpenedTests.Reverse();
 
             HashSet<string> uniqueNames = new HashSet<string>();

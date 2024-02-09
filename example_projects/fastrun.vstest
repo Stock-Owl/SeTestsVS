@@ -8,7 +8,7 @@
   "options": {
     "auto_exit_iframes": true,
     "log_JS_retry_timeout": 2000,
-    "parent_log_path": "C:\\dev\\SeTestsVS\\example_projects\\logs",
+    "parent_log_path": "C:\\Users\\kmarton\\source\\repos\\SeTestsVS\\example_projects\\logs",
     "start_fullscreen": false
   },
   "driver_options": {
@@ -56,25 +56,6 @@
         "1": {
           "type": "forward",
           "break": false
-        },
-        "2": {
-          "type": "wait_for",
-          "break": true,
-          "logic_operator": "all",
-          "condition_list": [
-            {
-              "type": "title_contains",
-              "case_sensitive": true,
-              "value": ""
-            },
-            {
-              "type": "title_is",
-              "case_sensitive": false,
-              "value": ""
-            }
-          ],
-          "frequency": 1100,
-          "timeout": 12000
         }
       }
     }
