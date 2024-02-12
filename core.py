@@ -280,7 +280,7 @@ class Core:
 
         active_bindings: list[str] = []
         failed_units: list[str] = []
-        timeguard: dict[str, TimeGuard] = {}
+        timeguards: dict[str, TimeGuard] = {}
         
         for  uname, unit in units.items():
             try:
@@ -369,17 +369,34 @@ class Core:
                                     key_,
                                     value_)
                             else:
-                                print("Interceptor is off")
-                                Support.LogProc(parent_log_path, "Interceptor is off")
+                                print("Interceptors are turned off")
+                                Support.LogProc(parent_log_path, "Interceptors are turned off")
                                 continue
                         case "interceptor_remove":
                             if interceptor_active:
                                 name_: str = action["name"]
                                 interceptor.Remove(name_)
                             else:
-                                print("Interceptor is off")
-                                Support.LogProc(parent_log_path, "Interceptor is off")
+                                print("Interceptors are turned off")
+                                Support.LogProc(parent_log_path, "Interceptors are turned off")
                                 continue
+                        case "timeguard_start":
+                            tg = TimeGuard(action["target"])
+                            tg.start()
+                            timeguards[action["name"]] = tg
+                        case "timeguard_stop":
+                            try:
+                                tg = timeguards[action["name"]]
+                            except KeyError:
+                                raise ValueError(f"{action["name"]}) hasn't been initialized")
+                            tg.end()
+                            result = str(tg)
+                            if result[0] == "✅":   # you, we're really checking against an emoji
+                                Support.LogProc(parent_log_path, result)
+                            else:
+                                Support.LogError(parent_log_path, result,)
+                            del tg
+                            del timeguards[action["name"]]
                         case "js_execute":
                             commands = action["commands"]
                             Actions.ExecuteJS(driver, commands, log_path=parent_log_path, retry_timeout=log_js_retry_timeout)
