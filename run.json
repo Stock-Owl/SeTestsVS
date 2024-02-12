@@ -1,5 +1,5 @@
 {
-  "interceptor": true,
+  "interceptor": false,
   "name": "run",
   "browsers": [
     "chrome",
@@ -30,15 +30,6 @@
       "backup_of": null,
       "actions":
       {
-        "0":
-        {
-          "type": "interceptor_add",
-          "break": false,
-          "name": "név",
-          "request_section": "header",
-          "key": "bar",
-          "value": "encode(foo)"
-        },
         "1":
         {
           "type": "goto",

@@ -7,10 +7,11 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.common.exceptions import JavascriptException as SeJSException
+
 from support import Support
 from interceptor import Interceptor
 from wait import Wait as WaitClass
-TimeGuard = WaitClass.TimeGuard
+from timeguard import TimeGuard
 
 # renaming shit from the wait class, because code segmentation
 
@@ -48,6 +49,11 @@ class Actions:
         Actions.CheckInterceptorExists(interceptor)
         interceptor.Remove(name_)
 
+    def TimeGuardStart(time_guard: TimeGuard) -> None:
+        time_guard.start()
+
+    def TimeGuardStop(time_guard: TimeGuard) -> None:
+        time_guard.end()
 
     def Wait(milliseconds: int) -> None:
         return WaitClass.Wait(milliseconds)

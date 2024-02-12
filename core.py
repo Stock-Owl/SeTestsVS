@@ -9,6 +9,7 @@ from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from support import Support
 from actions import Actions
 from interceptor import Interceptor
+from timeguard import TimeGuard
 
 from traceback import format_exc, format_stack
 
@@ -279,6 +280,7 @@ class Core:
 
         active_bindings: list[str] = []
         failed_units: list[str] = []
+        timeguard: dict[str, TimeGuard] = {}
         
         for  uname, unit in units.items():
             try:
