@@ -335,7 +335,7 @@ namespace WebTestGui
             // Getting python directory
             // TODO: MOST LIKELY WILL CHANGE ON PRODUCTION BUILD
             string temp = Application.ExecutablePath;
-            string[] temparray = temp.Split(@"gui");
+            string[] temparray = temp.Split(@"WebTestGui");
 
             File.WriteAllText(temparray[0] + "run.json", JSONString);
 
@@ -521,6 +521,7 @@ namespace WebTestGui
             string targetDirectory = targetDir;
             string pythonScript = pythonScriptName;
 
+            m_RunLogConsole.AddToConsoles($"/K cd /D {targetDirectory} && python {pythonScript} && exit");
             m_CurrentProcess = Process.Start("cmd.exe", $"/K cd /D {targetDirectory} && python {pythonScript} && exit");
 
             await m_CurrentProcess.WaitForExitAsync();

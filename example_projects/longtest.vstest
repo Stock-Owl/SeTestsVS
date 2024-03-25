@@ -8,7 +8,7 @@
   "options": {
     "auto_exit_iframes": true,
     "log_JS_retry_timeout": 1000,
-    "parent_log_path": "C:\\dev\\SeTestsVS\\example_projects\\logs",
+    "parent_log_path": "C:\\Users\\kmarton\\source\\repos\\SeTestsVS\\example_projects\\logs",
     "start_fullscreen": false
   },
   "driver_options": {
